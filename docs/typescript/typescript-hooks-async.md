@@ -1,30 +1,35 @@
 # Типизация кастомных хуков и async-паттерны в React
 
-Кастомные хуки — основной механизм переиспользования логики в React. TypeScript превращает их из удобного инструмента в мощный контракт: вы точно знаете, что хук принимает, что возвращает, и как ведёт себя при разных входных данных. Async-паттерны добавляют свою сложность: AbortController, типизация ответов API, обработка ошибок в эффектах. В этой статье разберём оба аспекта — от базовых возвращаемых типов до продвинутых паттернов вроде fetch-машины с discriminated unions.
+Кастомные хуки — основной механизм переиспользования логики в React. TypeScript превращает их из удобного инструмента в контракт: вы точно знаете, что хук принимает, что возвращает, и как ведёт себя при разных входных данных. Async-паттерны добавляют свою сложность: AbortController, типизация ответов API, обработка ошибок в эффектах.
 
----
+## Почему `useEffect` не может быть async
 
-## Содержание
+Это ограничение связано с **моделью рендеринга React**, а не с TypeScript.
 
-1. [Типизация возвращаемых значений](#типизация-возвращаемых-значений)
-2. [Дженерики в кастомных хуках](#дженерики-в-кастомных-хуках)
-3. [Перегрузки хуков](#перегрузки-хуков)
-4. [Практические паттерны кастомных хуков](#практические-паттерны-кастомных-хуков)
-5. [Async-паттерны: Promise в компонентах](#async-паттерны-promise-в-компонентах)
-6. [AbortController и отмена запросов](#abortcontroller-и-отмена-запросов)
-7. [Типизация fetch и API-ответов](#типизация-fetch-и-api-ответов)
-8. [Обработка ошибок с типами](#обработка-ошибок-с-типами)
-9. [Fetch-машина с discriminated unions](#fetch-машина-с-discriminated-unions)
-10. [Vue vs React: шпаргалка по хукам и async](#vue-vs-react-шпаргалка-по-хукам-и-async)
-11. [Типичные ошибки](#типичные-ошибки)
+React вызывает функции-компоненты синхронно. Каждый `useEffect` должен вернуть либо `void` (ничего), либо **cleanup-функцию** — синхронную функцию, которая вызывается при размонтировании или перед повторным запуском эффекта.
 
----
+```typescript
+// ❌ Ошибка: useEffect не может быть async
+useEffect(async () => {
+  const data = await fetchData();
+  setData(data);
+}, []);
+
+// ✅ Правильно: async-функция внутри useEffect
+useEffect(() => {
+  const loadData = async () => {
+    const data = await fetchData();
+    setData(data);
+  };
+  loadData();
+}, []);
+```
+
+Почему React не поддерживает async-эффекты: если `useEffect` возвращает Promise, React не может знать, когда эффект «завершится». Cleanup-функция должна быть вызвана синхронно при размонтировании — если эффект ещё не завершился, React не может корректно очистить ресурсы.
 
 ## Типизация возвращаемых значений
 
-Кастомные хуки возвращают данные через кортежи (как `useState`) или объекты. Выбор влияет на удобство использования и типобезопасность.
-
-> **Vue-аналог:** Vue Composables обычно возвращают объект с именованными полями: `return { data, error, isLoading }`. В React оба подхода равноправны, но кортежи — для простых случаев (один-два значения), объекты — для сложных (3+ поля).
+Хуки возвращают данные через кортежи или объекты. Выбор влияет на типобезопасность и удобство использования.
 
 ### Кортежи — для простых случаев
 
@@ -35,11 +40,10 @@ function useToggle(initial = false): [boolean, () => void] {
   return [value, toggle];
 }
 
-// Использование
 const [isOpen, toggleOpen] = useToggle(false);
 ```
 
-Тип возвращаемого значения явно указан как `[boolean, () => void]` — кортеж фиксированной длины с конкретными типами.
+Тип `[boolean, () => void]` — кортеж фиксированной длины. Без явного указания TypeScript вывел бы `(boolean | (() => void))[]` — массив, где каждый элемент может быть чем угодно.
 
 ### Объекты — для сложных случаев
 
@@ -53,39 +57,23 @@ interface UseCounterReturn {
 
 function useCounter(initial = 0): UseCounterReturn {
   const [count, setCount] = useState(initial);
-
   const increment = useCallback(() => setCount(c => c + 1), []);
   const decrement = useCallback(() => setCount(c => c - 1), []);
   const reset = useCallback(() => setCount(initial), [initial]);
-
   return { count, increment, decrement, reset };
 }
 
-// Использование — деструктуризация с именованными полями
 const { count, increment, reset } = useCounter(10);
 ```
 
-Преимущества объекта:
-- Именованные поля — не нужно помнить порядок.
-- Можно возвращать только часть: `const { count } = useCounter()`.
-- Легко расширять без breaking changes.
+| Подход | Когда использовать |
+|---|---|
+| Кортеж | 1-2 значения, порядок важен |
+| Объект | 3+ поля, нужна гибкость, частичная деструктуризация |
 
-### Когда что использовать
+## Дженерики в хуках
 
-| Подход | Когда использовать | Пример |
-|---|---|---|
-| Кортеж | 1-2 значения, порядок важен | `useState`, `useToggle` |
-| Объект | 3+ поля, нужна гибкость | `useCounter`, `useFetch` |
-
----
-
-## Дженерики в кастомных хуках
-
-Дженерики позволяют создавать хуки, работающие с любыми типами данных, сохраняя типобезопасность.
-
-> **Vue-аналог:** `function useLocalStorage<T>(key: string, initialValue: T): Ref<T>` — синтаксис идентичен. В React — `function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void]`.
-
-### Базовый пример
+Дженерики позволяют создавать хуки, работающие с любыми типами, сохраняя типобезопасность.
 
 ```tsx
 function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
@@ -106,9 +94,8 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => voi
   return [storedValue, setValue];
 }
 
-// Использование — тип выводится автоматически
-const [theme, setTheme] = useLocalStorage("theme", "light"); // string
-const [user, setUser] = useLocalStorage<User>("user", null); // User | null (если указать явно)
+const [theme, setTheme] = useLocalStorage("theme", "light"); // T = string
+const [user, setUser] = useLocalStorage<User>("user", null); // T = User | null
 ```
 
 ### Дженерики с ограничениями
@@ -125,13 +112,6 @@ function useItemsById<T extends HasId>(items: T[]): Map<string, T> {
     return map;
   }, [items]);
 }
-
-// T автоматически ограничивается типами с полем id
-const userMap = useItemsById([
-  { id: "1", name: "Alice" },
-  { id: "2", name: "Bob" },
-]);
-// userMap: Map<string, { id: string; name: string }>
 ```
 
 ### Дженерики с несколькими параметрами
@@ -164,51 +144,13 @@ function useAsync<TData, TError = Error>(
 
   return { data, error, isLoading, execute };
 }
-
-// Использование
-const { data, error, isLoading, execute } = useAsync<User, ApiError>(
-  () => fetchUser(userId)
-);
 ```
-
----
 
 ## Перегрузки хуков
 
 Перегрузки позволяют хуку возвращать разные типы в зависимости от входных параметров.
 
-### Пример: условный возврат
-
 ```tsx
-// Перегрузки
-function useMediaQuery(query: string): boolean;
-function useMediaQuery(query: string, defaultValue: boolean): boolean;
-function useMediaQuery(query: string, defaultValue?: boolean): boolean {
-  const [matches, setMatches] = useState(() => {
-    if (typeof window === "undefined") return defaultValue ?? false;
-    return window.matchMedia(query).matches;
-  });
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(query);
-    const handler = (e: MediaQueryListEvent) => setMatches(e.matches);
-    
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, [query]);
-
-  return matches;
-}
-
-// Использование
-const isMobile = useMediaQuery("(max-width: 768px)"); // boolean
-const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)", false); // boolean с дефолтом
-```
-
-### Пример: возврат кортежа или объекта
-
-```tsx
-// Перегрузки
 function useCounter(initial: number): { count: number; set: (value: number) => void };
 function useCounter(initial: number, asTuple: true): [number, (value: number) => void];
 function useCounter(initial: number, asTuple?: boolean) {
@@ -221,113 +163,13 @@ function useCounter(initial: number, asTuple?: boolean) {
   return { count, set };
 }
 
-// Использование
-const { count, set } = useCounter(0); // объект
-const [count, set] = useCounter(0, true); // кортеж
+const { count, set } = useCounter(0);        // объект
+const [count, set] = useCounter(0, true);    // кортеж
 ```
 
----
+## Async в компонентах
 
-## Практические паттерны кастомных хуков
-
-### useDebounce
-
-```tsx
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-// Использование
-const [query, setQuery] = useState("");
-const debouncedQuery = useDebounce(query, 300);
-
-useEffect(() => {
-  if (debouncedQuery) {
-    search(debouncedQuery);
-  }
-}, [debouncedQuery]);
-```
-
-### useOnClickOutside
-
-```tsx
-function useOnClickOutside<T extends HTMLElement>(
-  ref: React.RefObject<T>,
-  handler: (event: MouseEvent | TouchEvent) => void
-): void {
-  useEffect(() => {
-    const listener = (event: MouseEvent | TouchEvent) => {
-      if (!ref.current || ref.current.contains(event.target as Node)) {
-        return;
-      }
-      handler(event);
-    };
-
-    document.addEventListener("mousedown", listener);
-    document.addEventListener("touchstart", listener);
-
-    return () => {
-      document.removeEventListener("mousedown", listener);
-      document.removeEventListener("touchstart", listener);
-    };
-  }, [ref, handler]);
-}
-
-// Использование
-function Dropdown() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  useOnClickOutside(ref, () => setIsOpen(false));
-
-  return (
-    <div ref={ref}>
-      <button onClick={() => setIsOpen(true)}>Open</button>
-      {isOpen && <div className="dropdown">...</div>}
-    </div>
-  );
-}
-```
-
-### usePrevious
-
-```tsx
-function usePrevious<T>(value: T): T | undefined {
-  const ref = useRef<T | undefined>(undefined);
-
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return ref.current;
-}
-
-// Использование
-function Counter() {
-  const [count, setCount] = useState(0);
-  const prevCount = usePrevious(count);
-
-  return (
-    <div>
-      <p>Current: {count}, Previous: {prevCount}</p>
-      <button onClick={() => setCount(c => c + 1)}>+</button>
-    </div>
-  );
-}
-```
-
----
-
-## Async-паттерны: Promise в компонентах
-
-### Базовый паттерн: useEffect + async
+### Базовый паттерн
 
 ```tsx
 function UserProfile({ userId }: { userId: string }) {
@@ -343,7 +185,6 @@ function UserProfile({ userId }: { userId: string }) {
         setIsLoading(true);
         const response = await fetch(`/api/users/${userId}`);
         if (!response.ok) throw new Error("Failed to load user");
-        
         const data = await response.json();
         if (isMounted) {
           setUser(data);
@@ -354,9 +195,7 @@ function UserProfile({ userId }: { userId: string }) {
           setError(err instanceof Error ? err : new Error("Unknown error"));
         }
       } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        if (isMounted) setIsLoading(false);
       }
     };
 
@@ -375,32 +214,17 @@ function UserProfile({ userId }: { userId: string }) {
 }
 ```
 
-Ключевой момент: флаг `isMounted` предотвращает обновление состояния после размонтирования компонента.
+### Почему нужен cleanup
 
-### Альтернатива: async-функция внутри useEffect
+Флаг `isMounted` предотвращает обновление состояния после размонтирования. Это важно по двум причинам:
 
-```tsx
-useEffect(() => {
-  const fetchData = async () => {
-    const result = await api.getData();
-    setData(result);
-  };
+**1. React Strict Mode.** В development-режиме React монтирует, размонтирует и снова монтирует каждый компонент. Без cleanup вы получите двойной запрос и потенциальную гонку состояний.
 
-  fetchData();
-}, []);
-```
+**2. React Concurrent Features.** React может прервать рендеринг и начать заново. Если запрос завершился, но компонент уже размонтирован, `setState` вызовет warning (а в React 18 — может привести к непредсказуемому поведению).
 
-Нельзя делать сам `useEffect` async — React ожидает, что эффект вернёт `void` или cleanup-функцию, а Promise нарушает этот контракт.
+### AbortController
 
----
-
-## AbortController и отмена запросов
-
-AbortController позволяет отменить fetch-запрос при размонтировании компонента или изменении зависимостей.
-
-> **Vue-аналог:** во Vue Composables часто используется `watch` с `onCleanup` или `watchEffect` с автоматической отменой. В React — `AbortController` + `useEffect` cleanup.
-
-### Базовый пример
+Флаг `isMounted` предотвращает обновление состояния, но **не отменяет запрос**. Для отмены используется AbortController:
 
 ```tsx
 function SearchResults({ query }: { query: string }) {
@@ -422,15 +246,12 @@ function SearchResults({ query }: { query: string }) {
           `/api/search?q=${encodeURIComponent(query)}`,
           { signal: controller.signal }
         );
-
         if (!response.ok) throw new Error("Search failed");
-
         const data = await response.json();
         setResults(data);
       } catch (err) {
         if (err instanceof Error && err.name === "AbortError") {
-          console.log("Request aborted");
-          return;
+          return; // Запрос отменён — не ошибка
         }
         console.error("Search error:", err);
       } finally {
@@ -441,7 +262,7 @@ function SearchResults({ query }: { query: string }) {
     fetchResults();
 
     return () => {
-      controller.abort();
+      controller.abort(); // Отменяет запрос при размонтировании
     };
   }, [query]);
 
@@ -458,248 +279,30 @@ function SearchResults({ query }: { query: string }) {
 }
 ```
 
-`AbortError` — специальное исключение, которое выбрасывается при отмене запроса. Его нужно обрабатывать отдельно, чтобы не показывать пользователю ошибку.
+`AbortError` — специальное исключение при отмене запроса. Его нужно обрабатывать отдельно, чтобы не показывать пользователю ошибку.
 
-### AbortController + debounce
+## Fetch-машина: state machine
 
-```tsx
-function useSearch(query: string, delay = 300) {
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+Fetch-машина — паттерн моделирования состояний загрузки через **discriminated unions**. Это не просто удобный способ организовать код — это **конечный автомат** (state machine), который гарантирует корректность состояний.
 
-  useEffect(() => {
-    if (!query) {
-      setResults([]);
-      return;
-    }
+### Проблема обычного подхода
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `/api/search?q=${encodeURIComponent(query)}`,
-          { signal: controller.signal }
-        );
-        const data = await response.json();
-        setResults(data);
-      } catch (err) {
-        if (!(err instanceof Error && err.name === "AbortError")) {
-          console.error(err);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    }, delay);
-
-    return () => {
-      clearTimeout(timeoutId);
-      controller.abort();
-    };
-  }, [query, delay]);
-
-  return { results, isLoading };
-}
-```
-
----
-
-## Типизация fetch и API-ответов
-
-### Базовая типизация
+Обычный подход — три независимых поля:
 
 ```tsx
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
-async function fetchUser(userId: string): Promise<User> {
-  const response = await fetch(`/api/users/${userId}`);
-  
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
-
-  const data: User = await response.json();
-  return data;
-}
+const [data, setData] = useState<User | null>(null);
+const [error, setError] = useState<Error | null>(null);
+const [isLoading, setIsLoading] = useState(false);
 ```
 
-Проблема: `response.json()` возвращает `Promise<any>`, поэтому TypeScript не проверяет, что данные соответствуют типу `User`. Решение — каст с проверкой:
+Это допускает **бессмысленные состояния**:
+- `data` и `error` одновременно не null
+- `isLoading = true` и `error` не null
+- Все три поля null
 
-```tsx
-function isUser(data: unknown): data is User {
-  return (
-    typeof data === "object" &&
-    data !== null &&
-    "id" in data &&
-    "name" in data &&
-    "email" in data
-  );
-}
+TypeScript не может гарантировать, что вы обработали все комбинации.
 
-async function fetchUserSafe(userId: string): Promise<User> {
-  const response = await fetch(`/api/users/${userId}`);
-  const data = await response.json();
-
-  if (!isUser(data)) {
-    throw new Error("Invalid user data");
-  }
-
-  return data;
-}
-```
-
-### Типизация ошибок API
-
-```tsx
-class ApiError extends Error {
-  constructor(
-    public status: number,
-    public statusText: string,
-    public data?: unknown
-  ) {
-    super(`API Error: ${status} ${statusText}`);
-    this.name = "ApiError";
-  }
-}
-
-async function fetchUserWithApiError(userId: string): Promise<User> {
-  const response = await fetch(`/api/users/${userId}`);
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
-    throw new ApiError(response.status, response.statusText, errorData);
-  }
-
-  return response.json();
-}
-
-// Использование
-try {
-  const user = await fetchUserWithApiError(userId);
-} catch (err) {
-  if (err instanceof ApiError) {
-    console.error(`API error ${err.status}:`, err.data);
-  } else {
-    console.error("Network error:", err);
-  }
-}
-```
-
-### Generic fetch-обёртка
-
-```tsx
-interface FetchOptions extends RequestInit {
-  params?: Record<string, string>;
-}
-
-async function apiFetch<T>(
-  endpoint: string,
-  options: FetchOptions = {}
-): Promise<T> {
-  const { params, ...init } = options;
-
-  const url = new URL(endpoint, window.location.origin);
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.set(key, value);
-    });
-  }
-
-  const response = await fetch(url, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...init.headers,
-    },
-  });
-
-  if (!response.ok) {
-    throw new ApiError(response.status, response.statusText);
-  }
-
-  return response.json();
-}
-
-// Использование
-const users = await apiFetch<User[]>("/api/users", {
-  params: { role: "admin" },
-});
-
-const newUser = await apiFetch<User>("/api/users", {
-  method: "POST",
-  body: JSON.stringify({ name: "Alice", email: "alice@example.com" }),
-});
-```
-
----
-
-## Обработка ошибок с типами
-
-### Type guards для ошибок
-
-```tsx
-function isApiError(err: unknown): err is ApiError {
-  return err instanceof ApiError;
-}
-
-function isNetworkError(err: unknown): boolean {
-  return err instanceof TypeError && err.message.includes("fetch");
-}
-
-function handleError(err: unknown): void {
-  if (isApiError(err)) {
-    console.error(`API error ${err.status}:`, err.data);
-    showToast(`Error: ${err.statusText}`);
-  } else if (isNetworkError(err)) {
-    console.error("Network error:", err);
-    showToast("No internet connection");
-  } else if (err instanceof Error) {
-    console.error("Unexpected error:", err.message);
-    showToast("Something went wrong");
-  } else {
-    console.error("Unknown error:", err);
-    showToast("Unknown error");
-  }
-}
-```
-
-### Обработка ошибок в useEffect
-
-```tsx
-useEffect(() => {
-  const controller = new AbortController();
-
-  const loadData = async () => {
-    try {
-      const data = await fetchUser(userId, controller.signal);
-      setUser(data);
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") {
-        return;
-      }
-      handleError(err);
-    }
-  };
-
-  loadData();
-
-  return () => controller.abort();
-}, [userId]);
-```
-
----
-
-## Fetch-машина с discriminated unions
-
-Fetch-машина — паттерн моделирования состояний загрузки через discriminated unions. TypeScript гарантирует, что вы обработали все возможные состояния.
-
-> **Vue-аналог:** во Vue Composables часто используется объект `{ data, error, isLoading }`, но это позволяет бессмысленные состояния вроде `{ data: null, error: null, isLoading: false }`. Discriminated unions исключают такие случаи.
-
-### Определение состояний
+### Решение: discriminated unions
 
 ```tsx
 type FetchState<T> =
@@ -709,7 +312,12 @@ type FetchState<T> =
   | { status: "error"; error: Error };
 ```
 
-### Хук useFetch
+Каждый вариант — **допустимое состояние**. Невозможные состояния исключены на уровне типов:
+- При `status: "success"` — `data` гарантированно существует
+- При `status: "error"` — `error` гарантированно существует
+- Нельзя иметь `data` и `error` одновременно
+
+### Реализация
 
 ```tsx
 type FetchState<T> =
@@ -747,17 +355,11 @@ function useFetch<T>(url: string) {
       try {
         dispatch({ type: "FETCH_START" });
         const response = await fetch(url, { signal: controller.signal });
-        
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data: T = await response.json();
         dispatch({ type: "FETCH_SUCCESS", data });
       } catch (err) {
-        if (err instanceof Error && err.name === "AbortError") {
-          return;
-        }
+        if (err instanceof Error && err.name === "AbortError") return;
         dispatch({
           type: "FETCH_ERROR",
           error: err instanceof Error ? err : new Error("Unknown error"),
@@ -766,14 +368,10 @@ function useFetch<T>(url: string) {
     };
 
     fetchData();
-
     return () => controller.abort();
   }, [url]);
 
-  return {
-    ...state,
-    refetch: () => dispatch({ type: "RESET" }),
-  };
+  return { ...state, refetch: () => dispatch({ type: "RESET" }) };
 }
 ```
 
@@ -788,7 +386,7 @@ function UserProfile({ userId }: { userId: string }) {
     case "loading":
       return <Spinner />;
     case "success":
-      return <div>{data.name}</div>;
+      return <div>{data.name}</div>; // ✅ data гарантированно существует
     case "error":
       return (
         <div>
@@ -806,34 +404,88 @@ function UserProfile({ userId }: { userId: string }) {
 
 TypeScript проверяет, что все варианты обработаны. Если добавить новое состояние в `FetchState`, компилятор выдаст ошибку в `default`.
 
----
+## Типизация API-ответов
 
-## Vue vs React: шпаргалка по хукам и async
+`response.json()` возвращает `Promise<any>`. TypeScript не проверяет, что данные соответствуют ожидаемому типу. Решение — type guard:
 
-| Концепция | Vue | React |
-|---|---|---|
-| Composable/Hook | `function useX(): { data, error }` | `function useX(): [data, setData]` или `{ data, error }` |
-| Дженерики | `function useLocalStorage<T>(key: string, value: T): Ref<T>` | `function useLocalStorage<T>(key: string, value: T): [T, (v: T) => void]` |
-| Async в эффекте | `watchEffect(async () => { ... })` | `useEffect(() => { const fn = async () => {}; fn(); }, [])` |
-| Отмена запросов | `onCleanup(() => controller.abort())` в `watch` | `return () => controller.abort()` в `useEffect` |
-| Обработка ошибок | `try/catch` + `ref<Error \| null>` | `try/catch` + `useState<Error \| null>` |
-| Fetch-машина | Ручная через `ref` + `computed` | `useReducer` с discriminated unions |
-| AbortController | `watch` с `onCleanup` | `useEffect` cleanup |
+```tsx
+function isUser(data: unknown): data is User {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    "id" in data &&
+    "name" in data &&
+    "email" in data
+  );
+}
 
----
+async function fetchUserSafe(userId: string): Promise<User> {
+  const response = await fetch(`/api/users/${userId}`);
+  const data = await response.json();
+
+  if (!isUser(data)) {
+    throw new Error("Invalid user data");
+  }
+
+  return data;
+}
+```
+
+### Generic fetch-обёртка
+
+```tsx
+async function apiFetch<T>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<T> {
+  const response = await fetch(endpoint, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+
+  if (!response.ok) {
+    throw new ApiError(response.status, response.statusText);
+  }
+
+  return response.json();
+}
+
+const users = await apiFetch<User[]>("/api/users");
+```
+
+## Обработка ошибок
+
+```tsx
+function handleError(err: unknown): void {
+  if (err instanceof ApiError) {
+    console.error(`API error ${err.status}:`, err.data);
+    showToast(`Error: ${err.statusText}`);
+  } else if (err instanceof TypeError && err.message.includes("fetch")) {
+    showToast("No internet connection");
+  } else if (err instanceof Error) {
+    console.error("Unexpected error:", err.message);
+    showToast("Something went wrong");
+  } else {
+    showToast("Unknown error");
+  }
+}
+```
 
 ## Типичные ошибки
 
-### 1. Async-функция как useEffect
+### 1. Async useEffect
 
 ```tsx
-// ❌ Ошибка: useEffect не может быть async
+// ❌ useEffect не может быть async
 useEffect(async () => {
   const data = await fetchData();
   setData(data);
 }, []);
 
-// ✅ Правильно: async-функция внутри useEffect
+// ✅ async-функция внутри useEffect
 useEffect(() => {
   const loadData = async () => {
     const data = await fetchData();
@@ -843,7 +495,7 @@ useEffect(() => {
 }, []);
 ```
 
-### 2. Отсутствие cleanup для async-операций
+### 2. Отсутствие cleanup
 
 ```tsx
 // ❌ Утечка памяти: обновление состояния после размонтирования
@@ -851,22 +503,18 @@ useEffect(() => {
   fetchData().then(data => setData(data));
 }, []);
 
-// ✅ Cleanup: флаг isMounted или AbortController
+// ✅ Cleanup: AbortController или isMounted
 useEffect(() => {
-  let isMounted = true;
-  fetchData().then(data => {
-    if (isMounted) setData(data);
-  });
-  return () => {
-    isMounted = false;
-  };
+  const controller = new AbortController();
+  fetchData(controller.signal).then(data => setData(data));
+  return () => controller.abort();
 }, []);
 ```
 
-### 3. Неправильный тип для Error
+### 3. Неправильная типизация catch
 
 ```tsx
-// ❌ catch (err: Error) — TypeScript не позволяет типизировать err в catch
+// ❌ TypeScript не позволяет типизировать err в catch
 try {
   await fetchData();
 } catch (err: Error) { // Ошибка компиляции
@@ -908,52 +556,14 @@ try {
 }
 ```
 
-### 5. Отсутствие типизации для response.json()
-
-```tsx
-// ❌ response.json() возвращает Promise<any>
-const data = await response.json();
-setUser(data); // Нет проверки типа
-
-// ✅ Каст с проверкой
-const data = await response.json();
-if (isUser(data)) {
-  setUser(data);
-} else {
-  throw new Error("Invalid user data");
-}
-```
-
-### 6. Неполный массив зависимостей в useEffect
-
-```tsx
-// ❌ userId используется, но не указан в зависимостях
-useEffect(() => {
-  const loadData = async () => {
-    const data = await fetchData(userId);
-    setData(data);
-  };
-  loadData();
-}, []); // Ошибка: userId отсутствует
-
-// ✅ Правильно
-useEffect(() => {
-  const loadData = async () => {
-    const data = await fetchData(userId);
-    setData(data);
-  };
-  loadData();
-}, [userId]);
-```
-
-### 7. Возврат кортежа без явного типа
+### 5. Кортеж без явного типа
 
 ```tsx
 // ❌ Тип выводится как (string | number)[]
 function useCounter() {
   const [count, setCount] = useState(0);
   const increment = () => setCount(c => c + 1);
-  return [count, increment]; // TypeScript не знает, что это кортеж
+  return [count, increment];
 }
 
 // ✅ Явный тип кортежа
@@ -962,4 +572,20 @@ function useCounter(): [number, () => void] {
   const increment = () => setCount(c => c + 1);
   return [count, increment];
 }
+```
+
+### 6. Независимые поля состояния вместо discriminated union
+
+```tsx
+// ❌ Допускает бессмысленные состояния
+const [data, setData] = useState<User | null>(null);
+const [error, setError] = useState<Error | null>(null);
+const [isLoading, setIsLoading] = useState(false);
+
+// ✅ Discriminated union — только допустимые состояния
+type FetchState =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "success"; data: User }
+  | { status: "error"; error: Error };
 ```

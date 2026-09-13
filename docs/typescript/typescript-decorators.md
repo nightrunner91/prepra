@@ -1,30 +1,109 @@
-# TypeScript Decorators — полное руководство для React и Vue
+# Декораторы в TypeScript
 
-Декораторы — мощный механизм TypeScript, позволяющий модифицировать поведение классов, методов, свойств и параметров через специальные аннотации. Они широко используются в фреймворках вроде NestJS, TypeORM и MobX. В React декораторы встречаются реже (в основном в legacy-коде с MobX), но во Vue 3 они стали основой для работы с class-based компонентами и декораторами свойств. В этой статье разберём, как работают декораторы, какие виды существуют и где применяются.
+Декораторы — механизм метапрограммирования, позволяющий модифицировать поведение классов и их элементов через аннотации. Они не добавляют новой функциональности — они оборачивают существующую, добавляя поведение на уровне определения.
 
----
+## Архитектурная идея
 
-## Содержание
+Декораторы решают проблему **сквозной логики** (cross-cutting concerns). Логирование, валидация, кэширование, авторизация — это поведение, которое нужно во многих местах, но не является частью бизнес-логики.
 
-1. [Что такое декораторы](#что-такое-декораторы)
-2. [Виды декораторов](#виды-декораторов)
-3. [Декораторы классов](#декораторы-классов)
-4. [Декораторы методов](#декораторы-методов)
-5. [Декораторы свойств](#декораторы-свойств)
-6. [Декораторы параметров](#декораторы-параметров)
-7. [Декораторы доступа (get/set)](#декораторы-доступа-getset)
-8. [Декораторы во Vue](#декораторы-во-vue)
-9. [Декораторы в React](#декораторы-в-react)
-10. [Декораторы в NestJS](#декораторы-в-nestjs)
-11. [Метаданные и reflect-metadata](#метапрограммирование-и-reflect-metadata)
-12. [Stage 3 Decorators (TC39)](#stage-3-decorators-tc39)
-13. [Типичные ошибки](#типичные-ошибки)
+Без декораторов вы дублируете эту логику:
 
----
+```typescript
+class UserService {
+  async getUser(id: string) {
+    console.log("getUser called with", id);
+    const start = Date.now();
+    try {
+      const user = await db.users.findById(id);
+      return user;
+    } finally {
+      console.log("getUser took", Date.now() - start, "ms");
+    }
+  }
 
-## Что такое декораторы
+  async updateUser(id: string, data: Partial<User>) {
+    console.log("updateUser called with", id);
+    const start = Date.now();
+    try {
+      await db.users.update(id, data);
+    } finally {
+      console.log("updateUser took", Date.now() - start, "ms");
+    }
+  }
+}
+```
 
-Декоратор — это специальная функция, которая оборачивает элемент (класс, метод, свойство) и модифицирует его поведение. Синтаксически декораторы выглядят как `@имяДекоратора` перед объявлением.
+С декораторами — определяете поведение один раз:
+
+```typescript
+class UserService {
+  @log @measure
+  async getUser(id: string) {
+    return db.users.findById(id);
+  }
+
+  @log @measure
+  async updateUser(id: string, data: Partial<User>) {
+    await db.users.update(id, data);
+  }
+}
+```
+
+Это **Aspect-Oriented Programming** (AOP) — парадигма, в которой сквозная логика выделяется в отдельные модули и применяется к коду декларативно.
+
+## Когда вызываются декораторы
+
+Критически важно: декораторы выполняются **при определении класса** (когда модуль загружается), а не при создании экземпляра.
+
+```typescript
+function logClass(target: Function) {
+  console.log("Декоратор вызван для:", target.name);
+}
+
+@logClass
+class User {
+  constructor(public name: string) {}
+}
+
+// При загрузке модуля выведет: "Декоратор вызван для: User"
+// При new User() — НЕ выведет ничего
+```
+
+Это означает:
+- Декораторы не имеют доступа к `this` экземпляра (его ещё не существует)
+- Декораторы выполняются один раз за всё время жизни приложения
+- Порядок применения — снизу вверх (от класса к методу)
+
+## Две спецификации: Legacy и Stage 3
+
+TypeScript поддерживает две версии декораторов, и это **не просто разные синтаксисы** — это принципиально разные API.
+
+| | Legacy (`experimentalDecorators`) | Stage 3 (TC39 стандарт) |
+|---|---|---|
+| Сигнатура | `(target, key, descriptor)` | `(value, context)` |
+| Поддержка TS | `experimentalDecorators: true` | По умолчанию (TS 5.0+) |
+| Статус | Экспериментальная | Стандарт ECMAScript |
+| Доступ к метаданным | Через `reflect-metadata` | Через `context.metadata` |
+| `this` в декораторе | Не доступен | Через `context.access` |
+
+Legacy-декораторы — это экспериментальная фича TypeScript, которая предшествовала стандарту. Stage 3 — финальная спецификация, принятая TC39.
+
+## Legacy-декораторы (`experimentalDecorators`)
+
+Для использования нужна настройка в `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
+```
+
+### Декораторы классов
+
+Получают конструктор класса. Могут модифицировать или заменить его:
 
 ```typescript
 function sealed(constructor: Function) {
@@ -38,84 +117,15 @@ class User {
 }
 ```
 
-> **Аналогия:** Декоратор — как обёртка подарка. Подарок (класс/метод) остаётся тем же, но получает дополнительную «обёртку» — новое поведение или метаданные.
-
-### Как работают декораторы
-
-Декоратор — это обычная функция, которая вызывается при определении класса (не при создании экземпляра). Она получает информацию о декорируемом элементе и может:
-
-- Модифицировать его
-- Заменить его
-- Добавить метаданные
-- Вернуть новый дескриптор свойства
-
----
-
-## Виды декораторов
-
-| Вид | Что декорирует | Сигнатура |
-|---|---|---|
-| Class | Класс целиком | `(constructor: Function) => void` |
-| Method | Метод класса | `(target, key, descriptor) => void` |
-| Property | Свойство класса | `(target, key) => void` |
-| Parameter | Параметр метода | `(target, key, index) => void` |
-| Accessor | Getter/Setter | `(target, key, descriptor) => void` |
-
----
-
-## Декораторы классов
-
-Декоратор класса получает конструктор и может его модифицировать или заменить.
-
-### Базовый декоратор класса
-
-```typescript
-function logClass(target: Function) {
-  console.log(`Class created: ${target.name}`);
-}
-
-@logClass
-class User {
-  constructor(public name: string) {}
-}
-
-// При загрузке модуля выведет: "Class created: User"
-```
-
-### Декоратор, добавляющий метод
-
-```typescript
-function withTimestamp<T extends { new(...args: any[]): {} }>(constructor: T) {
-  return class extends constructor {
-    createdAt = new Date();
-
-    getCreatedAt() {
-      return this.createdAt;
-    }
-  };
-}
-
-@withTimestamp
-class User {
-  constructor(public name: string) {}
-}
-
-const user = new User("John");
-console.log(user.getCreatedAt()); // Date
-```
-
-### Декоратор с параметрами
+Декоратор с параметрами — это функция, возвращающая декоратор:
 
 ```typescript
 function singleton(scope: "global" | "request" = "global") {
   return function <T extends { new(...args: any[]): {} }>(constructor: T) {
     let instance: any;
-
     return class extends constructor {
       constructor(...args: any[]) {
-        if (!instance) {
-          instance = new constructor(...args);
-        }
+        if (!instance) instance = new constructor(...args);
         return instance;
       }
     };
@@ -126,25 +136,17 @@ function singleton(scope: "global" | "request" = "global") {
 class Database {
   constructor(public connectionString: string) {}
 }
-
-const db1 = new Database("postgres://...");
-const db2 = new Database("postgres://...");
-console.log(db1 === db2); // true — один экземпляр
 ```
 
----
+### Декораторы методов
 
-## Декораторы методов
-
-Декоратор метода получает три аргумента:
-- `target` — прототип класса (для static — сам класс)
+Получают три аргумента:
+- `target` — прототип класса (для `static` — сам класс)
 - `key` — имя метода
-- `descriptor` — дескриптор свойства (можно модифицировать)
-
-### Логирование вызовов
+- `descriptor` — дескриптор свойства, который можно модифицировать
 
 ```typescript
-function logMethod(
+function log(
   target: any,
   key: string,
   descriptor: PropertyDescriptor
@@ -162,90 +164,16 @@ function logMethod(
 }
 
 class Calculator {
-  @logMethod
+  @log
   add(a: number, b: number): number {
     return a + b;
   }
 }
-
-const calc = new Calculator();
-calc.add(2, 3);
-// "Calling add with [2, 3]"
-// "add returned 5"
 ```
 
-### Декоратор с параметрами
+### Декораторы свойств
 
-```typescript
-function deprecated(reason: string) {
-  return function (
-    target: any,
-    key: string,
-    descriptor: PropertyDescriptor
-  ): PropertyDescriptor {
-    const original = descriptor.value;
-
-    descriptor.value = function (...args: any[]) {
-      console.warn(`DEPRECATED: ${key} is deprecated. ${reason}`);
-      return original.apply(this, args);
-    };
-
-    return descriptor;
-  };
-}
-
-class UserService {
-  @deprecated("Use getUserById instead")
-  getUser(id: number) {
-    // ...
-  }
-}
-```
-
-### Кэширование
-
-```typescript
-function memoize() {
-  return function (
-    target: any,
-    key: string,
-    descriptor: PropertyDescriptor
-  ): PropertyDescriptor {
-    const original = descriptor.value;
-    const cache = new Map<string, any>();
-
-    descriptor.value = function (...args: any[]) {
-      const cacheKey = JSON.stringify(args);
-
-      if (cache.has(cacheKey)) {
-        return cache.get(cacheKey);
-      }
-
-      const result = original.apply(this, args);
-      cache.set(cacheKey, result);
-      return result;
-    };
-
-    return descriptor;
-  };
-}
-
-class MathService {
-  @memoize()
-  fibonacci(n: number): number {
-    if (n <= 1) return n;
-    return this.fibonacci(n - 1) + this.fibonacci(n - 2);
-  }
-}
-```
-
----
-
-## Декораторы свойств
-
-Декораторы свойств получают `target` (прототип) и `key` (имя свойства). Они **не могут** напрямую модифицировать значение — только добавлять метаданные.
-
-### Базовый декоратор свойства
+Получают `target` (прототип) и `key` (имя свойства). **Не получают дескриптор** — потому что свойство ещё не инициализировано на момент вызова декоратора. Могут только добавить метаданные или определить getter/setter:
 
 ```typescript
 function readonly(target: any, key: string) {
@@ -259,446 +187,71 @@ class Config {
   @readonly
   apiUrl = "https://api.example.com";
 }
-
-const config = new Config();
-config.apiUrl = "other"; // Error в strict mode
 ```
 
-### Декоратор с валидацией
+### Декораторы параметров
+
+Не могут модифицировать значение — только добавлять метаданные:
 
 ```typescript
-function validate(pattern: RegExp, message: string) {
-  return function (target: any, key: string) {
-    let value: any;
-
-    Object.defineProperty(target, key, {
-      get() {
-        return value;
-      },
-      set(newValue: any) {
-        if (!pattern.test(newValue)) {
-          throw new Error(message);
-        }
-        value = newValue;
-      },
-      configurable: true
-    });
-  };
-}
-
-class User {
-  @validate(/^[a-zA-Z]+$/, "Name must contain only letters")
-  name: string;
-
-  @validate(/^\d{3}-\d{3}-\d{4}$/, "Invalid phone format")
-  phone: string;
-}
-
-const user = new User();
-user.name = "John";    // OK
-user.name = "John123"; // Error: Name must contain only letters
-```
-
----
-
-## Декораторы параметров
-
-Декораторы параметров не могут модифицировать значение — они используются для добавления метаданных.
-
-### Базовый декоратор параметра
-
-```typescript
-function logParam(
-  target: any,
-  key: string,
-  index: number
-) {
+function logParam(target: any, key: string, index: number) {
   console.log(`Param ${index} in ${key}`);
 }
 
 class UserService {
-  createUser(
-    @logParam name: string,
-    @logParam age: number
-  ) {
-    // ...
-  }
-}
-// Выведет:
-// "Param 0 in createUser"
-// "Param 1 in createUser"
-```
-
-### Практическое применение — валидация
-
-```typescript
-const VALIDATION_KEY = Symbol("validation");
-
-function required(target: any, key: string, index: number) {
-  const existing = Reflect.getMetadata(VALIDATION_KEY, target, key) || [];
-  existing.push({ index, rule: "required" });
-  Reflect.defineMetadata(VALIDATION_KEY, existing, target, key);
-}
-
-function validateParams(target: any, key: string, descriptor: PropertyDescriptor) {
-  const original = descriptor.value;
-  const rules = Reflect.getMetadata(VALIDATION_KEY, target, key) || [];
-
-  descriptor.value = function (...args: any[]) {
-    for (const rule of rules) {
-      if (rule.rule === "required" && (args[rule.index] === null || args[rule.index] === undefined)) {
-        throw new Error(`Parameter ${rule.index} is required`);
-      }
-    }
-    return original.apply(this, args);
-  };
-
-  return descriptor;
-}
-
-class Controller {
-  @validateParams
-  createUser(@required name: string, @required age: number) {
+  createUser(@logParam name: string, @logParam age: number) {
     // ...
   }
 }
 ```
 
----
+### Декораторы accessor (get/set)
 
-## Декораторы доступа (get/set)
-
-Декораторы доступа применяются к getter/setter и работают аналогично декораторам методов.
+Работают как декораторы методов — получают дескриптор:
 
 ```typescript
-function format(target: any, key: string, descriptor: PropertyDescriptor) {
+function uppercase(target: any, key: string, descriptor: PropertyDescriptor) {
   const original = descriptor.get!;
-
   descriptor.get = function () {
     const value = original.call(this);
-    return value.toUpperCase();
+    return typeof value === "string" ? value.toUpperCase() : value;
   };
-
   return descriptor;
 }
 
 class User {
   private _name = "john";
 
-  @format
-  get name() {
-    return this._name;
-  }
+  @uppercase
+  get name() { return this._name; }
 }
 
-const user = new User();
-console.log(user.name); // "JOHN"
+new User().name; // "JOHN"
 ```
 
----
+## Stage 3 Декораторы (TC39)
 
-## Декораторы во Vue
+Новая спецификация, принятая как стандарт ECMAScript. TypeScript поддерживает её начиная с 5.0 без дополнительных флагов.
 
-### vue-property-decorator
+### Принципиально другой API
 
-Во Vue 2/3 с class-based API декораторы используются для объявления компонентов:
+Вместо `(target, key, descriptor)` — `(value, context)`:
 
-```typescript
-import { Component, Prop, Emit, Watch, Vue } from "vue-property-decorator";
+- `value` — декорируемый элемент (функция метода, класс, initializer)
+- `context` — объект с информацией о контексте:
+  - `context.kind` — тип элемента: `"class"`, `"method"`, `"getter"`, `"setter"`, `"field"`, `"accessor"`
+  - `context.name` — имя элемента (строка, символ или вычисленное)
+  - `context.access` — объект для доступа к элементу: `access.get(obj)`, `access.set(obj, value)`
+  - `context.metadata` — хранилище метаданных (замена `reflect-metadata`)
 
-@Component
-export default class UserCard extends Vue {
-  @Prop({ required: true })
-  userId!: number;
-
-  @Prop({ default: "Guest" })
-  displayName!: string;
-
-  user: User | null = null;
-
-  @Watch("userId", { immediate: true })
-  async onUserIdChange(newId: number) {
-    this.user = await fetchUser(newId);
-  }
-
-  @Emit("selected")
-  selectUser() {
-    return this.user;
-  }
-
-  get fullName() {
-    return this.user ? `${this.user.firstName} ${this.user.lastName}` : "";
-  }
-}
-```
-
-### Vue 3 + Class Component (vue-facing-decorator)
+### Декоратор метода
 
 ```typescript
-import { Component, Prop, Watch, Vue } from "vue-facing-decorator";
-
-@Component({
-  emits: ["selected"]
-})
-export default class UserCard extends Vue {
-  @Prop({ required: true })
-  userId!: number;
-
-  user: User | null = null;
-
-  @Watch("userId")
-  onUserIdChange() {
-    this.fetchUser();
-  }
-
-  mounted() {
-    this.fetchUser();
-  }
-
-  fetchUser() {
-    // ...
-  }
-}
-```
-
-### Декораторы для реактивности
-
-```typescript
-import { Mutation, Action, State } from "vuex-class";
-
-@Component
-export default class UserComponent extends Vue {
-  @State("users")
-  users!: User[];
-
-  @Mutation("SET_USERS")
-  setUsers!: (users: User[]) => void;
-
-  @Action("fetchUsers")
-  fetchUsers!: () => Promise<void>;
-
-  async created() {
-    await this.fetchUsers();
-  }
-}
-```
-
----
-
-## Декораторы в React
-
-В React декораторы используются реже, но встречаются в связке с MobX:
-
-### MobX декораторы
-
-```typescript
-import { makeObservable, observable, computed, action } from "mobx";
-
-class UserStore {
-  @observable
-  users: User[] = [];
-
-  @observable
-  loading = false;
-
-  @computed
-  get activeUsers() {
-    return this.users.filter(u => u.isActive);
-  }
-
-  @action
-  addUser(user: User) {
-    this.users.push(user);
-  }
-
-  constructor() {
-    makeObservable(this);
-  }
-}
-```
-
-### Декораторы для компонентов (legacy)
-
-```typescript
-// Декоратор для подключения к контексту
-function withTheme<T extends object>(
-  WrappedComponent: React.ComponentType<T>
-) {
-  return class extends React.Component<T> {
-    static contextType = ThemeContext;
-
-    render() {
-      return (
-        <WrappedComponent
-          {...this.props}
-          theme={this.context}
-        />
-      );
-    }
+function logged(value: Function, context: ClassMethodDecoratorContext) {
+  return function (this: any, ...args: any[]) {
+    console.log(`Calling ${String(context.name)}`);
+    return value.apply(this, args);
   };
-}
-
-@withTheme
-class Button extends React.Component<ButtonProps & { theme: Theme }> {
-  render() {
-    return <button style={{ color: this.props.theme.primary }}>Click</button>;
-  }
-}
-```
-
----
-
-## Декораторы в NestJS
-
-NestJS активно использует декораторы для построения приложений:
-
-### Контроллеры и маршруты
-
-```typescript
-import { Controller, Get, Post, Body, Param } from "@nestjs/common";
-
-@Controller("users")
-export class UserController {
-  @Get()
-  findAll(): Promise<User[]> {
-    return this.userService.findAll();
-  }
-
-  @Get(":id")
-  findOne(@Param("id") id: string): Promise<User> {
-    return this.userService.findOne(id);
-  }
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
-  }
-}
-```
-
-### Сервисы и инъекция зависимостей
-
-```typescript
-import { Injectable, Inject } from "@nestjs/common";
-
-@Injectable()
-export class UserService {
-  constructor(
-    @Inject("USER_REPOSITORY")
-    private userRepository: Repository<User>
-  ) {}
-
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
-  }
-}
-```
-
-### Валидация с декораторами
-
-```typescript
-import { IsString, IsEmail, MinLength, MaxLength } from "class-validator";
-
-export class CreateUserDto {
-  @IsString()
-  @MinLength(2)
-  @MaxLength(50)
-  name: string;
-
-  @IsEmail()
-  email: string;
-
-  @IsString()
-  @MinLength(8)
-  password: string;
-}
-```
-
----
-
-## Метапрограммирование и reflect-metadata
-
-Декораторы часто используются вместе с `reflect-metadata` для добавления метаданных:
-
-### Установка
-
-```bash
-npm install reflect-metadata
-```
-
-### tsconfig.json
-
-```json
-{
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  }
-}
-```
-
-### Практическое применение
-
-```typescript
-import "reflect-metadata";
-
-const ROUTE_KEY = Symbol("route");
-
-function Get(path: string) {
-  return function (target: any, key: string, descriptor: PropertyDescriptor) {
-    Reflect.defineMetadata(ROUTE_KEY, { method: "GET", path }, target, key);
-  };
-}
-
-function Post(path: string) {
-  return function (target: any, key: string, descriptor: PropertyDescriptor) {
-    Reflect.defineMetadata(ROUTE_KEY, { method: "POST", path }, target, key);
-  };
-}
-
-class UserController {
-  @Get("/users")
-  findAll() {
-    return [];
-  }
-
-  @Post("/users")
-  create() {
-    return {};
-  }
-}
-
-// Чтение метаданных
-const metadata = Reflect.getMetadata(ROUTE_KEY, UserController.prototype, "findAll");
-console.log(metadata); // { method: "GET", path: "/users" }
-```
-
----
-
-## Stage 3 Decorators (TC39)
-
-TypeScript поддерживает как legacy-декораторы (experimental), так и новые Stage 3 декораторы (стандарт ECMAScript).
-
-### Отличия
-
-| Характеристика | Legacy | Stage 3 |
-|---|---|---|
-| Сигнатура | `(target, key, descriptor)` | `(value, context)` |
-| Поддержка TS | `experimentalDecorators: true` | По умолчанию (TS 5.0+) |
-| Статус | Устаревший | Стандарт |
-| Доступ к `this` | В runtime | Через `context.access` |
-
-### Stage 3 синтаксис
-
-```typescript
-// Stage 3 декоратор метода
-function logged(value: any, context: ClassMethodDecoratorContext) {
-  if (context.kind === "method") {
-    return function (...args: any[]) {
-      console.log(`Calling ${String(context.name)}`);
-      return value.apply(this, args);
-    };
-  }
 }
 
 class User {
@@ -709,13 +262,10 @@ class User {
 }
 ```
 
-### Stage 3 декоратор класса
+### Декоратор класса
 
 ```typescript
-function registered<T extends new (...args: any[]) => any>(
-  value: T,
-  context: ClassDecoratorContext
-) {
+function registered(value: typeof User, context: ClassDecoratorContext) {
   return class extends value {
     constructor(...args: any[]) {
       super(...args);
@@ -730,14 +280,164 @@ class User {
 }
 ```
 
----
+### Декоратор поля (field)
+
+В Stage 3 декораторы полей работают через **initializer** — функцию, которая вызывается при инициализации поля:
+
+```typescript
+function observed(initialValue: any, context: ClassFieldDecoratorContext) {
+  const { name } = context;
+  
+  return function (this: any) {
+    const stored = initialValue;
+    Object.defineProperty(this, name, {
+      get() { return stored; },
+      set(v: any) {
+        console.log(`${String(name)} changed to`, v);
+      }
+    });
+    return stored;
+  };
+}
+
+class User {
+  @observed
+  name = "John";
+}
+```
+
+### Автоматическая установка доступа (auto-accessor)
+
+Stage 3 вводит новый синтаксис `accessor`, который автоматически создаёт getter/setter:
+
+```typescript
+function logged(value: { get(): any; set(v: any): void }, context: ClassAccessorDecoratorContext) {
+  return {
+    get(this: any) {
+      console.log(`Reading ${String(context.name)}`);
+      return value.get.call(this);
+    },
+    set(this: any, newValue: any) {
+      console.log(`Setting ${String(context.name)} to`, newValue);
+      value.set.call(this, newValue);
+    }
+  };
+}
+
+class User {
+  @logged
+  accessor name = "John";
+}
+```
+
+### Метаданные без `reflect-metadata`
+
+Stage 3 декораторы имеют встроенное хранилище метаданных:
+
+```typescript
+const ROUTES = Symbol("routes");
+
+function Route(path: string) {
+  return function (value: Function, context: ClassMethodDecoratorContext) {
+    context.metadata[ROUTES] ??= [];
+    context.metadata[ROUTES].push({ method: context.name, path });
+  };
+}
+
+class UserController {
+  @Route("/users")
+  getAll() { return []; }
+
+  @Route("/users/:id")
+  getById() { return null; }
+}
+```
+
+## Где используются декораторы
+
+### NestJS — декораторы как основа фреймворка
+
+NestJS построен на декораторах для DI, маршрутизации и валидации:
+
+```typescript
+@Controller("users")
+class UserController {
+  constructor(private userService: UserService) {}
+
+  @Get()
+  findAll(): Promise<User[]> {
+    return this.userService.findAll();
+  }
+
+  @Post()
+  create(@Body() dto: CreateUserDto): Promise<User> {
+    return this.userService.create(dto);
+  }
+}
+
+@Injectable()
+class UserService {
+  constructor(@Inject("USER_REPOSITORY") private repo: Repository<User>) {}
+}
+
+class CreateUserDto {
+  @IsString() @MinLength(2) @MaxLength(50)
+  name: string;
+
+  @IsEmail()
+  email: string;
+}
+```
+
+### MobX — реактивность через декораторы
+
+```typescript
+class UserStore {
+  @observable users: User[] = [];
+  @observable loading = false;
+
+  @computed get activeUsers() {
+    return this.users.filter(u => u.isActive);
+  }
+
+  @action addUser(user: User) {
+    this.users.push(user);
+  }
+}
+```
+
+### Vue — class-based компоненты (legacy)
+
+Vue 2 с `vue-property-decorator` и Vue 3 с `vue-facing-decorator`:
+
+```typescript
+@Component
+class UserCard extends Vue {
+  @Prop({ required: true }) userId!: number;
+
+  @Watch("userId", { immediate: true })
+  async onUserIdChange(id: number) {
+    this.user = await fetchUser(id);
+  }
+}
+```
+
+## Когда НЕ использовать декораторы
+
+1. **В функциональном коде.** React hooks, Vue composables — декораторы не нужны, если нет классов.
+
+2. **Когда достаточно обычных функций или HOC.** Декораторы — это синтаксический сахар над обёртками. Если обёртка простая, декоратор избыточен.
+
+3. **Если команда не знакома с паттерном.** Декораторы — продвинутая фича. Если команда не понимает, как они работают, — лучше использовать явные обёртки.
+
+4. **В новом коде на Stage 3.** Если проект начинается сейчас, используйте Stage 3 декораторы, а не legacy. Legacy — только для поддержки существующих библиотек (NestJS, MobX).
 
 ## Типичные ошибки
 
-### 1. Забытый experimentalDecorators
+### Забытый `experimentalDecorators`
 
 ```json
-// tsconfig.json — без этого декораторы не работают
+// tsconfig.json — без этого legacy-декораторы не работают
 {
   "compilerOptions": {
     "experimentalDecorators": true
@@ -745,44 +445,25 @@ class User {
 }
 ```
 
-### 2. Неправильная сигнатура декоратора
+### Путаница между legacy и Stage 3
 
 ```typescript
-// Error — декоратор метода должен возвращать PropertyDescriptor
-function log(target: any, key: string) {
-  // Нет descriptor — нельзя модифицировать метод
-}
+// Legacy — три аргумента
+function legacy(target: any, key: string, descriptor: PropertyDescriptor) { }
 
-// OK
-function log(target: any, key: string, descriptor: PropertyDescriptor) {
-  // ...
-  return descriptor;
-}
+// Stage 3 — два аргумента
+function stage3(value: any, context: ClassMethodDecoratorContext) { }
 ```
 
-### 3. Путаница между legacy и Stage 3
+### Декоратор свойства не может изменить значение напрямую
 
 ```typescript
-// Legacy
-function legacy(target: any, key: string, descriptor: PropertyDescriptor) {
-  // ...
-}
-
-// Stage 3
-function stage3(value: any, context: ClassMethodDecoratorContext) {
-  // ...
-}
-```
-
-### 4. Декоратор свойства не может изменить значение
-
-```typescript
-// Error — декоратор свойства не получает descriptor
+// ❌ Не работает — свойство ещё не инициализировано
 function init(target: any, key: string) {
-  target[key] = "initial"; // Это не сработает как ожидается
+  target[key] = "initial";
 }
 
-// OK — используйте getter/setter
+// ✅ Использовать getter/setter
 function init(target: any, key: string) {
   let value: any;
   Object.defineProperty(target, key, {
@@ -792,35 +473,13 @@ function init(target: any, key: string) {
 }
 ```
 
-### 5. Отсутствие reflect-metadata
+### Отсутствие `reflect-metadata` для legacy
 
 ```typescript
-// Error — Reflect.defineMetadata не существует
+// ❌ Reflect.defineMetadata не существует
 Reflect.defineMetadata("key", "value", target);
 
-// OK — импортируйте polyfill
+// ✅ Импортировать polyfill
 import "reflect-metadata";
 Reflect.defineMetadata("key", "value", target);
 ```
-
----
-
-## Заключение
-
-Декораторы — мощный инструмент для:
-
-- **Метапрограммирования** — добавление метаданных к классам и методам
-- **AOP (Aspect-Oriented Programming)** — логирование, валидация, кэширование
-- **DI (Dependency Injection)** — инъекция зависимостей в NestJS
-- **Реактивности** — MobX, Vuex class-based stores
-
-**Когда использовать:**
-- В NestJS — обязательно (контроллеры, сервисы, DTO)
-- В MobX — для class-based stores
-- Во Vue — для class-based компонентов (legacy)
-- В React — редко, в основном с MobX
-
-**Когда не использовать:**
-- В функциональном коде (React hooks, Vue composables)
-- Когда достаточно обычных функций или HOC
-- Если команда не знакома с паттерном
