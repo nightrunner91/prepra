@@ -16,12 +16,9 @@
 8. [Default types — типы по умолчанию](#default-types--типы-по-умолчанию)
 9. [Дженерики в React](#дженерики-в-react)
 10. [Дженерики во Vue](#дженерики-во-vue)
-11. [Utility-типы как дженерики](#utility-типы-как-дженерики)
-12. [Условные типы и infer](#условные-типы-и-infer)
-13. [Mapped types](#mapped-types)
-14. [Продвинутые паттерны](#продвинутые-паттерны)
-15. [Как читать сложные дженерики](#как-читать-сложные-дженерики)
-16. [Типичные ошибки](#типичные-ошибки)
+11. [Продвинутые паттерны](#продвинутые-паттерны)
+12. [Как читать сложные дженерики](#как-читать-сложные-дженерики)
+13. [Типичные ошибки](#типичные-ошибки)
 
 ---
 
@@ -786,219 +783,7 @@ const emit = defineEmits<{
 
 ---
 
-## Utility-типы как дженерики
-
-TypeScript предоставляет встроенные utility-типы, которые сами являются дженериками. Понимание их устройства помогает создавать свои utility-типы.
-
-### Partial, Required, Readonly
-
-Эти utility-типы трансформируют свойства существующего типа:
-
-```typescript
-interface User {
-  name: string;
-  age: number;
-  email: string;
-}
-
-type PartialUser = Partial<User>;
-// { name?: string; age?: number; email?: string; }
-// Все свойства стали опциональными
-
-type RequiredUser = Required<User>;
-// { name: string; age: number; email: string; }
-// Все свойства стали обязательными
-
-type ReadonlyUser = Readonly<User>;
-// { readonly name: string; readonly age: number; readonly email: string; }
-// Все свойства стали readonly
-```
-
-**Как это работает внутри:**
-
-```typescript
-// Встроенная реализация Partial
-type Partial<T> = {
-  [K in keyof T]?: T[K];
-};
-// keyof User = "name" | "age" | "email"
-// Для каждого ключа K делаем свойство опциональным (?)
-```
-
-### Pick, Omit
-
-Эти utility-типы выбирают или исключают свойства:
-
-```typescript
-type UserPreview = Pick<User, "name" | "age">;
-// { name: string; age: number; }
-// Оставили только name и age
-
-type UserWithoutEmail = Omit<User, "email">;
-// { name: string; age: number; }
-// Убрали email
-```
-
-**Как это работает внутри:**
-
-```typescript
-// Встроенная реализация Pick
-type Pick<T, K extends keyof T> = {
-  [P in K]: T[P];
-};
-// K = "name" | "age"
-// Для каждого ключа P из K берём тип T[P]
-```
-
-### Record
-
-`Record` создаёт тип объекта с заданными ключами и значениями:
-
-```typescript
-type UserById = Record<string, User>;
-// { [key: string]: User }
-// Словарь: ключ — строка, значение — User
-
-type StatusCodes = Record<"success" | "error" | "loading", number>;
-// { success: number; error: number; loading: number; }
-// Объект с фиксированными ключами
-```
-
-### Extract, Exclude
-
-Эти utility-типы работают с union-типами:
-
-```typescript
-type Status = "idle" | "loading" | "success" | "error";
-
-type ActiveStatus = Exclude<Status, "idle">;
-// "loading" | "success" | "error"
-// Убрали "idle" из union
-
-type FinalStatus = Extract<Status, "success" | "error">;
-// "success" | "error"
-// Оставили только "success" и "error"
-```
-
----
-
-## Условные типы и infer
-
-Условные типы и `infer` — продвинутые конструкции, которые позволяют создавать сложные трансформации типов.
-
-### Условные типы
-
-Условный тип проверяет, соответствует ли тип условию, и возвращает один из двух вариантов:
-
-```typescript
-type IsString<T> = T extends string ? "yes" : "no";
-
-type A = IsString<string>;  // "yes"
-type B = IsString<number>;  // "no"
-type C = IsString<"hello">; // "yes" — литеральный тип совместим со string
-```
-
-**Синтаксис:** `T extends U ? X : Y`
-- Если `T` совместим с `U` → результат `X`
-- Иначе → результат `Y`
-
-### infer — извлечение типа
-
-`infer` используется внутри условных типов для извлечения части типа. Это как «переменная», в которую TypeScript записывает найденный тип.
-
-```typescript
-type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
-
-type Fn = () => { name: string };
-type Result = ReturnType<Fn>; // { name: string }
-```
-
-**Разбор по шагам:**
-1. `ReturnType<Fn>` — подставляем `Fn` вместо `T`
-2. Проверяем: `(() => { name: string }) extends ((...args: any[]) => infer R)`?
-3. Да, функция подходит. TypeScript извлекает тип возвращаемого значения → `R = { name: string }`
-4. Результат: `R` = `{ name: string }`
-
-Другой пример — извлечение типа элемента массива:
-
-```typescript
-type ElementType<T> = T extends (infer U)[] ? U : T;
-
-type A = ElementType<string[]>; // string
-type B = ElementType<number>;   // number
-```
-
-**Разбор по шагам:**
-1. `ElementType<string[]>` — подставляем `string[]` вместо `T`
-2. Проверяем: `string[] extends (infer U)[]`?
-3. Да, это массив. TypeScript извлекает тип элемента → `U = string`
-4. Результат: `string`
-
-Для `ElementType<number>`:
-1. `number extends (infer U)[]`? Нет, `number` — не массив.
-2. Результат: `T` = `number` (ветка `else`)
-
-### Практический пример с infer
-
-```typescript
-type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
-
-type A = UnwrapPromise<Promise<string>>; // string
-type B = UnwrapPromise<number>;          // number
-```
-
-**Разбор по шагам:**
-1. `UnwrapPromise<Promise<string>>` — подставляем `Promise<string>` вместо `T`
-2. Проверяем: `Promise<string> extends Promise<infer U>`?
-3. Да, это Promise. TypeScript извлекает тип внутри → `U = string`
-4. Результат: `string`
-
----
-
-## Mapped types
-
-Mapped types позволяют создавать новые типы, трансформируя существующие. Это как `Array.map()`, но для типов.
-
-### Базовый mapped type
-
-```typescript
-type Readonly<T> = {
-  readonly [K in keyof T]: T[K];
-};
-
-type Optional<T> = {
-  [K in keyof T]?: T[K];
-};
-```
-
-**Как это работает:**
-- `keyof T` — получаем все ключи типа `T`
-- `[K in keyof T]` — итерируем по каждому ключу
-- `T[K]` — получаем тип значения для ключа `K`
-- `readonly` / `?` — модифицируем свойство
-
-### Key remapping
-
-Можно трансформировать сами ключи с помощью `as`:
-
-```typescript
-type Getters<T> = {
-  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
-};
-
-interface User {
-  name: string;
-  age: number;
-}
-
-type UserGetters = Getters<User>;
-// { getName: () => string; getAge: () => number; }
-```
-
-**Разбор по шагам:**
-1. `keyof User = "name" | "age"`
-2. Для `K = "name"`: `Capitalize<"name">` = `"Name"` → ключ `"getName"`, тип `() => string`
-3. Для `K = "age"`: `Capitalize<"age">` = `"Age"` → ключ `"getAge"`, тип `() => number`
+> **Смежные темы:** Встроенные utility-типы (`Partial`, `Pick`, `Omit`, `Record` и др.) подробно разобраны в статье [TypeScript Utility Types](./typescript-utility-types.md). Условные типы и `infer` — в статье [TypeScript `infer`](./typescript-infer.md).
 
 ---
 
@@ -1080,41 +865,24 @@ emitter.on("error", (msg, code) => console.log(msg, code)); // OK
 
 ## Как читать сложные дженерики
 
-Когда вы видите сложный дженерик, разберите его по шагам.
-
-### Алгоритм разбора
+Алгоритм разбора:
 
 1. **Найдите параметры типа** — что внутри `<>`?
 2. **Найдите constraints** — что после `extends`?
 3. **Найдите, где используется `T`** — в аргументах, возвращаемом типе, свойствах?
 4. **Подставьте конкретный тип** — замените `T` на реальный тип и посмотрите, что получится
 
-### Пример разбора
-
 ```typescript
-function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
-  return obj[key];
+function createApiService<T extends { id: string }>(baseUrl: string) {
+  // ...
 }
+
+const userService = createApiService<User>("/api/users");
+// 1. Параметры: T
+// 2. Constraint: T extends { id: string }
+// 3. T используется в возвращаемых методах
+// 4. Подстановка: T = User → все методы типизированы под User
 ```
-
-**Разбор:**
-1. Параметры типа: `T` и `K`
-2. Constraints: `K extends keyof T` — `K` должен быть ключом `T`
-3. Использование: `obj: T` (аргумент), `key: K` (аргумент), `T[K]` (возврат)
-4. Подстановка: `getProperty(user, "name")` → `T = User`, `K = "name"`, возврат `User["name"]` = `string`
-
-### Пример разбора условного типа
-
-```typescript
-type UnwrapArray<T> = T extends (infer U)[] ? U : T;
-```
-
-**Разбор:**
-1. Параметр типа: `T`
-2. Условие: `T extends (infer U)[]` — если `T` это массив
-3. `infer U` — извлекаем тип элемента массива в `U`
-4. Если да → `U` (тип элемента), если нет → `T` (исходный тип)
-5. `UnwrapArray<string[]>` → `string`, `UnwrapArray<number>` → `number`
 
 ---
 
@@ -1128,41 +896,13 @@ function getValue<T>(value: T): T {
   return value;
 }
 
-// Хорошо — дженерик нужен для связи типов
+// Хорошо — дженерик связывает вход и выход
 function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
   return obj[key];
 }
 ```
 
-### 2. Использование any вместо дженерика
-
-```typescript
-// Плохо — теряем типобезопасность
-function first(arr: any[]): any {
-  return arr[0];
-}
-
-// Хорошо — тип сохраняется
-function first<T>(arr: T[]): T | undefined {
-  return arr[0];
-}
-```
-
-### 3. Отсутствие constraint при обращении к свойствам
-
-```typescript
-// Error — T может не иметь свойства length
-function getLength<T>(item: T): number {
-  return item.length;
-}
-
-// OK — ограничиваем тип
-function getLength<T extends { length: number }>(item: T): number {
-  return item.length;
-}
-```
-
-### 4. Неправильное использование в React
+### 2. Неправильное использование в React
 
 ```typescript
 // Плохо — тип не передаётся в useState
@@ -1172,22 +912,6 @@ const [user, setUser] = useState(null);
 // Хорошо — явно указываем тип
 const [user, setUser] = useState<User | null>(null);
 // user: User | null
-```
-
-### 5. Забытый дженерик в API-функции
-
-```typescript
-// Плохо — теряем тип ответа
-async function fetchUser() {
-  const res = await fetch("/api/user");
-  return res.json(); // unknown
-}
-
-// Хорошо — типизируем
-async function fetchUser(): Promise<User> {
-  const res = await fetch("/api/user");
-  return res.json() as Promise<User>;
-}
 ```
 
 ---
