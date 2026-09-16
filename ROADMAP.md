@@ -46,22 +46,22 @@
 
 ---
 
-## Phase 0: Подготовка и инициализация
+## Phase 0: Подготовка и инициализация ✅
 
 **Цель:** Создать рабочий Astro-проект с базовой структурой.
 
 ### Задачи
 
-- [ ] Создать новую ветку `feature/astro-site`
-- [ ] Инициализировать Astro проект в корне (или в `/site`)
-- [ ] Установить зависимости: `astro`, `@astrojs/mdx`, `@astrojs/react`, `@astrojs/tailwind`, `tailwindcss`
-- [ ] Настроить `astro.config.mjs`:
+- [x] Создать новую ветку `feature/astro-site`
+- [x] Инициализировать Astro проект в корне (или в `/site`)
+- [x] Установить зависимости: `astro`, `@astrojs/mdx`, `@astrojs/react`, `@astrojs/tailwind`, `tailwindcss`
+- [x] Настроить `astro.config.mjs`:
   - Output: `static`
   - Site: `https://username.github.io/react-learn`
   - Base: `/react-learn` (для GitHub Pages)
-- [ ] Настроить TypeScript (`tsconfig.json`)
-- [ ] Добавить базовый layout (`src/layouts/BaseLayout.astro`)
-- [ ] Настроить GitHub Pages adapter (`@astrojs/github-pages`)
+- [x] Настроить TypeScript (`tsconfig.json`)
+- [x] Добавить базовый layout (`src/layouts/BaseLayout.astro`)
+- [x] Настроить GitHub Pages adapter (примечание: `@astrojs/github-pages` не существует, используется static output с GitHub Actions)
 
 ### Результат
 

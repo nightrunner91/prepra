@@ -1,0 +1,46 @@
+---
+title: "Типы данных в JavaScript"
+section: javascript
+description: "Примитивные и ссылочные типы данных, типы в JavaScript, преобразование типов"
+order: 1
+tags: [types, primitives, objects, coercion]
+questions:
+  - Какие типы данных существуют в JavaScript
+  - Чем примитивные типы отличаются от ссылочных
+  - Как работает преобразование типов (coercion)
+  - Что такое NaN и как его проверить
+  - Чем отличается null от undefined
+---
+
+# Типы данных в JavaScript
+
+В JavaScript существует 7 примитивных типов данных и один объектный тип.
+
+## Примитивные типы
+
+1. **string** - строка
+2. **number** - число (включая NaN и Infinity)
+3. **boolean** - логический тип
+4. **null** - отсутствие значения
+5. **undefined** - неопределённое значение
+6. **symbol** - уникальный идентификатор
+7. **bigint** - большое целое число
+
+## Ссылочный тип
+
+**object** - единственный ссылочный тип, включает объекты, массивы, функции и другие структуры.
+
+## Проверка типов
+
+Для проверки типов используется оператор `typeof`:
+
+```javascript
+typeof 'hello' // 'string'
+typeof 42 // 'number'
+typeof true // 'boolean'
+typeof null // 'object' (ошибка в языке)
+typeof undefined // 'undefined'
+typeof Symbol() // 'symbol'
+typeof 10n // 'bigint'
+typeof {} // 'object'
+```
