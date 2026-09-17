@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const sections = [
+    { id: 'javascript', label: 'JavaScript', description: 'Основы JavaScript, ES6+, замыкания, прототипы, асинхронность и многое другое' },
+    { id: 'typescript', label: 'TypeScript', description: 'Типизация, дженерики, утилитарные типы, декораторы и лучшие практики' },
+    { id: 'react', label: 'React', description: 'Хуки, паттерны, оптимизация производительности, архитектура компонентов' },
+    { id: 'nextjs', label: 'Next.js', description: 'Роутинг, серверные компоненты, кэширование, деплой и оптимизация' },
+    { id: 'testing', label: 'Testing', description: 'Unit, integration, E2E тестирование, мокирование, визуальное тестирование' },
+    { id: 'performance', label: 'Performance', description: 'Метрики, виртуализация, hydration, web workers, архитектура браузера' },
+    { id: 'architecture', label: 'Architecture', description: 'Паттерны проектирования, SOLID, DRY/KISS/YAGNI, BFF, MVC/MVVM' },
+    { id: 'state-management', label: 'State Management', description: 'Zustand, TanStack Query, клиентские хранилища данных' },
+    { id: 'algorithms', label: 'Algorithms', description: 'Алгоритмическая сложность, Big O, структуры данных' },
+    { id: 'api-communication', label: 'API Communication', description: 'REST, GraphQL, WebSocket, HTTP-клиенты, long polling' },
+    { id: 'build-and-deployment', label: 'Build & Deployment', description: 'Сборка бандлов, CI/CD, деплой платформ, стратегии деплоя' },
+    { id: 'html-css', label: 'HTML & CSS', description: 'Семантика, CSS-методологии, flexbox, grid, анимации, адаптивность' },
+    { id: 'platforms', label: 'Platforms', description: 'PWA, React Native, Preact и другие платформы' },
+    { id: 'security', label: 'Security', description: 'XSS, CSRF, CSP, аутентификация, HTTP-заголовки, supply chain' },
+  ];
+
+  return sections.map((s) => ({
+    params: { section: s.id },
+    props: { section: s },
+  }));
+}
+
+const { section } = Astro.props;
+const articles = await getCollection(section.id as any);
+const sorted = articles.sort((a, b) => a.data.order - b.data.order);
+const totalQuestions = sorted.reduce((sum: number, a: any) => sum + (a.data.questions?.length || 0), 0);
+---
+
+<BaseLayout title={section.label} description={section.description}>
+  <div class="container mx-auto max-w-4xl px-4 py-12">
+    <nav class="mb-8 text-sm text-gray-500">
+      <a href="/" class="hover:text-gray-900">Главная</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-900">{section.label}</span>
+    </nav>
+
+    <header class="mb-8">
+      <h1 class="mb-4 text-4xl font-bold text-gray-900">{section.label}</h1>
+      <p class="text-lg text-gray-600">{section.description}</p>
+      <div class="mt-4 flex gap-6 text-sm text-gray-500">
+        <span>{sorted.length} статей</span>
+        <span>{totalQuestions} вопросов</span>
+      </div>
+    </header>
+
+    <div class="space-y-4">
+      {sorted.map((article: any) => (
+        <a
+          href={`/${section.id}/${article.slug}`}
+          class="block rounded-lg border border-gray-200 p-6 transition hover:border-gray-400 hover:bg-gray-50"
+        >
+          <div class="flex items-start justify-between">
+            <div>
+              <h2 class="text-xl font-semibold text-gray-900">{article.data.title}</h2>
+              {article.data.description && (
+                <p class="mt-1 text-gray-600">{article.data.description}</p>
+              )}
+            </div>
+            <span class="flex-shrink-0 text-sm text-gray-400">#{article.data.order}</span>
+          </div>
+          {article.data.questions && article.data.questions.length > 0 && (
+            <div class="mt-3 text-sm text-gray-500">
+              {article.data.questions.length} вопросов для самопроверки
+            </div>
+          )}
+          {article.data.tags && article.data.tags.length > 0 && (
+            <div class="mt-3 flex flex-wrap gap-1">
+              {article.data.tags.map((tag: string) => (
+                <span class="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

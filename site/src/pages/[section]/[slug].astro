@@ -1,0 +1,99 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const collections = [
+    'javascript', 'typescript', 'react', 'nextjs', 'testing',
+    'performance', 'architecture', 'state-management', 'algorithms',
+    'api-communication', 'build-and-deployment', 'html-css',
+    'platforms', 'security',
+  ];
+
+  const entries: CollectionEntry<string>[] = [];
+  for (const col of collections) {
+    const items = await getCollection(col as any);
+    entries.push(...items);
+  }
+
+  return entries.map((entry) => ({
+    params: { section: entry.collection, slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const SECTION_LABELS: Record<string, string> = {
+  javascript: 'JavaScript',
+  typescript: 'TypeScript',
+  react: 'React',
+  nextjs: 'Next.js',
+  testing: 'Testing',
+  performance: 'Performance',
+  architecture: 'Architecture',
+  'state-management': 'State Management',
+  algorithms: 'Algorithms',
+  'api-communication': 'API Communication',
+  'build-and-deployment': 'Build & Deployment',
+  'html-css': 'HTML & CSS',
+  platforms: 'Platforms',
+  security: 'Security',
+};
+
+const sectionLabel = SECTION_LABELS[data.section] || data.section;
+---
+
+<BaseLayout title={data.title} description={data.description}>
+  <article class="container mx-auto max-w-4xl px-4 py-12">
+    <nav class="mb-8 text-sm text-gray-500">
+      <a href="/" class="hover:text-gray-900">Главная</a>
+      <span class="mx-2">/</span>
+      <a href={`/${data.section}`} class="hover:text-gray-900">{sectionLabel}</a>
+      <span class="mx-2">/</span>
+      <span class="text-gray-900">{data.title}</span>
+    </nav>
+
+    <header class="mb-8">
+      <h1 class="mb-4 text-4xl font-bold text-gray-900">{data.title}</h1>
+      {data.description && (
+        <p class="text-lg text-gray-600">{data.description}</p>
+      )}
+      {data.tags && data.tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {data.tags.map((tag: string) => (
+            <span class="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose prose-gray max-w-none prose-headings:scroll-mt-20 prose-pre:bg-gray-900 prose-pre:text-gray-100">
+      <Content />
+    </div>
+
+    {data.questions && data.questions.length > 0 && (
+      <section class="mt-12 rounded-lg border border-gray-200 bg-gray-50 p-6">
+        <h2 class="mb-4 text-2xl font-bold text-gray-900">Вопросы для самопроверки</h2>
+        <ul class="space-y-2">
+          {data.questions.map((q: string) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-1 block h-2 w-2 flex-shrink-0 rounded-full bg-gray-400"></span>
+              <span class="text-gray-700">{q}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <nav class="mt-12 border-t border-gray-200 pt-8">
+      <a href={`/${data.section}`} class="text-gray-600 hover:text-gray-900">
+        &larr; Назад к разделу {sectionLabel}
+      </a>
+    </nav>
+  </article>
+</BaseLayout>

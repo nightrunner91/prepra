@@ -1,39 +1,62 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const sections = [
+  { id: 'javascript', label: 'JavaScript', description: 'Основы JavaScript, ES6+, замыкания, прототипы, асинхронность' },
+  { id: 'typescript', label: 'TypeScript', description: 'Типизация, дженерики, утилитарные типы, декораторы' },
+  { id: 'react', label: 'React', description: 'Хуки, паттерны, оптимизация, архитектура компонентов' },
+  { id: 'nextjs', label: 'Next.js', description: 'Роутинг, серверные компоненты, кэширование, деплой' },
+  { id: 'testing', label: 'Testing', description: 'Unit, integration, E2E тестирование, мокирование' },
+  { id: 'performance', label: 'Performance', description: 'Метрики, виртуализация, hydration, web workers' },
+  { id: 'architecture', label: 'Architecture', description: 'Паттерны проектирования, SOLID, DRY/KISS/YAGNI, BFF' },
+  { id: 'state-management', label: 'State Management', description: 'Zustand, TanStack Query, клиентские хранилища' },
+  { id: 'algorithms', label: 'Algorithms', description: 'Алгоритмическая сложность, Big O, структуры данных' },
+  { id: 'api-communication', label: 'API Communication', description: 'REST, GraphQL, WebSocket, HTTP-клиенты' },
+  { id: 'build-and-deployment', label: 'Build & Deployment', description: 'Сборка бандлов, CI/CD, стратегии деплоя' },
+  { id: 'html-css', label: 'HTML & CSS', description: 'Семантика, CSS-методологии, flexbox, grid, адаптивность' },
+  { id: 'platforms', label: 'Platforms', description: 'PWA, React Native, Preact и другие платформы' },
+  { id: 'security', label: 'Security', description: 'XSS, CSRF, CSP, аутентификация, HTTP-заголовки' },
+];
+
+const sectionStats = await Promise.all(
+  sections.map(async (s) => {
+    const articles = await getCollection(s.id as any);
+    const totalQuestions = articles.reduce((sum, a) => sum + (a.data.questions?.length || 0), 0);
+    return { ...s, articleCount: articles.length, questionCount: totalQuestions };
+  })
+);
+
+const totalArticles = sectionStats.reduce((sum, s) => sum + s.articleCount, 0);
+const totalQuestions = sectionStats.reduce((sum, s) => sum + s.questionCount, 0);
 ---
 
 <BaseLayout title="Главная">
   <div class="container mx-auto px-4 py-12">
     <div class="mx-auto max-w-3xl text-center">
-      <h1 class="mb-6 text-5xl font-bold text-gray-900">
-        React Learn
-      </h1>
-      <p class="mb-8 text-xl text-gray-600">
+      <h1 class="mb-6 text-5xl font-bold text-gray-900">React Learn</h1>
+      <p class="mb-4 text-xl text-gray-600">
         Интерактивная учебная платформа для изучения React, TypeScript и JavaScript
       </p>
-      <div class="flex justify-center gap-4">
-        <a
-          href="/javascript"
-          class="rounded-lg bg-gray-900 px-6 py-3 text-white hover:bg-gray-700"
-        >
-          Начать обучение
-        </a>
-      </div>
+      <p class="mb-8 text-sm text-gray-500">
+        {totalArticles} статей &middot; {totalQuestions} вопросов для самопроверки
+      </p>
     </div>
 
-    <div class="mx-auto mt-16 grid max-w-5xl gap-8 md:grid-cols-3">
-      <div class="rounded-lg border border-gray-200 p-6">
-        <h3 class="mb-2 text-xl font-semibold">JavaScript</h3>
-        <p class="text-gray-600">Основы JavaScript, ES6+, замыкания, прототипы и многое другое</p>
-      </div>
-      <div class="rounded-lg border border-gray-200 p-6">
-        <h3 class="mb-2 text-xl font-semibold">TypeScript</h3>
-        <p class="text-gray-600">Типизация, дженерики, утилитарные типы и лучшие практики</p>
-      </div>
-      <div class="rounded-lg border border-gray-200 p-6">
-        <h3 class="mb-2 text-xl font-semibold">React</h3>
-        <p class="text-gray-600">Хуки, паттерны, оптимизация производительности и архитектура</p>
-      </div>
+    <div class="mx-auto mt-16 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {sectionStats.map((s) => (
+        <a
+          href={`/${s.id}`}
+          class="rounded-lg border border-gray-200 p-6 transition hover:border-gray-400 hover:bg-gray-50"
+        >
+          <h3 class="mb-1 text-lg font-semibold text-gray-900">{s.label}</h3>
+          <p class="mb-3 text-sm text-gray-600">{s.description}</p>
+          <div class="flex gap-4 text-xs text-gray-500">
+            <span>{s.articleCount} статей</span>
+            <span>{s.questionCount} вопросов</span>
+          </div>
+        </a>
+      ))}
     </div>
   </div>
 </BaseLayout>
