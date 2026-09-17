@@ -71,7 +71,7 @@
 
 ---
 
-## Phase 1: Миграция контента
+## Phase 1: Миграция контента ✅
 
 **Цель:** Перенести markdown в Astro content collections с типизированным frontmatter.
 

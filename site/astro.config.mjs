@@ -10,6 +10,8 @@ export default defineConfig({
   integrations: [
     mdx(),
     react(),
-    tailwind(),
+    tailwind({
+      applyBaseStyles: false,
+    }),
   ],
 });
