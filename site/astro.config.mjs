@@ -6,7 +6,7 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   output: 'static',
   site: 'https://username.github.io',
-  base: '/react-learn',
+  base: '/prepra',
   integrations: [
     mdx(),
     react(),

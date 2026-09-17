@@ -1,6 +1,6 @@
-# React Learn Site
+# Prepra
 
-Интерактивная учебная платформа для изучения React, TypeScript и JavaScript, построенная на Astro.
+Интерактивная учебная платформа для подготовки к собеседованиям Frontend-разработчика. Построена на Astro.
 
 ## Технологии
 
@@ -44,7 +44,7 @@ npm run preview
 
 1. Установите зависимости: `npm install`
 2. Запустите dev сервер: `npm run dev`
-3. Откройте http://localhost:4321/react-learn
+3. Откройте http://localhost:4321/prepra
 
 ## Деплой
 

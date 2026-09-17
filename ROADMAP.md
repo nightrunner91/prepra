@@ -1,4 +1,4 @@
-# Roadmap: React Learn — от markdown к интерактивной учебной платформе
+# Roadmap: Prepra — от markdown к интерактивной учебной платформе
 
 Этот документ описывает план трансформации проекта из набора `.md` файлов в полноценный статический сайт с интерактивными элементами, трекером прогресса и инструментами для эффективного обучения.
 
@@ -57,8 +57,8 @@
 - [x] Установить зависимости: `astro`, `@astrojs/mdx`, `@astrojs/react`, `@astrojs/tailwind`, `tailwindcss`
 - [x] Настроить `astro.config.mjs`:
   - Output: `static`
-  - Site: `https://username.github.io/react-learn`
-  - Base: `/react-learn` (для GitHub Pages)
+   - Site: `https://username.github.io/prepra`
+   - Base: `/prepra` (для GitHub Pages)
 - [x] Настроить TypeScript (`tsconfig.json`)
 - [x] Добавить базовый layout (`src/layouts/BaseLayout.astro`)
 - [x] Настроить GitHub Pages adapter (примечание: `@astrojs/github-pages` не существует, используется static output с GitHub Actions)
