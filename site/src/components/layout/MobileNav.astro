@@ -1,0 +1,91 @@
+---
+import { withBase } from '../../lib/urls';
+
+interface Props {
+  currentSection?: string;
+}
+
+const { currentSection } = Astro.props;
+
+const sections = [
+  { id: 'javascript', label: 'JavaScript' },
+  { id: 'typescript', label: 'TypeScript' },
+  { id: 'react', label: 'React' },
+  { id: 'nextjs', label: 'Next.js' },
+  { id: 'testing', label: 'Testing' },
+  { id: 'html-css', label: 'HTML/CSS' },
+  { id: 'performance', label: 'Performance' },
+  { id: 'architecture', label: 'Architecture' },
+  { id: 'state-management', label: 'State Mgmt' },
+  { id: 'algorithms', label: 'Algorithms' },
+  { id: 'api-communication', label: 'API' },
+  { id: 'build-and-deployment', label: 'Build/Deploy' },
+  { id: 'platforms', label: 'Platforms' },
+  { id: 'security', label: 'Security' },
+];
+---
+
+<div
+  id="mobile-drawer"
+  class="fixed inset-y-0 right-0 z-50 w-72 translate-x-full border-l border-border bg-canvas transition-transform duration-300 ease-in-out lg:hidden"
+>
+  <div class="flex items-center justify-between border-b border-border px-4 h-14">
+    <span class="font-serif text-lg tracking-tight text-text">Навигация</span>
+    <button
+      id="mobile-drawer-close"
+      class="flex items-center justify-center h-8 w-8 rounded-[5px] text-text-secondary hover:text-text transition-colors"
+      aria-label="Close menu"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="3" y1="3" x2="13" y2="13" />
+        <line x1="13" y1="3" x2="3" y2="13" />
+      </svg>
+    </button>
+  </div>
+  <nav class="overflow-y-auto h-[calc(100vh-3.5rem)] py-4 px-3">
+    <div class="space-y-0.5">
+      {sections.map((s) => (
+        <a
+          href={withBase(`/${s.id}`)}
+          class={`block rounded-[5px] px-3 py-2.5 text-sm transition-colors ${
+            currentSection === s.id
+              ? 'bg-surface-alt text-text font-medium'
+              : 'text-text-secondary hover:text-text hover:bg-surface-alt/50'
+          }`}
+        >
+          {s.label}
+        </a>
+      ))}
+    </div>
+  </nav>
+</div>
+
+<div
+  id="mobile-drawer-overlay"
+  class="fixed inset-0 z-40 bg-black/20 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
+></div>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const drawer = document.getElementById('mobile-drawer');
+  const overlay = document.getElementById('mobile-drawer-overlay');
+  const closeBtn = document.getElementById('mobile-drawer-close');
+
+  function openDrawer() {
+    drawer?.classList.remove('translate-x-full');
+    drawer?.classList.add('translate-x-0');
+    overlay?.classList.remove('opacity-0', 'pointer-events-none');
+    overlay?.classList.add('opacity-100');
+  }
+
+  function closeDrawer() {
+    drawer?.classList.add('translate-x-full');
+    drawer?.classList.remove('translate-x-0');
+    overlay?.classList.add('opacity-0', 'pointer-events-none');
+    overlay?.classList.remove('opacity-100');
+  }
+
+  btn?.addEventListener('click', openDrawer);
+  closeBtn?.addEventListener('click', closeDrawer);
+  overlay?.addEventListener('click', closeDrawer);
+</script>

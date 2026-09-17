@@ -1,0 +1,58 @@
+---
+import { ThemeToggle } from './ThemeToggle.tsx';
+import { withBase } from '../../lib/urls';
+
+interface Props {
+  currentSection?: string;
+}
+
+const { currentSection } = Astro.props;
+
+const sections = [
+  { id: 'javascript', label: 'JavaScript' },
+  { id: 'typescript', label: 'TypeScript' },
+  { id: 'react', label: 'React' },
+  { id: 'nextjs', label: 'Next.js' },
+  { id: 'testing', label: 'Testing' },
+  { id: 'html-css', label: 'HTML/CSS' },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-border bg-canvas/80 backdrop-blur-md">
+  <div class="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 lg:px-8">
+    <div class="flex items-center gap-6">
+      <a href={withBase('/')} class="font-serif text-lg tracking-tight text-text hover:text-text-secondary transition-colors">
+        Prepra
+      </a>
+      <nav class="hidden lg:flex items-center gap-1">
+        {sections.map((s) => (
+          <a
+            href={withBase(`/${s.id}`)}
+            class={`px-2.5 py-1.5 text-[13px] rounded-[5px] transition-colors ${
+              currentSection === s.id
+                ? 'bg-surface-alt text-text font-medium'
+                : 'text-text-secondary hover:text-text hover:bg-surface-alt/50'
+            }`}
+          >
+            {s.label}
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <ThemeToggle client:load />
+      <button
+        id="mobile-menu-btn"
+        class="lg:hidden flex items-center justify-center h-8 w-8 rounded-[5px] text-text-secondary hover:text-text hover:bg-surface-alt transition-colors"
+        aria-label="Menu"
+      >
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="2" y1="5" x2="16" y2="5" />
+          <line x1="2" y1="9" x2="16" y2="9" />
+          <line x1="2" y1="13" x2="16" y2="13" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

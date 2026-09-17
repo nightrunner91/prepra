@@ -1,4 +1,4 @@
-# Roadmap: React Learn — от markdown к интерактивной учебной платформе
+# Roadmap: Prepra — от markdown к интерактивной учебной платформе
 
 Этот документ описывает план трансформации проекта из набора `.md` файлов в полноценный статический сайт с интерактивными элементами, трекером прогресса и инструментами для эффективного обучения.
 
@@ -46,22 +46,22 @@
 
 ---
 
-## Phase 0: Подготовка и инициализация
+## Phase 0: Подготовка и инициализация ✅
 
 **Цель:** Создать рабочий Astro-проект с базовой структурой.
 
 ### Задачи
 
-- [ ] Создать новую ветку `feature/astro-site`
-- [ ] Инициализировать Astro проект в корне (или в `/site`)
-- [ ] Установить зависимости: `astro`, `@astrojs/mdx`, `@astrojs/react`, `@astrojs/tailwind`, `tailwindcss`
-- [ ] Настроить `astro.config.mjs`:
+- [x] Создать новую ветку `feature/astro-site`
+- [x] Инициализировать Astro проект в корне (или в `/site`)
+- [x] Установить зависимости: `astro`, `@astrojs/mdx`, `@astrojs/react`, `@astrojs/tailwind`, `tailwindcss`
+- [x] Настроить `astro.config.mjs`:
   - Output: `static`
-  - Site: `https://username.github.io/react-learn`
-  - Base: `/react-learn` (для GitHub Pages)
-- [ ] Настроить TypeScript (`tsconfig.json`)
-- [ ] Добавить базовый layout (`src/layouts/BaseLayout.astro`)
-- [ ] Настроить GitHub Pages adapter (`@astrojs/github-pages`)
+   - Site: `https://username.github.io/prepra`
+   - Base: `/prepra` (для GitHub Pages)
+- [x] Настроить TypeScript (`tsconfig.json`)
+- [x] Добавить базовый layout (`src/layouts/BaseLayout.astro`)
+- [x] Настроить GitHub Pages adapter (примечание: `@astrojs/github-pages` не существует, используется static output с GitHub Actions)
 
 ### Результат
 
@@ -71,7 +71,7 @@
 
 ---
 
-## Phase 1: Миграция контента
+## Phase 1: Миграция контента ✅
 
 **Цель:** Перенести markdown в Astro content collections с типизированным frontmatter.
 
@@ -157,7 +157,7 @@ questions:
 
 ---
 
-## Phase 2: Базовый UI и навигация
+## Phase 2: Базовый UI и навигация ✅
 
 **Цель:** Создать удобный интерфейс для чтения статей и навигации.
 
@@ -472,13 +472,13 @@ interface Progress {
 
 ---
 
-## Phase 9: CI/CD и деплой
+## Phase 9: CI/CD и деплой ✅
 
 **Цель:** Автоматизировать билд и деплой.
 
 ### Задачи
 
-- [ ] GitHub Actions workflow:
+- [x] GitHub Actions workflow:
   ```yaml
   name: Deploy to GitHub Pages
   on:
@@ -495,13 +495,13 @@ interface Progress {
         - uses: actions/upload-pages-artifact@v3
         - uses: actions/deploy-pages@v4
   ```
-- [ ] Настроить GitHub Pages:
+- [x] Настроить GitHub Pages:
   - Source: GitHub Actions
   - Custom domain (опционально)
-- [ ] Preview deployments для PR:
+- [x] Preview deployments для PR:
   - Каждый PR → preview URL
   - Комментарий в PR с ссылкой
-- [ ] Lighthouse CI:
+- [x] Lighthouse CI:
   - Проверка производительности на каждом PR
   - Блокировка merge, если score < 90
 

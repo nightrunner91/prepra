@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionCard from '../components/content/SectionCard.astro';
+import { withBase } from '../lib/urls';
+
+const sections = [
+  { id: 'javascript', label: 'JavaScript', description: 'Основы JavaScript, ES6+, замыкания, прототипы, асинхронность', color: 'yellow' as const },
+  { id: 'typescript', label: 'TypeScript', description: 'Типизация, дженерики, утилитарные типы, декораторы', color: 'blue' as const },
+  { id: 'react', label: 'React', description: 'Хуки, паттерны, оптимизация, архитектура компонентов', color: 'blue' as const },
+  { id: 'nextjs', label: 'Next.js', description: 'Роутинг, серверные компоненты, кэширование, деплой', color: 'neutral' as const },
+  { id: 'testing', label: 'Testing', description: 'Unit, integration, E2E тестирование, мокирование', color: 'green' as const },
+  { id: 'html-css', label: 'HTML & CSS', description: 'Семантика, CSS-методологии, flexbox, grid, адаптивность', color: 'red' as const },
+  { id: 'performance', label: 'Performance', description: 'Метрики, виртуализация, hydration, web workers', color: 'green' as const },
+  { id: 'architecture', label: 'Architecture', description: 'Паттерны проектирования, SOLID, DRY/KISS/YAGNI, BFF', color: 'neutral' as const },
+  { id: 'state-management', label: 'State Management', description: 'Zustand, TanStack Query, клиентские хранилища', color: 'blue' as const },
+  { id: 'algorithms', label: 'Algorithms', description: 'Алгоритмическая сложность, Big O, структуры данных', color: 'yellow' as const },
+  { id: 'api-communication', label: 'API Communication', description: 'REST, GraphQL, WebSocket, HTTP-клиенты', color: 'green' as const },
+  { id: 'build-and-deployment', label: 'Build & Deployment', description: 'Сборка бандлов, CI/CD, стратегии деплоя', color: 'neutral' as const },
+  { id: 'platforms', label: 'Platforms', description: 'PWA, React Native, Preact и другие платформы', color: 'red' as const },
+  { id: 'security', label: 'Security', description: 'XSS, CSRF, CSP, аутентификация, HTTP-заголовки', color: 'red' as const },
+];
+
+const sectionStats = await Promise.all(
+  sections.map(async (s) => {
+    const articles = await getCollection(s.id as any);
+    const totalQuestions = articles.reduce((sum, a) => sum + (a.data.questions?.length || 0), 0);
+    return { ...s, articleCount: articles.length, questionCount: totalQuestions };
+  })
+);
+
+const totalArticles = sectionStats.reduce((sum, s) => sum + s.articleCount, 0);
+const totalQuestions = sectionStats.reduce((sum, s) => sum + s.questionCount, 0);
+---
+
+<BaseLayout title="Главная">
+  <div class="mx-auto max-w-5xl px-4 py-16 lg:py-24 lg:px-8">
+    <div class="animate-fade-in max-w-2xl">
+      <p class="font-mono text-[11px] uppercase tracking-wider text-text-tertiary mb-4">
+        Учебная платформа
+      </p>
+      <h1 class="font-serif text-4xl text-text sm:text-5xl lg:text-6xl leading-[1.1] tracking-tight">
+        Prepra
+      </h1>
+      <p class="mt-4 text-lg text-text-secondary leading-relaxed max-w-xl">
+        Интерактивная платформа для подготовки к собеседованиям по React, TypeScript и JavaScript.
+      </p>
+      <div class="mt-6 flex items-center gap-4 font-mono text-[11px] text-text-tertiary">
+        <span>{totalArticles} статей</span>
+        <span class="text-border">/</span>
+        <span>{totalQuestions} вопросов</span>
+        <span class="text-border">/</span>
+        <span>{sections.length} разделов</span>
+      </div>
+    </div>
+
+    <div class="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {sectionStats.map((s, i) => (
+        <div class="animate-fade-in" style={`animation-delay: ${i * 60}ms`}>
+          <SectionCard
+            title={s.label}
+            description={s.description}
+            href={withBase(`/${s.id}`)}
+            articleCount={s.articleCount}
+            questionCount={s.questionCount}
+            color={s.color}
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  document.querySelectorAll('.animate-fade-in').forEach((el) => observer.observe(el));
+</script>
