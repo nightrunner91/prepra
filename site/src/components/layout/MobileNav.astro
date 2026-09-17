@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../../lib/urls';
+
 interface Props {
   currentSection?: string;
 }
@@ -44,7 +46,7 @@ const sections = [
     <div class="space-y-0.5">
       {sections.map((s) => (
         <a
-          href={`/${s.id}`}
+          href={withBase(`/${s.id}`)}
           class={`block rounded-[5px] px-3 py-2.5 text-sm transition-colors ${
             currentSection === s.id
               ? 'bg-surface-alt text-text font-medium'

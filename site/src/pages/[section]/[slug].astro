@@ -7,6 +7,7 @@ import TableOfContents from '../../components/content/TableOfContents.astro';
 import PrevNextNav from '../../components/content/PrevNextNav.astro';
 import { ReadingProgress } from '../../components/content/ReadingProgress';
 import Badge from '../../components/ui/Badge.astro';
+import { withBase } from '../../lib/urls';
 
 export async function getStaticPaths() {
   const collections = [
@@ -60,12 +61,12 @@ const nextArticle = currentIdx < allSectionArticles.length - 1 ? allSectionArtic
 
 const prev = prevArticle ? {
   title: prevArticle.data.title,
-  href: `/${data.section}/${prevArticle.slug}`,
+  href: withBase(`/${data.section}/${prevArticle.slug}`),
 } : null;
 
 const next = nextArticle ? {
   title: nextArticle.data.title,
-  href: `/${data.section}/${nextArticle.slug}`,
+  href: withBase(`/${data.section}/${nextArticle.slug}`),
 } : null;
 
 const { headings } = await render(entry);
@@ -81,8 +82,8 @@ const { headings } = await render(entry);
       <article class="mx-auto max-w-3xl px-4 py-10 lg:px-8 lg:py-14 w-full">
         <div class="animate-fade-in">
           <Breadcrumbs items={[
-            { label: 'Главная', href: '/' },
-            { label: sectionLabel, href: `/${data.section}` },
+            { label: 'Главная', href: withBase('/') },
+            { label: sectionLabel, href: withBase(`/${data.section}`) },
             { label: data.title },
           ]} />
 
@@ -125,7 +126,7 @@ const { headings } = await render(entry);
           prev={prev}
           next={next}
           sectionLabel={sectionLabel}
-          sectionHref={`/${data.section}`}
+          sectionHref={withBase(`/${data.section}`)}
         />
       </article>
 

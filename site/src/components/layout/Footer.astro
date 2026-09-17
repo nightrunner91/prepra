@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../../lib/urls';
 ---
 
 <footer class="border-t border-border bg-canvas">
@@ -8,11 +9,11 @@
         &copy; 2026 React Learn
       </p>
       <div class="flex items-center gap-4 text-[13px] text-text-tertiary">
-        <a href="/" class="hover:text-text transition-colors">Главная</a>
+        <a href={withBase('/')} class="hover:text-text transition-colors">Главная</a>
         <span class="text-border">/</span>
-        <a href="/javascript" class="hover:text-text transition-colors">JavaScript</a>
+        <a href={withBase('/javascript')} class="hover:text-text transition-colors">JavaScript</a>
         <span class="text-border">/</span>
-        <a href="/react" class="hover:text-text transition-colors">React</a>
+        <a href={withBase('/react')} class="hover:text-text transition-colors">React</a>
       </div>
     </div>
   </div>

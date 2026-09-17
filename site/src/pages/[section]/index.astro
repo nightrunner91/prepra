@@ -5,6 +5,7 @@ import Breadcrumbs from '../../components/layout/Breadcrumbs.astro';
 import Sidebar from '../../components/layout/Sidebar.astro';
 import ArticleCard from '../../components/content/ArticleCard.astro';
 import Badge from '../../components/ui/Badge.astro';
+import { withBase } from '../../lib/urls';
 
 export async function getStaticPaths() {
   const sections = [
@@ -44,7 +45,7 @@ const totalQuestions = sorted.reduce((sum: number, a: any) => sum + (a.data.ques
       <div class="mx-auto max-w-3xl px-4 py-10 lg:px-8 lg:py-14">
         <div class="animate-fade-in">
           <Breadcrumbs items={[
-            { label: 'Главная', href: '/' },
+            { label: 'Главная', href: withBase('/') },
             { label: section.label },
           ]} />
 
@@ -67,7 +68,7 @@ const totalQuestions = sorted.reduce((sum: number, a: any) => sum + (a.data.ques
               <ArticleCard
                 title={article.data.title}
                 description={article.data.description}
-                href={`/${section.id}/${article.slug}`}
+                href={withBase(`/${section.id}/${article.slug}`)}
                 order={article.data.order}
                 tags={article.data.tags}
                 questionCount={article.data.questions?.length || 0}

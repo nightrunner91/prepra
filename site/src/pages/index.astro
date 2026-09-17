@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionCard from '../components/content/SectionCard.astro';
+import { withBase } from '../lib/urls';
 
 const sections = [
   { id: 'javascript', label: 'JavaScript', description: 'Основы JavaScript, ES6+, замыкания, прототипы, асинхронность', color: 'yellow' as const },
@@ -59,7 +60,7 @@ const totalQuestions = sectionStats.reduce((sum, s) => sum + s.questionCount, 0)
           <SectionCard
             title={s.label}
             description={s.description}
-            href={`/${s.id}`}
+            href={withBase(`/${s.id}`)}
             articleCount={s.articleCount}
             questionCount={s.questionCount}
             color={s.color}
