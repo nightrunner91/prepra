@@ -472,13 +472,13 @@ interface Progress {
 
 ---
 
-## Phase 9: CI/CD и деплой
+## Phase 9: CI/CD и деплой ✅
 
 **Цель:** Автоматизировать билд и деплой.
 
 ### Задачи
 
-- [ ] GitHub Actions workflow:
+- [x] GitHub Actions workflow:
   ```yaml
   name: Deploy to GitHub Pages
   on:
@@ -495,13 +495,13 @@ interface Progress {
         - uses: actions/upload-pages-artifact@v3
         - uses: actions/deploy-pages@v4
   ```
-- [ ] Настроить GitHub Pages:
+- [x] Настроить GitHub Pages:
   - Source: GitHub Actions
   - Custom domain (опционально)
-- [ ] Preview deployments для PR:
+- [x] Preview deployments для PR:
   - Каждый PR → preview URL
   - Комментарий в PR с ссылкой
-- [ ] Lighthouse CI:
+- [x] Lighthouse CI:
   - Проверка производительности на каждом PR
   - Блокировка merge, если score < 90
 
