@@ -4,6 +4,15 @@ section: typescript
 description: "TypeScript — надмножество JavaScript. Он добавляет статическую типизацию, но не меняет поведение рантайма. Это создаёт разрыв: типы существуют только при компиляции, а значения — только при выполне..."
 order: 8
 tags: ["typeguard", "typescript"]
+questions:
+  - "Что такое control flow analysis и как он работает"
+  - "Чем предикат типа (`value is T`) отличается от обычной проверки"
+  - "Почему предикат типа — это контракт, а не проверка"
+  - "Как assertion functions (`asserts value is T`) отличаются от type guards"
+  - "Какие ограничения есть у встроенных сужений (`typeof`, `instanceof`, `in`)"
+  - "Что такое discriminated unions и как они сужаются"
+  - "Как type guard работает с `.filter()` и `.find()`"
+  - "Когда ручных type guard недостаточно и нужны библиотеки валидации"
 ---
 
 # TypeGuard в TypeScript

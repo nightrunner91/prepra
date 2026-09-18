@@ -4,6 +4,15 @@ section: typescript
 description: "Enum — механизм TypeScript для создания именованных наборов констант. Но прежде чем использовать enum, нужно понять его ключевую особенность, которая отличает его от всех остальных конструкций Type..."
 order: 2
 tags: ["typescript", "enums"]
+questions:
+  - "Почему enum — единственная конструкция TypeScript, генерирующая runtime-объект"
+  - "Что такое reverse mapping в numeric enums и почему это проблема"
+  - "Чем string enums лучше numeric enums"
+  - "Почему union types в большинстве случаев лучше enum"
+  - "Как работает паттерн `as const` и чем он лучше enum"
+  - "Когда enum действительно оправдан (битовые флаги, reverse mapping)"
+  - "Почему `const enum` не работает с `isolatedModules`"
+  - "Как использовать `Record<Enum, ...>` для метаданных"
 ---
 
 # TypeScript Enums
