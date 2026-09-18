@@ -127,6 +127,7 @@
   --tw-prose-body: var(--color-text);
   --tw-prose-headings: var(--color-text);
   --tw-prose-links: var(--color-text);
+  --tw-prose-bold: var(--color-text);
   --tw-prose-code: var(--color-text);
   --tw-prose-pre-bg: var(--color-surface-alt);
   --tw-prose-pre-code: var(--color-text);
