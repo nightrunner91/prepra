@@ -1,3 +1,11 @@
+﻿---
+title: "BFC, IFC, FFC, GFC: formatting contexts и containing block"
+section: html-css
+description: "CSS рисует элементы не по одному, а группами, объединёнными общими правилами раскладки. Эти группы называются **formatting contexts** (контекстами форматирования). Понимание того, какой контекст со..."
+order: 5
+tags: ["bfc", "ifc", "ffc", "gfc", "formatting"]
+---
+
 # BFC, IFC, FFC, GFC: formatting contexts и containing block
 
 CSS рисует элементы не по одному, а группами, объединёнными общими правилами раскладки. Эти группы называются **formatting contexts** (контекстами форматирования). Понимание того, какой контекст создаёт элемент, объясняет многие «магические» поведения: схлопывание margin’ов, обтекание float, выравнивание inline-элементов и разницу между `width` и размером flex/grid-элемента.

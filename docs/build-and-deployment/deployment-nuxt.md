@@ -1,3 +1,22 @@
+﻿---
+title: "Деплой Nuxt 3"
+section: build-and-deployment
+description: "1. [Что такое Nitro](#что-такое-nitro)"
+order: 4
+tags: ["деплой", "nuxt"]
+questions:
+  - "`nuxt build` проходит локально без ошибок"
+  - "`nuxt generate` протестирован, если используется SSG"
+  - "Все environment variables добавлены в `runtimeConfig`"
+  - "Server routes валидируют входные данные"
+  - "ISR настроен и протестирован"
+  - "Выбран правильный Nitro preset"
+  - "`site.url` настроен для SEO и метаданных"
+  - "Image provider соответствует платформе"
+  - "Добавлен health check"
+  - "Есть план отката"
+---
+
 # Деплой Nuxt 3
 
 ## Содержание

@@ -1,3 +1,11 @@
+﻿---
+title: "E2E-тестирование с Playwright"
+section: testing
+description: "1. [Что такое Playwright](#что-такое-playwright)"
+order: 6
+tags: ["e2e-тестирование", "playwright"]
+---
+
 # E2E-тестирование с Playwright
 
 ## Содержание

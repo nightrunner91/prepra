@@ -1,3 +1,11 @@
+﻿---
+title: "SOLID в Frontend: Как запомнить и применить в React и Vue"
+section: architecture
+description: "**SOLID** — это акроним. Запомни как \"твёрдый код\":"
+order: 6
+tags: ["solid", "frontend", "запомнить", "применить", "react"]
+---
+
 # SOLID в Frontend: Как запомнить и применить в React и Vue
 
 ## Мнемоника для запоминания

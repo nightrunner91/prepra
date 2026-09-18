@@ -1,3 +1,11 @@
+﻿---
+title: "Grid: explicit/implicit, `fr`, `minmax`, `auto-fit`/`auto-fill`, subgrid"
+section: html-css
+description: "CSS Grid — это двумерная система раскладки: одновременно по строкам и колонкам. В отличие от Flexbox, который распределяет пространство вдоль одной оси, Grid позволяет точно описывать структуру мак..."
+order: 4
+tags: ["grid", "explicitimplicit", "minmax", "auto-fitauto-fill", "subgrid"]
+---
+
 # Grid: explicit/implicit, `fr`, `minmax`, `auto-fit`/`auto-fill`, subgrid
 
 CSS Grid — это двумерная система раскладки: одновременно по строкам и колонкам. В отличие от Flexbox, который распределяет пространство вдоль одной оси, Grid позволяет точно описывать структуру макета. Понимание explicit и implicit grid, единиц `fr` и функции `minmax` отделяет уверенное использование Grid от «метода тыка».

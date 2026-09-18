@@ -1,3 +1,22 @@
+﻿---
+title: "Деплой Next.js"
+section: build-and-deployment
+description: "1. [Что происходит при `next build`](#что-происходит-при-next-build)"
+order: 3
+tags: ["деплой", "nextjs"]
+questions:
+  - "`npm run build` проходит локально без ошибок"
+  - "Все environment variables настроены на платформе"
+  - "Секреты не имеют префикса `NEXT_PUBLIC_`"
+  - "`next/image` настроен под выбранную платформу"
+  - "ISR настроен и протестирован, если используется"
+  - "Middleware работает в Edge Runtime"
+  - "API Routes защищены и валидируют входные данные"
+  - "Добавлен health check endpoint"
+  - "Настроен мониторинг ошибок и производительности"
+  - "Есть план отката (rollback)"
+---
+
 # Деплой Next.js
 
 ## Содержание

@@ -1,3 +1,11 @@
+﻿---
+title: "Positioning, stacking context, `z-index` и paint order"
+section: html-css
+description: "Позиционирование — это один из самых частых источников путаницы в CSS. Разработчики знают, что `position: absolute` выводит элемент из потока, но теряются, когда речь заходит о containing block, st..."
+order: 7
+tags: ["positioning", "stacking", "context", "z-index", "paint"]
+---
+
 # Positioning, stacking context, `z-index` и paint order
 
 Позиционирование — это один из самых частых источников путаницы в CSS. Разработчики знают, что `position: absolute` выводит элемент из потока, но теряются, когда речь заходит о containing block, stacking context’ах и порядке отрисовки. Эта статья связывает позиционирование, наложение и порядок рисования в единую картину.

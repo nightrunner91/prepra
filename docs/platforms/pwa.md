@@ -1,3 +1,11 @@
+﻿---
+title: "Progressive Web Apps (PWA) в React и Next.js"
+section: platforms
+description: "1. [Что такое PWA](#что-такое-pwa)"
+order: 2
+tags: ["progressive", "web", "apps", "pwa", "react"]
+---
+
 # Progressive Web Apps (PWA) в React и Next.js
 
 ## Содержание

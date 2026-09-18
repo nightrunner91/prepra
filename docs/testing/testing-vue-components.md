@@ -1,3 +1,11 @@
+﻿---
+title: "Тестирование Vue-компонентов с Vue Test Utils"
+section: testing
+description: "1. [Что такое Vue Test Utils](#что-такое-vue-test-utils)"
+order: 17
+tags: ["тестирование", "vue-компонентов", "vue", "test", "utils"]
+---
+
 # Тестирование Vue-компонентов с Vue Test Utils
 
 ## Содержание

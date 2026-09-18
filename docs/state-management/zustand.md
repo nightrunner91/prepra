@@ -1,3 +1,11 @@
+﻿---
+title: "Zustand — Глубокое погружение"
+section: state-management
+description: "1. [Что такое Zustand](#что-такое-zustand)"
+order: 3
+tags: ["zustand", "глубокое", "погружение"]
+---
+
 # Zustand — Глубокое погружение
 
 ## Содержание

@@ -1,3 +1,11 @@
+﻿---
+title: "Content Security Policy: настройка, эволюция и практика"
+section: security
+description: "1. [Что такое CSP и зачем она нужна](#что-такое-csp-и-зачем-она-нужна)"
+order: 2
+tags: ["content", "security", "policy", "настройка", "эволюция"]
+---
+
 # Content Security Policy: настройка, эволюция и практика
 
 ## Содержание

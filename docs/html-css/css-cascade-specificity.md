@@ -1,3 +1,11 @@
+﻿---
+title: "Cascade, specificity, inheritance и `@layer`"
+section: html-css
+description: "CSS расшифровывается как Cascading Style Sheets, и именно каскад — сердце всей системы. Понимание cascade нужно не для заучивания формулы специфичности, а чтобы предсказывать, какое правило победит..."
+order: 2
+tags: ["cascade", "specificity", "inheritance", "layer"]
+---
+
 # Cascade, specificity, inheritance и `@layer`
 
 CSS расшифровывается как Cascading Style Sheets, и именно каскад — сердце всей системы. Понимание cascade нужно не для заучивания формулы специфичности, а чтобы предсказывать, какое правило победит в неочевидных ситуациях: при подключении сторонней библиотеки, при переопределениях через `!important`, при использовании CSS-Layer’ов и при работе с Shadow DOM.

@@ -1,3 +1,11 @@
+﻿---
+title: "Безопасность зависимостей и supply chain"
+section: security
+description: "1. [Что такое supply chain attack](#что-такое-supply-chain-attack)"
+order: 4
+tags: ["безопасность", "зависимостей", "supply", "chain"]
+---
+
 # Безопасность зависимостей и supply chain
 
 ## Содержание

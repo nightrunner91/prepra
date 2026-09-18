@@ -24,7 +24,7 @@ export async function getStaticPaths() {
   }
 
   return entries.map((entry) => ({
-    params: { section: entry.collection, slug: entry.slug },
+    params: { section: entry.collection, slug: entry.id },
     props: { entry },
   }));
 }
@@ -55,18 +55,18 @@ const sectionLabel = SECTION_LABELS[data.section] || data.section;
 const allSectionArticles = (await getCollection(data.section as any))
   .sort((a: any, b: any) => a.data.order - b.data.order);
 
-const currentIdx = allSectionArticles.findIndex((a: any) => a.slug === entry.slug);
+const currentIdx = allSectionArticles.findIndex((a: any) => a.id === entry.id);
 const prevArticle = currentIdx > 0 ? allSectionArticles[currentIdx - 1] : null;
 const nextArticle = currentIdx < allSectionArticles.length - 1 ? allSectionArticles[currentIdx + 1] : null;
 
 const prev = prevArticle ? {
   title: prevArticle.data.title,
-  href: withBase(`/${data.section}/${prevArticle.slug}`),
+  href: withBase(`/${data.section}/${prevArticle.id}`),
 } : null;
 
 const next = nextArticle ? {
   title: nextArticle.data.title,
-  href: withBase(`/${data.section}/${nextArticle.slug}`),
+  href: withBase(`/${data.section}/${nextArticle.id}`),
 } : null;
 
 const { headings } = await render(entry);

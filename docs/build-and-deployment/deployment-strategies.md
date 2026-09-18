@@ -1,3 +1,11 @@
+﻿---
+title: "Стратегии деплоя — blue-green, canary releases, feature flags"
+section: build-and-deployment
+description: "1. [Почему «просто задеплоить» больше не работает](#почему-просто-задеплоить-больше-не-работает)"
+order: 7
+tags: ["стратегии", "деплоя", "blue-green", "canary", "releases"]
+---
+
 # Стратегии деплоя — blue-green, canary releases, feature flags
 
 ## Содержание

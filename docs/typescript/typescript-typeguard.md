@@ -1,3 +1,11 @@
+﻿---
+title: "TypeGuard в TypeScript"
+section: typescript
+description: "TypeScript — надмножество JavaScript. Он добавляет статическую типизацию, но не меняет поведение рантайма. Это создаёт разрыв: типы существуют только при компиляции, а значения — только при выполне..."
+order: 8
+tags: ["typeguard", "typescript"]
+---
+
 # TypeGuard в TypeScript
 
 ## Фундаментальная проблема

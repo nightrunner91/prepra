@@ -1,3 +1,11 @@
+﻿---
+title: "HTTP-клиенты: fetch, axios, ky и другие способы работы с API"
+section: api-communication
+description: "1. [Зачем отдельный HTTP-клиент](#зачем-отдельный-http-клиент)"
+order: 2
+tags: ["http-клиенты", "fetch", "axios", "другие", "способы"]
+---
+
 # HTTP-клиенты: fetch, axios, ky и другие способы работы с API
 
 ## Содержание
