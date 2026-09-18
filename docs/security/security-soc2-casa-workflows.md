@@ -1,3 +1,11 @@
+﻿---
+title: "Подготовка к security аудиту: SOC2 и CASA для фронтенд-разработчика"
+section: security
+description: "1. [Что такое SOC2 и CASA](#что-такое-soc2-и-casa)"
+order: 8
+tags: ["подготовка", "security", "аудиту", "soc2", "casa"]
+---
+
 # Подготовка к security аудиту: SOC2 и CASA для фронтенд-разработчика
 
 ## Содержание

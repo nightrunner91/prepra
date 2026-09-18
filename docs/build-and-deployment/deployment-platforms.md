@@ -1,3 +1,11 @@
+﻿---
+title: "Платформы деплоя: Vercel, Railway, Netlify, Fly.io и другие"
+section: build-and-deployment
+description: "1. [Как выбирать платформу](#как-выбирать-платформу)"
+order: 5
+tags: ["платформы", "деплоя", "vercel", "railway", "netlify"]
+---
+
 # Платформы деплоя: Vercel, Railway, Netlify, Fly.io и другие
 
 ## Содержание

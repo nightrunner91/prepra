@@ -1,3 +1,11 @@
+﻿---
+title: "Long Polling — обновления через обычный HTTP"
+section: api-communication
+description: "1. [Что такое Long Polling](#что-такое-long-polling)"
+order: 3
+tags: ["long", "polling", "обновления", "через", "обычный"]
+---
+
 # Long Polling — обновления через обычный HTTP
 
 ## Содержание

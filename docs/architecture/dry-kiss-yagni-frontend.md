@@ -1,3 +1,11 @@
+﻿---
+title: "DRY, KISS, YAGNI: Три кита здорового кода во Frontend"
+section: architecture
+description: "Эти три принципа — как правила техники безопасности. Короткие, простые, спасают от проблем."
+order: 3
+tags: ["dry", "kiss", "yagni", "три", "кита"]
+---
+
 # DRY, KISS, YAGNI: Три кита здорового кода во Frontend
 
 ## Мнемоника для запоминания

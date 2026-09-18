@@ -1,3 +1,11 @@
+﻿---
+title: "Тестирование React-компонентов с React Testing Library"
+section: testing
+description: "1. [Что такое React Testing Library](#что-такое-react-testing-library)"
+order: 13
+tags: ["тестирование", "react-компонентов", "react", "testing", "library"]
+---
+
 # Тестирование React-компонентов с React Testing Library
 
 ## Содержание

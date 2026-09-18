@@ -68,7 +68,7 @@ const totalQuestions = sorted.reduce((sum: number, a: any) => sum + (a.data.ques
               <ArticleCard
                 title={article.data.title}
                 description={article.data.description}
-                href={withBase(`/${section.id}/${article.slug}`)}
+                href={withBase(`/${section.id}/${article.id}`)}
                 order={article.data.order}
                 tags={article.data.tags}
                 questionCount={article.data.questions?.length || 0}

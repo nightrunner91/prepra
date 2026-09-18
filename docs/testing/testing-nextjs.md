@@ -1,3 +1,11 @@
+﻿---
+title: "Тестирование в Next.js"
+section: testing
+description: "1. [Особенности тестирования Next.js](#особенности-тестирования-nextjs)"
+order: 9
+tags: ["тестирование", "nextjs"]
+---
+
 # Тестирование в Next.js
 
 ## Содержание

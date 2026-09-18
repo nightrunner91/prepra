@@ -1,4 +1,5 @@
 import { z, defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const articleSchema = z.object({
   title: z.string(),
@@ -25,24 +26,26 @@ const articleSchema = z.object({
   questions: z.array(z.string()).optional(),
 });
 
-const articlesCollection = defineCollection({
-  type: 'content',
-  schema: articleSchema,
-});
+function articles(section: string) {
+  return defineCollection({
+    loader: glob({ pattern: ['**/*.md', '!README.md'], base: `../docs/${section}` }),
+    schema: articleSchema,
+  });
+}
 
 export const collections = {
-  javascript: articlesCollection,
-  typescript: articlesCollection,
-  react: articlesCollection,
-  nextjs: articlesCollection,
-  testing: articlesCollection,
-  performance: articlesCollection,
-  architecture: articlesCollection,
-  'state-management': articlesCollection,
-  algorithms: articlesCollection,
-  'api-communication': articlesCollection,
-  'build-and-deployment': articlesCollection,
-  'html-css': articlesCollection,
-  platforms: articlesCollection,
-  security: articlesCollection,
+  javascript: articles('javascript'),
+  typescript: articles('typescript'),
+  react: articles('react'),
+  nextjs: articles('nextjs'),
+  testing: articles('testing'),
+  performance: articles('performance'),
+  architecture: articles('architecture'),
+  'state-management': articles('state-management'),
+  algorithms: articles('algorithms'),
+  'api-communication': articles('api-communication'),
+  'build-and-deployment': articles('build-and-deployment'),
+  'html-css': articles('html-css'),
+  platforms: articles('platforms'),
+  security: articles('security'),
 };

@@ -1,3 +1,11 @@
+﻿---
+title: "Spec-Driven Development: методология разработки со спецификациями"
+section: testing
+description: "1. [Что такое Spec-Driven Development](#что-такое-spec-driven-development)"
+order: 4
+tags: ["spec-driven", "development", "методология", "разработки", "спецификациями"]
+---
+
 # Spec-Driven Development: методология разработки со спецификациями
 
 ## Содержание

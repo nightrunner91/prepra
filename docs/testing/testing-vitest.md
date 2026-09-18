@@ -1,3 +1,11 @@
+﻿---
+title: "Unit-тестирование с Vitest"
+section: testing
+description: "1. [Что такое Vitest](#что-такое-vitest)"
+order: 16
+tags: ["unit-тестирование", "vitest"]
+---
+
 # Unit-тестирование с Vitest
 
 ## Содержание

@@ -1,3 +1,11 @@
+﻿---
+title: "Отмена HTTP-запросов: AbortController, Race Conditions и cleanup"
+section: api-communication
+description: "1. [Зачем отменять запросы](#зачем-отменять-запросы)"
+order: 4
+tags: ["отмена", "http-запросов", "abortcontroller", "race", "conditions"]
+---
+
 # Отмена HTTP-запросов: AbortController, Race Conditions и cleanup
 
 ## Содержание
