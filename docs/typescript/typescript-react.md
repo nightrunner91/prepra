@@ -8,7 +8,9 @@ tags: ["typescript", "react", "полное", "руководство", "vue-р�
 
 # TypeScript в React — полное руководство для Vue-разработчика
 
-TypeScript и React — одна из самых распространённых связок в современной frontend-разработке. Если вы уже используете TypeScript во Vue, многие концепции покажутся знакомыми, но есть и специфичные для React паттерны: типизация JSX-пропсов, синтетических событий, хуков, дженериков в компонентах и `ref`. В этой статье мы разберём все ключевые аспекты TypeScript в React, проводя параллели с Vue и показывая, как перенести накопленные знания.
+TypeScript и React — одна из самых распространённых связок в современной frontend-разработке. Если вы уже используете TypeScript во Vue, многие концепции покажутся знакомыми, но есть и специфичные для React паттерны: типизация JSX-пропсов, синтетических событий, хуков, дженериков в компонентах и `ref`.
+
+В этой статье мы разберём все ключевые аспекты TypeScript в React, проводя параллели с Vue и показывая, как перенести накопленные знания. От базовой типизации пропсов до продвинутых паттернов с discriminated unions, forwardRef и generic-компонентами.
 
 ---
 
@@ -1007,3 +1009,27 @@ const style = { colour: "red" }; // опечатка не ловится
 // ✅ Типизированный объект
 const style: React.CSSProperties = { color: "red" }; // опечатка — ошибка компиляции
 ```
+
+## Ключевые тезисы для интервью
+
+- Пропсы типизируются через `interface Props` или `type Props` у параметра функции-компонента.
+- Дефолтные значения в деструктуризации автоматически сужают тип — `undefined` исключается.
+- React использует синтетические события с дженериками: `React.ChangeEvent<HTMLInputElement>`, `React.MouseEvent<HTMLButtonElement>`.
+- `useState<User | null>(null)` — явный дженерик обязателен для nullable начальных значений.
+- `useReducer` с discriminated union по полю `type` — TypeScript проверяет exhaustiveness и сужает тип в каждой ветке.
+- Generic-компоненты (`function List<T>(props: ListProps<T>)`) сохраняют тип данных при переиспользовании.
+- `React.ReactNode` — тип всего, что может быть отрендерено в JSX; `React.ReactElement` — только JSX-элементы.
+- С React 19 ref передаётся как обычный пропс — `forwardRef` больше не обязателен.
+- `createContext<T>` + кастомный хук с null-check — паттерн безопасного доступа к контексту.
+- Discriminated union для взаимоисключающих пропсов предпочтительнее intersection.
+
+## Заключение
+
+TypeScript в React — это строгий контракт для каждого компонента. Ключевые паттерны: interface для пропсов, дженерики для переиспользуемых компонентов, discriminated unions для редукторов и вариантов пропсов, `React.ReactNode` для дочерних элементов, `useRef<HTMLInputElement>(null)` для DOM. Vue-разработчикам стоит обратить внимание на различия: пропсы через параметры функции (не `defineProps`), события через пропсы-функции (не `emit`), слоты через `children` и именованные пропсы (не `<slot>`).
+
+## Полезные ссылки
+
+- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
+- [React Documentation — TypeScript](https://react.dev/learn/typescript)
+- [React v19 Release Notes](https://react.dev/blog/2024/12/05/react-19)
+- [Vue vs React TypeScript](https://www.totaltypescript.com/tutorials/react)

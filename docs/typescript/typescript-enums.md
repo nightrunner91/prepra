@@ -10,6 +10,24 @@ tags: ["typescript", "enums"]
 
 Enum — механизм TypeScript для создания именованных наборов констант. Но прежде чем использовать enum, нужно понять его ключевую особенность, которая отличает его от всех остальных конструкций TypeScript и которая делает его спорным.
 
+Enum — единственная конструкция TypeScript, которая генерирует реальный JavaScript-объект при компиляции. Все остальные типы стираются, а enum существует в рантайме. Это определяет и его возможности, и его проблемы. В этой статье разберём numeric и string enums, union types как альтернативу, `as const` паттерн и узнаем, когда enum действительно оправдан.
+
+## Содержание
+
+1. [Enum — это не тип, это значение](#enum--это-не-тип-это-значение)
+2. [Numeric Enums](#numeric-enums)
+3. [String Enums](#string-enums)
+4. [Union Types — альтернатива enum](#union-types--альтернатива-enum)
+5. [Когда enum действительно нужен](#когда-enum-действительно-нужен)
+6. [Const Enum](#const-enum)
+7. [Практические паттерны](#практические-паттерны)
+8. [Рекомендации](#рекомендации)
+9. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+10. [Заключение](#заключение)
+11. [Полезные ссылки](#полезные-ссылки)
+
+---
+
 ## Enum — это не тип, это значение
 
 Все остальные конструкции TypeScript — `interface`, `type`, generics, utility-типы — существуют только на уровне типов. При компиляции в JavaScript они полностью стираются.
@@ -352,3 +370,26 @@ function render(state: FetchState) {
 6. **Не смешивайте string и numeric** в одном enum.
 
 7. **Используйте exhaustiveness check** с `never` в `default`-ветке `switch`.
+
+## Ключевые тезисы для интервью
+
+- Enum — единственная конструкция TypeScript, генерирующая реальный JavaScript-объект в рантайме.
+- Numeric enum создаёт reverse mapping: по значению можно узнать имя, но любое число проходит как валидное значение.
+- String enum хранит строки, не поддерживает reverse mapping, но обеспечивает строгую типобезопасность.
+- String enum не совместим со строковыми литералами — нужен `as` для приведения типов.
+- Union type (`"idle" | "loading"`) в большинстве случаев лучше enum: стирается при компиляции, совместим с данными извне.
+- `as const` создаёт enum-подобный объект без runtime-генерации: и пространство имён, и тип, и итерация.
+- `const enum` не работает с `isolatedModules: true` (Vite, Next.js, esbuild).
+- Enum оправдан для битовых флагов, числовых констант с reverse mapping и итерируемых групп констант.
+- `Record<Enum, ...>` гарантирует обработку всех вариантов; exhaustiveness check с `never` ловит забытые случаи.
+- Не смешивайте string и numeric значения в одном enum.
+
+## Заключение
+
+Enum в TypeScript — спорная конструкция. Единственная, которая генерирует runtime-объект, что одновременно даёт возможности (итерация, reverse mapping) и создаёт проблемы (размер бандла, несовместимость с внешними данными). В большинстве случаев union type или `as const` решают задачу лучше. Enum оправдан для битовых флагов и числовых констант с reverse mapping. При использовании enum применяйте `Record` для метаданных и exhaustiveness check для полноты обработки.
+
+## Полезные ссылки
+
+- [Enums — TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/enums.html)
+- [TypeScript Enums — Matt Pocock](https://www.totaltypescript.com/tutorials/typescript/enum)
+- [Union types vs Enums](https://www.typescriptlang.org/docs/handbook/2/types-from-types.html)

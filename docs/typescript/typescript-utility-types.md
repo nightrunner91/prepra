@@ -10,7 +10,7 @@ tags: ["typescript", "utility", "types", "полное", "руководство
 
 Utility-типы в TypeScript — это набор встроенных типов, которые позволяют трансформировать и модифицировать другие типы. Но прежде чем учить их наизусть, давай разберёмся, **зачем они вообще нужны** и **как работают под капотом**.
 
-В этой статье мы не просто посмотрим на примеры — мы поймём философию каждого utility-типа, разберём его реализацию и научимся применять осознанно.
+Utility-типы — это «функции для типов». Они принимают тип как аргумент и возвращают новый тип, устраняя дублирование и синхронизируя определения. В этой статье мы не просто посмотрим на примеры — мы поймём философию каждого utility-типа, разберём его реализацию через mapped types и conditional types, и научимся применять осознанно в React и Vue.
 
 ---
 
@@ -2255,3 +2255,24 @@ Utility-типы — это мощный инструмент TypeScript для 
 6. Используй `ReturnType` и `Parameters` для типизации функций и хуков
 
 Практикуйся — и через неделю ты будешь использовать utility-типы интуитивно.
+
+## Ключевые тезисы для интервью
+
+- Utility-типы — «функции для типов»: принимают тип как аргумент и возвращают новый тип.
+- Mapped types — основа `Partial`, `Required`, `Readonly`: итерация по ключам с трансформацией через `[K in keyof T]`.
+- Conditional types — основа `Exclude`, `Extract`, `NonNullable`, `ReturnType`: условие `T extends U ? X : Y`.
+- `Partial<T>` делает все поля опциональными — для обновлений и форм.
+- `Required<T>` делает все поля обязательными — для валидации и конфигурации после дефолтов.
+- `Readonly<T>` запрещает изменение свойств — для констант и immutable state.
+- `Record<K, V>` создаёт типизированный словарь с известными ключами.
+- `Pick<T, K>` выбирает нужные поля; `Omit<T, K>` исключает лишние — для превью и create-типов.
+- `Exclude<T, U>` фильтрует union; `Extract<T, U>` извлекает из union — через distributive conditional types.
+- `ReturnType<T>` и `Parameters<T>` извлекают сигнатуру функции через `infer`.
+- `Awaited<T>` рекурсивно распаковывает `Promise<T>`.
+- Комбинации utility-типов (`Partial<Pick<T, K>>`, `Omit<T, K> & Partial<T>`) покрывают сложные сценарии без дублирования.
+
+## Полезные ссылки
+
+- [Utility Types — TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+- [Mapped Types — TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html)
+- [Conditional Types — TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html)
