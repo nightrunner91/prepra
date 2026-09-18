@@ -1,7 +1,7 @@
-﻿---
+---
 title: "TanStack Query — Глубокое погружение"
 section: state-management
-description: "1. [Что такое TanStack Query](#что-такое-tanstack-query)"
+description: "TanStack Query — Глубокое погружение"
 order: 2
 tags: ["tanstack", "query", "глубокое", "погружение"]
 ---

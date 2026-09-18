@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Деплой Nuxt 3"
 section: build-and-deployment
-description: "1. [Что такое Nitro](#что-такое-nitro)"
+description: "Деплой Nuxt 3"
 order: 4
 tags: ["деплой", "nuxt"]
 questions:

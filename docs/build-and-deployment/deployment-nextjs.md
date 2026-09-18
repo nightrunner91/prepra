@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Деплой Next.js"
 section: build-and-deployment
-description: "1. [Что происходит при `next build`](#что-происходит-при-next-build)"
+description: "Деплой Next.js"
 order: 3
 tags: ["деплой", "nextjs"]
 questions:

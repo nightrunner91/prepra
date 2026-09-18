@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Preact — лёгкий React-альтернативный рантайм"
 section: platforms
-description: "1. [Что такое Preact](#что-такое-preact)"
+description: "Preact — лёгкий React-альтернативный рантайм"
 order: 1
 tags: ["preact", "лёгкий", "react-альтернативный", "рантайм"]
 ---

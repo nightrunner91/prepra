@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Unit-тестирование с Vitest"
 section: testing
-description: "1. [Что такое Vitest](#что-такое-vitest)"
+description: "Unit-тестирование с Vitest"
 order: 16
 tags: ["unit-тестирование", "vitest"]
 ---

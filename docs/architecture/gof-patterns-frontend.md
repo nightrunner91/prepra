@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Классические паттерны GoF во Frontend-разработке (React и Vue)"
 section: architecture
-description: "1. [Введение](#введение)"
+description: "Классические паттерны GoF во Frontend-разработке (React и Vue)"
 order: 4
 tags: ["классические", "паттерны", "gof", "frontend-разработке", "react"]
 ---

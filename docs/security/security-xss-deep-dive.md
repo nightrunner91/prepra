@@ -1,7 +1,7 @@
-﻿---
+---
 title: "XSS: анатомия атаки и защита во Vue, React, Nuxt и Next.js"
 section: security
-description: "1. [Что такое XSS на самом деле](#что-такое-xss-на-самом-деле)"
+description: "XSS: анатомия атаки и защита во Vue, React, Nuxt и Next.js"
 order: 10
 tags: ["xss", "анатомия", "атаки", "защита", "vue"]
 ---

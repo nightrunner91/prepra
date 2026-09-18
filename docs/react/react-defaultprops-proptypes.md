@@ -8,6 +8,19 @@ tags: ["defaultprops", "proptypes", "react"]
 
 # defaultProps и propTypes в React
 
+`propTypes` и `defaultProps` — классические механизмы React для валидации и задания значений по умолчанию для пропсов компонентов. С появлением TypeScript они уступили место compile-time проверке, но понимание этих API необходимо для работы с legacy-кодом и классами. В этой статье разберём оба механизма, их современные альтернативы и сравнение с Vue.
+
+## Содержание
+
+1. [propTypes](#proptypes)
+2. [defaultProps](#defaultprops)
+3. [Современная альтернатива: TypeScript](#современная-альтернатива-typescript)
+4. [Сравнение с Vue](#сравнение-с-vue)
+5. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+6. [Заключение](#заключение)
+
+---
+
 ## propTypes
 
 `propTypes` — статическое свойство компонента для декларирования типов и валидации props. Работает только в runtime (не в compile-time).
@@ -266,11 +279,22 @@ Button.defaultProps = { size: 'md' };
 
 ---
 
-## Итог
+## Ключевые тезисы для интервью
 
-| Аспект | React | Vue 3 |
-|--------|-------|-------|
-| Валидация runtime | `prop-types` (deprecated) | `defineProps` (встроено) |
-| Дефолты | Деструктуризация / `defaultProps` | `withDefaults` / `default` в options |
-| Типизация | TypeScript (рекомендуется) | TypeScript (`lang="ts"`) |
-| Направление | Движение к полной типизации через TS | Валидация runtime + TS |
+- `propTypes` — runtime-валидация пропсов, работает только в development-режиме.
+- `defaultProps` задаёт значения по умолчанию; для функциональных компонентов deprecated в React 19+.
+- Порядок разрешения props: JSX → defaultProps → undefined.
+- Современная альтернатива `propTypes` — TypeScript с compile-time проверкой.
+- В Vue `defineProps` объединяет типы и дефолты, валидация встроена без доп. пакетов.
+- React 19+ рекомендует деструктуризацию с дефолтами вместо `defaultProps` для функциональных компонентов.
+- `propTypes` игнорируется в production-сборке.
+
+## Заключение
+
+`propTypes` и `defaultProps` — исторически важные API React, которые в 2026 году в значительной степени заменены TypeScript. Для функциональных компонентов `defaultProps` deprecated — используйте деструктуризацию с дефолтами. `propTypes` остаётся в legacy-коде, но новые проекты должны использовать TypeScript для compile-time типизации. Во Vue аналогичные механизмы (`defineProps`, `withDefaults`) встроены в фреймворк и не требуют отдельных пакетов.
+
+## Полезные ссылки
+
+- [TypeScript with React](https://react.dev/learn/typescript)
+- [prop-types (npm)](https://www.npmjs.com/package/prop-types)
+- [Vue defineProps](https://vuejs.org/api/sfc-script-setup.html#defineprops)

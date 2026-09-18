@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Стратегии рендеринга, SSG, CDN и Edge"
 section: build-and-deployment
-description: "1. [Почему важна стратегия рендеринга](#почему-важна-стратегия-рендеринга)"
+description: "Стратегии рендеринга, SSG, CDN и Edge"
 order: 6
 tags: ["стратегии", "рендеринга", "ssg", "cdn", "edge"]
 ---

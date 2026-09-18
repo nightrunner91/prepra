@@ -1,7 +1,7 @@
-﻿---
+---
 title: "React Native — введение для React-разработчиков"
 section: platforms
-description: "1. [Что такое React Native](#что-такое-react-native)"
+description: "React Native — введение для React-разработчиков"
 order: 3
 tags: ["react", "native", "введение", "react-разработчиков"]
 ---

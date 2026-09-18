@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Безопасность Next.js: Server Components, Server Actions и заголовки"
 section: security
-description: "1. [Почему Next.js меняет подход к безопасности](#почему-nextjs-меняет-подход-к-безопасности)"
+description: "Безопасность Next.js: Server Components, Server Actions и заголовки"
 order: 6
 tags: ["безопасность", "nextjs", "server", "components", "actions"]
 ---

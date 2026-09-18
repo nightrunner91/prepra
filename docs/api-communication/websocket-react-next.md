@@ -1,7 +1,7 @@
-﻿---
+---
 title: "WebSocket в React и Next.js"
 section: api-communication
-description: "1. [Что такое WebSocket](#что-такое-websocket)"
+description: "WebSocket в React и Next.js"
 order: 6
 tags: ["websocket", "react", "nextjs"]
 ---

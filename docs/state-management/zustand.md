@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Zustand — Глубокое погружение"
 section: state-management
-description: "1. [Что такое Zustand](#что-такое-zustand)"
+description: "Zustand — Глубокое погружение"
 order: 3
 tags: ["zustand", "глубокое", "погружение"]
 ---

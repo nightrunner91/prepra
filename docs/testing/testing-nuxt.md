@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Тестирование в Nuxt 3"
 section: testing
-description: "1. [Особенности тестирования Nuxt](#особенности-тестирования-nuxt)"
+description: "Тестирование в Nuxt 3"
 order: 10
 tags: ["тестирование", "nuxt"]
 ---
