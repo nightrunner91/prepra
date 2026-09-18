@@ -32,7 +32,9 @@ JavaScript — **однопоточный** язык: в один момент �
 9. [Визуализация Event Loop](#визуализация-event-loop)
 10. [Что блокирует Event Loop](#что-блокирует-event-loop)
 11. [Event Loop и React](#event-loop-и-react)
-12. [Чеклист](#чеклист)
+12. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+13. [Заключение](#заключение)
+14. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -356,13 +358,24 @@ React 18+ использует конкурентный режим, которы
 
 ---
 
-## Чеклист
+## Ключевые тезисы для интервью
 
-- [ ] В каком порядке выполняются макро- и микрозадачи.
-- [ ] Почему `setTimeout(fn, 0)` выполняется не сразу.
-- [ ] Что блокирует Event Loop и как этого избежать.
-- [ ] Чем `queueMicrotask` отличается от `setTimeout(..., 0)`.
-- [ ] Что такое `process.nextTick` и где он используется.
-- [ ] Как `requestAnimationFrame` связан с рендерингом.
-- [ ] Как Event Loop влияет на `Promise` и `async/await`.
-- [ ] Почему важно не блокировать стек вызовов во фронтенде.
+- Микрозадачи (Promise, `queueMicrotask`, `MutationObserver`) выполняются все до конца перед каждой следующей макрозадачей.
+- `setTimeout(fn, 0)` не выполняется сразу: callback ждёт освобождения стека, завершения всех микрозадач и минимальной задержки (~4 мс).
+- Event Loop блокируют длинные синхронные операции, бесконечные цепочки микрозадач и тяжёлые вычисления в главном потоке.
+- `queueMicrotask` ставит задачу в очередь микрозадач с приоритетом выше макрозадач; `setTimeout(..., 0)` — в очередь макрозадач.
+- `process.nextTick` в Node.js имеет приоритет выше микрозадач и выполняется перед ними.
+- `requestAnimationFrame` вызывает callback перед следующим repaint, синхронизируя анимации с обновлением экрана (~60 FPS).
+- Event Loop определяет порядок выполнения Promise и `async/await`: промисы — это микрозадачи, выполняемые до следующей макрозадачи.
+- Блокировка стека вызовов замораживает UI: для тяжёлых задач используйте Web Workers, `setTimeout` или `requestIdleCallback`.
+
+## Заключение
+
+Event Loop — это механизм, который обеспечивает асинхронное поведение в однопоточном JavaScript. Понимание порядка выполнения синхронного кода, микрозадач и макрозадач необходимо для работы с Promise, `async/await`, хуками React и отладки производительности. Помните: микрозадачи всегда выполняются до макрозадач, `setTimeout(fn, 0)` — это не «сейчас», а «на следующем тике», а бесконечные микрозадачи блокируют рендер так же, как и синхронный код.
+
+## Полезные ссылки
+
+- [Event Loop — HTML Living Standard](https://html.spec.whatwg.org/multipage/webappapis.html#event-loop-processing-model)
+- [JavaScript Visualized: Event Loop](https://dev.to/lydiahallie/javascript-visualized-event-loop-3dif)
+- [Using microtasks in JavaScript with queueMicrotask](https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/microtask_guide)
+- [requestAnimationFrame — MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame)
