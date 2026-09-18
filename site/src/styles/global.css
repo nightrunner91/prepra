@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Geist', 'SF Pro Display', 'Helvetica Neue', sans-serif;
-  --font-serif: 'Geist', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Geist Mono', 'SF Mono', monospace;
+  --font-sans: 'Google Sans', 'SF Pro Display', 'Helvetica Neue', sans-serif;
+  --font-serif: 'Google Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
 
   --color-canvas: #FBFBFA;
   --color-surface: #FFFFFF;
