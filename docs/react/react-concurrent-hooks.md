@@ -1,9 +1,18 @@
 ﻿---
 title: "useTransition и useDeferredValue — управление приоритетами в Concurrent Mode"
 section: react
-description: "React 18 представил **конкурентный режим** (Concurrent Mode) — новую модель рендеринга, позволяющую React прерывать и возобновлять работу над обновлениями. Ключевая идея: не все обновления равнозна..."
+description: "Хуки useTransition и useDeferredValue из React 18 дают явный контроль над приоритетами рендеринга. Разбор конкурентного режима, уровней приоритета и практических паттернов."
 order: 1
-tags: ["usetransition", "usedeferredvalue", "управление", "приоритетами", "concurrent"]
+tags: ["usetransition", "usedeferredvalue", "concurrent-mode", "starttransition", "priority"]
+questions:
+  - "Какие уровни приоритета обновлений существуют в Concurrent Mode"
+  - "Чем useTransition отличается от useDeferredValue"
+  - "Что возвращает useTransition и как использовать isPending"
+  - "Почему useTransition — это не CSS-анимация"
+  - "Когда useDeferredValue предпочтительнее useTransition"
+  - "Как React обрабатывает прерывание transition-обновления"
+  - "Почему useTransition не подходит для drag-and-drop"
+  - "Как комбинация с React.memo усиливает эффект от приоритизации"
 ---
 
 # useTransition и useDeferredValue — управление приоритетами в Concurrent Mode

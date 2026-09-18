@@ -1,9 +1,17 @@
 ﻿---
 title: "defaultProps и propTypes в React"
 section: react
-description: "`propTypes` — статическое свойство компонента для декларирования типов и валидации props. Работает только в runtime (не в compile-time)."
+description: "Классические механизмы React для валидации и задания значений по умолчанию для пропсов. С появлением TypeScript уступили место compile-time проверке, но необходимы для работы с legacy-кодом."
 order: 2
-tags: ["defaultprops", "proptypes", "react"]
+tags: ["defaultprops", "proptypes", "prop-types", "typescript", "validation"]
+questions:
+  - "Как работает propTypes и какие валидаторы доступны"
+  - "Что делает .isRequired при валидации пропсов"
+  - "Почему propTypes игнорируется в production-сборке"
+  - "Как работает порядок разрешения props: JSX → defaultProps → undefined"
+  - "Почему defaultProps deprecated для функциональных компонентов в React 19+"
+  - "Чем TypeScript лучше propTypes для типизации пропсов"
+  - "Как во Vue аналогичные механизмы встроены в defineProps"
 ---
 
 # defaultProps и propTypes в React

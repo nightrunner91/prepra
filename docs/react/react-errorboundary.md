@@ -1,9 +1,17 @@
 ﻿---
 title: "Error Boundary в React"
 section: react
-description: "Error Boundary — это механизм перехвата ошибок JavaScript в любом месте дерева компонентов, журналирования этих ошибок и отображения fallback UI вместо упавшего дерева."
+description: "Механизм перехвата ошибок рендеринга в дереве компонентов, логирования и отображения fallback UI. Нативная реализация через класс, библиотека react-error-boundary и практические паттерны."
 order: 3
-tags: ["error", "boundary", "react"]
+tags: ["error-boundary", "react-error-boundary", "fallback", "getderivedstatefromerror", "componentdidcatch"]
+questions:
+  - "Что такое Error Boundary и зачем он нужен"
+  - "Почему Error Boundary реализуется только через классовый компонент"
+  - "Какие ошибки ловит Error Boundary, а какие — нет"
+  - "Как работает библиотека react-error-boundary и resetErrorBoundary"
+  - "Как комбинировать Error Boundary с Suspense"
+  - "Почему хук не может быть Error Boundary"
+  - "Какие лучшие практики использования Error Boundary"
 ---
 
 # Error Boundary в React

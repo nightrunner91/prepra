@@ -1,9 +1,18 @@
 ﻿---
 title: "useContext — передача данных через дерево компонентов"
 section: react
-description: "useContext — хук для чтения данных из Context без prop drilling. В React 19 use(context) заменяет useContext и добавляет возможность условного вызова."
+description: "Хук для чтения данных из Context без prop drilling. Создание контекста, оптимизация рендеров, связка с useReducer, сравнение с Zustand и Redux, замена на use() в React 19."
 order: 13
-tags: ["usecontext", "передача", "данных", "через", "дерево"]
+tags: ["usecontext", "createcontext", "context", "prop-drilling", "provider"]
+questions:
+  - "Какую проблему решает useContext и что такое prop drilling"
+  - "Как работают createContext, Provider и useContext вместе"
+  - "Почему все потребители перерендериваются при изменении value"
+  - "Как разделение state/dispatch на два контекста оптимизирует рендеры"
+  - "Как useMemo для значения контекста предотвращает лишние ререндеры"
+  - "Как работает связка useReducer + useContext как мини-Redux"
+  - "Чем Context отличается от Zustand и когда что использовать"
+  - "Как use(context) в React 19 заменяет useContext"
 ---
 
 # useContext — передача данных через дерево компонентов

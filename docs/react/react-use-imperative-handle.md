@@ -1,12 +1,20 @@
 ﻿---
-title: "useImperativeHandle"
+title: "useImperativeHandle: императивный API компонента через ref"
 section: react
-description: "`useImperativeHandle` — хук, который настраивает, какие методы и свойства будут доступны родительскому компоненту через `ref`. Он позволяет явно определить публичный API дочернего компонента, скрыв..."
+description: "Хук для определения публичного API дочернего компонента, доступного через ref. Связка с forwardRef, зависимости, React 19 с ref как пропом, TypeScript-типизация и аналог defineExpose из Vue."
 order: 12
-tags: ["useimperativehandle"]
+tags: ["useimperativehandle", "forwardref", "ref", "defineexpose", "imperative-handle"]
+questions:
+  - "Для каких сценариев нужен useImperativeHandle"
+  - "Как работает связка useImperativeHandle + forwardRef"
+  - "Зачем нужен третий аргумент deps и что происходит без него"
+  - "Что изменилось в React 19 с передачей ref как пропа"
+  - "Как типизировать useImperativeHandle в TypeScript"
+  - "Чем useImperativeHandle отличается от Vue defineExpose"
+  - "Когда НЕ стоит использовать useImperativeHandle"
 ---
 
-# useImperativeHandle
+# useImperativeHandle: императивный API компонента через ref
 
 `useImperativeHandle` — хук, который настраивает, какие методы и свойства будут доступны родительскому компоненту через `ref`. Он позволяет явно определить публичный API дочернего компонента, скрывая внутреннюю реализацию. Используется редко — только когда императивный доступ действительно необходим (фокус, плеер, анимации).
 

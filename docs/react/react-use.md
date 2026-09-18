@@ -1,12 +1,21 @@
 ﻿---
-title: "React `use()` — Полное руководство"
+title: "Хук use(): разворачивание Promise и Context в React 19"
 section: react
-description: "Хук use() из React 19 позволяет читать Promise и Context прямо в теле компонента. Единственный хук, который можно вызывать условно. Работает в связке с Suspense и Error Boundaries."
+description: "Единственный хук React, который можно вызывать условно. Читает Promise и Context прямо в теле компонента, интегрируется с Suspense и Error Boundaries. Паттерны, ограничения и антипаттерны."
 order: 11
-tags: ["react", "use", "полное", "руководство"]
+tags: ["use", "promise", "context", "suspense", "error-boundary", "render-as-you-fetch"]
+questions:
+  - "Что делает хук use() и какие два типа аргументов он принимает"
+  - "Почему use() — единственный хук, который можно вызывать условно"
+  - "Как use() работает с Promise: pending, fulfilled, rejected"
+  - "Почему Promise должен быть стабильным между рендерами"
+  - "Как use(context) заменяет useContext и что добавляет"
+  - "Что такое render-as-you-fetch и как это устраняет waterfall"
+  - "Какова трёхслойная архитектура: ErrorBoundary → Suspense → Компонент"
+  - "Где нельзя вызывать use(): обработчики событий, useEffect, классы"
 ---
 
-# React `use()` — Полное руководство
+# Хук use(): разворачивание Promise и Context в React 19
 
 Хук `use()` — API из React 19 для чтения Promise и Context непосредственно на этапе рендера. Он стирает границу между синхронным и асинхронным кодом: вы пишете компонент так, как будто данные уже доступны, а инфраструктура React (Suspense, Error Boundaries) берёт на себя ожидание и обработку ошибок. Единственный хук, который можно вызывать условно.
 
