@@ -3,7 +3,7 @@ title: "Типы данных и приведение типов"
 section: javascript
 description: "Прежде чем говорить о замыканиях, `this` или Event Loop, нужно разобраться, из чего состоят значения в JavaScript. Типы данных и правила их преобразования — это фундамент, на котором строится всё о..."
 order: 4
-tags: ["типы", "данных", "приведение", "типов"]
+tags: ["type-coercion", "typeof", "toPrimitive", "falsy-truthy", "ieee-754", "equality"]
 questions:
   - "Чем примитивы отличаются от объектов на уровне памяти"
   - "Почему `typeof null === 'object'`"

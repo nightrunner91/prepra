@@ -3,7 +3,7 @@ title: "Event Loop"
 section: javascript
 description: "JavaScript — **однопоточный** язык: в один момент времени выполняется только одна операция. Но благодаря **Event Loop** (цикл событий) он может работать с таймерами, сетевыми запросами, событиями п..."
 order: 5
-tags: ["event", "loop"]
+tags: ["event-loop", "microtasks", "macrotasks", "call-stack", "queueMicrotask", "requestAnimationFrame"]
 questions:
   - "В каком порядке выполняются макро- и микрозадачи"
   - "Почему `setTimeout(fn, 0)` выполняется не сразу"

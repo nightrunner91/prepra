@@ -3,7 +3,7 @@ title: "Контекст выполнения и `this`"
 section: javascript
 description: "`this` — одна из самых запутанных концепций JavaScript, потому что его значение определяется **не местом определения функции, а способом её вызова**. Это фундаментально отличается от замыканий, где..."
 order: 12
-tags: ["контекст", "выполнения", "this"]
+tags: ["this", "call-apply-bind", "arrow-functions", "strict-mode", "context-loss", "class-methods"]
 questions:
   - "Как определяется `this` в разных случаях"
   - "Чем стрелочная функция отличается от обычной по `this`"

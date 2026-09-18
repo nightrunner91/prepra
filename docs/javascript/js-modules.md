@@ -3,7 +3,7 @@ title: "Модули"
 section: javascript
 description: "По мере роста приложения код перестаёт помещаться в один файл. **Модули** позволяют разбивать программу на изолированные части с явными зависимостями. В JavaScript существуют две основные системы м..."
 order: 8
-tags: ["модули"]
+tags: ["esm", "commonjs", "tree-shaking", "live-bindings", "dynamic-import"]
 questions:
   - "Чем ESM отличается от CommonJS"
   - "Как работают именованные и дефолтные экспорты в ESM"
