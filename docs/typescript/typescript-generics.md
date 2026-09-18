@@ -1,9 +1,9 @@
 ﻿---
-title: ""
+title: "TypeScript Generics — полное руководство для React и Vue"
 section: typescript
-description: ""
+description: "Дженерики — одна из самых мощных концепций TypeScript. Они позволяют писать код, который работает с любыми типами, сохраняя типобезопасность. Разбираем от базового синтаксиса до продвинутых паттернов в React и Vue."
 order: 4
-tags: []
+tags: ["дженерики", "typescript", "react", "vue"]
 ---
 
 # TypeScript Generics — полное руководство для React и Vue
