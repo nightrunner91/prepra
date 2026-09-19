@@ -1,12 +1,15 @@
-import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
+import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://username.github.io',
+  site: 'https://nightrunner91.github.io',
   base: '/prepra',
+  server: {
+    port: 8305,
+  },
   integrations: [
     mdx(),
     react(),
