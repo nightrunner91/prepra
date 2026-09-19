@@ -33,7 +33,7 @@ const sections = [
     <span class="font-serif text-lg tracking-tight text-text">Навигация</span>
     <button
       id="mobile-drawer-close"
-      class="flex items-center justify-center h-8 w-8 rounded-[5px] text-text-secondary hover:text-text transition-colors"
+      class="flex items-center justify-center h-8 w-8 rounded-[5px] text-text-secondary hover:text-accent transition-colors"
       aria-label="Close menu"
     >
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -50,7 +50,7 @@ const sections = [
           class={`block rounded-[5px] px-3 py-2.5 text-sm transition-colors ${
             currentSection === s.id
               ? 'bg-surface-alt text-text font-medium'
-              : 'text-text-secondary hover:text-text hover:bg-surface-alt/50'
+              : 'text-text-secondary hover:text-accent hover:bg-surface-alt/50'
           }`}
         >
           {s.label}

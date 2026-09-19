@@ -11,7 +11,7 @@ export function Button({ variant = 'primary', size = 'md', children, className =
 
   const variants = {
     primary: 'bg-accent text-canvas hover:bg-accent-hover',
-    ghost: 'bg-transparent text-text-secondary hover:text-text hover:bg-surface-alt',
+    ghost: 'bg-transparent text-text-secondary hover:text-accent hover:bg-surface-alt',
   };
 
   const sizes = {

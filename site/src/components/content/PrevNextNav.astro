@@ -14,19 +14,19 @@ const { prev, next, sectionLabel, sectionHref } = Astro.props;
     {prev ? (
       <a href={prev.href} class="group flex flex-col gap-1 text-left">
         <span class="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">Предыдущая</span>
-        <span class="text-sm text-text-secondary group-hover:text-text transition-colors">{prev.title}</span>
+        <span class="text-sm text-text-secondary group-hover:text-accent transition-colors">{prev.title}</span>
       </a>
     ) : (
       <a href={sectionHref} class="group flex flex-col gap-1 text-left">
         <span class="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">Раздел</span>
-        <span class="text-sm text-text-secondary group-hover:text-text transition-colors">{sectionLabel}</span>
+        <span class="text-sm text-text-secondary group-hover:text-accent transition-colors">{sectionLabel}</span>
       </a>
     )}
 
     {next && (
       <a href={next.href} class="group flex flex-col gap-1 text-right">
         <span class="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">Следующая</span>
-        <span class="text-sm text-text-secondary group-hover:text-text transition-colors">{next.title}</span>
+        <span class="text-sm text-text-secondary group-hover:text-accent transition-colors">{next.title}</span>
       </a>
     )}
   </div>

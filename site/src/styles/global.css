@@ -17,8 +17,8 @@
   --color-text: #111111;
   --color-text-secondary: #787774;
   --color-text-tertiary: #9A9A97;
-  --color-accent: #111111;
-  --color-accent-hover: #333333;
+  --color-accent: #2E7A58;
+  --color-accent-hover: #24684A;
 
   --color-pale-red-bg: #FDEBEC;
   --color-pale-red-text: #9F2F2D;
@@ -39,8 +39,8 @@
   --color-text: #EDEDEC;
   --color-text-secondary: #8A8A87;
   --color-text-tertiary: #6A6A67;
-  --color-accent: #EDEDEC;
-  --color-accent-hover: #CCCCCC;
+  --color-accent: #6DD39F;
+  --color-accent-hover: #85DBAE;
 
   --color-pale-red-bg: #2D1A1B;
   --color-pale-red-text: #E8888A;
@@ -115,7 +115,7 @@
 
   .card-hover:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border-color: var(--color-border-strong);
+    border-color: var(--color-accent);
   }
 
   .dark .card-hover:hover {

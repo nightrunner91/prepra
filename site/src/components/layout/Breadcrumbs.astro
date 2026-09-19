@@ -11,7 +11,7 @@ const { items } = Astro.props;
     <>
       {i > 0 && <span class="text-text-tertiary mx-0.5">/</span>}
       {item.href ? (
-        <a href={item.href} class="text-text-secondary hover:text-text transition-colors">
+        <a href={item.href} class="text-text-secondary hover:text-accent transition-colors">
           {item.label}
         </a>
       ) : (
