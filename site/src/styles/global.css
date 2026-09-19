@@ -154,3 +154,12 @@
   background: transparent;
   padding: 0;
 }
+
+.dark .astro-code-themes {
+  background-color: var(--shiki-dark-bg) !important;
+  color: var(--shiki-dark) !important;
+}
+
+.dark .astro-code-themes span {
+  color: var(--shiki-dark) !important;
+}

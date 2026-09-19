@@ -14,4 +14,13 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+      wrap: true,
+    },
+  },
 });
