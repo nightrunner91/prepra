@@ -1,8 +1,8 @@
 ---
-import '../styles/global.css';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
-import MobileNav from '../components/layout/MobileNav.astro';
+import "../styles/global.css";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import MobileNav from "../components/layout/MobileNav.astro";
 
 interface Props {
   title: string;
@@ -10,7 +10,11 @@ interface Props {
   currentSection?: string;
 }
 
-const { title, description = 'Учебная платформа для изучения React и JavaScript', currentSection } = Astro.props;
+const {
+  title,
+  description = "Учебная платформа для изучения React и JavaScript",
+  currentSection,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -22,11 +26,13 @@ const { title, description = 'Учебная платформа для изуч�
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | Prepra</title>
     <script is:inline>
-      (function() {
-        const theme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (theme === 'dark' || (!theme && prefersDark)) {
-          document.documentElement.classList.add('dark');
+      (function () {
+        const theme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        if (theme === "dark" || (!theme && prefersDark)) {
+          document.documentElement.classList.add("dark");
         }
       })();
     </script>
@@ -40,7 +46,7 @@ const { title, description = 'Учебная платформа для изуч�
         <slot />
       </main>
 
-      <Footer />
+      <!-- <Footer /> -->
     </div>
   </body>
 </html>

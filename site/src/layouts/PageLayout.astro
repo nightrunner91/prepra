@@ -1,0 +1,32 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  currentSection?: string;
+  showLeftSidebar?: boolean;
+  showRightSidebar?: boolean;
+}
+
+const { title, description, currentSection, showLeftSidebar = false, showRightSidebar = false } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} currentSection={currentSection}>
+  <div class="flex">
+    <!-- Left sidebar column: reserves space on lg+ even when empty -->
+    <div class="hidden lg:block w-56 flex-shrink-0">
+      {showLeftSidebar && <slot name="left-sidebar" />}
+    </div>
+
+    <!-- Main content column -->
+    <div class="flex-1 min-w-0">
+      <slot />
+    </div>
+
+    <!-- Right sidebar column: reserves space on xl+ even when empty -->
+    <div class="hidden xl:block w-56 flex-shrink-0">
+      {showRightSidebar && <slot name="right-sidebar" />}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,19 +1,24 @@
 ---
-import { withBase } from '../../lib/urls';
+import { withBase } from "../../lib/urls";
 ---
 
 <footer class="border-t border-border bg-canvas">
   <div class="mx-auto max-w-7xl px-4 lg:px-8 py-8">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-[13px] text-text-tertiary">
-        &copy; 2026 Prepra
-      </p>
+      <p class="text-[13px] text-text-tertiary">&copy; 2026 Prepra</p>
       <div class="flex items-center gap-4 text-[13px] text-text-tertiary">
-        <a href={withBase('/')} class="hover:text-accent transition-colors">Главная</a>
+        <a href={withBase("/")} class="hover:text-accent transition-colors"
+          >Главная</a
+        >
         <span class="text-border">/</span>
-        <a href={withBase('/javascript')} class="hover:text-accent transition-colors">JavaScript</a>
+        <a
+          href={withBase("/javascript")}
+          class="hover:text-accent transition-colors">JavaScript</a
+        >
         <span class="text-border">/</span>
-        <a href={withBase('/react')} class="hover:text-accent transition-colors">React</a>
+        <a href={withBase("/react")} class="hover:text-accent transition-colors"
+          >React</a
+        >
       </div>
     </div>
   </div>
