@@ -1,14 +1,41 @@
 ﻿---
-title: "RSC Payload (React Server Components Payload)"
+title: "RSC Payload в Next.js"
 section: nextjs
-description: "**RSC Payload** — это сериализованный поток данных, который React Server Components отправляют с сервера клиенту. Это не HTML и не JSON в привычном смысле, а специальный бинарный формат, содержащий:"
+description: "RSC Payload — сериализованный поток данных, который React Server Components отправляют с сервера. Разбираем формат, кэширование, преимущества и ограничения."
 order: 9
-tags: ["rsc", "payload", "react", "server", "components"]
+tags: ["rsc-payload", "react-server-components", "nextjs", "streaming", "hydration", "router-cache"]
+questions:
+  - "Чем RSC Payload отличается от HTML и JSON"
+  - "Какие данные содержит RSC Payload"
+  - "Как Next.js использует двойной рендеринг RSC и SSR"
+  - "Где и как кэшируется RSC Payload"
+  - "Как управлять кэшем через revalidate и router.refresh"
+  - "Почему серверные компоненты не имеют доступа к браузерным API"
+  - "Как работает селективная гидратация клиентских компонентов"
+  - "Как отлаживать RSC Payload в DevTools"
 ---
 
-# RSC Payload (React Server Components Payload)
+# RSC Payload в Next.js
 
-## Что это?
+RSC Payload — это формат данных, который React Server Components передают с сервера на клиент вместо обычного JSON или чистого HTML. Понимание его структуры помогает разобраться, как Next.js рендерит страницы, кэширует данные и сокращает объём JavaScript на клиенте. В статье разберём формат потока, механизм двойного рендеринга, уровни кэширования, практические примеры и ограничения серверных компонентов.
+
+## Содержание
+
+1. [Что такое RSC Payload](#что-такое-rsc-payload)
+2. [Механизм работы](#механизм-работы)
+3. [Кэширование RSC Payload](#кэширование-rsc-payload)
+4. [Преимущества RSC Payload](#преимущества-rsc-payload)
+5. [Ограничения](#ограничения)
+6. [Практические примеры](#практические-примеры)
+7. [Отладка RSC Payload](#отладка-rsc-payload)
+8. [Сравнение с альтернативами](#сравнение-с-альтернативами)
+9. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+10. [Заключение](#заключение)
+11. [Полезные ссылки](#полезные-ссылки)
+
+---
+
+## Что такое RSC Payload
 
 **RSC Payload** — это сериализованный поток данных, который React Server Components отправляют с сервера клиенту. Это не HTML и не JSON в привычном смысле, а специальный бинарный формат, содержащий:
 
@@ -428,7 +455,19 @@ export function middleware(request) {
 | **CSR (JSON)** | Средний | ❌ | ❌ |
 | **Static (HTML)** | Большой | ❌ | ❌ |
 
-## Выводы
+## Ключевые тезисы для интервью
+
+- RSC Payload — сериализованный поток, который React Server Components отправляют с сервера клиенту, а не HTML или JSON.
+- Формат потока содержит сериализованное дерево React-элементов, результаты асинхронных операций, инструкции по гидратации и ссылки на JS-чанки.
+- Next.js использует двойной рендеринг: RSC Render создаёт Payload, SSR Render превращает его в HTML.
+- RSC Payload кэшируется на сервере (Full Route Cache), CDN/Edge (HTTP-заголовки), в браузере (Cache API, Memory) и Router Cache.
+- Кэшем управляют через `revalidate`, `revalidateTag`, `revalidatePath` и `router.refresh()`.
+- Серверные компоненты не имеют доступа к браузерным API и не могут хранить состояние или обработчики событий.
+- RSC Payload уменьшает размер передаваемых данных, поддерживает streaming и селективную гидратацию клиентских компонентов.
+- Prefetch загружает RSC Payload заранее и сохраняет его в Router Cache для мгновенной навигации.
+- В DevTools RSC Payload виден как document-запрос, а заголовки `rsc` и `next-router-prefetch` помогают отлаживать навигацию.
+
+## Заключение
 
 **RSC Payload** — это ключевой механизм React Server Components, который:
 
@@ -448,3 +487,10 @@ export function middleware(request) {
 - ❌ Полностью интерактивные приложения (SPA)
 - ❌ Данные только на клиенте (localStorage, Web APIs)
 - ❌ Частые обновления в реальном времени
+
+## Полезные ссылки
+
+- [React Server Components](https://react.dev/reference/react-server)
+- [Next.js Rendering: Server Components](https://nextjs.org/docs/app/building-your-application/rendering/server-components)
+- [Next.js Caching](https://nextjs.org/docs/app/building-your-application/caching)
+- [Next.js Link Component](https://nextjs.org/docs/app/api-reference/components/link)

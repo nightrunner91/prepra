@@ -1,12 +1,22 @@
 ﻿---
-title: "Кэширование данных в Next.js: полное руководство"
+title: "Кэширование в Next.js: уровни и ревалидация"
 section: nextjs
-description: "Next.js расширяет нативный `fetch` API, добавляя многоуровневую систему кэширования. Понимание этой системы — ключ к производительности приложений. Этот документ разбирает каждый уровень кэша, их в..."
+description: "Четыре уровня кэша Next.js: Request Memoization, Data Cache, Full Route Cache и Router Cache. Управление через cache, revalidate, tags и router.refresh."
 order: 2
-tags: ["кэширование", "данных", "nextjs", "полное", "руководство"]
+tags: ["caching", "nextjs", "data-cache", "request-memoization", "full-route-cache", "router-cache"]
+questions:
+  - "Какие четыре уровня кэша есть в Next.js и где каждый из них находится?"
+  - "Чем Data Cache отличается от Request Memoization?"
+  - "Как работает time-based revalidation и в чём смысл stale-while-revalidate?"
+  - "Когда использовать revalidatePath, а когда revalidateTag?"
+  - "Почему после мутации данных может понадобиться router.refresh() на клиенте?"
+  - "Как отключить Full Route Cache для конкретной страницы?"
+  - "Почему персонализированные данные пользователя нельзя кэшировать на сервере?"
+  - "Что происходит с Router Cache при изменении searchParams?"
+  - "Какой уровень кэша срабатывает первым при навигации пользователя?"
 ---
 
-# Кэширование данных в Next.js: полное руководство
+# Кэширование в Next.js: уровни и ревалидация
 
 Next.js расширяет нативный `fetch` API, добавляя многоуровневую систему кэширования. Понимание этой системы — ключ к производительности приложений. Этот документ разбирает каждый уровень кэша, их взаимодействие и стратегии управления.
 
@@ -14,25 +24,24 @@ Next.js расширяет нативный `fetch` API, добавляя мно
 
 ## Содержание
 
-- [4 уровня кэша в Next.js](#4-уровня-кэша-в-nextjs)
-- [Data Cache](#data-cache)
-  - [Где физически хранится](#где-физически-хранится)
-  - [Пошаговый процесс](#пошаговый-процесс)
-  - [Сценарии поведения](#сценарии-поведения)
-- [Request Memoization](#request-memoization)
-- [Full Route Cache](#full-route-cache)
-- [Router Cache](#router-cache)
-- [Взаимодействие всех уровней кэша](#взаимодействие-всех-уровней-кэша)
-- [Полный цикл кэширования: таймлайн](#полный-цикл-кэширования-таймлайн)
-- [Ре-валидация кэша](#ре-валидация-кэша)
-  - [Time-based revalidation](#time-based-revalidation)
-  - [On-demand revalidation](#on-demand-revalidation)
-  - [revalidatePath vs revalidateTag](#revalidatepath-vs-revalidatetag)
-- [Кэширование vs Хранение](#кэширование-vs-хранение)
-- [Глобальная настройка кэширования](#глобальная-настройка-кэширования)
-- [Сравнение с Nuxt.js](#сравнение-с-nuxtjs)
-- [Best Practices](#best-practices)
-- [Антипаттерны](#антипаттерны)
+1. [4 уровня кэша в Next.js](#4-уровня-кэша-в-nextjs)
+2. [Data Cache](#data-cache)
+3. [Request Memoization](#request-memoization)
+4. [Full Route Cache](#full-route-cache)
+5. [Router Cache](#router-cache)
+6. [Взаимодействие всех уровней кэша](#взаимодействие-всех-уровней-кэша)
+7. [Полный цикл кэширования: таймлайн](#полный-цикл-кэширования-таймлайн)
+8. [Ре-валидация кэша](#ре-валидация-кэша)
+9. [Кэширование vs Хранение](#кэширование-vs-хранение)
+10. [Глобальная настройка кэширования](#глобальная-настройка-кэширования)
+11. [Сравнение с Nuxt.js](#сравнение-с-nuxtjs)
+12. [Best Practices](#best-practices)
+13. [Антипаттерны](#антипаттерны)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
+
+---
 
 ## 4 уровня кэша в Next.js
 
@@ -1385,3 +1394,28 @@ revalidateTag('products')
 revalidateTag('categories')
 revalidateTag('user-profile')
 ```
+
+## Ключевые тезисы для интервью
+
+- Next.js имеет четыре уровня кэша: Request Memoization, Data Cache, Full Route Cache и Router Cache, каждый со своим местом хранения и временем жизни.
+- Request Memoization дедуплицирует одинаковые fetch-запросы внутри одного рендера, хранясь в памяти Node.js только на время render.
+- Data Cache сохраняет результаты fetch на диске сервера, позволяя избегать повторных HTTP-запросов между разными запросами пользователей.
+- Full Route Cache хранит готовый HTML + RSC Payload для статических страниц, возвращаясь без повторного выполнения page.tsx.
+- Router Cache находится в памяти браузера и ускоряет навигацию между посещёнными маршрутами, живя до F5 или router.refresh().
+- Time-based revalidation обновляет кэш по таймеру по модели stale-while-revalidate: пользователь получает старые данные мгновенно, а фоновый запрос обновляет кэш.
+- On-demand revalidation через revalidatePath или revalidateTag позволяет сбрасывать кэш по событию, например после CRUD-операций.
+- revalidatePath инвалидирует кэш по URL, а revalidateTag — по логической группе данных независимо от страницы.
+- revalidatePath и revalidateTag очищают серверные кэши, но не Router Cache в браузере; для этого нужен router.refresh().
+- Статические данные кэшируются навсегда, динамические данные пользователя должны использовать cache: 'no-store', а редко меняющиеся — next.revalidate.
+- Использование широких тегов вроде 'data' и revalidate: 0 усложняет инвалидацию и ведёт к неожиданному поведению.
+
+## Заключение
+
+Кэширование в Next.js — это многоуровневая система, где каждый уровень решает свою задачу: от дедупликации запросов внутри одного рендера до ускорения навигации в браузере. Понимание разницы между Data Cache, Full Route Cache и Router Cache позволяет выбирать правильную стратегию для статических, динамических и персонализированных данных. Time-based и on-demand ревалидация дают гибкость в управлении актуальностью контента. Главное — не забывать очищать Router Cache после мутаций и не кэшировать данные конкретного пользователя на сервере. Попробуйте явно задать cache и revalidate в своих fetch-запросах и проверьте, какие кэши участвуют в каждом сценарии.
+
+## Полезные ссылки
+
+- [Caching in Next.js](https://nextjs.org/docs/app/building-your-application/caching)
+- [Data Fetching and Caching](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching-caching-and-revalidating)
+- [Server Actions and Mutations](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)
+- [Routing: Linking and Navigating](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating)

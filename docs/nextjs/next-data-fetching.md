@@ -1,30 +1,45 @@
-﻿---
-title: "Глубокое погружение в Data Fetching в Next.js"
-section: nextjs
-description: "Загрузка данных в Next.js App Router кардинально отличается от традиционных React-приложений. Серверные компоненты позволяют загружать данные напрямую в компоненте через `async/await`, без `useEffe..."
-order: 3
-tags: ["глубокое", "погружение", "data", "fetching", "nextjs"]
 ---
-
-# Глубокое погружение в Data Fetching в Next.js
+title: "Data Fetching в Next.js App Router"
+section: nextjs
+description: "Разбираем загрузку данных в Next.js App Router: серверные компоненты, кэширование, Server Actions, Route Handlers и Suspense."
+order: 3
+tags: ["data-fetching", "nextjs", "app-router", "server-components", "server-actions", "route-handlers"]
+questions:
+  - "Чем загрузка данных в Server Components отличается от клиентского useEffect + fetch"
+  - "Какие уровни кэширования есть в Next.js и чем они отличаются"
+  - "Когда использовать Promise.all, а когда последовательные await"
+  - "Как работают Server Actions и зачем нужен useActionState"
+  - "Зачем нужны Route Handlers и когда их стоит добавлять"
+  - "Как streaming с Suspense улучшает пользовательский опыт"
+  - "Какие основные антипаттерны загрузки данных в Next.js"
+  - "В чём ключевые различия между Next.js App Router и Nuxt 3"
+  - "Когда можно обойтись без REST API в Next.js"
+  - "Какие опции кэширования fetch используются в Next.js 15+"
+---
+# Data Fetching в Next.js App Router
 
 Загрузка данных в Next.js App Router кардинально отличается от традиционных React-приложений. Серверные компоненты позволяют загружать данные напрямую в компоненте через `async/await`, без `useEffect`, `useState` и клиентских хуков. Этот документ разбирает все подходы, паттерны и подводные камни.
 
 ## Содержание
 
-- [Архитектура данных в Next.js](#архитектура-данных-в-nextjs)
-- [Data Fetching на сервере](#data-fetching-на-сервере)
-- [Кэширование данных](#кэширование-данных)
-- [Параллельная загрузка данных](#параллельная-загрузка-данных)
-- [Последовательная загрузка данных](#последовательная-загрузка-данных)
-- [Data Fetching на клиенте](#data-fetching-на-клиенте)
-- [Server Actions и мутации](#server-actions-и-мутации)
-- [Route Handlers](#route-handlers)
-- [Streaming и Suspense](#streaming-и-suspense)
-- [Практические паттерны](#практические-паттерны)
-- [Best Practices](#best-practices)
-- [Антипаттерны](#антипаттерны)
-- [Сравнение с Nuxt.js](#сравнение-с-nuxtjs)
+1. [Архитектура данных в Next.js](#архитектура-данных-в-nextjs)
+2. [Data Fetching на сервере](#data-fetching-на-сервере)
+3. [Кэширование данных](#кэширование-данных)
+4. [Параллельная загрузка данных](#параллельная-загрузка-данных)
+5. [Последовательная загрузка данных](#последовательная-загрузка-данных)
+6. [Data Fetching на клиенте](#data-fetching-на-клиенте)
+7. [Server Actions и мутации](#server-actions-и-мутации)
+8. [Route Handlers](#route-handlers)
+9. [Streaming и Suspense](#streaming-и-suspense)
+10. [Практические паттерны](#практические-паттерны)
+11. [Best Practices](#best-practices)
+12. [Антипаттерны](#антипаттерны)
+13. [Сравнение с Nuxt.js](#сравнение-с-nuxtjs)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
+
+---
 
 ## Архитектура данных в Next.js
 
@@ -1966,3 +1981,33 @@ if (error.value) {
 - `$fetch` → Server Actions (для мутаций) или `fetch` (для GET)
 - `routeRules.isr` → `next: { revalidate: N }` в fetch
 - `refreshNuxtData()` → `revalidatePath` / `revalidateTag`
+
+
+---
+
+## Ключевые тезисы для интервью
+
+- В Next.js App Router компоненты по умолчанию серверные, поэтому `async/await` и прямые запросы к БД работают без `'use client'`.
+- `fetch` в Next.js расширен опциями `cache`, `next.revalidate` и `next.tags`, что даёт четыре уровня кэширования.
+- Request Memoization дедуплицирует одинаковые fetch в рамках одного рендера, Data Cache хранит ответы на диске, Full Route Cache хранит HTML/RSC, Router Cache живёт в браузере.
+- Независимые запросы загружают через `Promise.all`, зависимые — последовательными `await`.
+- Клиентский fetch нужен только для интерактивности; для начальной загрузки предпочтительнее Server Components.
+- Server Actions позволяют вызывать серверные функции прямо из JSX-форм и инвалидировать кэш через `revalidatePath` / `revalidateTag`.
+- Route Handlers стоит добавлять, когда нужен публичный API, webhook, мобильный клиент или real-time слой.
+- `Suspense` и `loading.tsx` дают streaming: пользователь видит HTML постепенно, а не ждёт полной загрузки страницы.
+- Основные антипаттерны: клиентский fetch для статики, лишние waterfall-запросы, дублирование fetch, избыточное `use client` и бессмысленный `revalidate: 0`.
+- Next.js разделяет серверные и клиентские компоненты, тогда как Nuxt использует универсальные компоненты с `useFetch` / `useAsyncData`.
+
+## Заключение
+
+Data Fetching в Next.js App Router строится вокруг серверных компонентов: большинство данных можно и нужно загружать на сервере через `async/await`. Правильный выбор между `cache`, `no-store` и `revalidate` определяет производительность и актуальность контента. Для мутаций используйте Server Actions, а Route Handlers добавляйте только при внешней необходимости. Не забывайте про `Suspense` и параллельные запросы — они существенно улучшают пользовательский опыт. Попробуйте переписать один экран своего приложения с клиентского fetch на серверный компонент и замерьте разницу.
+
+## Полезные ссылки
+
+- [Data Fetching in Next.js](https://nextjs.org/docs/app/building-your-application/data-fetching)
+- [Caching in Next.js](https://nextjs.org/docs/app/building-your-application/caching)
+- [Server Actions and Mutations](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)
+- [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)
+- [React Suspense](https://react.dev/reference/react/Suspense)
+- [SWR](https://swr.vercel.app/)
+- [Nuxt Data Fetching](https://nuxt.com/docs/getting-started/data-fetching)

@@ -1,12 +1,40 @@
 ﻿---
 title: "Edge Runtime в Next.js"
 section: nextjs
-description: "Edge Runtime — это среда выполнения JavaScript, оптимизированная для низкой задержки (latency) и быстрого запуска. В отличие от традиционного Node.js сервера, Edge функции выполняются на \"edge\" — б..."
+description: "Разбираем Edge Runtime в Next.js: на чём основан, чем отличается от Node.js, где применять и какие ограничения влияют на выбор runtime."
 order: 4
-tags: ["edge", "runtime", "nextjs"]
+tags: ["edge-runtime", "nextjs", "middleware", "v8-isolates", "serverless"]
+questions:
+  - "Чем Edge Runtime отличается от Node.js runtime в Next.js"
+  - "Что такое V8 Isolate и почему Edge функции запускаются быстрее"
+  - "Какие сценарии подходят для Edge Runtime"
+  - "Какие Node.js API недоступны в Edge Runtime"
+  - "Как включить Edge Runtime для Route Handler, страницы или middleware"
+  - "Когда лучше использовать Serverless Node.js вместо Edge"
+  - "Какие лимиты существуют у Edge функций на Vercel и Cloudflare"
 ---
 
 # Edge Runtime в Next.js
+
+Next.js позволяет запускать код не только на классическом Node.js, но и в легковесной среде Edge Runtime, которая работает ближе к пользователю на CDN-узлах. Эта возможность особенно ценна для middleware, простых API-обработчиков и задач, где критична низкая задержка. В статье разберём архитектуру Edge Runtime, его ограничения и практические примеры использования.
+
+## Содержание
+
+1. [Что такое Edge Runtime](#что-такое-edge-runtime)
+2. [Как работает Edge Runtime](#как-работает-edge-runtime)
+3. [Когда использовать Edge Runtime](#когда-использовать-edge-runtime)
+4. [Ограничения Edge Runtime](#ограничения-edge-runtime)
+5. [Конфигурация](#конфигурация)
+6. [Практические примеры](#практические-примеры)
+7. [Edge vs Serverless](#edge-vs-serverless)
+8. [Оптимизация Edge функций](#оптимизация-edge-функций)
+9. [Deployment](#deployment)
+10. [Лучшие практики](#лучшие-практики)
+11. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+12. [Заключение](#заключение)
+13. [Полезные ссылки](#полезные-ссылки)
+
+---
 
 ## Что такое Edge Runtime
 
@@ -515,8 +543,27 @@ npx @cloudflare/next-on-pages
 6. **Мониторьте метрики** — следите за временем выполнения
 7. **Не используйте для сложной логики** — Edge не для этого
 
+## Ключевые тезисы для интервью
+
+- Edge Runtime в Next.js основан на V8 Isolates и работает на CDN-узлах, обеспечивая запуск за миллисекунды.
+- В отличие от Node.js runtime, Edge не имеет доступа к файловой системе и большинству Node.js API, доступны только Web API.
+- Edge идеально подходит для middleware, простых API-роутов, геолокации, редиректов, аутентификации и A/B-тестирования.
+- Для тяжёлых вычислений, работы с файлами, большими зависимостями и долгих операций лучше оставаться на Node.js runtime.
+- Включить Edge можно через `export const runtime = 'edge'` в Route Handler или странице; middleware всегда выполняется в Edge.
+- Edge функции имеют лимиты: размер бандла, память и время выполнения, которые отличаются у разных провайдеров.
+- Vercel Edge Functions ограничены 4 MB бандла и 128 MB памяти, Cloudflare Workers — до 1–5 MB скрипта и 128 MB памяти.
+- Для оптимизации Edge функций важно минимизировать размер бандла, избегать тяжёлых зависимостей и использовать кэширование.
+- Edge Runtime — не замена Node.js, а дополнительный инструмент для сценариев с критичной latency и глобальным распределением.
+
 ## Заключение
 
 Edge Runtime — мощный инструмент для оптимизации задержки и масштабирования. Используйте его для middleware, простых API, геолокации и A/B тестирования. Для сложной бизнес-логики и работы с БД оставляйте Node.js runtime.
 
 Помните: Edge — это не замена Node.js, а дополнение для специфических задач, где важна низкая задержка и глобальное распределение.
+
+## Полезные ссылки
+
+- [Edge Runtime — Next.js Docs](https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes)
+- [Vercel Edge Functions](https://vercel.com/docs/functions/edge-functions)
+- [Cloudflare Workers](https://developers.cloudflare.com/workers/)
+- [V8 Isolates](https://v8.dev/docs/isolation)

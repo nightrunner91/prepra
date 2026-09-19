@@ -1,45 +1,58 @@
 ﻿---
-title: "Глубокое погружение в Route Handlers и Server Actions"
+title: "Next.js: Route Handlers и Server Actions"
 section: nextjs
-description: "Route Handlers и Server Actions — два механизма серверной логики в Next.js App Router. Route Handlers дают полный контроль над HTTP-запросом/ответом (как традиционный REST API), а Server Actions аб..."
+description: "Разбираем Route Handlers и Server Actions в Next.js App Router: когда какой подход выбрать и как писать безопасный серверный код."
 order: 7
-tags: ["глубокое", "погружение", "route", "handlers", "server"]
+tags: ["route-handlers", "server-actions", "app-router", "next-response", "revalidation", "bff"]
+questions:
+  - "Чем Route Handlers отличаются от Server Actions и когда что использовать"
+  - "Почему нельзя одновременно размещать route.ts и page.tsx на одном уровне"
+  - "Как работает NextResponse.json() и чем он отличается от возврата объекта"
+  - "Какие HTTP-методы поддерживает Route Handler и как они маппятся на URL"
+  - "Что делает директива 'use server' и как вызывается Server Action из клиентского компонента"
+  - "Как управлять кэшированием в Route Handlers: статика, динамика, revalidate"
+  - "Для чего нужны revalidatePath и revalidateTag после мутаций"
+  - "Как реализовать оптимистичные обновления с useOptimistic и Server Actions"
+  - "Как настроить CORS в Route Handlers"
+  - "Что такое BFF-паттерн и как его реализовать через Route Handlers"
 ---
 
-# Глубокое погружение в Route Handlers и Server Actions
+# Next.js: Route Handlers и Server Actions
 
-Route Handlers и Server Actions — два механизма серверной логики в Next.js App Router. Route Handlers дают полный контроль над HTTP-запросом/ответом (как традиционный REST API), а Server Actions абстрагируют эту сложность, позволяя вызывать серверные функции напрямую из компонентов. Этот документ разбирает оба подхода, их внутреннее устройство и ключевые различия.
+В Next.js App Router серверную логику можно реализовать двумя способами: явные HTTP-эндпоинты через Route Handlers или прямые серверные функции через Server Actions. Выбор между ними влияет на архитектуру API, кэширование, безопасность и пользовательский опыт. В этой статье разберём оба подхода, их внутреннее устройство и практические паттерны применения.
 
 ## Содержание
 
-- [Что такое route.ts — простое объяснение](#что-такое-routets--простое-объяснение)
-- [Маппинг файлов на URL](#маппинг-файлов-на-url)
-- [NextResponse.json() — что это и зачем](#nextresponsejson--что-это-и-зачем)
-- [fetch — универсальный HTTP клиент](#fetch--универсальный-http-клиент)
-- [BFF паттерн — адаптация кривого API](#bff-паттерн--адаптация-кривого-api)
-- [Route Handlers vs Server Actions — когда что использовать](#route-handlers-vs-server-actions--когда-что-использовать)
-- [Архитектура серверной логики](#архитектура-серверной-логики)
-- [Route Handlers](#route-handlers)
-- [HTTP методы и обработчики](#http-методы-и-обработчики)
-- [Request и Response объекты](#request-и-response-объекты)
-- [Кэширование в Route Handlers](#кэширование-в-route-handlers)
-- [Динамические сегменты](#динамические-сегменты)
-- [CORS и заголовки](#cors-и-заголовки)
-- [Streaming и Web Streams API](#streaming-и-web-streams-api)
-- [Server Actions](#server-actions)
-- [Директива "use server"](#директива-use-server)
-- [Вызов Server Actions](#вызов-server-actions)
-- [useFormState и useFormStatus](#useformstate-и-useformstatus)
-- [Revalidation и мутации](#revalidation-и-мутации)
-- [Оптимистичные обновления](#оптимистичные-обновления)
-- [Server Actions под капотом](#server-actions-под-капотом)
-- [Route Handlers vs Server Actions](#route-handlers-vs-server-actions)
-- [Таблица сравнения](#таблица-сравнения)
-- [Когда что использовать](#когда-что-использовать)
-- [Практические паттерны](#практические-паттерны)
-- [Best Practices](#best-practices)
-- [Антипаттерны](#антипаттерны)
-- [Сравнение с Nuxt.js](#сравнение-с-nuxtjs)
+1. [Что такое route.ts — простое объяснение](#что-такое-routets-простое-объяснение)
+2. [Маппинг файлов на URL](#маппинг-файлов-на-url)
+3. [NextResponse.json() — что это и зачем](#nextresponsejson-что-это-и-зачем)
+4. [fetch — универсальный HTTP клиент](#fetch-универсальный-http-клиент)
+5. [BFF паттерн — адаптация кривого API](#bff-паттерн-адаптация-кривого-api)
+6. [Route Handlers vs Server Actions — когда что использовать](#route-handlers-vs-server-actions-когда-что-использовать)
+7. [Архитектура серверной логики](#архитектура-серверной-логики)
+8. [Route Handlers](#route-handlers)
+9. [HTTP методы и обработчики](#http-методы-и-обработчики)
+10. [Request и Response объекты](#request-и-response-объекты)
+11. [Кэширование в Route Handlers](#кэширование-в-route-handlers)
+12. [Динамические сегменты](#динамические-сегменты)
+13. [CORS и заголовки](#cors-и-заголовки)
+14. [Streaming и Web Streams API](#streaming-и-web-streams-api)
+15. [Server Actions](#server-actions)
+16. [useFormState и useFormStatus](#useformstate-и-useformstatus)
+17. [Revalidation и мутации](#revalidation-и-мутации)
+18. [Оптимистичные обновления](#оптимистичные-обновления)
+19. [Server Actions под капотом](#server-actions-под-капотом)
+20. [Route Handlers vs Server Actions](#route-handlers-vs-server-actions)
+21. [Когда что использовать](#когда-что-использовать)
+22. [Практические паттерны](#практические-паттерны)
+23. [Best Practices](#best-practices)
+24. [Антипаттерны](#антипаттерны)
+25. [Сравнение с Nuxt.js](#сравнение-с-nuxtjs)
+26. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+27. [Заключение](#заключение)
+28. [Полезные ссылки](#полезные-ссылки)
+
+---
 
 ## Что такое route.ts — простое объяснение
 
@@ -2185,3 +2198,32 @@ export const usePosts = () => {
 ### Итоговая рекомендация
 
 Используйте **Route Handlers** для всего, что требует полного HTTP-контроля (API, webhooks, streaming). Используйте **Server Actions** для мутаций из UI (формы, кнопки) — они проще, безопаснее и обеспечивают лучший UX.
+
+## Ключевые тезисы для интервью
+
+- Route Handlers — это файлы `route.ts`, экспортирующие HTTP-методы (GET, POST и т.д.) и дающие полный контроль над запросом/ответом.
+- Server Actions — серверные функции с директивой `'use server'`, которые вызываются из клиентских компонентов напрямую, абстрагируя HTTP.
+- `route.ts` и `page.tsx` не могут сосуществовать на одном уровне в `app` router.
+- `NextResponse.json()` формирует корректный HTTP-ответ с нужными заголовками, в отличие от возврата plain объекта.
+- Route Handler кэшируется, если не использует `Request` и не имеет динамических данных; использование `Request` или `dynamic = 'force-dynamic'` делает его динамическим.
+- Server Actions всегда выполняются динамически (POST) и работают только в Node.js runtime.
+- Для форм и мутаций из UI предпочтительнее Server Actions; для публичных API, webhooks, streaming и CORS — Route Handlers.
+- Server Actions поддерживают прогрессивное улучшение и работают без JavaScript в браузере.
+- `useFormState` и `useFormStatus` помогают управлять состоянием форм и статусом отправки при использовании Server Actions.
+- `revalidatePath` и `revalidateTag` используются для инвалидации кэша после мутаций.
+- Оптимистичные обновления реализуются через `useOptimistic` для мгновенного обновления UI до ответа сервера.
+- BFF-паттерн позволяет адаптировать неровный внешний API к удобному формату для фронтенда через Route Handlers.
+
+## Заключение
+
+Route Handlers и Server Actions решают разные задачи серверной логики в Next.js. Route Handlers дают полный контроль над HTTP и нужны для API, webhooks, streaming и интеграций. Server Actions упрощают мутации из UI, формы и прогрессивное улучшение. Важно валидировать входные данные, использовать правильные HTTP-статусы и не забывать ревалидацию кэша. При выборе подхода ориентируйтесь на потребность в HTTP-контроле: чем больше контроля нужно, тем чаще выбор падает на Route Handlers.
+
+## Полезные ссылки
+
+- [Route Handlers — Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)
+- [Server Actions and Mutations — Next.js Docs](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)
+- [NextResponse — Next.js Docs](https://nextjs.org/docs/app/api-reference/functions/next-response)
+- [NextRequest — Next.js Docs](https://nextjs.org/docs/app/api-reference/functions/next-request)
+- [useOptimistic — React Docs](https://react.dev/reference/react/useOptimistic)
+- [useFormState — React Docs](https://react.dev/reference/react-dom/hooks/useFormState)
+- [Web Streams API — MDN](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API)

@@ -1,12 +1,38 @@
 ﻿---
-title: "Next.js Server API - Полное руководство"
+title: "Next.js Server API: headers, cookies, cache"
 section: nextjs
-description: "**Назначение:** Чтение HTTP заголовков входящего запроса в Server Components."
+description: "Обзор серверных API Next.js App Router: чтение заголовков и cookies, навигация, инвалидация кэша и клиентские хуки. Разбираем синтаксис и ограничения."
 order: 1
-tags: ["nextjs", "server", "api", "полное", "руководство"]
+tags: ["nextjs", "next-headers", "next-navigation", "next-cache", "cookies", "server-components"]
+questions:
+  - "Какие API входят в next/headers и для чего они используются"
+  - "Чем отличается headers() от cookies() по возможностям записи"
+  - "Почему redirect нельзя вызывать внутри try/catch"
+  - "Какие методы доступны у useRouter в Client Components"
+  - "Чем revalidatePath отличается от revalidateTag"
+  - "Какие API делают маршрут динамическим"
+  - "Где можно изменять cookies: в Server Component или Server Action"
+  - "Как работает draftMode и зачем нужен режим черновика"
 ---
 
-# Next.js Server API - Полное руководство
+# Next.js Server API: headers, cookies, cache
+
+Next.js App Router предоставляет набор серверных и клиентских API для работы с запросом, навигацией и кэшированием. Правильный выбор между `headers()`, `cookies()`, `redirect()` и хуками `useRouter()` определяет архитектуру страницы и её производительность. В статье разберём синтаксис, примеры и ограничения каждой функции, а также соберём их в сводную таблицу.
+
+## Содержание
+
+1. [next/headers](#nextheaders)
+2. [next/navigation](#nextnavigation)
+3. [next/cache](#nextcache)
+4. [Клиентские хуки](#клиентские-хуки)
+5. [Сводная таблица](#сводная-таблица)
+6. [Лучшие практики](#лучшие-практики)
+7. [Динамический рендеринг](#динамический-рендеринг)
+8. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+9. [Заключение](#заключение)
+10. [Полезные ссылки](#полезные-ссылки)
+
+---
 
 ## next/headers
 
@@ -453,7 +479,7 @@ export default function Page() {
 
 ---
 
-## Best Practices
+## Лучшие практики
 
 ### 1. Работа с cookies
 
@@ -560,7 +586,24 @@ export default async function Page() {
 
 ---
 
-## Дополнительные ресурсы
+## Ключевые тезисы для интервью
+
+- `headers()` из `next/headers` возвращает read-only объект HTTP-заголовков и делает маршрут динамическим.
+- `cookies()` позволяет читать в Server Components, а записывать — только в Server Functions и Route Handlers.
+- `draftMode()` управляет режимом черновика через cookie `__prerender_bypass` и обходит кэширование.
+- `redirect()` бросает ошибку `NEXT_REDIRECT`, поэтому его нельзя вызывать внутри `try/catch`.
+- `notFound()` прерывает рендеринг и автоматически отображает `not-found.tsx` с `noindex`.
+- `useRouter()` работает только в Client Components и предоставляет методы `push`, `replace`, `refresh`, `prefetch`, `back`, `forward`.
+- `useSearchParams()` и `usePathname()` возвращают клиентские данные URL и требуют ближайшего Suspense boundary.
+- `revalidatePath()` инвалидирует кэш по конкретному пути или layout, а `revalidateTag()` — по тегам fetch.
+- `headers()`, `cookies()`, `draftMode()` и `searchParams` в page-компонентах автоматически переключают маршрут в динамический рендеринг.
+- Для cookies важно разделять чтение в Server Components и запись в Server Actions, иначе возникнет ошибка.
+
+## Заключение
+
+Next.js App Router даёт чёткое разделение между серверными и клиентскими API: `headers()`, `cookies()` и `draftMode()` работают на сервере, а `useRouter()`, `usePathname()` и `useSearchParams()` — только в клиентских компонентах. Понимание этих границ помогает избежать ошибок при записи cookies и вызове `redirect()`. Правильное использование `revalidatePath()` и `revalidateTag()` позволяет эффективно управлять кэшем без лишнего рендеринга. Попробуйте перенести запись cookies из Server Components в Server Actions и проверьте, какие маршруты становятся динамическими.
+
+## Полезные ссылки
 
 - [Официальная документация Next.js](https://nextjs.org/docs)
 - [Server Components](https://nextjs.org/docs/app/getting-started/server-and-client-components)

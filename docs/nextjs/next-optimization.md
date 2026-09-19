@@ -1,16 +1,48 @@
 ﻿---
-title: "Оптимизация Next.js: Полное руководство"
+title: "Оптимизация производительности в Next.js"
 section: nextjs
-description: "Next.js предоставляет множество встроенных оптимизаций \"из коробки\", но для максимальной производительности нужно понимать, как они работают и как их правильно использовать. В этой статье разберем ..."
+description: "Разбираем встроенные механизмы оптимизации Next.js: next/link, next/image, next/font, next/script, рендеринг, кэширование, code splitting и SEO."
 order: 6
-tags: ["оптимизация", "nextjs", "полное", "руководство"]
+tags: ["nextjs", "next-link", "next-image", "next-font", "dynamic-imports", "caching"]
+questions:
+  - "Как работает prefetching в `next/link` и как его контролировать"
+  - "Какие пропсы `next/image` обязательны и зачем нужен `priority`"
+  - "В чём преимущества `next/font` перед обычным подключением шрифтов"
+  - "Какие стратегии загрузки есть у `next/script` и когда их применять"
+  - "Как выбрать между SSG, SSR и ISR в Next.js"
+  - "Как работают Data Cache, Router Cache и Full Route Cache"
+  - "Как генерировать метаданные страниц и sitemap в App Router"
+  - "Когда стоит использовать `dynamic()` и `ssr: false`"
+  - "Зачем нужен `@next/bundle-analyzer` и Edge Runtime"
 ---
 
-# Оптимизация Next.js: Полное руководство
+# Оптимизация производительности в Next.js
 
-Next.js предоставляет множество встроенных оптимизаций "из коробки", но для максимальной производительности нужно понимать, как они работают и как их правильно использовать. В этой статье разберем все ключевые аспекты оптимизации.
+Производительность современных приложений во многом определяется на уровне фреймворка: от способа загрузки скриптов и изображений до стратегии рендеринга. Next.js поставляется с набором встроенных инструментов — `next/link`, `next/image`, `next/font`, `next/script`, кэшированием и динамическими импортами — которые позволяют ускорить приложение без самописных решений. В статье разберём, как эти механизмы работают, когда их стоит применять и на что обращать внимание при подготовке к собеседованию.
 
-## 1. next/link — Оптимизация навигации
+## Содержание
+
+1. [next/link — Оптимизация навигации](#nextlink--оптимизация-навигации)
+2. [next/image — Оптимизация изображений](#nextimage--оптимизация-изображений)
+3. [next/font — Оптимизация шрифтов](#nextfont--оптимизация-шрифтов)
+4. [next/script — Оптимизация скриптов](#nextscript--оптимизация-скриптов)
+5. [Оптимизация рендеринга](#оптимизация-рендеринга)
+6. [Кэширование в Next.js](#кэширование-в-nextjs)
+7. [Metadata API — SEO оптимизация](#metadata-api--seo-оптимизация)
+8. [Sitemap — Карта сайта для SEO](#sitemap--карта-сайта-для-seo)
+9. [Dynamic Imports — Code Splitting](#dynamic-imports--code-splitting)
+10. [Оптимизация third-party библиотек](#оптимизация-third-party-библиотек)
+11. [Bundle Analysis](#bundle-analysis)
+12. [Edge Runtime](#edge-runtime)
+13. [Дополнительные оптимизации](#дополнительные-оптимизации)
+14. [Чек-лист оптимизации](#чек-лист-оптимизации)
+15. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+16. [Заключение](#заключение)
+17. [Полезные ссылки](#полезные-ссылки)
+
+---
+
+## next/link — Оптимизация навигации
 
 ### Как работает Link
 
@@ -101,7 +133,7 @@ Next.js использует два типа prefetching:
 </Link>
 ```
 
-## 2. next/image — Оптимизация изображений
+## next/image — Оптимизация изображений
 
 ### Зачем нужен Image
 
@@ -258,7 +290,7 @@ module.exports = {
 5. **Оптимизируйте исходные изображения** — Image не заменяет базовую оптимизацию
 6. **Используйте современные форматы** — WebP/AVIF автоматически
 
-## 3. next/font — Оптимизация шрифтов
+## next/font — Оптимизация шрифтов
 
 ### Зачем нужен Font
 
@@ -364,7 +396,7 @@ export default function RootLayout({ children }) {
 4. **Предпочитайте variable fonts** — один файл для всех весов
 5. **Self-hosting быстрее** — нет внешних запросов
 
-## 4. next/script — Оптимизация скриптов
+## next/script — Оптимизация скриптов
 
 ### Стратегии загрузки
 
@@ -431,7 +463,7 @@ import Script from 'next/script'
 4. **Не используйте strategy="beforeInteractive"** вне `_app.js` или `_document.js`
 5. **Группируйте скрипты** — используйте один Script для нескольких функций
 
-## 5. Оптимизация рендеринга
+## Оптимизация рендеринга
 
 ### Статическая генерация (SSG)
 
@@ -512,7 +544,7 @@ function Loading() {
 - Можно обновлять без пересборки
 - Лучшее из обоих миров
 
-## 6. Кэширование в Next.js
+## Кэширование в Next.js
 
 ### Data Cache
 
@@ -566,7 +598,7 @@ export async function revalidateData() {
 }
 ```
 
-## 7. Metadata API — SEO оптимизация
+## Metadata API — SEO оптимизация
 
 ### Как работает generateMetadata
 
@@ -768,7 +800,7 @@ export async function generateMetadata({ params }) {
 }
 ```
 
-## 8. Sitemap — Карта сайта для SEO
+## Sitemap — Карта сайта для SEO
 
 ### Что такое sitemap
 
@@ -941,7 +973,7 @@ export default function robots(): MetadataRoute.Robots {
 6. **Добавьте в robots.txt** — поисковики найдут sitemap автоматически
 7. **Кэшируйте при необходимости** — для больших сайтов используйте ISR
 
-## 9. Dynamic Imports — Code Splitting
+## Dynamic Imports — Code Splitting
 
 ### Что такое Code Splitting
 
@@ -1294,7 +1326,7 @@ export default function Page() {
 }
 ```
 
-## 10. Оптимизация third-party библиотек
+## Оптимизация third-party библиотек
 
 ### Избегайте больших зависимостей
 
@@ -1341,7 +1373,7 @@ export function RichTextEditor() {
 }
 ```
 
-## 11. Bundle Analysis
+## Bundle Analysis
 
 ### Анализ бандла
 
@@ -1369,7 +1401,7 @@ ANALYZE=true npm run build
 3. **Remove unused code** — удалите неиспользуемые зависимости
 4. **Use lighter alternatives** — замените тяжелые библиотеки
 
-## 12. Edge Runtime
+## Edge Runtime
 
 ### Использование Edge Runtime
 
@@ -1394,7 +1426,7 @@ export default function EdgePage() {
 - Node.js API
 - Большие зависимости
 
-## 13. Дополнительные оптимизации
+## Дополнительные оптимизации
 
 ### Оптимизация API Routes
 
@@ -1502,8 +1534,36 @@ export default function Page() {
 - [ ] Мониторить Core Web Vitals
 - [ ] Оптимизировать для мобильных устройств
 
+---
+
+## Ключевые тезисы для интервью
+
+- `next/link` автоматически prefetchит страницы при попадании в viewport или при наведении, но для тяжёлых страниц prefetch можно отключить.
+- `next/image` оптимизирует размер, формат и порядок загрузки изображений, а явные `width`/`height` предотвращают layout shift.
+- `priority` в `next/image` используется для изображений above-the-fold, остальные загружаются лениво.
+- `next/font` самостоятельно хостит шрифты, убирает внешние запросы и снижает layout shift за счёт правильного `display`.
+- `next/script` предлагает стратегии `beforeInteractive`, `afterInteractive`, `lazyOnload` и `worker`, позволяя контролировать порядок загрузки скриптов.
+- SSG подходит для редко меняющегося контента, SSR — для персонализированных данных, ISR совмещает преимущества обоих подходов.
+- Next.js использует несколько уровней кэша: Data Cache, Router Cache и Full Route Cache; валидировать их можно через `revalidatePath` и `revalidateTag`.
+- Metadata API позволяет декларативно задавать `<meta>`-теги, Open Graph, Twitter Card и canonical URL на уровне страницы и layout.
+- Sitemap и robots.txt можно генерировать через `app/sitemap.ts` и `app/robots.ts`, что упрощает SEO-настройку.
+- `dynamic()` откладывает загрузку компонентов и библиотек, а `ssr: false` используется только для компонентов, завязанных на браузерные API.
+- Tree-shaking, условная загрузка библиотек и анализ бандла помогают уменьшить размер клиентского JavaScript.
+- Edge Runtime ускоряет ответ за счёт близости к пользователю, но не подходит для тяжёлых вычислений и Node.js API.
+
 ## Заключение
 
 Next.js предоставляет мощные инструменты оптимизации из коробки. Ключ к максимальной производительности — понимание того, как работают эти инструменты и когда их применять. Используйте чек-лист выше для аудита вашего приложения и постепенно внедряйте оптимизации.
 
 Помните: **измеряйте перед оптимизацией**. Используйте Lighthouse, Web Vitals и реальные метрики пользователей для определения узких мест. Не оптимизируйте то, что не измеряли.
+
+## Полезные ссылки
+
+- [Next.js — Optimizing](https://nextjs.org/docs/app/building-your-application/optimizing)
+- [Next.js Link](https://nextjs.org/docs/app/api-reference/components/link)
+- [Next.js Image](https://nextjs.org/docs/app/api-reference/components/image)
+- [Next.js Font](https://nextjs.org/docs/app/api-reference/components/font)
+- [Next.js Script](https://nextjs.org/docs/app/api-reference/components/script)
+- [Next.js Metadata API](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)
+- [Next.js Dynamic Imports](https://nextjs.org/docs/app/building-your-application/optimizing/lazy-loading)
+- [Web Vitals](https://web.dev/vitals/)

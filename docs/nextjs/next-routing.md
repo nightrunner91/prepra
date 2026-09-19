@@ -1,30 +1,44 @@
 ﻿---
-title: "Глубокое погружение в роутинг Next.js: App Router"
+title: "Роутинг в Next.js: App Router"
 section: nextjs
-description: "Next.js App Router — это революционный подход к маршрутизации, основанный на файловой системе и React Server Components. В отличие от традиционных роутеров, здесь структура файлов напрямую определя..."
+description: "Разбираем App Router в Next.js 13+: файловая структура, динамические сегменты, группы роутов, параллельные и перехватывающие роуты, middleware."
 order: 8
-tags: ["глубокое", "погружение", "роутинг", "nextjs", "app"]
+tags: ["app-router", "nextjs", "routing", "dynamic-routes", "route-groups", "middleware"]
+questions:
+  - "Как файловая структура в app превращается в URL-маршруты"
+  - "Чем динамический сегмент [slug] отличается от catch-all [...slug] и optional catch-all [[...slug]]"
+  - "Какой приоритет маршрутов использует Next.js при конфликте"
+  - "Для чего нужны Route Groups и влияют ли они на URL"
+  - "Как параллельные роуты (@slot) помогают изолировать loading и error UI на одной странице"
+  - "Когда перехватывающий роут показывает модалку, а когда — полную страницу"
+  - "В чём разница между layout.tsx и template.tsx"
+  - "Как работает middleware и как ограничить его действие matcher'ом"
 ---
 
-# Глубокое погружение в роутинг Next.js: App Router
+# Роутинг в Next.js: App Router
 
-Next.js App Router — это революционный подход к маршрутизации, основанный на файловой системе и React Server Components. В отличие от традиционных роутеров, здесь структура файлов напрямую определяет URL-маршруты вашего приложения.
+Роутинг — один из столпов архитектуры Next.js-приложения: от того, как устроены файлы и папки, зависят URL, серверный рендеринг и пользовательский опыт. В статье разбираем App Router 13+ — от базовой файловой маршрутизации и динамических сегментов до параллельных и перехватывающих роутов, а также практические паттерны обработки ошибок, навигации и middleware. Вы узнаете, как организовать масштабируемую структуру приложения и избежать типичных ошибок на собеседованиях.
 
 ## Содержание
 
-- [Основы App Router](#основы-app-router)
-- [Базовая маршрутизация](#базовая-маршрутизация)
-- [Динамические сегменты](#динамические-сегменты)
-- [Route Groups](#route-groups)
-- [Параллельные роуты](#параллельные-роуты)
-- [Перехватывающие роуты](#перехватывающие-роуты)
-- [Специальные файлы](#специальные-файлы)
-- [Layouts и Templates](#layouts-и-templates)
-- [Loading и Error UI](#loading-и-error-ui)
-- [Route Handlers](#route-handlers)
-- [Навигация](#навигация)
-- [Middleware](#middleware)
-- [Best Practices](#best-practices)
+1. [Основы App Router](#основы-app-router)
+2. [Базовая маршрутизация](#базовая-маршрутизация)
+3. [Динамические сегменты](#динамические-сегменты)
+4. [Route Groups](#route-groups)
+5. [Параллельные роуты](#параллельные-роуты)
+6. [Перехватывающие роуты](#перехватывающие-роуты)
+7. [Специальные файлы](#специальные-файлы)
+8. [Layouts и Templates](#layouts-и-templates)
+9. [Loading и Error UI](#loading-и-error-ui)
+10. [Route Handlers](#route-handlers)
+11. [Навигация](#навигация)
+12. [Middleware](#middleware)
+13. [Best Practices](#best-practices)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
+
+---
 
 ## Основы App Router
 
@@ -1493,6 +1507,23 @@ export default async function BlogPost({ params }) {
 }
 ```
 
+## Ключевые тезисы для интервью
+
+- App Router в Next.js 13+ строит маршруты на основе файловой системы в директории `app`: папка — сегмент URL, а `page.tsx` делает его доступным
+- По умолчанию компоненты в `app` — серверные, что даёт прямой доступ к данным, меньший бандл и лучшую производительность
+- Динамические сегменты (`[slug]`), catch-all (`[...slug]`) и optional catch-all (`[[...slug]]`) покрывают параметризованные, вложённые и опциональные URL
+- Приоритет маршрутов: статические > динамические > catch-all, поэтому конкретные пути должны быть более специфичными
+- Route Groups `(group)` позволяют группировать роуты для общего layout без влияния на URL
+- Параллельные роуты через `@slot` рендерят независимые секции одной страницы, не создавая отдельных URL и изолируя loading/error UI
+- Перехватывающие роуты `(.)`, `(..)`, `(...)` показывают контент в другом UI-контексте при клиентской навигации, но при прямом переходе или обновлении рендерится полная страница
+- `layout.tsx` сохраняет состояние между навигациями, а `template.tsx` пересоздаётся при каждом переходе
+- `loading.tsx` автоматически оборачивает страницу в Suspense, а `error.tsx` работает как клиентский error boundary
+- Route Handlers в `app/api` заменяют API Routes из Pages Router и поддерживают стандартные HTTP-методы
+- `next/link`, `useRouter` и `redirect` покрывают клиентскую, программную и серверную навигацию соответственно
+- Middleware выполняется перед запросом и через `matcher` применяется только к заданным путям
+
+---
+
 ## Заключение
 
 App Router в Next.js предоставляет мощную и гибкую систему маршрутизации. Ключевые преимущества:
@@ -1505,3 +1536,13 @@ App Router в Next.js предоставляет мощную и гибкую с
 - **Автоматическая оптимизация**: prefetching, стриминг, code splitting
 
 Изучайте документацию и экспериментируйте с различными паттернами для создания оптимальной архитектуры вашего приложения.
+
+## Полезные ссылки
+
+- [Routing Fundamentals – Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing)
+- [Dynamic Routes – Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes)
+- [Route Groups – Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing/route-groups)
+- [Parallel Routes – Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
+- [Intercepting Routes – Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes)
+- [Route Handlers – Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)
+- [Middleware – Next.js Docs](https://nextjs.org/docs/app/building-your-application/routing/middleware)
