@@ -1,34 +1,54 @@
 ---
-import Badge from '../ui/Badge.astro';
-
 interface Props {
   title: string;
   description: string;
   href: string;
   articleCount: number;
   questionCount: number;
-  color?: 'red' | 'blue' | 'green' | 'yellow';
+  color?: "red" | "blue" | "green" | "yellow";
 }
 
-const { title, description, href, articleCount, questionCount, color = 'blue' } = Astro.props;
+const {
+  title,
+  description,
+  href,
+  articleCount,
+  questionCount,
+  color = "blue",
+} = Astro.props;
 ---
 
-<a href={href} class="card-hover group block rounded-[8px] border border-border bg-surface p-6 transition-colors">
+<a
+  href={href}
+  class="card-hover group block rounded-[8px] border border-border bg-surface p-6 transition-colors"
+>
   <div class="flex items-start justify-between">
-    <h3 class="font-serif text-xl text-text leading-snug group-hover:text-accent transition-colors">
+    <h3
+      class="font-serif text-xl text-text leading-snug group-hover:text-accent transition-colors"
+    >
       {title}
     </h3>
-    <div class={`h-2 w-2 rounded-full mt-2 ${
-      color === 'red' ? 'bg-pale-red-text' :
-      color === 'green' ? 'bg-pale-green-text' :
-      color === 'yellow' ? 'bg-pale-yellow-text' :
-      'bg-pale-blue-text'
-    }`} />
+    <div
+      class={`h-2 w-2 rounded-full mt-2 ${
+        color === "red"
+          ? "bg-pale-red-text"
+          : color === "green"
+            ? "bg-pale-green-text"
+            : color === "yellow"
+              ? "bg-pale-yellow-text"
+              : "bg-pale-blue-text"
+      }`}
+    >
+    </div>
   </div>
 
-  <p class="mt-2 text-[13px] text-text-secondary leading-relaxed">{description}</p>
+  <p class="mt-2 text-sm text-text-secondary leading-relaxed">
+    {description}
+  </p>
 
-  <div class="mt-4 flex items-center gap-4 font-mono text-[11px] text-text-tertiary">
+  <div
+    class="mt-4 flex items-center gap-4 font-mono text-xs text-text-tertiary"
+  >
     <span>{articleCount} статей</span>
     <span class="text-border">/</span>
     <span>{questionCount} вопросов</span>

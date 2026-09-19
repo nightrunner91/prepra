@@ -1,4 +1,3 @@
-import React from 'react';
 
 interface ProgressBarProps {
   value: number;
@@ -19,7 +18,7 @@ export function ProgressBar({ value, max = 100, showLabel = false, className = '
         />
       </div>
       {showLabel && (
-        <span className="font-mono text-[11px] text-text-tertiary tabular-nums">
+        <span className="font-mono text-sm text-text-tertiary tabular-nums">
           {pct}%
         </span>
       )}
