@@ -1,0 +1,5 @@
+# Playwright MCP artifacts
+.playwright-mcp/
+
+# Agent temporary artifacts
+.tmp/
