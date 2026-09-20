@@ -9,12 +9,17 @@ export function ReadingProgress() {
       if (!article) return;
 
       const rect = article.getBoundingClientRect();
-      const articleTop = rect.top + window.scrollY;
       const articleHeight = article.offsetHeight;
       const viewportHeight = window.innerHeight;
+      const scrollable = articleHeight - viewportHeight;
 
-      const scrolled = window.scrollY - articleTop + viewportHeight * 0.3;
-      const pct = Math.min(100, Math.max(0, (scrolled / articleHeight) * 100));
+      if (scrollable <= 0) {
+        setProgress(0);
+        return;
+      }
+
+      const scrolled = -rect.top;
+      const pct = Math.min(100, Math.max(0, (scrolled / scrollable) * 100));
       setProgress(pct);
     };
 
@@ -24,9 +29,9 @@ export function ReadingProgress() {
   }, []);
 
   return (
-    <div className="fixed top-14 left-0 right-0 z-40 h-[2px] bg-transparent">
+    <div className="fixed top-14 left-0 right-0 z-40 h-[3px] bg-transparent">
       <div
-        className="h-full bg-accent/30 transition-[width] duration-150"
+        className="h-full bg-accent transition-[width] duration-150"
         style={{ width: `${progress}%` }}
       />
     </div>
