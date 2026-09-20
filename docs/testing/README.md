@@ -2,7 +2,7 @@
 
 Раздел посвящён тестированию фронтенда: от базовых принципов до продвинутых стратегий, оптимизации CI/CD и борьбы с flaky-тестами.
 
-## Начни с базы
+## Начни с базы 📚
 
 Если ты только начинаешь знакомиться с тестами — иди по порядку:
 
@@ -11,7 +11,7 @@
 3. **[Мокирование](./testing-mocking.md)** — `vi.fn`, `vi.spyOn`, `vi.mock`, MSW.
 4. **[Тестирование React-компонентов](./testing-react-components.md)** — React Testing Library, хуки, события.
 
-## Углубись в детали
+## Углубись в детали 🔎
 
 После базы переходи к глубоким темам:
 
@@ -20,17 +20,13 @@
 - **[Оптимизация E2E-тестов](./e2e-optimization.md)** — параллелизм, шардинг, селективный запуск, ускорение CI.
 - **[GitLab CI/CD для тестов](./gitlab-cicd-testing.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
 - **[Подводные камни и антипаттерны](./testing-pitfalls.md)** — flaky-тесты, shared state, моки, false confidence.
-
-## Не будет лишним
-
 - **[E2E с Playwright](./testing-e2e-playwright.md)** — полное руководство по Playwright.
 - **[Тестирование Next.js](./testing-nextjs.md)** — Server Components, Server Actions, Route Handlers.
-- **[Тестирование производительности](./testing-performance.md)** — Lighthouse CI и метрики.
-- **[Визуальное тестирование](./testing-visual-regression.md)** — Chromatic, Percy, скриншоты.
-- **[Sentry](./sentry-guide.md)** — мониторинг ошибок в production.
-- **[Spec-Driven Development](./spec-driven-development.md)** — разработка через спецификации.
-
-## Фреймворки
-
 - **[Vue-компоненты](./testing-vue-components.md)**
 - **[Nuxt](./testing-nuxt.md)**
+- **[Тестирование производительности](./testing-performance.md)** — Lighthouse CI и метрики.
+- **[Визуальное тестирование](./testing-visual-regression.md)** — Chromatic, Percy, скриншоты.
+
+## Не будет лишним ✍
+- **[Sentry](./sentry-guide.md)** — мониторинг ошибок в production.
+- **[Spec-Driven Development](./spec-driven-development.md)** — разработка через спецификации.

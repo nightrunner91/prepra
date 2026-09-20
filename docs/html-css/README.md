@@ -2,7 +2,7 @@
 
 Раздел углубляет понимание браузерного фундамента: как HTML и CSS работают под капотом, как строится страница, как устроены раскладки и современные механизмы стилизации. Материалы ориентированы на Middle+/Senior-собеседования и уверенную разработку.
 
-## Начни с базы
+## Начни с базы 📚
 
 Если хочешь закрыть пробелы в фундаменте — иди по порядку:
 
@@ -13,7 +13,7 @@
 5. **[Grid](./css-grid.md)** — explicit/implicit, `fr`, `minmax`, `auto-fit`/`auto-fill`, subgrid.
 6. **[Позиционирование и stacking context](./css-positioning-stacking.md)** — positioning, stacking context, z-index, paint order.
 
-## Углубись в детали
+## Углубись в детали 🔎
 
 После базы переходи к глубоким и прикладным темам:
 
@@ -24,6 +24,6 @@
 - **[Анимации и производительность](./css-animations-performance.md)** — transitions/animations, composite-only свойства, `will-change`, `contain`.
 - **[CSS-переменные и архитектура](./css-variables-architecture.md)** — custom properties, theming, BEM/CUBE/layers, CSS Modules vs CSS-in-JS.
 
-## Не будет лишним
+## Не будет лишним ✍
 
 - **[Современные селекторы и возможности CSS](./css-modern-selectors.md)** — `:is`/`:where`/`:has`/`:not`, nesting, logical properties, color spaces.

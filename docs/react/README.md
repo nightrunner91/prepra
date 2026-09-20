@@ -2,7 +2,7 @@
 
 Раздел охватывает всё, что нужно для уверенной работы с React: фазы рендеринга, хуки, события, мемоизацию, Suspense, конкурентный режим и внутреннее устройство Fiber.
 
-## Начни с базы
+## Начни с базы 📚
 
 1. **[Порядок рендеринга и вызова хуков](./react_rendering_order.md)** — фазы render/commit, порядок хуков, Strict Mode.
 2. **[Хуки React](./react_hooks.md)** — `useRef`, `useState`, `useReducer`, `useEffect`, `useMemo`, `useCallback`, правила хуков.
@@ -11,14 +11,14 @@
 5. **[Синтетические события](./react_synthetic_events.md)** — event pooling, делегирование, доступ к нативным событиям.
 6. **[Error Boundaries](./react_errorboundary.md)** — перехват ошибок рендеринга и fallback UI.
 
-## Углубись в детали
+## Углубись в детали 🔎
 
 - **[Мемоизация](./react_memorization.md)** — `useMemo`, `useCallback`, `React.memo`, React Compiler.
 - **[Suspense](./react_suspense.md)** — lazy loading, потоковый рендеринг, Error Boundaries.
 - **[HOC](./react_hoc.md)** — композиция, проблемы, сравнение с хуками.
 - **[Конкурентные хуки](./react_concurrent_hooks.md)** — `useTransition`, `useDeferredValue`, приоритеты обновлений.
 
-## Не будет лишним
+## Не будет лишним ✍
 
 - **[defaultProps и propTypes](./react_defaultprops_proptypes.md)** — legacy-типизация и современная альтернатива.
 - **[React Fiber](./react_fiber.md)** — внутреннее устройство reconciler для глубокого понимания.

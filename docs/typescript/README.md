@@ -2,7 +2,7 @@
 
 Раздел помогает уверенно использовать TypeScript во фронтенде: от базовых типов возвращаемых значений до дженериков, utility-типов, `infer` и декораторов. Материалы ориентированы на практику в React и Vue.
 
-## Начни с базы
+## Начни с базы 📚
 
 Если ты только знакомишься с TypeScript или хочешь закрыть пробелы:
 
@@ -10,7 +10,7 @@
 2. **[TypeGuard](./typescript-typeguard.md)** — встроенные и пользовательские защитники типов.
 3. **[Enums](./typescript-enums.md)** — numeric, string, const enums, reverse mapping, best practices.
 
-## Углубись в детали
+## Углубись в детали 🔎
 
 Когда база усвоена, переходи к мощным абстракциям:
 
@@ -20,6 +20,6 @@
 - **[TypeScript в React](./typescript-react.md)** — типизация компонентов, props, children, events.
 - **[Типизация хуков и async-паттернов](./typescript-hooks-async.md)** — кастомные хуки, Promise, `useState`/`useEffect`.
 
-## Не будет лишним
+## Не будет лишним ✍
 
 - **[Decorators](./typescript-decorators.md)** — классы, методы, свойства, reflect-metadata, применение в React/Vue/NestJS.
