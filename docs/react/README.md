@@ -18,7 +18,7 @@
 - **[HOC](./react_hoc.md)** — композиция, проблемы, сравнение с хуками.
 - **[Конкурентные хуки](./react_concurrent_hooks.md)** — `useTransition`, `useDeferredValue`, приоритеты обновлений.
 
-## Устаревшее и специализированное
+## Не будет лишним
 
 - **[defaultProps и propTypes](./react_defaultprops_proptypes.md)** — legacy-типизация и современная альтернатива.
 - **[React Fiber](./react_fiber.md)** — внутреннее устройство reconciler для глубокого понимания.

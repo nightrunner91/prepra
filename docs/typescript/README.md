@@ -20,6 +20,6 @@
 - **[TypeScript в React](./typescript-react.md)** — типизация компонентов, props, children, events.
 - **[Типизация хуков и async-паттернов](./typescript-hooks-async.md)** — кастомные хуки, Promise, `useState`/`useEffect`.
 
-## Специализированные темы
+## Не будет лишним
 
 - **[Decorators](./typescript-decorators.md)** — классы, методы, свойства, reflect-metadata, применение в React/Vue/NestJS.

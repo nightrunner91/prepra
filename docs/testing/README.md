@@ -21,7 +21,7 @@
 - **[GitLab CI/CD для тестов](./gitlab-cicd-testing.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
 - **[Подводные камни и антипаттерны](./testing-pitfalls.md)** — flaky-тесты, shared state, моки, false confidence.
 
-## Специализированные темы
+## Не будет лишним
 
 - **[E2E с Playwright](./testing-e2e-playwright.md)** — полное руководство по Playwright.
 - **[Тестирование Next.js](./testing-nextjs.md)** — Server Components, Server Actions, Route Handlers.

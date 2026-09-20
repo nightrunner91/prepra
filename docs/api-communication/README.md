@@ -12,7 +12,7 @@
 - **[GraphQL vs REST](./graphql-vs-rest.md)** — сравнение подходов, схемы, запросы, мутации, подписки, когда что выбрать.
 - **[Отмена запросов](./request-abortion.md)** — AbortController, предотвращение race conditions, cleanup в React, TanStack Query.
 
-## Специализированные темы
+## Не будет лишним
 
 - **[WebSocket в React и Next.js](./websocket_react_next.md)** — real-time, переподключения, интеграция с состоянием, масштабирование.
 - **[Long Polling](./long-polling.md)** — real-time обновления через обычный HTTP, реализация, обработка ошибок, сравнение с SSE/WebSocket.

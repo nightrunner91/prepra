@@ -6,7 +6,7 @@
 
 1. **[Progressive Web Apps (PWA)](./pwa.md)** — манифест, Service Workers, офлайн, push, кэширование, установка на устройство.
 
-## Специализированные темы
+## Не будет лишним
 
 - **[React Native](./react_native_intro.md)** — компоненты, стилизация, навигация, состояние, нативные модули, Expo vs Bare, публикация.
 - **[Preact](./preact.md)** — лёгкий React-совместимый рантайм, миграция через `preact/compat`, Preact Signals, trade-offs.

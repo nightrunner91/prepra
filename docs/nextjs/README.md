@@ -15,7 +15,7 @@
 - **[Next.js Server API](./next-server-api.md)** — серверные возможности фреймворка.
 - **[Оптимизация Next.js](./next_optimization.md)** — бандл, изображения, метрики, анализ.
 
-## Специализированные темы
+## Не будет лишним
 
 - **[RSC Payload](./next_rsc_payload.md)** — механизм сериализации серверных компонентов.
 - **[Edge Runtime](./next_edge_runtime.md)** — edge-функции, ограничения, деплой.

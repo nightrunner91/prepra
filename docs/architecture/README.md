@@ -13,6 +13,6 @@
 - **[Паттерны GoF](./gof_patterns_frontend.md)** — фабрика, декоратор, синглтон, наблюдатель.
 - **[Паттерны проектирования React / Next.js](./design_patterns.md)** — композиция, render props, custom hooks, структура файлов.
 
-## Специализированные темы
+## Не будет лишним
 
 - **[Backend for Frontend](./backend_for_frontend.md)** — адаптация API под нужды клиента.

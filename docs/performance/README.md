@@ -13,6 +13,6 @@
 - **[Гидратация](./hydration.md)** — как работает hydration, hydration mismatch и способы борьбы.
 - **[Виртуализация списков](./list_virtualization.md)** — react-window, react-virtuoso, vue-virtual-scroller.
 
-## Специализированные темы
+## Не будет лишним
 
 - **[Web Workers](./web_workers.md)** — вынос тяжёлых вычислений из основного потока.
