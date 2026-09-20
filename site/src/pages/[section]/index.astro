@@ -3,9 +3,13 @@ import { getCollection } from "astro:content";
 import PageLayout from "../../layouts/PageLayout.astro";
 import Breadcrumbs from "../../components/layout/Breadcrumbs.astro";
 import Sidebar from "../../components/layout/Sidebar.astro";
-import ArticleCard from "../../components/content/ArticleCard.astro";
-import Badge from "../../components/ui/Badge.astro";
+import ArticleGroup from "../../components/content/ArticleGroup.astro";
 import { withBase } from "../../lib/urls";
+import {
+  normalizeSlug,
+  parseSectionDescription,
+  parseSectionReadme,
+} from "../../lib/section-readme";
 
 export async function getStaticPaths() {
   const sections = [
@@ -97,17 +101,78 @@ export async function getStaticPaths() {
 }
 
 const { section } = Astro.props;
+const description = parseSectionDescription(section.id, section.label);
 const articles = await getCollection(section.id as any);
-const sorted = articles.sort((a, b) => a.data.order - b.data.order);
-const totalQuestions = sorted.reduce(
+const totalQuestions = articles.reduce(
   (sum: number, a: any) => sum + (a.data.questions?.length || 0),
   0,
 );
+
+const articleMap = new Map(
+  articles.map((article: any) => [normalizeSlug(article.id), article]),
+);
+
+const referencedIds = new Set<string>();
+
+function resolveArticle(slug: string): any | undefined {
+  const normalized = normalizeSlug(slug);
+  referencedIds.add(normalized);
+  return articleMap.get(normalized);
+}
+
+let orderCounter = 0;
+
+const groups = parseSectionReadme(section.id).map((group) => {
+  const directItems = group.slugs
+    .map((slug) => resolveArticle(slug))
+    .filter(Boolean)
+    .map((article) => ({
+      article,
+      order: ++orderCounter,
+      href: withBase(`/${section.id}/${article.id}`),
+    }));
+
+  const subgroups = group.subgroups
+    .map((subgroup) => ({
+      title: subgroup.title,
+      items: subgroup.slugs
+        .map((slug) => resolveArticle(slug))
+        .filter(Boolean)
+        .map((article) => ({
+          article,
+          order: ++orderCounter,
+          href: withBase(`/${section.id}/${article.id}`),
+        })),
+    }))
+    .filter((subgroup) => subgroup.items.length > 0);
+
+  return {
+    title: group.title,
+    items: directItems,
+    subgroups,
+  };
+});
+
+const otherArticles = articles
+  .filter((article: any) => !referencedIds.has(normalizeSlug(article.id)))
+  .map((article: any) => ({
+    article,
+    order: ++orderCounter,
+    href: withBase(`/${section.id}/${article.id}`),
+  }));
+
+if (otherArticles.length > 0) {
+  groups.push({
+    title: "Остальные",
+    items: otherArticles,
+    subgroups: [],
+  });
+}
 ---
 
 <PageLayout
   title={section.label}
-  description={section.description}
+  description={description}
   currentSection={section.id}
   showLeftSidebar={true}
 >
@@ -129,29 +194,26 @@ const totalQuestions = sorted.reduce(
           {section.label}
         </h1>
         <p class="mt-3 text-text-secondary leading-relaxed">
-          {section.description}
+          {description}
         </p>
         <div
           class="mt-4 flex items-center gap-4 font-mono text-sm text-text-tertiary"
         >
-          <span>{sorted.length} статей</span>
+          <span>{articles.length} статей</span>
           <span class="text-border">/</span>
           <span>{totalQuestions} вопросов</span>
         </div>
       </header>
     </div>
 
-    <div class="space-y-3">
+    <div class="space-y-10">
       {
-        sorted.map((article: any, i: number) => (
-          <div class="animate-fade-in" style={`animation-delay: ${i * 50}ms`}>
-            <ArticleCard
-              title={article.data.title}
-              description={article.data.description}
-              href={withBase(`/${section.id}/${article.id}`)}
-              order={article.data.order}
-              tags={article.data.tags}
-              questionCount={article.data.questions?.length || 0}
+        groups.map((group, i) => (
+          <div class="animate-fade-in" style={`animation-delay: ${i * 60}ms`}>
+            <ArticleGroup
+              title={group.title}
+              items={group.items}
+              subgroups={group.subgroups}
             />
           </div>
         ))

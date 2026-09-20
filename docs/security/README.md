@@ -2,7 +2,7 @@
 
 Раздел объясняет, как защищать веб-приложения на уровне фронтенда: от классических XSS и CSRF до Server Actions, CSP, секретов, авторизации, безопасности зависимостей и подготовки к security аудитам SOC2 и CASA.
 
-## Начни здесь
+## Начни с базы
 
 1. **[Безопасность веб-приложений](./security.md)** — комплексный обзор угроз и защит.
 2. **[Подготовка к SOC2 и CASA](./security-soc2-casa-workflows.md)** — как фронтендеру участвовать в security аудите.
@@ -26,23 +26,3 @@
 - **[Безопасность Next.js](./security-nextjs.md)** — Server Components, Server Actions, middleware, Route Handlers, CSP, Open Redirect.
 - **[Безопасность Vue и Nuxt](./security-vue-nuxt.md)** — `v-html`, refs, Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP.
 - **[Безопасность зависимостей и supply chain](./security-dependency-supply-chain.md)** — npm audit, lock-файлы, Snyk, Socket, SBOM, provenance.
-
-## Пройди по порядку
-
-1. XSS — виды, защита, экранирование.
-2. CSRF — механизм атаки и токены.
-3. Content Security Policy.
-4. HTTP-заголовки безопасности.
-5. Аутентификация и авторизация.
-6. Управление секретами.
-7. Безопасность Server Actions в Next.js / server routes в Nuxt.
-8. Безопасность зависимостей.
-9. Подготовка к SOC2 и CASA.
-
-## Как пользоваться
-
-1. Пойми базовые угрозы: XSS и CSRF.
-2. Изучи CSP и security-заголовки — внедри в проект.
-3. Проверь, где хранятся токены и секреты.
-4. Регулярно аудируй зависимости на уязвимости.
-5. Используй чек-листы перед релизом и аудитом.
