@@ -1,9 +1,9 @@
 ﻿---
 title: "TypeScript в React и Vue"
 section: typescript
-description: "TypeScript и React — одна из самых распространённых связок в современной frontend-разработке. Если вы уже используете TypeScript во Vue, многие концепции покажутся знакомыми, но есть и специфичные ..."
+description: "TypeScript в React и Vue: типизация пропсов, событий, хуков, generic-компонентов, forwardRef и discriminated unions, а также сравнение подходов."
 order: 7
-tags: ["typescript", "react", "полное", "руководство", "vue-разработчика"]
+tags: ["typescript", "react", "vue", "props", "hooks", "forwardref"]
 questions:
   - "Как типизировать пропсы компонента через `interface` и `type`"
   - "Как дефолтные значения в деструктуризации сужают тип"

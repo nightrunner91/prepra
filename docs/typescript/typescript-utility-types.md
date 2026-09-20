@@ -1,9 +1,9 @@
 ﻿---
-title: "TypeScript Utility Types — полное руководство"
+title: "Utility-типы TypeScript: от Partial до Awaited"
 section: typescript
-description: "Utility-типы в TypeScript — это набор встроенных типов, которые позволяют трансформировать и модифицировать другие типы. Но прежде чем учить их наизусть, давай разберёмся, **зачем они вообще нужны*..."
+description: "Utility-типы TypeScript трансформируют типы: Partial, Pick, Omit, Record, Exclude, ReturnType и другие. Разбираем реализацию и применение в React и Vue."
 order: 9
-tags: ["typescript", "utility", "types", "полное", "руководство"]
+tags: ["utility-types", "mapped-types", "conditional-types", "partial", "record", "pick"]
 questions:
   - "Что такое mapped types и как они работают"
   - "Чем `Partial` отличается от `Required` и как они реализованы"
@@ -15,7 +15,7 @@ questions:
   - "Как комбинировать utility-типы для сложных трансформаций"
 ---
 
-# TypeScript Utility Types — полное руководство
+# Utility-типы TypeScript: от Partial до Awaited
 
 Utility-типы в TypeScript — это набор встроенных типов, которые позволяют трансформировать и модифицировать другие типы. Но прежде чем учить их наизусть, давай разберёмся, **зачем они вообще нужны** и **как работают под капотом**.
 
@@ -2246,6 +2246,21 @@ type UserById = Record<number, Pick<User, "name" | "email">>;
 
 ---
 
+## Ключевые тезисы для интервью
+
+- Utility-типы — «функции для типов»: принимают тип как аргумент и возвращают новый тип.
+- Mapped types — основа `Partial`, `Required`, `Readonly`: итерация по ключам с трансформацией через `[K in keyof T]`.
+- Conditional types — основа `Exclude`, `Extract`, `NonNullable`, `ReturnType`: условие `T extends U ? X : Y`.
+- `Partial<T>` делает все поля опциональными — для обновлений и форм.
+- `Required<T>` делает все поля обязательными — для валидации и конфигурации после дефолтов.
+- `Readonly<T>` запрещает изменение свойств — для констант и immutable state.
+- `Record<K, V>` создаёт типизированный словарь с известными ключами.
+- `Pick<T, K>` выбирает нужные поля; `Omit<T, K>` исключает лишние — для превью и create-типов.
+- `Exclude<T, U>` фильтрует union; `Extract<T, U>` извлекает из union — через distributive conditional types.
+- `ReturnType<T>` и `Parameters<T>` извлекают сигнатуру функции через `infer`.
+- `Awaited<T>` рекурсивно распаковывает `Promise<T>`.
+- Комбинации utility-типов (`Partial<Pick<T, K>>`, `Omit<T, K> & Partial<T>`) покрывают сложные сценарии без дублирования.
+
 ## Заключение
 
 Utility-типы — это мощный инструмент TypeScript для трансформации типов. Они позволяют:
@@ -2264,21 +2279,6 @@ Utility-типы — это мощный инструмент TypeScript для 
 6. Используй `ReturnType` и `Parameters` для типизации функций и хуков
 
 Практикуйся — и через неделю ты будешь использовать utility-типы интуитивно.
-
-## Ключевые тезисы для интервью
-
-- Utility-типы — «функции для типов»: принимают тип как аргумент и возвращают новый тип.
-- Mapped types — основа `Partial`, `Required`, `Readonly`: итерация по ключам с трансформацией через `[K in keyof T]`.
-- Conditional types — основа `Exclude`, `Extract`, `NonNullable`, `ReturnType`: условие `T extends U ? X : Y`.
-- `Partial<T>` делает все поля опциональными — для обновлений и форм.
-- `Required<T>` делает все поля обязательными — для валидации и конфигурации после дефолтов.
-- `Readonly<T>` запрещает изменение свойств — для констант и immutable state.
-- `Record<K, V>` создаёт типизированный словарь с известными ключами.
-- `Pick<T, K>` выбирает нужные поля; `Omit<T, K>` исключает лишние — для превью и create-типов.
-- `Exclude<T, U>` фильтрует union; `Extract<T, U>` извлекает из union — через distributive conditional types.
-- `ReturnType<T>` и `Parameters<T>` извлекают сигнатуру функции через `infer`.
-- `Awaited<T>` рекурсивно распаковывает `Promise<T>`.
-- Комбинации utility-типов (`Partial<Pick<T, K>>`, `Omit<T, K> & Partial<T>`) покрывают сложные сценарии без дублирования.
 
 ## Полезные ссылки
 

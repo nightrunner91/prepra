@@ -1,9 +1,9 @@
 ﻿---
 title: "TypeGuard в TypeScript"
 section: typescript
-description: "TypeScript — надмножество JavaScript. Он добавляет статическую типизацию, но не меняет поведение рантайма. Это создаёт разрыв: типы существуют только при компиляции, а значения — только при выполне..."
+description: "TypeGuard в TypeScript связывает runtime-проверки с compile-time анализом. Разбираем type predicates, assertion functions и валидацию внешних данных."
 order: 8
-tags: ["typeguard", "typescript"]
+tags: ["type-guards", "typescript", "narrowing", "control-flow", "assertion-functions", "discriminated-unions"]
 questions:
   - "Что такое control flow analysis и как он работает"
   - "Чем предикат типа (`value is T`) отличается от обычной проверки"

@@ -3,7 +3,7 @@ title: "Типы возврата функций в TypeScript"
 section: typescript
 description: "Типизация возвращаемого значения — одна из ключевых возможностей TypeScript. Она позволяет зафиксировать контракт функции: что именно получит вызывающий код."
 order: 3
-tags: ["типы", "возврата", "функций", "typescript"]
+tags: ["return-types", "void", "never", "unknown", "generics", "promise"]
 questions:
   - "Чем `void` отличается от `never` в типах возврата функций"
   - "Почему `unknown` безопаснее `any` для возвращаемых значений"

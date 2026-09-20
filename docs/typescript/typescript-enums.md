@@ -1,9 +1,9 @@
 ﻿---
-title: "TypeScript Enums"
+title: "Enum в TypeScript: польза и риски"
 section: typescript
-description: "Enum — механизм TypeScript для создания именованных наборов констант. Но прежде чем использовать enum, нужно понять его ключевую особенность, которая отличает его от всех остальных конструкций Type..."
+description: "Enum в TypeScript генерирует runtime-объект, что даёт возможности и создаёт риски. Сравниваем numeric, string enums и альтернативы: union types и as const."
 order: 2
-tags: ["typescript", "enums"]
+tags: ["enum", "union-types", "as-const", "const-enum", "reverse-mapping", "numeric-enums"]
 questions:
   - "Почему enum — единственная конструкция TypeScript, генерирующая runtime-объект"
   - "Что такое reverse mapping в numeric enums и почему это проблема"
@@ -15,7 +15,7 @@ questions:
   - "Как использовать `Record<Enum, ...>` для метаданных"
 ---
 
-# TypeScript Enums
+# Enum в TypeScript: польза и риски
 
 Enum — механизм TypeScript для создания именованных наборов констант. Но прежде чем использовать enum, нужно понять его ключевую особенность, которая отличает его от всех остальных конструкций TypeScript и которая делает его спорным.
 
