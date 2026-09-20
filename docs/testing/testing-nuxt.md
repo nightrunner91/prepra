@@ -1,12 +1,24 @@
----
+﻿---
 title: "Тестирование в Nuxt 3"
 section: testing
-description: "Тестирование в Nuxt 3"
+description: "Как тестировать Nuxt 3-приложения: настройка Vitest, тестирование компонентов, composables, server routes, middleware, мокирование API и антипаттерны."
 order: 10
-tags: ["тестирование", "nuxt"]
+tags: ["nuxt", "vitest", "mountSuspended", "registerEndpoint", "mockNuxtImport", "composables"]
+questions:
+  - "Почему для тестирования Nuxt 3 недостаточно обычного Vue Test Utils"
+  - "Как настроить Vitest с environment: 'nuxt'"
+  - "Когда использовать mountSuspended вместо обычного mount"
+  - "Как зарегистрировать endpoint для тестирования useFetch"
+  - "Как протестировать composable в изоляции от Nuxt-рантайма"
+  - "Какие способы тестирования server routes существуют и чем они отличаются"
+  - "Как мокировать useRoute, useRouter и useRuntimeConfig"
+  - "Как стабить NuxtLink в компонентных тестах"
+  - "Какие антипаттерны чаще всего встречаются при тестировании Nuxt"
 ---
 
 # Тестирование в Nuxt 3
+
+Тестирование Nuxt-приложений отличается от обычных Vue-компонентов из-за auto-imports, server routes, SSR и Nitro-рантайма. Без правильной инфраструктуры тесты ломаются при попытках вызвать `useFetch` или `useRuntimeConfig` вне Nuxt-контекста. В статье разберём настройку Vitest, тестирование компонентов, composables, server API, middleware и плагинов, а также наиболее частые ошибки.
 
 ## Содержание
 
@@ -22,6 +34,9 @@ tags: ["тестирование", "nuxt"]
 10. [Тестирование NuxtLink](#тестирование-nuxtlink)
 11. [Лучшие практики](#лучшие-практики)
 12. [Антипаттерны](#антипаттерны)
+13. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+14. [Заключение](#заключение)
+15. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -696,3 +711,30 @@ const createUser = (overrides) => ({
   ...overrides,
 });
 ```
+
+---
+
+## Ключевые тезисы для интервью
+
+- Nuxt 3 добавляет слои абстракции (auto-imports, server routes, SSR), которые требуют специального окружения `@nuxt/test-utils` для тестирования.
+- `environment: "nuxt"` в Vitest эмулирует Nuxt-рантайм и отличается от стандартного `jsdom` для Vue.
+- `mountSuspended` дожидается завершения асинхронных операций компонента, что критично для SSR-компонентов с `useFetch` или `useAsyncData`.
+- `registerEndpoint` позволяет стабить server routes, не запуская реальный Nitro-сервер.
+- Composables удобно тестировать через тестовый компонент с `mountSuspended` или с помощью `mockNuxtImport`.
+- Server routes можно тестировать через `registerEndpoint` для реалистичности или напрямую вызывать обработчик h3 для скорости и изоляции.
+- Middleware — это чистые функции `to, from → navigateTo/abortNavigation`, которые мокируются через `mockNuxtImport`.
+- Plugins проверяют глобальные provide-значения и side-эффекты, часто проще через интеграционный тест с `mountSuspended`.
+- Встроенные Nuxt-composables (`useRoute`, `useRouter`, `useRuntimeConfig`, `navigateTo`) мокируются через `mockNuxtImport` или `vi.mock`.
+- `NuxtLink` стабится через `global.stubs` или глобальную моку в `vitest.config.ts`.
+- Тестируйте бизнес-логику, а не фреймворк; избегайте избыточного мокирования и хардкода данных.
+
+## Заключение
+
+Тестирование Nuxt 3 требует учёта server-side контекста, auto-imports и SSR. Основной инструментарий — `@nuxt/test-utils` с `mountSuspended`, `registerEndpoint` и `mockNuxtImport`. Для компонентов с асинхронными данными всегда используйте `mountSuspended`, а server routes тестируйте как функции h3. Мокируйте только то, что необходимо: runtime config, route и API-эндпоинты. Избегайте тестирования самого фреймворка и хардкода тестовых данных — это делает тесты хрупкими. Регулярная практика с этими паттернами поможет уверенно покрывать бизнес-логику Nuxt-приложений.
+
+## Полезные ссылки
+
+- [Nuxt Test Utils](https://nuxt.com/docs/getting-started/testing)
+- [Vitest](https://vitest.dev/)
+- [Vue Test Utils](https://test-utils.vuejs.org/)
+- [h3](https://github.com/unjs/h3)

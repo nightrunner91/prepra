@@ -1,20 +1,24 @@
 ﻿---
 title: "GitLab CI/CD для фронтенд-тестов"
 section: testing
-description: "GitLab CI/CD — один из самых распространённых инструментов автоматизации в компаниях, особенно в enterprise. Правильно настроенный pipeline ускоряет обратную связь, надёжно запускает тесты и даёт п..."
+description: "Как построить pipeline GitLab CI/CD для фронтенд-тестов: stages, кэш, артефакты, шардинг, JUnit-отчёты и безопасность."
 order: 2
-tags: ["gitlab", "cicd", "фронтенд-тестов"]
+tags:
+  - "gitlab-ci"
+  - "cicd"
+  - "frontend-testing"
+  - "playwright"
+  - "pipeline"
 questions:
-  - "Pipeline разбит на stages: lint → typecheck → unit → build → e2e"
-  - "`node_modules` кешируется между pipeline'ами"
-  - "Production-сборка передаётся в E2E через artifacts"
-  - "Unit-тесты генерируют JUnit-отчёты"
-  - "E2E запускаются в официальном Docker-образе Playwright"
-  - "E2E шардируются для ускорения"
-  - "Используются `needs` для параллельного запуска независимых job'ов"
-  - "`rules` запускают тяжёлые E2E не на каждый MR, а по необходимости"
-  - "Secrets хранятся в CI/CD Variables, не в репозитории"
-  - "Coverage и отчёты о тестах видны в MR"
+  - "Какие stages обычно используются во фронтенд-pipeline и в каком порядке выполняются?"
+  - "Чем cache отличается от artifacts и когда использовать каждый механизм?"
+  - "Как настроить параллельный запуск unit-тестов через parallel matrix в GitLab CI?"
+  - "Почему для E2E с Playwright выгодно использовать официальный Docker-образ?"
+  - "Как шардировать E2E-тесты и объединить отчёты в одном pipeline?"
+  - "Зачем нужны needs и DAG-зависимости между job'ами?"
+  - "Какие rules позволяют запускать тяжёлые E2E не на каждый MR?"
+  - "Какие форматы отчётов нужны, чтобы результаты тестов отображались в MR?"
+  - "Где безопасно хранить secrets для CI/CD и почему нельзя коммитить .env?"
 ---
 
 # GitLab CI/CD для фронтенд-тестов
@@ -40,6 +44,9 @@ GitLab CI/CD — один из самых распространённых ин�
 11. [Безопасность: переменные и secrets](#безопасность-переменные-и-secrets)
 12. [Полный пример .gitlab-ci.yml](#полный-пример-gitlab-ci-yml)
 13. [Чеклист](#чеклист)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -526,3 +533,32 @@ e2e-regression:
 - [ ] `rules` запускают тяжёлые E2E не на каждый MR, а по необходимости.
 - [ ] Secrets хранятся в CI/CD Variables, не в репозитории.
 - [ ] Coverage и отчёты о тестах видны в MR.
+
+
+---
+
+## Ключевые тезисы для интервью
+
+- Фронтенд-pipeline в GitLab CI обычно строится из стадий `lint → typecheck → unit → build → e2e`, где stage'ы идут последовательно, а job'ы внутри stage — параллельно.
+- `cache` ускоряет установку зависимостей между pipeline'ами, а `artifacts` передаёт файлы между job'ами внутри одного pipeline.
+- Для ускорения unit-тестов используют `parallel: matrix` с переменными `SHARD_INDEX` и `SHARD_TOTAL`.
+- E2E с Playwright запускают в официальном Docker-образе, содержащем браузеры и системные зависимости.
+- Шардинг E2E в GitLab CI требует отдельного job'а для `merge-reports`, который собирает `blob-reports` через `npx playwright merge-reports`.
+- `services` позволяют поднять рядом с job'ом БД или другие зависимости, обращаясь к ним по alias.
+- `needs` строит DAG-зависимости и запускает job'ы раньше, без ожидания завершения всей предыдущей stage.
+- `rules` управляют запуском job'ов: можно запускать тяжёлые E2E только в `main` или по label MR.
+- JUnit-отчёты и регулярное выражение coverage делают результаты тестов видимыми прямо в MR.
+- Secrets хранят в CI/CD Variables, лучше protected, и никогда не коммитят в репозиторий.
+- Полный `.gitlab-ci.yml` комбинирует кэш, artifacts, `needs`, шардинг, `rules` и отчёты в единый pipeline.
+
+## Заключение
+
+Правильно настроенный GitLab CI/CD pipeline превращает запуск тестов из рутины в быструю и предсказуемую проверку каждого изменения. Главные рычаги — разбиение на stages, кэш `node_modules`, передача сборки через `artifacts`, параллельный запуск через `needs` и шардинг, а также точные `rules`, чтобы не гонять тяжёлые E2E без нужды. Не забывайте о JUnit-отчётах, coverage и хранении secrets в CI/CD Variables. Попробуйте применить чеклист к своему проекту и убедитесь, что pipeline даёт обратную связь за минуты, а не часы.
+
+## Полезные ссылки
+
+- [GitLab CI/CD documentation](https://docs.gitlab.com/ee/ci/)
+- [GitLab CI/CD artifacts](https://docs.gitlab.com/ee/ci/jobs/job_artifacts.html)
+- [GitLab CI/CD cache](https://docs.gitlab.com/ee/ci/caching/)
+- [GitLab CI/CD variables](https://docs.gitlab.com/ee/ci/variables/)
+- [Playwright Docker images](https://playwright.dev/docs/docker)
