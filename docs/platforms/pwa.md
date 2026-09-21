@@ -1,12 +1,24 @@
 ---
-title: "Progressive Web Apps (PWA) в React и Next.js"
+title: "PWA в React и Next.js"
 section: platforms
-description: "Progressive Web Apps (PWA) в React и Next.js"
+description: "Progressive Web Apps: manifest, Service Worker, стратегии кэширования, offline, push и Background Sync — на примерах React и Next.js."
 order: 2
-tags: ["progressive", "web", "apps", "pwa", "react"]
+tags: ["pwa", "service-worker", "web-app-manifest", "workbox", "next-pwa"]
+questions:
+  - "Из каких трёх обязательных частей состоит PWA"
+  - "Что описывает Web App Manifest и зачем нужен `purpose: maskable`"
+  - "Как работает жизненный цикл Service Worker и что делают `skipWaiting` и `clients.claim`"
+  - "Чем отличаются стратегии Cache First, Network First и Stale While Revalidate"
+  - "Как реализовать offline-страницу и индикатор офлайн-статуса в React"
+  - "Как подписаться на push-уведомления и обработать их в Service Worker"
+  - "Что делает Background Sync и когда он полезен"
+  - "Как подключить PWA к Next.js через `next-pwa` и App Router"
+  - "Какие ограничения у PWA на iOS и Android"
 ---
 
-# Progressive Web Apps (PWA) в React и Next.js
+# PWA в React и Next.js
+
+Progressive Web App — способ дать веб-приложению возможности нативного: работу офлайн, установку на домашний экран, push-уведомления и фоновую синхронизацию. Всё это строится поверх трёх обязательных частей: HTTPS, Web App Manifest и Service Worker. В статье разбираем каждую из них, стратегии кэширования, интеграцию с Next.js и типичные ограничения PWA на разных платформах.
 
 ## Содержание
 
@@ -23,6 +35,9 @@ tags: ["progressive", "web", "apps", "pwa", "react"]
 11. [Тестирование PWA](#тестирование-pwa)
 12. [Лучшие практики](#лучшие-практики)
 13. [Ограничения PWA](#ограничения-pwa)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -875,3 +890,32 @@ function showUpdateNotification() {
 - Требуется глубокая интеграция с ОС (виджеты, Siri, Google Assistant)
 - Нужны сложные анимации / 3D-графика
 - Требуется доступ к специфичным API (ARKit, ARCore)
+
+---
+
+## Ключевые тезисы для интервью
+
+- PWA — не отдельная технология, а набор практик: HTTPS + Web App Manifest + Service Worker.
+- Manifest описывает имя, иконки, `display`, `start_url` и `scope`; `purpose: maskable` нужен для адаптивных иконок Android.
+- Service Worker — фоновый скрипт, живёт вне вкладки и перехватывает `fetch`, `push`, `sync`.
+- Жизненный цикл SW: install → waiting → activate; `skipWaiting` и `clients.claim` активируют новый SW без ожидания закрытия вкладок.
+- Cache First — для статики, Network First — для API, Stale While Revalidate — для быстрого отклика с фоновым обновлением, Cache Only — для версионированных файлов.
+- Offline-режим строится на кэшировании навигационных запросов и fallback на `offline.html`; `navigator.onLine` + события `online`/`offline` дают индикатор состояния.
+- Push-уведомления требуют VAPID-ключей, подписки через `pushManager.subscribe` и обработчика `push` в Service Worker.
+- Background Sync позволяет отложить действие до восстановления соединения — полезно для отправки сообщений, аналитики, синхронизации данных.
+- В Next.js PWA собирается через `next-pwa` (на основе Workbox), а manifest объявляется файлом `app/manifest.ts` в App Router.
+- iOS ограничивает PWA: push доступен только с 16.4+ и после установки на экран «Домой», нет Bluetooth/NFC и Badge API.
+
+## Заключение
+
+PWA закрывает разрыв между вебом и нативом там, где не нужен доступ к специфичным ОС-возможностям: приложение устанавливается, работает офлайн и получает push без публикации в сторах. Основную работу делает Service Worker — фоновый воркер, живущий отдельно от страницы и перехватывающий сетевые запросы. Ключевое проектное решение — выбор стратегии кэширования под тип ресурса: статика, API, картинки требуют разного поведения. В Next.js всё это оборачивает `next-pwa` (Workbox под капотом), а App Router даёт первокласснный `app/manifest.ts`. Помните про ограничения платформ, особенно iOS, и тестируйте через Lighthouse и Chrome DevTools → Application.
+
+## Полезные ссылки
+
+- [MDN — Progressive Web Apps](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
+- [Web App Manifest — W3C](https://www.w3.org/TR/appmanifest/)
+- [Service Worker API — MDN](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API)
+- [Workbox — Google](https://developer.chrome.com/docs/workbox)
+- [next-pwa](https://github.com/shadowwalker/next-pwa)
+- [Next.js Manifest File](https://nextjs.org/docs/app/api-reference/file-conventions/metadata/manifest)
+- [web.dev — Learn PWA](https://web.dev/learn/pwa/)

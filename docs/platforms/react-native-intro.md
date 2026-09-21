@@ -1,12 +1,24 @@
 ---
-title: "React Native — введение для React-разработчиков"
+title: "React Native для React-разработчиков"
 section: platforms
-description: "React Native — введение для React-разработчиков"
+description: "React Native для тех, кто пришёл из React: как устроен рантайм, чем отличаются компоненты, стилизация, навигация и как выбрать между Expo и Bare CLI."
 order: 3
-tags: ["react", "native", "введение", "react-разработчиков"]
+tags: ["react-native", "expo", "fabric", "turbomodules", "expo-router"]
+questions:
+  - "Как React Native рендерит UI и почему это не WebView"
+  - "В чём разница между старой архитектурой (Bridge) и новой (JSI + Fabric + TurboModules)"
+  - "Какие концепции React переносятся в React Native без изменений, а какие меняются"
+  - "Чем `StyleSheet` в React Native отличается от CSS в вебе"
+  - "Как устроена файловая маршрутизация в Expo Router и в чём её отличие от React Navigation"
+  - "Как работать с AsyncStorage, Zustand и TanStack Query в React Native"
+  - "Когда выбирать Expo, а когда Bare CLI"
+  - "Что даёт EAS Build и EAS Update"
+  - "В каких сценариях React Native не подходит"
 ---
 
-# React Native — введение для React-разработчиков
+# React Native для React-разработчиков
+
+React Native позволяет писать мобильные приложения для iOS и Android на React, но рендерить их в настоящие нативные компоненты — не WebView и не кросс-платформенный HTML. Статья для тех, кто знает React и хочет понять, что переносится напрямую, что меняется и как устроен рантайм под капотом. Разбираем архитектуру (Bridge → JSI + Fabric), основные компоненты, стилизацию, навигацию через Expo Router и выбор между Expo и Bare CLI.
 
 ## Содержание
 
@@ -23,6 +35,9 @@ tags: ["react", "native", "введение", "react-разработчиков"
 11. [Отладка](#отладка)
 12. [Публикация в сторах](#публикация-в-сторах)
 13. [Когда НЕ выбирать React Native](#когда-не-выбирать-react-native)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -785,5 +800,35 @@ React Native не подходит, если:
 - **Тяжёлые анимации / игры** — используйте Unity, Flutter или нативные фреймворки
 - **AR / VR** — нативные SDK (ARKit, ARCore) дают больше контроля
 - **Bluetooth / IoT** — нативные модули существуют, но отладка сложнее
-- **Критическая производительность** — нативный код быстрее (хотя новая архитектура缩小ла разрыв)
+- **Критическая производительность** — нативный код быстрее (хотя новая архитектура сократила разрыв)
 - **Одно приложение** — если не планируете iOS + Android, нативная разработка проще
+
+---
+
+## Ключевые тезисы для интервью
+
+- React Native рендерит настоящие нативные компоненты (`UIView`, `android.widget`) — это не WebView и не HTML.
+- Старая архитектура использовала асинхронный Bridge с JSON-сериализацией; новая — JSI + Fabric + TurboModules с прямыми C++-вызовами.
+- Все базовые концепции React (хуки, Context, custom hooks, Zustand, TanStack Query, TS) работают в React Native без изменений.
+- Основные примитивы UI: `View`, `Text`, `TextInput`, `Button`/`TouchableOpacity`, `Image`, `ScrollView`, `FlatList`, `SafeAreaView`.
+- Стилизация — `StyleSheet.create` с подмножеством CSS: `flexDirection` по умолчанию `column`, нет grid/float, нет shorthand для margin.
+- `FlatList` — виртуализированный список, обязательный для длинных данных; поддерживает pull-to-refresh и infinite scroll.
+- Навигация: Expo Router даёт файловую маршрутизацию (аналог Next.js App Router), React Navigation — императивный API.
+- AsyncStorage — key-value хранилище для локальных данных; аналог `localStorage`, но асинхронное.
+- Expo рекомендован как стартовая точка: EAS Build (облачная сборка), EAS Update (OTA без ревью сторов), готовые модули для камеры, push, геолокации.
+- React Native не подходит для тяжёлых 3D/игр, AR/VR и глубокой работы с Bluetooth/IoT — там лучше нативные SDK.
+
+## Заключение
+
+Для React-разработчика вход в React Native — это в первую очередь смена набора компонентов и стилей: `div` → `View`, `span` → `Text`, `onClick` → `onPress`, CSS → `StyleSheet`. Логика, хуки, управление состоянием и запросы остаются теми же. Ключевое архитектурное знание — переход от Bridge к JSI, Fabric и TurboModules, который убирает главное узкое место старого рантайма. На практике почти всегда стоит начинать с Expo и EAS — они убирают Xcode/Android Studio из цикла разработки и дают OTA-обновления. Выбирайте нативную разработку тогда, когда упираетесь в 3D, AR/VR или сложную работу с железом.
+
+## Полезные ссылки
+
+- [React Native — Official Docs](https://reactnative.dev/)
+- [New Architecture Overview](https://reactnative.dev/docs/the-new-architecture/landing-page)
+- [Expo Documentation](https://docs.expo.dev/)
+- [Expo Router](https://docs.expo.dev/router/introduction/)
+- [React Navigation](https://reactnavigation.org/)
+- [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/)
+- [EAS Build](https://docs.expo.dev/build/introduction/)
+- [NativeWind](https://www.nativewind.dev/)
