@@ -9,3 +9,7 @@
 3. **[TanStack Query](./tanstack_query.md)** — кэширование, мутации, фоновое обновление, продвинутые сценарии.
 4. **[Pinia](./pinia.md)** — официальный стейт-менеджер Vue 3, defineStore, геттеры, плагины, миграция с Vuex.
 5. **[Redux Toolkit](./redux.md)** — createSlice, Immer, createAsyncThunk, RTK Query, миграция с классического Redux.
+
+## Не будет лишним ✍
+
+- **[Vuex](./vuex.md)** — классический стейт-менеджер Vue: state, mutations, getters, actions, модули с namespaced и миграция на Pinia.
