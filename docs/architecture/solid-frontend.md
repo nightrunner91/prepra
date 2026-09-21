@@ -1,12 +1,41 @@
 ﻿---
-title: "SOLID в Frontend: Как запомнить и применить в React и Vue"
+title: "SOLID в React и Vue"
 section: architecture
-description: "**SOLID** — это акроним. Запомни как \"твёрдый код\":"
+description: "Пять принципов SOLID — Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion — на примерах React и Vue. Мнемоники и когда не применять."
 order: 6
-tags: ["solid", "frontend", "запомнить", "применить", "react"]
+tags: ["solid", "single-responsibility", "open-closed", "liskov-substitution", "dependency-inversion", "react", "vue"]
+questions:
+  - "Что такое SOLID и какие пять принципов в него входят"
+  - "Как определить, что компонент нарушает Single Responsibility"
+  - "Как реализовать Open/Closed для кнопок в React через композицию"
+  - "Что такое Liskov Substitution и как это выглядит в TypeScript-типах"
+  - "Почему передача всего DTO в компонент нарушает Interface Segregation"
+  - "Когда Dependency Inversion действительно нужен, а когда это оверинжиниринг"
+  - "Как использовать slots во Vue для реализации Open/Closed"
+  - "Какие признаки оверинжиниринга SOLID"
+  - "Почему S и O — самые часто применимые принципы, а D и I — ситуативные"
 ---
 
-# SOLID в Frontend: Как запомнить и применить в React и Vue
+# SOLID в React и Vue
+
+SOLID — пять принципов ООП, которые дошли до фронтенда, но реализуются здесь через хуки, композицию и слоты, а не через классы и интерфейсы. В статье разберём каждый принцип на примерах React и Vue, покажем мнемоники для запоминания и объясним, когда SOLID помогает, а когда превращается в оверинжиниринг.
+
+## Содержание
+
+1. [Мнемоника для запоминания](#мнемоника-для-запоминания)
+2. [S — Single Responsibility](#s--single-responsibility-один-мастер--одно-дело)
+3. [O — Open/Closed](#o--openclosed-стена-с-закладными-подключай-что-угодно)
+4. [L — Liskov Substitution](#l--liskov-substitution-универсальный-кирпич-любой-блок-подходит)
+5. [I — Interface Segregation](#i--interface-segregation-чертеж-комнаты-не-тащи-лишнее)
+6. [D — Dependency Inversion](#d--dependency-inversion-подрядчик-через-договор-не-важен-мастер)
+7. [Шпаргалка для собеседования](#шпаргалка-для-собеседования)
+8. [Когда НЕ применять SOLID](#когда-не-применять-solid)
+9. [Главные мысли](#главные-мысли)
+10. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+11. [Заключение](#заключение)
+12. [Полезные ссылки](#полезные-ссылки)
+
+---
 
 ## Мнемоника для запоминания
 
@@ -873,3 +902,29 @@ function UserList() {
 6. **В Vue** — через composables, слоты и dependency injection.
 7. **Запоминай через аналогии:** мастер, закладные, кирпич, чертёж, договор.
 8. **На собесах** важнее показать применение и понимание, когда правило НЕ нужно применять.
+
+## Ключевые тезисы для интервью
+
+- SOLID — пять принципов ООП, адаптированных к фронтенду: во frontend они реализуются через хуки, композицию и слоты.
+- **S (Single Responsibility)** — компонент делает одну вещь: если он и грузит данные, и трансформирует, и рендерит — разделяй.
+- **O (Open/Closed)** — расширение через композицию: базовый `Button` + обёртки `PrimaryButton`, `SecondaryButton`, а не `if type ===`.
+- **L (Liskov Substitution)** — подтип заменяет базовый тип без ломки: `UserCard` должен работать с любым `User`, а не ждать `admin.delete()`.
+- **I (Interface Segregation)** — не тащи весь DTO в компонент, если ему нужно 2 поля; но если реально нужно 15 — передавай 15.
+- **D (Dependency Inversion)** — компонент зависит от абстракции (интерфейс `UserService`), реализация подставляется снаружи; помогает в тестах и при смене API.
+- S и O применимы почти всегда, D и I — ситуативные и часто становятся оверинжинирингом.
+- SOLID не нужен в прототипах, MVP, маленьких проектах и когда абстракция усложняет код.
+- В React SOLID проявляется через custom hooks (SRP), композицию пропсов (O), TypeScript-интерфейсы (L, I) и props-инъекцию сервисов (D).
+- Во Vue — через composables (SRP), слоты (O), валидаторы пропсов (L, I) и `provide/inject` для сервисов (D).
+- Признак оверинжиниринга: абстракция создана «на будущее», без конкретной проблемы, которую она решает.
+
+## Заключение
+
+SOLID — инструмент, а не религия. Пять принципов помогают выявить типичные проблемы: слишком большие компоненты, жёсткие условные ветки, зависимости от конкретики. Но применение SOLID должно упрощать код, а не создавать иллюзию «правильной архитектуры». На собеседовании важнее не заучить пять букв, а показать, что вы понимаете, когда каждый принцип уместен и когда от него нужно сознательно отступить.
+
+## Полезные ссылки
+
+- [SOLID Principles — Wikipedia](https://en.wikipedia.org/wiki/SOLID)
+- [The Principles of OOD — Robert C. Martin](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod)
+- [React Custom Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
+- [Vue Composables](https://vuejs.org/guide/reusability/composables.html)
+- [The Wrong Abstraction — Sandi Metz](https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction)

@@ -1,16 +1,39 @@
 ﻿---
-title: "Архитектурные паттерны: MVC, MVP и MVVM в контексте React и Vue"
+title: "MVC, MVP и MVVM в React и Vue"
 section: architecture
-description: "При разработке современных веб-приложений понимание архитектурных паттернов критически важно. MVC, MVP и MVVM — это три фундаментальных подхода к организации кода, которые определяют разделение отв..."
+description: "Три классических паттерна — MVC, MVP и MVVM — и их отражение в архитектуре современных фронтенд-фреймворков. React как компонентный подход, Vue как MVVM."
 order: 5
-tags: ["архитектурные", "паттерны", "mvc", "mvp", "mvvm"]
+tags: ["mvc", "mvp", "mvvm", "react", "vue", "architecture-patterns", "data-binding"]
+questions:
+  - "В чём разница между MVC, MVP и MVVM"
+  - "Почему React официально не следует ни одному из классических паттернов"
+  - "Как компоненты React объединяют Model, View и Controller"
+  - "Почему Vue считается MVVM-фреймворком"
+  - "Что такое двустороннее связывание и как оно работает через v-model"
+  - "Как custom hooks в React приближают архитектуру к MVVM"
+  - "В чём отличие Presenter от Controller"
+  - "Как Redux/Pinia меняют роль компонента в архитектуре"
+  - "Какие недостатки у MVVM при большом количестве bindings"
 ---
 
-# Архитектурные паттерны: MVC, MVP и MVVM в контексте React и Vue
+# MVC, MVP и MVVM в React и Vue
 
-## Введение
+MVC, MVP и MVVM — три фундаментальных архитектурных паттерна, определяющих, как разделяется ответственность между данными, отображением и логикой. В статье разберём каждый из них, покажем классические примеры и посмотрим, как современные фронтенд-фреймворки — React и Vue — вписываются в эти модели или сознательно отходят от них.
 
-При разработке современных веб-приложений понимание архитектурных паттернов критически важно. MVC, MVP и MVVM — это три фундаментальных подхода к организации кода, которые определяют разделение ответственности между компонентами системы. В этой статье мы детально разберем каждый паттерн и рассмотрим, как React и Vue соотносятся с этими концепциями.
+## Содержание
+
+1. [MVC (Model-View-Controller)](#mvc-model-view-controller)
+2. [MVP (Model-View-Presenter)](#mvp-model-view-presenter)
+3. [MVVM (Model-View-ViewModel)](#mvvm-model-view-viewmodel)
+4. [React и архитектурные паттерны](#react-и-архитектурные-паттерны)
+5. [Vue и архитектурные паттерны](#vue-и-архитектурные-паттерны)
+6. [Сравнение паттернов в контексте современных фреймворков](#сравнение-паттернов-в-контексте-современных-фреймворков)
+7. [Практические рекомендации](#практические-рекомендации)
+8. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+9. [Заключение](#заключение)
+10. [Полезные ссылки](#полезные-ссылки)
+
+---
 
 ## MVC (Model-View-Controller)
 
@@ -720,6 +743,19 @@ export const useUserStore = defineStore('user', {
 });
 ```
 
+## Ключевые тезисы для интервью
+
+- MVC разделяет приложение на Model (данные), View (отображение) и Controller (посредник, обрабатывает ввод).
+- MVP заменяет Controller на Presenter, полностью изолируя View от Model — View становится пассивным.
+- MVVM использует двустороннее связывание: ViewModel и View синхронизируются автоматически через реактивные свойства.
+- Основной недостаток MVC — «Massive View Controller», недостаток MVP — много boilerplate, недостаток MVVM — сложность отладки скрытых binding.
+- React не следует ни одному классическому паттерну — использует компонентный подход с однонаправленным потоком данных.
+- В React компонент объединяет Model (state), View (JSX) и Controller (event handlers).
+- Vue официально позиционируется как MVVM-фреймворк: `data`/`ref` — ViewModel, шаблон — View, `v-model` — двустороннее связывание.
+- Custom hooks в React позволяют вынести ViewModel-логику, приблизив архитектуру к MVVM.
+- Redux/Pinia играют роль внешнего Model, компоненты становятся View + Controller.
+- MVC чаще всего встречается в серверных фреймворках (Express, Rails, Django), MVVM — во фронтенде с реактивностью.
+
 ## Заключение
 
 Понимание MVC, MVP и MVVM помогает лучше организовать код и выбрать правильный подход для вашего проекта:
@@ -733,3 +769,12 @@ export const useUserStore = defineStore('user', {
 - Если вам нужен готовый MVVM-фреймворк — выбирайте Vue
 
 Оба подхода имеют свои преимущества, и понимание классических паттернов поможет вам принимать более обоснованные архитектурные решения в любом фреймворке.
+
+## Полезные ссылки
+
+- [MVC — Wikipedia](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)
+- [MVP — Wikipedia](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter)
+- [MVVM — Wikipedia](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)
+- [React Docs — Thinking in React](https://react.dev/learn/thinking-in-react)
+- [Vue Docs — Reactivity Fundamentals](https://vuejs.org/guide/essentials/reactivity-fundamentals.html)
+- [GUI Architectures — Martin Fowler](https://martinfowler.com/eaaDev/uiArchs.html)
