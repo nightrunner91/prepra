@@ -1,12 +1,23 @@
 ---
-title: "Стратегии деплоя — blue-green, canary releases, feature flags"
+title: "Blue-Green, Canary и Feature Flags при деплое"
 section: build-and-deployment
-description: "Стратегии деплоя — blue-green, canary releases, feature flags"
+description: "Стратегии деплоя без downtime: blue-green для мгновенного переключения, canary для постепенного rollout, feature flags для разделения деплоя и релиза, и как правильно откатываться."
 order: 7
-tags: ["стратегии", "деплоя", "blue-green", "canary", "releases"]
+tags: ["blue-green", "canary-releases", "feature-flags", "zero-downtime", "rollback"]
+questions:
+  - "Чем blue-green deployment отличается от canary release по механизму переключения трафика?"
+  - "Почему blue-green deployment требует двойных ресурсов и как это решается?"
+  - "Что такое feature flag и как он разделяет деплой кода от релиза функции?"
+  - "Какие типы feature flags существуют: release, experiment, ops, permission?"
+  - "Как expand-contract pattern помогает при миграциях БД во время деплоя?"
+  - "Что такое graceful shutdown и почему он нужен для zero-downtime деплоя?"
+  - "Как Flagger автоматизирует canary analysis и принимает решение о rollback?"
+  - "Как Vercel и Netlify реализуют blue-green deployment автоматически?"
 ---
 
-# Стратегии деплоя — blue-green, canary releases, feature flags
+# Blue-Green, Canary и Feature Flags при деплое
+
+Остановить сервер, залить новый код и запустить снова — этот подход давно устарел. Пользователи ожидают 24/7 доступности, а Amazon деплоит каждые несколько секунд без downtime. Blue-green deployment, canary releases и feature flags — стандартный набор стратегий, позволяющих деплоить часто и безопасно. Статья разбирает каждую из них с примерами на nginx, Kubernetes и популярных хостингах.
 
 ## Содержание
 
@@ -20,6 +31,8 @@ tags: ["стратегии", "деплоя", "blue-green", "canary", "releases"]
 8. [Zero-downtime deployment](#zero-downtime-deployment)
 9. [Инструменты и платформы](#инструменты-и-платформы)
 10. [Практические рекомендации](#практические-рекомендации)
+11. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+12. [Заключение](#заключение)
 
 ---
 
@@ -853,6 +866,20 @@ Kubernetes поддерживает rolling updates, blue-green, canary чере
 **4. Infrastructure.** CPU, memory, disk, network — убедитесь, что новая версия не потребляет больше ресурсов.
 
 Если что-то из этого ухудшилось — rollback.
+
+---
+
+## Ключевые тезисы для интервью
+
+- Традиционный деплой «остановить-залить-запустить» даёт downtime и медленный откат — неприемлемо для современного веба.
+- Blue-green: два идентичных окружения; load balancer мгновенно переключает трафик; откат — переключить обратно за секунды.
+- Canary: новая версия получает 1–5% трафика и постепенно растёт до 100%; проблемы влияют только на малую долю пользователей.
+- Feature flags разделяют деплой и релиз: код в production, но функция выключена до нужного момента.
+- Типы flags: release (постепенный rollout), experiment (A/B), ops (аварийное отключение), permission (для конкретных групп).
+- Rollback должен быть мгновенным: blue-green — переключить lb, canary — убрать canary-версию, feature flag — выключить.
+- Expand-contract pattern для DB-миграций: сначала добавить новую колонку (nullable), перенести данные, затем удалить старую.
+- Graceful shutdown и health checks гарантируют zero-downtime: Load Balancer направляет трафик только на готовые серверы.
+- Vercel и Netlify реализуют blue-green автоматически; Kubernetes + Flagger автоматизирует canary analysis.
 
 ---
 

@@ -1,23 +1,23 @@
 ---
-title: "Деплой Nuxt 3"
+title: "Деплой Nuxt 3: Nitro, presets и routeRules"
 section: build-and-deployment
-description: "Деплой Nuxt 3"
+description: "Как устроен Nitro и почему он ключевой для деплоя Nuxt 3, чем `nuxt build` отличается от `nuxt generate`, как работают `routeRules` и edge-пресеты."
 order: 4
-tags: ["деплой", "nuxt"]
+tags: ["nuxt", "nitro", "ssr", "routerules", "deployment"]
 questions:
-  - "`nuxt build` проходит локально без ошибок"
-  - "`nuxt generate` протестирован, если используется SSG"
-  - "Все environment variables добавлены в `runtimeConfig`"
-  - "Server routes валидируют входные данные"
-  - "ISR настроен и протестирован"
-  - "Выбран правильный Nitro preset"
-  - "`site.url` настроен для SEO и метаданных"
-  - "Image provider соответствует платформе"
-  - "Добавлен health check"
-  - "Есть план отката"
+  - "Что такое Nitro и за что он отвечает в архитектуре Nuxt 3?"
+  - "Чем `nuxt build` отличается от `nuxt generate` и когда использовать каждый?"
+  - "Как `routeRules` позволяет смешивать SSG, SSR и ISR на уровне маршрутов?"
+  - "Что такое Nitro preset и почему важно выбрать правильный для целевой платформы?"
+  - "Чем `runtimeConfig` в Nuxt отличается от `NEXT_PUBLIC_` в Next.js?"
+  - "Как edge-пресеты Cloudflare, Vercel и Netlify различаются между собой?"
+  - "Почему переменные в `runtimeConfig.public` можно менять без пересборки на некоторых платформах?"
+  - "Как настроить ISR через `routeRules` и какие платформы поддерживают его из коробки?"
 ---
 
-# Деплой Nuxt 3
+# Деплой Nuxt 3: Nitro, presets и routeRules
+
+Nuxt 3 решает деплой через Nitro — универсальный серверный движок, который знает, как собрать приложение для Node.js, Vercel, Cloudflare Workers, Netlify и других сред. Одним Nitro preset вы меняете целевую платформу без изменения кода. Статья разбирает разницу между `nuxt build` и `nuxt generate`, работу `routeRules`, edge-деплой и управление переменными окружения через `runtimeConfig`.
 
 ## Содержание
 
@@ -32,7 +32,8 @@ questions:
 9. [Деплой на популярные платформы](#деплой-на-популярные-платформы)
 10. [Image optimization](#image-optimization)
 11. [Чеклист перед деплоем](#чеклист-перед-деплоем)
-12. [Заключение](#заключение)
+12. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+13. [Заключение](#заключение)
 
 ---
 
@@ -539,6 +540,19 @@ export default defineNuxtConfig({
 - [ ] Image provider соответствует платформе.
 - [ ] Добавлен health check.
 - [ ] Есть план отката.
+
+---
+
+## Ключевые тезисы для интервью
+
+- Nitro — универсальный серверный движок Nuxt 3: он собирает приложение для любой платформы, меняя только preset.
+- `nuxt build` создаёт SSR-приложение в `.output/`; `nuxt generate` — статические HTML в `.output/public/`.
+- `routeRules` — центральное место для управления SSG/SSR/ISR на уровне маршрутов без изменения компонентов.
+- `isr: 60` в `routeRules` включает ISR с периодом ревалидации 60 секунд для указанных маршрутов.
+- Edge-пресеты (cloudflare-pages, vercel-edge, netlify-edge) собирают приложение для CDN-узлов без холодного старта.
+- `runtimeConfig` — правильный способ работы с переменными окружения в Nuxt 3; `NUXT_*` переменные маппятся автоматически.
+- `runtimeConfig.public` доступен на клиенте и сервере; `runtimeConfig` без `public` — только на сервере.
+- Для self-hosted деплоя используйте `node-server` preset и PM2 или Docker с `.output/server/index.mjs`.
 
 ---
 

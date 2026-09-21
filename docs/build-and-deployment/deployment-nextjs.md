@@ -1,23 +1,23 @@
 ---
-title: "Деплой Next.js"
+title: "Деплой Next.js: режимы вывода и платформы"
 section: build-and-deployment
-description: "Деплой Next.js"
+description: "Что происходит при `next build`, чем `output: 'export'` отличается от `standalone`, как деплоить на Vercel и в Docker, и как настроить environment variables."
 order: 3
-tags: ["деплой", "nextjs"]
+tags: ["nextjs", "vercel", "docker", "isr", "edge-runtime"]
 questions:
-  - "`npm run build` проходит локально без ошибок"
-  - "Все environment variables настроены на платформе"
-  - "Секреты не имеют префикса `NEXT_PUBLIC_`"
-  - "`next/image` настроен под выбранную платформу"
-  - "ISR настроен и протестирован, если используется"
-  - "Middleware работает в Edge Runtime"
-  - "API Routes защищены и валидируют входные данные"
-  - "Добавлен health check endpoint"
-  - "Настроен мониторинг ошибок и производительности"
-  - "Есть план отката (rollback)"
+  - "Что происходит на каждом этапе выполнения `next build`?"
+  - "Чем `output: 'export'` отличается от `output: 'standalone'` и когда использовать каждый режим?"
+  - "Почему ISR требует serverless-функции и не работает при `output: 'export'`?"
+  - "Какие ограничения у Edge Runtime по сравнению с Node.js?"
+  - "Чем `NEXT_PUBLIC_` переменные отличаются от обычных и почему секреты нельзя делать публичными?"
+  - "Зачем в Dockerfile для Next.js использовать multi-stage build?"
+  - "Почему для `next/image` нужен сервер или custom loader при static export?"
+  - "Какие платформы поддерживают ISR из коробки, а для каких нужна дополнительная настройка?"
 ---
 
-# Деплой Next.js
+# Деплой Next.js: режимы вывода и платформы
+
+Деплой Next.js зависит от выбранной стратегии рендеринга: статический экспорт можно загрузить куда угодно, а ISR и SSR требуют сервера или serverless-функций. Правильный выбор режима вывода (`export`, `standalone`) и платформы определяет, как работает приложение в production. Статья разбирает процесс `next build`, режимы вывода, деплой на Vercel и в Docker, работу с переменными окружения и Edge Runtime.
 
 ## Содержание
 
@@ -32,7 +32,8 @@ questions:
 9. [Деплой в Docker](#деплой-в-docker)
 10. [Деплой на других платформах](#деплой-на-других-платформах)
 11. [Чеклист перед деплоем](#чеклист-перед-деплоем)
-12. [Заключение](#заключение)
+12. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+13. [Заключение](#заключение)
 
 ---
 
@@ -493,6 +494,20 @@ pm2 start npm --name "next-app" -- start
 - [ ] Добавлен health check endpoint.
 - [ ] Настроен мониторинг ошибок и производительности.
 - [ ] Есть план отката (rollback).
+
+---
+
+## Ключевые тезисы для интервью
+
+- `next build` компилирует код, генерирует статические страницы, упаковывает serverless-функции и складывает всё в `.next/`.
+- `output: 'export'` создаёт статические HTML/CSS/JS — можно хостить везде, но SSR, ISR, API Routes и Middleware недоступны.
+- `output: 'standalone'` создаёт минимальный production-сервер в `.next/standalone/` — идеально для Docker и self-hosted деплоя.
+- ISR требует платформу с поддержкой фоновой регенерации; на Vercel и Netlify работает из коробки.
+- Edge Runtime — это V8 Isolate без Node.js API; подходит для middleware и простых API, не для тяжёлой логики.
+- `NEXT_PUBLIC_` переменные встраиваются в клиентский бандл при сборке; секреты никогда не должны иметь этот префикс.
+- Vercel — оптимальная платформа для Next.js: нативная поддержка SSR, ISR, Edge, Image Optimization и preview deployments.
+- Multi-stage Dockerfile уменьшает образ с ~500 МБ до ~20 МБ, копируя только `.next/standalone/` и статику.
+- `next/image` требует сервера для оптимизации; при static export добавьте `unoptimized: true` или используйте custom loader.
 
 ---
 
