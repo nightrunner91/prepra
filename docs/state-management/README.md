@@ -8,3 +8,4 @@
 2. **[Zustand](./zustand.md)** — лёгкий стор, селекторы, мидлвары, миграция с Redux.
 3. **[TanStack Query](./tanstack_query.md)** — кэширование, мутации, фоновое обновление, продвинутые сценарии.
 4. **[Pinia](./pinia.md)** — официальный стейт-менеджер Vue 3, defineStore, геттеры, плагины, миграция с Vuex.
+5. **[Redux Toolkit](./redux.md)** — createSlice, Immer, createAsyncThunk, RTK Query, миграция с классического Redux.
