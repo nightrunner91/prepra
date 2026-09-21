@@ -1,12 +1,24 @@
 ---
-title: "Безопасность веб-приложений — глубокое понимание для фронтендера"
+title: "Безопасность фронтенда: обзор угроз и защит"
 section: security
-description: "Безопасность веб-приложений — глубокое понимание для фронтендера"
+description: "Комплексный обзор безопасности для фронтендера: XSS, CSRF, Server Actions, CSP, секреты, аутентификация, HTTP-заголовки, безопасность зависимостей."
 order: 11
-tags: ["безопасность", "веб-приложений", "глубокое", "понимание", "фронтендера"]
+tags: ["безопасность", "xss", "csrf", "csp", "authentication", "secrets"]
+questions:
+  - "Чем отличаются отражённый, хранимый и DOM-based XSS?"
+  - "Как SameSite cookies защищают от CSRF и когда этого недостаточно?"
+  - "Какие проверки должен выполнять каждый Server Action?"
+  - "Зачем нужен CSP, если React уже экранирует ввод?"
+  - "Как переменные с префиксом `NEXT_PUBLIC_` попадают в клиентский бандл?"
+  - "В чём принципиальная разница между аутентификацией и авторизацией?"
+  - "Что такое defense in depth и как этот принцип применяется на фронтенде?"
+  - "Как lock-файлы защищают от supply chain атак?"
+  - "Что такое Open Redirect и как его предотвратить?"
 ---
 
-# Безопасность веб-приложений — глубокое понимание для фронтендера
+# Безопасность фронтенда: обзор угроз и защит
+
+Фронтенд — это точка входа в приложение, где обрабатываются формы, хранятся токены и рендерится пользовательский контент. Именно здесь происходит большинство атак: XSS, CSRF, кража секретов, эксплуатация уязвимых зависимостей. Статья даёт комплексный обзор угроз и защит для фронтенд-разработчика — от классических атак до безопасности Server Actions и supply chain.
 
 ## Содержание
 
@@ -22,6 +34,9 @@ tags: ["безопасность", "веб-приложений", "глубок�
 10. [Безопасность в Next.js — серверные особенности](#безопасность-в-nextjs--серверные-особенности)
 11. [Философия защиты — глубокая защита и безопасность по умолчанию](#философия-защиты--глубокая-защита-и-безопасность-по-умолчанию)
 12. [Чек-лист безопасности](#чек-лист-безопасности)
+13. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+14. [Заключение](#заключение)
+15. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -1140,17 +1155,36 @@ function ExternalLink({ href, children }) {
 
 ---
 
-## Где углубиться
+## Ключевые тезисы для интервью
 
-Эта статья даёт комплексный обзор. Для более глубокого изучения отдельных тем переходи в специализированные материалы:
+- Безопасность фронтенда — не «забота бэкенда»: XSS, CSRF, кража секретов и Open Redirect эксплуатируются именно через клиент.
+- XSS бывает трёх типов — отражённый, хранимый и DOM-based; React экранирует значения в JSX, но `dangerouslySetInnerHTML`, `javascript:` URL и прямой доступ к DOM обходят защиту.
+- CSRF работает потому, что браузер автоматически прикрепляет cookies к cross-site запросам; защита строится на CSRF-токенах, `SameSite` cookies и проверке `Origin`/`Referer`.
+- Server Actions выполняются на сервере, но вызываются с клиента — валидация входа (Zod), проверка авторизации и rate limiting обязательны в каждом действии.
+- CSP — вторая линия обороны после экранирования: nonce-based CSP со `strict-dynamic` даёт наиболее строгую защиту от inline-скриптов.
+- Переменные с префиксом `NEXT_PUBLIC_` встраиваются в клиентский бандл; секретные ключи должны использоваться только в серверном коде через прокси.
+- Аутентификация отвечает «кто вы», авторизация — «что вам можно»; проверять и то и другое нужно на трёх уровнях: middleware, Server Component, Server Action.
+- HTTP-заголовки (`X-Frame-Options`, `HSTS`, `Referrer-Policy`, `Permissions-Policy`) закрывают клaсс атак с минимальными усилиями — только конфигурация.
+- Lock-файлы и `npm audit` в CI защищают от supply chain атак; в 2021 году `ua-parser-js` и в 2024 — `colors` показали, что зависимости могут быть скомпрометированы.
+- Defense in Depth — не полагайтесь на одну линию защиты: middleware, серверная проверка, БД-constraints и CSP работают в связке, а не поодиночке.
 
-- **[XSS: анатомия атаки](./security-xss-deep-dive.md)** — виды XSS, экранирование, санитизация, защита в React/Vue/Nuxt/Next.js, Trusted Types.
-- **[CSRF: как браузер становится оружием](./security-csrf-deep-dive.md)** — механика атаки, SameSite cookies, CSRF-токены, double submit cookie.
-- **[CSP: Content Security Policy](./security-csp-deep-dive.md)** — директивы, nonce, strict-dynamic, Report-Only, настройка в Next.js и Nuxt.
-- **[HTTP-заголовки безопасности](./security-http-headers.md)** — HSTS, X-Frame-Options, COOP, COEP, CORP, Permissions-Policy.
-- **[Аутентификация и авторизация](./security-authn-authz.md)** — сессии, JWT, OAuth 2.0, OIDC, PKCE, RBAC/ABAC.
-- **[Управление секретами](./security-secrets-management.md)** — `NEXT_PUBLIC_`, `runtimeConfig`, vaults, ротация, защита от утечек в git.
-- **[Безопасность Next.js](./security-nextjs.md)** — Server Components, Server Actions, middleware, Route Handlers, CSP, Open Redirect.
-- **[Безопасность Vue и Nuxt](./security-vue-nuxt.md)** — `v-html`, refs, Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP.
-- **[Безопасность зависимостей и supply chain](./security-dependency-supply-chain.md)** — npm audit, lock-файлы, Snyk, Socket, SBOM, provenance.
-- **[Подготовка к SOC2 и CASA](./security-soc2-casa-workflows.md)** — controls, evidence, access reviews, change management, pentest, Secure SDLC.
+## Заключение
+
+Безопасность фронтенда — это не набор изолированных проверок, а системный подход. React экранирует JSX, но `dangerouslySetInnerHTML` открывает XSS. `SameSite=Lax` защищает от CSRF в большинстве случаев, но токены нужны для критических операций. Server Actions удобны, но требуют явной валидации и авторизации. CSP закрывает вредоносные скрипты, HTTP-заголовки — clickjacking, HSTS — downgrade-атаки, аудит зависимостей — supply chain. Работайте по принципу defense in depth: каждая защита может быть обойдена, но за ней должна быть следующая. И помните главное правило — никогда не доверяйте клиенту.
+
+## Полезные ссылки
+
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [MDN — Web Security](https://developer.mozilla.org/en-US/docs/Web/Security)
+- [Content Security Policy Reference](https://content-security-policy.com/)
+- [Next.js Security Headers](https://nextjs.org/docs/app/api-reference/next-config-js/headers)
+- [XSS: анатомия атаки](./security-xss-deep-dive.md)
+- [CSRF: как браузер становится оружием](./security-csrf-deep-dive.md)
+- [CSP: Content Security Policy](./security-csp-deep-dive.md)
+- [HTTP-заголовки безопасности](./security-http-headers.md)
+- [Аутентификация и авторизация](./security-authn-authz.md)
+- [Управление секретами](./security-secrets-management.md)
+- [Безопасность Next.js](./security-nextjs.md)
+- [Безопасность Vue и Nuxt](./security-vue-nuxt.md)
+- [Безопасность зависимостей и supply chain](./security-dependency-supply-chain.md)
+- [Подготовка к SOC2 и CASA](./security-soc2-casa-workflows.md)

@@ -1,12 +1,24 @@
 ---
-title: "Подготовка к security аудиту: SOC2 и CASA для фронтенд-разработчика"
+title: "SOC2 и CASA для фронтенд-разработчика"
 section: security
-description: "Подготовка к security аудиту: SOC2 и CASA для фронтенд-разработчика"
+description: "Как фронтендеру участвовать в SOC2 и CASA-аудите: controls, evidence, access reviews, change management, pentest, incident response, Secure SDLC."
 order: 8
-tags: ["подготовка", "security", "аудиту", "soc2", "casa"]
+tags: ["soc2", "casa", "compliance", "audit", "secure-sdlc", "incident-response"]
+questions:
+  - "Что такое SOC2 Type II и чем он отличается от Type I?"
+  - "Когда приложение обязано пройти CASA?"
+  - "Какие controls SOC2 напрямую касаются фронтенда?"
+  - "Что такое evidence и почему один скриншот CSP недостаточен?"
+  - "Как проходит access review и зачем он нужен?"
+  - "Как change management формализует изменения в production?"
+  - "Какие фазы включает incident response?"
+  - "Что обычно проверяют пентестеры во фронтенд-коде?"
+  - "Как встроить безопасность в SDLC и что такое threat modeling?"
 ---
 
-# Подготовка к security аудиту: SOC2 и CASA для фронтенд-разработчика
+# SOC2 и CASA для фронтенд-разработчика
+
+SOC2 и CASA — не «проверка кода», а проверка того, как компания систематически управляет безопасностью и данными клиентов. Фронтенд-разработчик играет важную роль: именно в его коде обрабатываются токены, формы, cookies, взаимодействие с браузером. Аудиторы задают вопросы о защите от XSS/CSRF, хранении токенов, управлении секретами и зависимостями. Статья систематизирует основные controls, процессы (code review, dependency management, access review), фазы incident response, pentest и Secure SDLC — всё, что должен знать фронтендер, работающий в компании, готовящейся к аудиту.
 
 ## Содержание
 
@@ -23,6 +35,9 @@ tags: ["подготовка", "security", "аудиту", "soc2", "casa"]
 11. [Secure SDLC](#secure-sdlc)
 12. [Чек-лист подготовки фронтенд-разработчика](#чек-лист-подготовки-фронтенд-разработчика)
 13. [Что делать во время аудита](#что-делать-во-время-аудита)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -352,8 +367,28 @@ Secure SDLC (Software Development Life Cycle) — это встраивание 
 
 ---
 
-## Что важно понимать
+## Ключевые тезисы для интервью
 
-SOC2 и CASA — это не просто «проверка кода». Это проверка того, что компания систематически управляет безопасностью. Фронтенд-разработчик играет важную роль: именно в его коде обрабатываются данные пользователей, токены, формы и взаимодействия с браузером.
+- SOC2 Type II оценивает не только наличие политик, но и их соблюдение в течение 3–12 месяцев по пяти принципам: Security, Availability, Processing Integrity, Confidentiality, Privacy.
+- CASA — программа Google для приложений, использующих чувствительные API (Gmail, Drive); фокус на OAuth-токенах, защите данных, OWASP Top 10.
+- Аудитор проверяет не строки кода, а процессы и evidence того, что команда систематически управляет рисками.
+- Ключевые controls для фронтенда: CC6.1 (доступ), CC6.6 (инфраструктура), CC6.7 (детекция), CC7.1 (change management), CC7.2 (операции), CC8.1 (контроль изменений).
+- Evidence должно быть систематическим: один скриншот CSP недостаточен — нужно показать, что политика действует непрерывно.
+- Change management формализует все изменения через git → PR → review → CI → deploy; emergency changes требуют отдельного documented процесса.
+- Incident response — пять фаз: Detection, Containment, Eradication, Recovery, Lessons learned; фронтендер участвует в детекции и расследовании клиентских инцидентов.
+- Pentest во фронтенде проверяет XSS, CSRF, Open Redirect, IDOR, утечку секретов, слабые cookies, отсутствие security-заголовков.
+- Secure SDLC встраивает безопасность на всех этапах: planning (threat modeling), design (least privilege), development (линтеры), testing (SAST/DAST), deployment (secret management), operations (monitoring).
+- На аудите — будьте честны, показывайте процессы, готовьте evidence заранее, не паникуйте при findings; важно показать план remediation.
 
-Понимание принципов безопасности и умение объяснить свои решения аудитору — это не только требование compliance, но и профессиональная зрелость разработчика.
+## Заключение
+
+SOC2 и CASA — это не просто «проверка кода», а проверка того, что компания систематически управляет безопасностью. Фронтенд-разработчик играет важную роль: именно в его коде обрабатываются токены, формы и взаимодействия с браузером. Аудиторы задают вопросы, которые напрямую касаются фронтенда — от защиты от XSS до управления зависимостями. Понимание принципов безопасности и умение объяснить свои решения аудитору — это не только требование compliance, но и профессиональная зрелость разработчика. Compliance — это не «у нас всё идеально», а «у нас есть процесс управления рисками».
+
+## Полезные ссылки
+
+- [AICPA — SOC 2](https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2)
+- [Google — CASA (Cloud Application Security Assessment)](https://appdefensealliance.dev/casa)
+- [OWASP Application Security Verification Standard (ASVS)](https://owasp.org/www-project-application-security-verification-standard/)
+- [NIST Secure Software Development Framework](https://csrc.nist.gov/publications/detail/sp/800-218/final)
+- [SANS — Incident Response](https://www.sans.org/white-papers/incident-response/)
+- [Vanta](https://www.vanta.com/) и [Drata](https://drata.com/) — популярные платформы автоматизации compliance

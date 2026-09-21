@@ -1,12 +1,24 @@
 ---
-title: "HTTP-заголовки безопасности: полный гид для фронтендера"
+title: "HTTP-заголовки безопасности"
 section: security
-description: "HTTP-заголовки безопасности: полный гид для фронтендера"
+description: "Security-заголовки: HSTS, CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy, COOP/COEP/CORP, Clear-Site-Data. Настройка в Next.js и Nuxt."
 order: 5
-tags: ["http-заголовки", "безопасности", "полный", "гид", "фронтендера"]
+tags: ["http-headers", "hsts", "x-frame-options", "coop", "coep", "permissions-policy"]
+questions:
+  - "Зачем нужен HSTS и что делают `includeSubDomains` и `preload`?"
+  - "Чем `X-Frame-Options: DENY` отличается от CSP `frame-ancestors 'none'`?"
+  - "От чего защищает `X-Content-Type-Options: nosniff`?"
+  - "Как выбрать значение `Referrer-Policy`?"
+  - "Что такое cross-origin isolated режим и зачем нужны COOP + COEP?"
+  - "Как COOP защищает от tabnabbing и window.opener атак?"
+  - "Когда использовать `Clear-Site-Data` и что он очищает?"
+  - "Почему для чувствительных страниц важен `Cache-Control: no-store`?"
+  - "Какие security-заголовки закрывают clickjacking, mime sniffing, mixed content?"
 ---
 
-# HTTP-заголовки безопасности: полный гид для фронтендера
+# HTTP-заголовки безопасности
+
+HTTP security-заголовки — это инструкции, которые сервер отправляет браузеру вместе с ответом. Они не требуют изменений в бизнес-логике, но закрывают целые классы атак: HSTS блокирует downgrade на HTTP, `X-Frame-Options` — clickjacking, `Referrer-Policy` — утечку URL, COOP/COEP — cross-origin атаки. Статья систематизирует основные заголовки, их значения и способы настройки в Next.js и Nuxt.
 
 ## Содержание
 
@@ -25,6 +37,9 @@ tags: ["http-заголовки", "безопасности", "полный", "�
 13. [Как настроить в Next.js и Nuxt](#как-настроить-в-nextjs-и-nuxt)
 14. [Чек-лист заголовков](#чек-лист-заголовков)
 15. [Терминология](#терминология)
+16. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+17. [Заключение](#заключение)
+18. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -274,8 +289,29 @@ export default defineNuxtConfig({
 
 ---
 
-## Что важно понимать
+## Ключевые тезисы для интервью
 
-Security-заголовки — это дешёвый и эффективный способ защиты. Они не заменяют безопасный код, но добавляют несколько независимых слоёв защиты. Для SOC2 и CASA наличие и документирование этих заголовков является стандартным evidence.
+- Security-заголовки — самый дешёвый способ защиты: только конфигурация, никаких изменений в коде.
+- HSTS (`Strict-Transport-Security`) заставляет браузер использовать HTTPS даже при вводе `http://`. Перед включением убедитесь, что весь сайт работает по HTTPS.
+- `X-Frame-Options: DENY` и CSP `frame-ancestors 'none'` защищают от clickjacking; современный подход — второе.
+- `X-Content-Type-Options: nosniff` запрещает браузеру угадывать MIME-тип и интерпретировать `.txt` как JavaScript.
+- `Referrer-Policy: strict-origin-when-cross-origin` — баланс приватности и функциональности.
+- `Permissions-Policy` блокирует ненужные API (камера, микрофон, геолокация); уменьшает поверхность атаки.
+- COOP + COEP включают cross-origin isolated режим, необходимый для SharedArrayBuffer и точных таймеров.
+- COOP защищает от tabnabbing и атак через `window.opener`.
+- `Clear-Site-Data` при logout удаляет cookies, storage и cache — важно для общих устройств.
+- `Cache-Control: no-store` для чувствительных страниц предотвращает кэширование в браузере и прокси.
 
-Фронтенд-разработчик должен знать, какой заголовок за что отвечает, и уметь настраивать их в своём фреймворке.
+## Заключение
+
+Security-заголовки — это дешёвый и эффективный способ защиты. Они не заменяют безопасный код, но добавляют несколько независимых слоёв защиты: HSTS против downgrade, `frame-ancestors` против clickjacking, `nosniff` против mime sniffing, COOP/COEP против cross-origin атак. Для SOC2 и CASA наличие и документирование этих заголовков — стандартный evidence. Фронтенд-разработчик должен знать, какой заголовок за что отвечает, и уметь настраивать их в своём фреймворке.
+
+## Полезные ссылки
+
+- [MDN — HTTP security headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+- [OWASP Secure Headers Project](https://owasp.org/www-project-secure-headers/)
+- [Mozilla Observatory](https://observatory.mozilla.org/)
+- [securityheaders.com](https://securityheaders.com/)
+- [HSTS Preload List](https://hstspreload.org/)
+- [web.dev — Cross-Origin Isolation](https://web.dev/articles/cross-origin-isolation-guide)
+- [Nuxt Security](https://nuxt-security.vercel.app/)

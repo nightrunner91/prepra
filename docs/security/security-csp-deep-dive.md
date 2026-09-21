@@ -1,12 +1,24 @@
 ---
-title: "Content Security Policy: настройка, эволюция и практика"
+title: "Content Security Policy: директивы и практика"
 section: security
-description: "Content Security Policy: настройка, эволюция и практика"
+description: "CSP: директивы, nonce, hash, strict-dynamic, Report-Only, интеграция с Next.js и Nuxt. Вторая линия обороны против XSS и clickjacking."
 order: 2
-tags: ["content", "security", "policy", "настройка", "эволюция"]
+tags: ["csp", "content-security-policy", "nonce", "strict-dynamic", "xss"]
+questions:
+  - "Зачем нужен CSP, если фреймворки уже экранируют ввод?"
+  - "Какие директивы CSP отвечают за скрипты, стили, соединения и iframe?"
+  - "Почему `'unsafe-inline'` в `script-src` сводит защиту на нет?"
+  - "Как работает nonce-based CSP и почему nonce должен меняться при каждом запросе?"
+  - "Чем hash-based CSP отличается от nonce-based?"
+  - "Что делает `strict-dynamic` и зачем он нужен для бандлеров?"
+  - "Как внедрить CSP в Next.js через middleware с nonce?"
+  - "Зачем нужен режим `Content-Security-Policy-Report-Only`?"
+  - "Какие типичные ошибки допускают при внедрении CSP?"
 ---
 
-# Content Security Policy: настройка, эволюция и практика
+# Content Security Policy: директивы и практика
+
+Content Security Policy (CSP) — это HTTP-заголовок, который говорит браузеру, откуда разрешено загружать скрипты, стили, изображения, шрифты, iframe и куда можно отправлять запросы. CSP не заменяет экранирование и санитизацию, а работает как вторая линия обороны: даже если XSS-уязвимость существует, правильно настроенная политика блокирует выполнение вредоносного кода. Статья разбирает директивы, работу с inline-скриптами через nonce и hash, `strict-dynamic`, Report-Only и интеграцию с Next.js и Nuxt.
 
 ## Содержание
 
@@ -23,6 +35,9 @@ tags: ["content", "security", "policy", "настройка", "эволюция"
 11. [Типичные ошибки при внедрении](#типичные-ошибки-при-внедрении)
 12. [Чек-лист внедрения CSP](#чек-лист-внедрения-csp)
 13. [Терминология CSP](#терминология-csp)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -400,10 +415,29 @@ connect-src *;
 
 ---
 
-## Что важно понимать
+## Ключевые тезисы для интервью
 
-CSP — это не замена экранированию и санитизации, а вторая линия обороны. Даже если в приложении есть XSS, правильно настроенная CSP может предотвратить выполнение вредоносного кода.
+- CSP — это HTTP-заголовок, указывающий браузеру, откуда разрешено загружать ресурсы. Даже при XSS вредоносный `<script>` не выполнится.
+- `default-src` задаёт значение по умолчанию; `script-src`, `style-src`, `img-src`, `connect-src`, `frame-ancestors` — самые важные директивы.
+- `'unsafe-inline'` в `script-src` сводит защиту от XSS на нет. Используйте nonce или hash.
+- Nonce — криптографически случайный токен (128 бит), генерируется на каждый запрос, встраивается в тег и в CSP-заголовок.
+- Hash-based CSP разрешает конкретный inline-скрипт по SHA-хэшу; удобно для статики, но любое изменение требует пересчёта.
+- `'strict-dynamic'` доверяет скриптам, загруженным доверенным корневым скриптом — упрощает работу с бандлерами и динамическими импортами.
+- `frame-ancestors 'none'` защищает от clickjacking-атак; современный аналог `X-Frame-Options: DENY`.
+- `Content-Security-Policy-Report-Only` позволяет собирать отчёты о нарушениях, не блокируя ресурсы — оптимальный способ внедрения.
+- Nuxt Security и Next.js middleware автоматизируют nonce и генерацию политики.
+- Типичные ошибки: `'unsafe-inline'`, `https:` в `script-src`, `*` в `connect-src`, отсутствие `frame-ancestors`, предсказуемый nonce.
 
-Идеальная CSP — это политика без `'unsafe-inline'` и `'unsafe-eval'` с явным перечислением источников. На практике к этому приходят постепенно, через Report-Only режим и nonce-based подход.
+## Заключение
 
-Для SOC2 и CASA наличие CSP, настроенной и мониторящей нарушения, является важным evidence защиты клиентских данных.
+CSP — не замена экранированию и санитизации, а вторая линия обороны. Даже если в приложении есть XSS, правильно настроенная политика может предотвратить выполнение вредоносного кода. Идеальная CSP — это политика без `'unsafe-inline'` и `'unsafe-eval'` с явным перечислением источников; на практике к этому приходят постепенно, через Report-Only режим и nonce-based подход. Для SOC2 и CASA наличие настроенной и мониторящей нарушения CSP — важный evidence защиты клиентских данных.
+
+## Полезные ссылки
+
+- [MDN — Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
+- [W3C — Content Security Policy Level 3](https://www.w3.org/TR/CSP3/)
+- [Content Security Policy Reference](https://content-security-policy.com/)
+- [Google — Adopting a strict CSP](https://web.dev/articles/strict-csp)
+- [CSP Evaluator](https://csp-evaluator.withgoogle.com/)
+- [Next.js — Content Security Policy](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)
+- [Nuxt Security — CSP](https://nuxt-security.vercel.app/documentation/headers/csp)

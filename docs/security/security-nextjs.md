@@ -1,12 +1,24 @@
 ---
-title: "Безопасность Next.js: Server Components, Server Actions и заголовки"
+title: "Безопасность Next.js"
 section: security
-description: "Безопасность Next.js: Server Components, Server Actions и заголовки"
+description: "Server Components, Server Actions, middleware, Route Handlers, CSP с nonce, security-заголовки, защита от Open Redirect в Next.js App Router."
 order: 6
-tags: ["безопасность", "nextjs", "server", "components", "actions"]
+tags: ["nextjs", "server-components", "server-actions", "middleware", "route-handlers"]
+questions:
+  - "Как Next.js размывает границу между фронтендом и бэкендом?"
+  - "Как данные из Server Component утекают в клиентский бандл через RSC Payload?"
+  - "Какие проверки обязательны в каждом Server Action?"
+  - "Как использовать middleware для защиты маршрутов и установки заголовков?"
+  - "Как настроить nonce-based CSP через middleware?"
+  - "Что такое CVE-2025-55182 и как от него защититься?"
+  - "Как защитить приложение от Open Redirect?"
+  - "Чем App Router отличается от Pages Router с точки зрения безопасности?"
+  - "Почему Edge Runtime ограничивает возможности middleware?"
 ---
 
-# Безопасность Next.js: Server Components, Server Actions и заголовки
+# Безопасность Next.js
+
+Next.js — full-stack фреймворк, в котором фронтенд-разработчик работает и с браузером, и с сервером: Server Components, Client Components, Server Actions, Route Handlers, middleware. Каждый слой имеет свою модель безопасности: секреты только в серверном коде, валидация и авторизация в Server Actions, CSP с nonce через middleware, защита от утечки данных через RSC Payload и Open Redirect. Статья систематизирует практики безопасности в App Router и объясняет, что изменилось по сравнению с Pages Router.
 
 ## Содержание
 
@@ -22,6 +34,9 @@ tags: ["безопасность", "nextjs", "server", "components", "actions"]
 10. [App Router vs Pages Router](#app-router-vs-pages-router)
 11. [Чек-лист безопасности Next.js](#чек-лист-безопасности-nextjs)
 12. [Терминология](#терминология)
+13. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+14. [Заключение](#заключение)
+15. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -461,13 +476,29 @@ redirect(isInternal ? callbackUrl : '/');
 
 ---
 
-## Что важно понимать
+## Ключевые тезисы для интервью
 
-Next.js размывает границу между фронтендом и бэкендом. Это даёт мощь, но и ответственность. Фронтенд-разработчик Next.js должен уметь:
+- В App Router все компоненты по умолчанию серверные; `"use client"` явно помечает клиентские — только они попадают в бандл.
+- Данные из Server Component, переданные в Client Component, целиком сериализуются в RSC Payload — передавайте только нужные поля через `select`.
+- Server Action — это HTTP-endpoint, доступный из любого клиента; всегда валидируйте вход (Zod), проверяйте авторизацию и владение ресурсом.
+- CVE-2025-55182 в Server Actions (React 19.0.0–19.2.2) показал: серверный код Next.js требует такого же мониторинга и обновлений, как любой другой сервер.
+- Middleware — Edge Runtime до рендеринга; хорош для редиректов, заголовков и генерации nonce, но не заменяет проверку авторизации в Server Actions.
+- Route Handlers (`route.ts`) — это API endpoints App Router; валидируйте query, body и заголовки.
+- Nonce-based CSP через middleware — рекомендуемый подход в Next.js 15+; nonce читается через `headers()` и передаётся в `<script nonce=...>`.
+- Open Redirect защищается проверкой префикса URL или белым списком; никогда не делайте `redirect(searchParams.get('callbackUrl'))` без валидации.
+- В Pages Router `getServerSideProps` сериализует данные в HTML — риск stored XSS при попадании необработанного ввода.
+- Middleware работает на Edge Runtime с ограниченным API; тяжёлую логику выносите в Route Handlers.
 
-- разделять серверный и клиентский код;
-- валидировать и авторизовать Server Actions;
-- настраивать CSP и security-заголовки;
-- защищать от Open Redirect и утечки данных.
+## Заключение
 
-Для SOC2 и CASA это означает, что security-контроли должны охватывать и Server Components, и Client Components, и middleware.
+Next.js размывает границу между фронтендом и бэкендом. Это даёт мощь, но и ответственность: фронтенд-разработчик должен уметь разделять серверный и клиентский код, валидировать и авторизовать Server Actions, настраивать CSP и security-заголовки, защищать от Open Redirect и утечки данных через RSC Payload. Server Actions удобны, но их атакующая поверхность — не UI, а HTTP-endpoint, доступный любому. Для SOC2 и CASA это означает, что security-контроли должны охватывать и Server Components, и Client Components, и middleware, и Route Handlers.
+
+## Полезные ссылки
+
+- [Next.js — Security](https://nextjs.org/docs/app/building-your-application/authentication)
+- [Next.js — Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations)
+- [Next.js — Middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware)
+- [Next.js — Content Security Policy](https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy)
+- [Auth.js (NextAuth.js)](https://authjs.dev/)
+- [Vercel — Security Best Practices](https://vercel.com/docs/security)
+- [CVE-2025-55182 advisory](https://github.com/facebook/react/security/advisories)

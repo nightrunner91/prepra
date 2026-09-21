@@ -1,12 +1,24 @@
 ---
-title: "Безопасность Vue и Nuxt: специфика фреймворка"
+title: "Безопасность Vue и Nuxt"
 section: security
-description: "Безопасность Vue и Nuxt: специфика фреймворка"
+description: "Vue/Nuxt: `v-html`, refs, серверные маршруты Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP и защита от XSS в SSR-контексте."
 order: 9
-tags: ["безопасность", "vue", "nuxt", "специфика", "фреймворка"]
+tags: ["vue", "nuxt", "v-html", "nuxt-security", "nitro", "runtime-config"]
+questions:
+  - "Как Vue экранирует текстовые интерполяции и что остаётся уязвимым?"
+  - "Почему `v-html` опасен и как его безопасно использовать?"
+  - "Как валидировать URL в `:href` и что делает `rel=\"noopener noreferrer\"`?"
+  - "Почему `innerHTML` через ref обходит защиту Vue?"
+  - "Чем `runtimeConfig` отличается от `appConfig` в Nuxt?"
+  - "Как настроить CSP через `nuxt-security` с nonce?"
+  - "Что такое Nitro и как валидировать вход в серверных маршрутах?"
+  - "Почему `v-html` в SSR особенно опасен?"
+  - "Как добавить CSRF-защиту в Nuxt?"
 ---
 
-# Безопасность Vue и Nuxt: специфика фреймворка
+# Безопасность Vue и Nuxt
+
+Vue, как и React, автоматически экранирует текстовые интерполяции — но у него есть мощные инструменты (`v-html`, refs, серверные маршруты Nitro), которые требуют осознанного подхода. В Nuxt добавляется SSR: `v-html` в серверном рендеринге особенно опасен, потому что вредоносный код попадает в исходный HTML ещё до гидратации. Статья разбирает специфику Vue и Nuxt: границы защиты фреймворка, `runtimeConfig` для секретов, `nuxt-security` для CSP и заголовков, серверные маршруты Nitro с валидацией и авторизацией.
 
 ## Содержание
 
@@ -23,6 +35,9 @@ tags: ["безопасность", "vue", "nuxt", "специфика", "фре�
 11. [CSP в Nuxt](#csp-в-nuxt)
 12. [Чек-лист для Vue/Nuxt](#чек-лист-для-vuenuxt)
 13. [Терминология](#терминология)
+14. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+15. [Заключение](#заключение)
+16. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -499,13 +514,29 @@ export default defineEventHandler((event) => {
 
 ---
 
-## Что важно понимать
+## Ключевые тезисы для интервью
 
-Vue и Nuxt предоставляют хорошую базовую защиту от XSS через автоматическое экранирование, но у них есть мощные инструменты (`v-html`, refs, server routes), которые требуют осознанного подхода.
+- Vue автоматически экранирует `{{ }}` через `textContent` — прямая аналогия с JSX в React.
+- `v-html` — прямой эквивалент `dangerouslySetInnerHTML`; без DOMPurify — XSS-уязвимость.
+- Vue не проверяет протоколы URL: `javascript:alert(1)` в `:href` выполнится при клике.
+- `rel="noopener noreferrer"` для `target="_blank"` защищает от tabnabbing через `window.opener`.
+- `innerHTML` через `ref` обходит защиту фреймворка — избегайте прямой манипуляции DOM.
+- Токен сессии в памяти (через composable) защищён от XSS лучше, чем в `localStorage`.
+- В Nuxt `v-html` в SSR попадает в исходный HTML, который выполняется мгновенно до гидратации — санитизация обязательна и на сервере.
+- `runtimeConfig` без `public` — только сервер; `runtimeConfig.public` — клиент и сервер.
+- `nuxt-security` из коробки настраивает CSP с nonce, security-заголовки, rate limiting и SRI.
+- Nitro — серверный движок Nuxt; серверные маршруты (`server/api/`) требуют валидации (Zod) и проверки авторизации/владения ресурсом.
 
-Для SOC2 и CASA важно показать, что команда:
+## Заключение
 
-- понимает различие между клиентом и сервером в Nuxt;
-- использует `runtimeConfig` для секретов;
-- валидирует данные в Nitro;
-- настраивает CSP и security-заголовки через `nuxt-security`.
+Vue и Nuxt предоставляют хорошую базовую защиту от XSS через автоматическое экранирование, но у них есть мощные инструменты — `v-html`, refs, серверные маршруты Nitro — которые требуют осознанного подхода. Особенности SSR удваивают риски: вредоносный `v-html` попадает в исходный HTML и индексируется поисковиками. Модуль `nuxt-security` закрывает большинство инфраструктурных задач: CSP с nonce, security-заголовки, rate limiting. Для SOC2 и CASA важно показать, что команда понимает различие между клиентом и сервером в Nuxt, использует `runtimeConfig` для секретов, валидирует данные в Nitro и настраивает защиту через `nuxt-security`.
+
+## Полезные ссылки
+
+- [Vue.js — Security](https://vuejs.org/guide/best-practices/security.html)
+- [Nuxt — Runtime Config](https://nuxt.com/docs/guide/going-further/runtime-config)
+- [Nuxt Security](https://nuxt-security.vercel.app/)
+- [Nitro — Server Engine](https://nitro.unjs.io/)
+- [Sidebase Nuxt Auth](https://sidebase.io/nuxt-auth)
+- [DOMPurify](https://github.com/cure53/DOMPurify)
+- [MDN — noopener](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/noopener)

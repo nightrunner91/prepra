@@ -1,12 +1,24 @@
 ---
-title: "XSS: анатомия атаки и защита во Vue, React, Nuxt и Next.js"
+title: "XSS: анатомия атаки и методы защиты"
 section: security
-description: "XSS: анатомия атаки и защита во Vue, React, Nuxt и Next.js"
+description: "XSS-атаки во фронтенде: reflected, stored, DOM-based, mXSS. Экранирование, санитизация, `dangerouslySetInnerHTML`, `v-html`, Trusted Types."
 order: 10
-tags: ["xss", "анатомия", "атаки", "защита", "vue"]
+tags: ["xss", "sanitization", "dompurify", "dangerouslysetinnerhtml", "v-html", "trusted-types"]
+questions:
+  - "В чём разница между reflected, stored и DOM-based XSS?"
+  - "Что такое mutation XSS и почему нельзя писать свой санитайзер?"
+  - "Чем экранирование отличается от санитизации и валидации?"
+  - "Как React защищает от XSS и где эта защита не работает?"
+  - "Почему `dangerouslySetInnerHTML` и `v-html` требуют особого обращения?"
+  - "Как `javascript:` URL могут обойти защиту фреймворка?"
+  - "Что делает Trusted Types и как их включить?"
+  - "Почему HttpOnly cookies надёжнее `localStorage` для хранения токенов?"
+  - "Какие места в SSR/Nuxt/Next.js особенно уязвимы к XSS?"
 ---
 
-# XSS: анатомия атаки и защита во Vue, React, Nuxt и Next.js
+# XSS: анатомия атаки и методы защиты
+
+XSS (Cross-Site Scripting) — класс атак, при которых злоумышленник внедряет исполняемый код в страницу жертвы. Уязвимость существует почти 30 лет и по-прежнему в OWASP Top 10: каждый ввод, каждое `innerHTML`, каждый rich-text редактор — потенциальный вектор. Статья разбирает механику типов XSS, чем экранирование отличается от санитизации, где заканчивается защита React и Vue, и как Trusted Types закрывают последние DOM-based уязвимости.
 
 ## Содержание
 
@@ -21,6 +33,9 @@ tags: ["xss", "анатомия", "атаки", "защита", "vue"]
 9. [Trusted Types: последний рубеж](#trusted-types-последний-рубеж)
 10. [Практический чек-лист защиты от XSS](#практический-чек-лист-защиты-от-xss)
 11. [Термины, которые должен знать фронтендер](#термины-которые-должен-знать-фронтендер)
+12. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+13. [Заключение](#заключение)
+14. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -394,8 +409,29 @@ element.innerHTML = policy.createHTML(userInput);
 
 ---
 
-## Что важно понимать
+## Ключевые тезисы для интервью
 
-XSS — это не «одна уязвимость», а целый класс атак. Современные фреймворки закрывают самые очевидные векторы, но не могут защитить от неосмотрительного использования мощных инструментов вроде `v-html` или `dangerouslySetInnerHTML`.
+- XSS — это не одна уязвимость, а класс атак: reflected, stored, DOM-based, mutation, self-XSS, blind XSS.
+- Reflected XSS приходит в HTTP-запросе, stored — сохраняется на сервере и поражает всех, DOM-based — живёт полностью на клиенте.
+- Экранирование, санитизация и валидация решают разные задачи: экранируй текст, санитизируй HTML, валидируй формат.
+- React и Vue автоматически экранируют текстовые вставки (`{...}`, `{{ ... }}`), но не защищают от `dangerouslySetInnerHTML`/`v-html`, `javascript:` URL и прямого доступа к DOM.
+- Санитайзер писать самому нельзя — mXSS использует различия в парсинге HTML. Используйте DOMPurify.
+- SSR (Next.js, Nuxt) увеличивает риск: stored XSS попадает в исходный HTML ещё до гидратации.
+- CSP — вторая линия обороны: даже если XSS случился, `script-src 'self'` с nonce блокирует выполнение.
+- Trusted Types требуют «доверенные» объекты вместо строк для `innerHTML`, полностью закрывая DOM-based XSS.
+- Токены сессии храните в HttpOnly cookies, а не в `localStorage` — XSS не сможет их прочитать.
+- Sources (URL, form, `postMessage`) и sinks (`innerHTML`, `eval`, `document.write`) — ключевые точки для code review.
 
-Лучшая защита — это многослойная: экранирование на уровне фреймворка, санитизация при необходимости, CSP как вторая линия обороны, Trusted Types для DOM-операций и регулярный аудит кода.
+## Заключение
+
+XSS — не одна уязвимость, а целый класс атак с разными точками входа и разной механикой. Современные фреймворки закрывают самые очевидные векторы через автоматическое экранирование, но не могут защитить от неосмотрительного использования `v-html`, `dangerouslySetInnerHTML`, `innerHTML` через refs или сторонних библиотек с внутренними уязвимостями. Лучшая защита многослойна: экранирование на уровне фреймворка, санитизация через DOMPurify при необходимости, CSP как вторая линия обороны, Trusted Types для DOM-операций и регулярный аудит кода с фокусом на sources и sinks.
+
+## Полезные ссылки
+
+- [OWASP — Cross-Site Scripting (XSS)](https://owasp.org/www-community/attacks/xss/)
+- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
+- [DOMPurify](https://github.com/cure53/DOMPurify)
+- [MDN — Trusted Types](https://developer.mozilla.org/en-US/docs/Web/API/Trusted_Types_API)
+- [React — Rendering values as text](https://react.dev/reference/react-dom/components/common#rendering-values-as-text)
+- [Vue — Security](https://vuejs.org/guide/best-practices/security.html)
+- [Nuxt Security](https://nuxt-security.vercel.app/)
