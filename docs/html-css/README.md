@@ -1,6 +1,6 @@
 # HTML и CSS
 
-Раздел углубляет понимание браузерного фундамента: как HTML и CSS работают под капотом, как строится страница, как устроены раскладки и современные механизмы стилизации. Материалы ориентированы на Middle+/Senior-собеседования и уверенную разработку.
+Раздел углубляет понимание браузерного фундамента: как HTML и CSS работают под капотом, как строится страница, как устроены раскладки и современные механизмы стилизации.
 
 ## Начни с базы 📚
 
@@ -23,7 +23,9 @@
 - **[Адаптивность и container queries](./css-responsive-container-queries.md)** — media queries, container queries, viewport units, `prefers-*`.
 - **[Анимации и производительность](./css-animations-performance.md)** — transitions/animations, composite-only свойства, `will-change`, `contain`.
 - **[CSS-переменные и архитектура](./css-variables-architecture.md)** — custom properties, theming, BEM/CUBE/layers, CSS Modules vs CSS-in-JS.
+- **[Современные селекторы и возможности CSS](./css-modern-selectors.md)** — `:is`/`:where`/`:has`/`:not`, nesting, logical properties, color spaces.
+- **[Способы применения CSS в клиентских приложениях](./css-styling-approaches.md)** — разбор подходов применения CSS в современном вебе.
 
 ## Не будет лишним ✍
 
-- **[Современные селекторы и возможности CSS](./css-modern-selectors.md)** — `:is`/`:where`/`:has`/`:not`, nesting, logical properties, color spaces.
+
