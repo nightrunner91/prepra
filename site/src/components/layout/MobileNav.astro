@@ -1,4 +1,5 @@
 ---
+import { sections } from "../../lib/sections";
 import { withBase } from "../../lib/urls";
 import { X } from "@phosphor-icons/react";
 
@@ -7,22 +8,6 @@ interface Props {
 }
 
 const { currentSection } = Astro.props;
-
-const sections = [
-  { id: "javascript", label: "JavaScript" },
-  { id: "typescript", label: "TypeScript" },
-  { id: "react", label: "React" },
-  { id: "nextjs", label: "Next.js" },
-  { id: "testing", label: "Тестирование" },
-  { id: "html-css", label: "HTML и CSS" },
-  { id: "performance", label: "Производительность" },
-  { id: "architecture", label: "Архитектура" },
-  { id: "state-management", label: "Хранилища" },
-  { id: "api-communication", label: "API" },
-  { id: "build-and-deployment", label: "Сборка и деплой" },
-  { id: "platforms", label: "Платформы" },
-  { id: "security", label: "Безопасность" },
-];
 ---
 
 <div

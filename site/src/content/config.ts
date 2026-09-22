@@ -15,7 +15,6 @@ const articleSchema = z.object({
     'api-communication',
     'build-and-deployment',
     'html-css',
-    'platforms',
     'security',
     'ai',
   ]),
@@ -45,7 +44,6 @@ export const collections = {
   'api-communication': articles('api-communication'),
   'build-and-deployment': articles('build-and-deployment'),
   'html-css': articles('html-css'),
-  platforms: articles('platforms'),
   security: articles('security'),
   ai: articles('ai'),
 };

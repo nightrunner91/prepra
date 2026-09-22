@@ -1,0 +1,31 @@
+import {
+  Atom,
+  BracketsCurly,
+  Brain,
+  CheckSquare,
+  Code,
+  Database,
+  FileCode,
+  Lightning,
+  Package,
+  PlugsConnected,
+  Rocket,
+  Shield,
+  TreeStructure,
+} from "@phosphor-icons/react";
+
+export const sections = [
+  { id: "javascript", label: "JavaScript", icon: Code },
+  { id: "typescript", label: "TypeScript", icon: BracketsCurly },
+  { id: "react", label: "React", icon: Atom },
+  { id: "nextjs", label: "Next.js", icon: Rocket },
+  { id: "testing", label: "Тестирование", icon: CheckSquare },
+  { id: "html-css", label: "HTML и CSS", icon: FileCode },
+  { id: "performance", label: "Производительность", icon: Lightning },
+  { id: "architecture", label: "Архитектура", icon: TreeStructure },
+  { id: "state-management", label: "Хранилища", icon: Database },
+  { id: "api-communication", label: "API", icon: PlugsConnected },
+  { id: "build-and-deployment", label: "Сборка и деплой", icon: Package },
+  { id: "security", label: "Безопасность", icon: Shield },
+  { id: "ai", label: "AI и LLM", icon: Brain },
+];
