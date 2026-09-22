@@ -1,8 +1,8 @@
 ---
 title: "PWA в React и Next.js"
-section: platforms
+section: build-and-deployment
 description: "Progressive Web Apps: manifest, Service Worker, стратегии кэширования, offline, push и Background Sync — на примерах React и Next.js."
-order: 2
+order: 9
 tags: ["pwa", "service-worker", "web-app-manifest", "workbox", "next-pwa"]
 questions:
   - "Из каких трёх обязательных частей состоит PWA"

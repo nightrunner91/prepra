@@ -24,3 +24,5 @@
 - **[React Fiber](./react_fiber.md)** — внутреннее устройство reconciler для глубокого понимания.
 - **[use()](./react_use.md)** — новый хук для Promise и Context.
 - **[useImperativeHandle](./react_use_imperative_handle.md)** — управление императивным API дочерних компонентов.
+- **[Preact](./preact.md)** — лёгкий React-совместимый рантайм, миграция через `preact/compat`, Preact Signals, trade-offs.
+- **[React Native](./react-native-intro.md)** — компоненты, стилизация, навигация, состояние, нативные модули, Expo vs Bare, публикация.

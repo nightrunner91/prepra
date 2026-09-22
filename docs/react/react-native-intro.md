@@ -1,8 +1,8 @@
 ---
 title: "React Native для React-разработчиков"
-section: platforms
+section: react
 description: "React Native для тех, кто пришёл из React: как устроен рантайм, чем отличаются компоненты, стилизация, навигация и как выбрать между Expo и Bare CLI."
-order: 3
+order: 16
 tags: ["react-native", "expo", "fabric", "turbomodules", "expo-router"]
 questions:
   - "Как React Native рендерит UI и почему это не WebView"

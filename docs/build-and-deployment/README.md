@@ -18,3 +18,4 @@
 ## Не будет лишним ✍
 
 - **[Платформы деплоя](./deployment-platforms.md)** — Vercel, Netlify, Railway, Render, Fly.io, Cloudflare Pages/Workers, AWS/GCP/Azure. Сравнение, цены, ограничения.
+- **[PWA](./pwa.md)** — манифест, Service Workers, офлайн, push, кэширование, установка на устройство.
