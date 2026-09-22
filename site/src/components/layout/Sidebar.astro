@@ -1,4 +1,20 @@
 ---
+import {
+  Atom,
+  BracketsCurly,
+  Brain,
+  CheckSquare,
+  Code,
+  Database,
+  Devices,
+  FileCode,
+  Lightning,
+  Package,
+  PlugsConnected,
+  Rocket,
+  Shield,
+  TreeStructure,
+} from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
 
 interface Props {
@@ -8,32 +24,20 @@ interface Props {
 const { currentSection } = Astro.props;
 
 const sections = [
-  { id: "javascript", label: "JavaScript", desc: "Основы, ES6+, замыкания" },
-  { id: "typescript", label: "TypeScript", desc: "Типизация, дженерики" },
-  { id: "react", label: "React", desc: "Хуки, паттерны" },
-  { id: "nextjs", label: "Next.js", desc: "Роутинг, SSR" },
-  { id: "testing", label: "Тестирование", desc: "Unit, E2E, моки" },
-  { id: "html-css", label: "HTML и CSS", desc: "Семантика, layout" },
-  {
-    id: "performance",
-    label: "Производительность",
-    desc: "Метрики, оптимизация",
-  },
-  { id: "architecture", label: "Архитектура", desc: "Паттерны, SOLID" },
-  {
-    id: "state-management",
-    label: "Управление состоянием",
-    desc: "Zustand, TanStack",
-  },
-  { id: "api-communication", label: "API", desc: "REST, GraphQL" },
-  {
-    id: "build-and-deployment",
-    label: "Сборка и деплой",
-    desc: "CI/CD, бандлы",
-  },
-  { id: "platforms", label: "Платформы", desc: "PWA, React Native" },
-  { id: "security", label: "Безопасность", desc: "XSS, CSRF, CSP" },
-  { id: "ai", label: "AI и LLM", desc: "Модели, агенты, RAG" },
+  { id: "javascript", label: "JavaScript", icon: Code },
+  { id: "typescript", label: "TypeScript", icon: BracketsCurly },
+  { id: "react", label: "React", icon: Atom },
+  { id: "nextjs", label: "Next.js", icon: Rocket },
+  { id: "testing", label: "Тестирование", icon: CheckSquare },
+  { id: "html-css", label: "HTML и CSS", icon: FileCode },
+  { id: "performance", label: "Производительность", icon: Lightning },
+  { id: "architecture", label: "Архитектура", icon: TreeStructure },
+  { id: "state-management", label: "Хранилища", icon: Database },
+  { id: "api-communication", label: "API", icon: PlugsConnected },
+  { id: "build-and-deployment", label: "Сборка и деплой", icon: Package },
+  { id: "platforms", label: "Платформы", icon: Devices },
+  { id: "security", label: "Безопасность", icon: Shield },
+  { id: "ai", label: "AI и LLM", icon: Brain },
 ];
 ---
 
@@ -42,21 +46,22 @@ const sections = [
 >
   <div class="space-y-0.5">
     {
-      sections.map((s) => (
-        <a
-          href={withBase(`/${s.id}`)}
-          class={`block rounded-[5px] px-3 py-2 text-[13px] transition-colors ${
-            currentSection === s.id
-              ? "bg-surface-alt text-text font-medium"
-              : "text-text-secondary hover:text-accent hover:bg-surface-alt/50"
-          }`}
-        >
-          <span class="block">{s.label}</span>
-          <span class="block text-sm text-text-tertiary font-normal mt-0.5">
-            {s.desc}
-          </span>
-        </a>
-      ))
+      sections.map((s) => {
+        const Icon = s.icon;
+        return (
+          <a
+            href={withBase(`/${s.id}`)}
+            class={`flex items-center gap-2 rounded-[5px] px-3 py-2 text-[14px] transition-colors ${
+              currentSection === s.id
+                ? "bg-surface-alt text-text font-medium"
+                : "text-text-secondary hover:text-accent hover:bg-surface-alt/50"
+            }`}
+          >
+            <Icon size={16} class="shrink-0" />
+            <span>{s.label}</span>
+          </a>
+        );
+      })
     }
   </div>
 </aside>
