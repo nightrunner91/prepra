@@ -18,6 +18,7 @@ const articleSchema = z.object({
     'html-css',
     'platforms',
     'security',
+    'ai',
   ]),
   description: z.string().optional(),
   order: z.number(),
@@ -48,4 +49,5 @@ export const collections = {
   'html-css': articles('html-css'),
   platforms: articles('platforms'),
   security: articles('security'),
+  ai: articles('ai'),
 };
