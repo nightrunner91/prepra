@@ -8,22 +8,22 @@ interface Props {
 const { label, color = "neutral", size = "sm" } = Astro.props;
 
 const colorMap = {
-  red: "bg-pale-red-bg text-pale-red-text",
-  blue: "bg-pale-blue-bg text-pale-blue-text",
-  green: "bg-pale-green-bg text-pale-green-text",
-  yellow: "bg-pale-yellow-bg text-pale-yellow-text",
-  neutral: "bg-surface-alt text-text-secondary",
+  red: "bg-pale-red-bg text-pale-red-text badge-hover-red",
+  blue: "bg-pale-blue-bg text-pale-blue-text badge-hover-blue",
+  green: "bg-pale-green-bg text-pale-green-text badge-hover-green",
+  yellow: "bg-pale-yellow-bg text-pale-yellow-text badge-hover-yellow",
+  neutral: "bg-surface-alt text-text-secondary badge-hover-neutral",
 };
 
 const sizeMap = {
   xs: "px-2 py-0.5 text-xs",
-  sm: "px-2 py-0.5 text-sm",
-  md: "px-3 py-1 text-xs",
+  sm: "px-2.5 py-1 text-sm",
+  md: "px-3 py-1 text-md",
 };
 ---
 
 <span
-  class={`inline-block rounded-full font-mono uppercase tracking-wider ${colorMap[color]} ${sizeMap[size]}`}
+  class={`inline-block rounded-full font-mono uppercase tracking-wider transition-all cursor-pointer ${colorMap[color]} ${sizeMap[size]}`}
 >
   {label}
 </span>

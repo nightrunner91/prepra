@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Code:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,7 +7,7 @@
 :root {
   --font-sans: 'Google Sans', 'SF Pro Display', 'Helvetica Neue', sans-serif;
   --font-serif: 'Google Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-mono: 'Google Sans Code', 'SF Mono', monospace;
 
   --color-canvas: #FBFBFA;
   --color-surface: #FFFFFF;
@@ -22,12 +22,20 @@
 
   --color-pale-red-bg: #FDEBEC;
   --color-pale-red-text: #9F2F2D;
+  --color-pale-red-bg-hover: #FAD5D7;
+  --color-pale-red-text-hover: #7A2422;
   --color-pale-blue-bg: #E1F3FE;
   --color-pale-blue-text: #1F6C9F;
+  --color-pale-blue-bg-hover: #C5E7FD;
+  --color-pale-blue-text-hover: #175580;
   --color-pale-green-bg: #EDF3EC;
   --color-pale-green-text: #346538;
+  --color-pale-green-bg-hover: #D9E6D7;
+  --color-pale-green-text-hover: #274D2A;
   --color-pale-yellow-bg: #FBF3DB;
   --color-pale-yellow-text: #956400;
+  --color-pale-yellow-bg-hover: #F5E6B8;
+  --color-pale-yellow-text-hover: #704B00;
 }
 
 .dark {
@@ -44,12 +52,20 @@
 
   --color-pale-red-bg: #2D1A1B;
   --color-pale-red-text: #E8888A;
+  --color-pale-red-bg-hover: #3D2425;
+  --color-pale-red-text-hover: #F0A5A7;
   --color-pale-blue-bg: #152530;
   --color-pale-blue-text: #7BB8DE;
+  --color-pale-blue-bg-hover: #1D3342;
+  --color-pale-blue-text-hover: #9CCCE8;
   --color-pale-green-bg: #1A2519;
   --color-pale-green-text: #8BBF8E;
+  --color-pale-green-bg-hover: #243323;
+  --color-pale-green-text-hover: #A8D4AA;
   --color-pale-yellow-bg: #2A2415;
   --color-pale-yellow-text: #D4B55A;
+  --color-pale-yellow-bg-hover: #3A3220;
+  --color-pale-yellow-text-hover: #E0C878;
 }
 
 @layer base {
@@ -124,6 +140,36 @@
 
   .dark .card-hover:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .badge-hover-red:hover {
+    background-color: var(--color-pale-red-bg-hover);
+    color: var(--color-pale-red-text-hover);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pale-red-text) 30%, transparent);
+  }
+
+  .badge-hover-blue:hover {
+    background-color: var(--color-pale-blue-bg-hover);
+    color: var(--color-pale-blue-text-hover);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pale-blue-text) 30%, transparent);
+  }
+
+  .badge-hover-green:hover {
+    background-color: var(--color-pale-green-bg-hover);
+    color: var(--color-pale-green-text-hover);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pale-green-text) 30%, transparent);
+  }
+
+  .badge-hover-yellow:hover {
+    background-color: var(--color-pale-yellow-bg-hover);
+    color: var(--color-pale-yellow-text-hover);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pale-yellow-text) 30%, transparent);
+  }
+
+  .badge-hover-neutral:hover {
+    background-color: var(--color-surface-alt);
+    color: var(--color-text);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-text) 20%, transparent);
   }
 }
 

@@ -112,9 +112,27 @@ const { headings } = await render(entry);
       />
     </div>
 
+    {
+      data.tags && data.tags.length > 0 && (
+        <div class="mb-6 flex flex-wrap gap-2">
+          {data.tags.map((tag: string) => (
+            <Badge label={tag} size="xs" />
+          ))}
+        </div>
+      )
+    }
+
     <div class="prose prose-gray max-w-none prose-headings:scroll-mt-20">
       <Content />
     </div>
+
+    <button
+      id="read-toggle"
+      type="button"
+      class="mt-10 w-full flex items-center justify-center rounded-[8px] border border-border bg-surface-alt px-6 py-3 font-medium text-text-secondary transition-all hover:border-accent hover:text-accent hover:shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-accent)_15%,transparent)]"
+    >
+      Отметить прочитанным
+    </button>
 
     {
       data.questions && data.questions.length > 0 && (
@@ -144,6 +162,8 @@ const { headings } = await render(entry);
 </PageLayout>
 
 <script>
+  import "@phosphor-icons/web/regular";
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -159,4 +179,52 @@ const { headings } = await render(entry);
   document
     .querySelectorAll(".animate-fade-in")
     .forEach((el) => observer.observe(el));
+
+  const STORAGE_KEY = "prepra:read-articles";
+  const articleId = window.location.pathname.replace(/\/+$/, "");
+  const btn = document.getElementById("read-toggle") as HTMLButtonElement;
+
+  function getReadArticles(): string[] {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    } catch {
+      return [];
+    }
+  }
+
+  function applyState(isRead: boolean) {
+    if (isRead) {
+      btn.innerHTML =
+        '<i class="ph ph-check" style="margin-right:6px"></i>Прочитано';
+      btn.classList.add(
+        "!bg-pale-green-bg-hover",
+        "!text-pale-green-text-hover",
+        "!border-pale-green-text",
+        "!shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-pale-green-text)_25%,transparent)]",
+      );
+    } else {
+      btn.textContent = "Отметить прочитанным";
+      btn.classList.remove(
+        "!bg-pale-green-bg-hover",
+        "!text-pale-green-text-hover",
+        "!border-pale-green-text",
+        "!shadow-[0_0_0_2px_color-mix(in_srgb,var(--color-pale-green-text)_25%,transparent)]",
+      );
+    }
+  }
+
+  const readArticles = getReadArticles();
+  applyState(readArticles.includes(articleId));
+
+  btn.addEventListener("click", () => {
+    const current = getReadArticles();
+    const idx = current.indexOf(articleId);
+    if (idx === -1) {
+      current.push(articleId);
+    } else {
+      current.splice(idx, 1);
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+    applyState(idx === -1);
+  });
 </script>

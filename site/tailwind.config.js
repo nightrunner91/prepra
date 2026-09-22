@@ -28,18 +28,26 @@ export default {
         'pale-red': {
           bg: 'var(--color-pale-red-bg)',
           text: 'var(--color-pale-red-text)',
+          'bg-hover': 'var(--color-pale-red-bg-hover)',
+          'text-hover': 'var(--color-pale-red-text-hover)',
         },
         'pale-blue': {
           bg: 'var(--color-pale-blue-bg)',
           text: 'var(--color-pale-blue-text)',
+          'bg-hover': 'var(--color-pale-blue-bg-hover)',
+          'text-hover': 'var(--color-pale-blue-text-hover)',
         },
         'pale-green': {
           bg: 'var(--color-pale-green-bg)',
           text: 'var(--color-pale-green-text)',
+          'bg-hover': 'var(--color-pale-green-bg-hover)',
+          'text-hover': 'var(--color-pale-green-text-hover)',
         },
         'pale-yellow': {
           bg: 'var(--color-pale-yellow-bg)',
           text: 'var(--color-pale-yellow-text)',
+          'bg-hover': 'var(--color-pale-yellow-bg-hover)',
+          'text-hover': 'var(--color-pale-yellow-text-hover)',
         },
       },
       fontFamily: {
