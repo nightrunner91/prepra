@@ -6,7 +6,8 @@
 
 Если ты только знакомишься с TypeScript или хочешь закрыть пробелы:
 
-1. **[Типы возврата функций](./typescript-function-return-types.md)** — `void`, `never`, `unknown`, Promise, generics и вывод типов.
+1. **[Основы TypeScript](./typescript-fundamentals.md)** — что такое TS, базовые типы, interface vs type, union types, generics, tsconfig.json, компиляция. Самая база для начинающих.
+2. **[Типы возврата функций](./typescript-function-return-types.md)** — `void`, `never`, `unknown`, Promise, generics и вывод типов.
 2. **[TypeGuard](./typescript-typeguard.md)** — встроенные и пользовательские защитники типов.
 3. **[Enums](./typescript-enums.md)** — numeric, string, const enums, reverse mapping, best practices.
 

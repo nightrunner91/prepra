@@ -4,7 +4,8 @@
 
 ## Начни с базы 📚
 
-1. **[Роутинг в App Router](./next_routing.md)** — маршруты, динамические сегменты, группы, middleware.
+1. **[Основы Next.js](./nextjs-fundamentals.md)** — что такое Next.js, файловый роутинг, SSR/SSG/ISR, серверные и клиентские компоненты, оптимизация. Самая база для начинающих.
+2. **[Роутинг в App Router](./next_routing.md)** — маршруты, динамические сегменты, группы, middleware.
 2. **[Серверные и клиентские компоненты](./next_server_client_composition.md)** — правила композиции, interleaving, границы.
 3. **[Data Fetching](./next_data_fetching.md)** — fetch на сервере, клиенте, паттерны загрузки.
 

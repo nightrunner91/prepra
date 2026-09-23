@@ -6,7 +6,8 @@
 
 Если хочешь закрыть пробелы в фундаменте — иди по порядку:
 
-1. **[Парсинг HTML и критический путь рендеринга](./html-rendering-pipeline.md)** — DOM/CSSOM/Render Tree, Layout/Paint/Composite, preload scanner.
+1. **[Основы HTML и CSS](./html-css-fundamentals.md)** — семантическая разметка, селекторы, box model, flexbox, grid, позиционирование, адаптивная вёрстка. Самая база для начинающих.
+2. **[Парсинг HTML и критический путь рендеринга](./html-rendering-pipeline.md)** — DOM/CSSOM/Render Tree, Layout/Paint/Composite, preload scanner.
 2. **[Каскад и специфичность](./css-cascade-specificity.md)** — cascade, origin, `@layer`, specificity, inheritance, `!important`.
 3. **[Formatting контексты и блочная модель](./css-layout-formatting-contexts.md)** — BFC/IFC/FFC/GFC, containing block, margin collapse, box-sizing.
 4. **[Flexbox](./css-flexbox.md)** — оси, `flex-basis`, grow/shrink, alignment.

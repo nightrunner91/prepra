@@ -4,7 +4,8 @@
 
 ## Начни с базы 📚
 
-1. **[Порядок рендеринга и вызова хуков](./react_rendering_order.md)** — фазы render/commit, порядок хуков, Strict Mode.
+1. **[Основы React](./react-fundamentals.md)** — что такое React, JSX, компоненты, props, state, события, условный рендеринг, списки. Самая база для начинающих.
+2. **[Порядок рендеринга и вызова хуков](./react_rendering_order.md)** — фазы render/commit, порядок хуков, Strict Mode.
 2. **[Хуки React](./react_hooks.md)** — `useRef`, `useState`, `useReducer`, `useEffect`, `useMemo`, `useCallback`, правила хуков.
 3. **[useEffect](./react_useeffect.md)** — жизненный цикл эффектов, cleanup, зависимости.
 4. **[useContext](./react_usecontext.md)** — передача данных через дерево компонентов.
