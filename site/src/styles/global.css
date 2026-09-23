@@ -92,6 +92,14 @@
     color: var(--color-text);
   }
 
+  a {
+    color: var(--color-accent);
+
+    &:hover {
+      color: var(--color-accent-hover);
+    }
+  }
+
   h1,
   h2,
   h3 {
@@ -198,6 +206,7 @@
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.875em;
+  font-weight: 500;
 }
 
 .prose pre code {
