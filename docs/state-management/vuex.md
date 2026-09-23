@@ -5,16 +5,12 @@ description: "Vuex — официальный стейт-менеджер Vue 2 
 order: 6
 tags: ["vuex", "state-management", "vue", "flux", "pinia"]
 questions:
-  - "Зачем во Vuex разделены mutations и actions?"
-  - "Почему mutations обязаны быть синхронными?"
-  - "Как работает namespaced в модулях Vuex?"
-  - "Чем mapState и mapGetters отличаются от прямого обращения через store?"
-  - "Как правильно обновить вложенный объект в state Vuex?"
-  - "Как получить доступ к store вне компонента?"
-  - "В чём разница между Vuex 3 и Vuex 4?"
-  - "Почему команда Vue заменила Vuex на Pinia?"
-  - "Как тестировать mutations, getters и actions изолированно?"
-  - "Когда стоит остаться на Vuex, а когда мигрировать на Pinia?"
+  - "Почему mutations во Vuex обязаны быть синхронными и как это связано с отслеживанием изменений в DevTools"
+  - "Как getters и actions работают с реактивной системой Vue и какие контексты доступны в actions"
+  - "Как namespaced-модули изолируют пространство имён и как организовать доступ между модулями через rootState и rootGetters"
+  - "Что даёт строгий режим strict mode и почему его отключают в production"
+  - "Почему TypeScript-поддержка во Vuex считается слабой и как это стало одной из причин создания Pinia"
+  - "Как организовать постепенную миграцию с Vuex на Pinia и могут ли оба стейт-менеджера сосуществовать"
 ---
 
 # Vuex: классический стейт-менеджер Vue
@@ -1355,16 +1351,12 @@ store.registerModule('auth', anotherAuthModule) // Ошибка в Vuex 4
 
 ## Ключевые тезисы для интервью
 
-- Vuex построен на архитектуре Flux: state изменяется только через mutations, mutations вызываются только через commit, асинхронщина живёт в actions.
-- Mutations обязаны быть синхронными — иначе DevTools не сможет корректно сопоставить событие и snapshot состояния.
-- Getters — вычисляемые свойства стора, кэшируются реактивной системой Vue и пересчитываются только при изменении зависимостей.
-- Actions принимают контекст (`{ commit, dispatch, state, getters, rootState, rootGetters }`) и могут возвращать Promise — это позволяет цеплять `await store.dispatch(...)`.
-- Модули с `namespaced: true` изолируют своё пространство имён — обращение идёт через `commit('mod/MUT')`, `dispatch('mod/act')`, `getters['mod/x']`.
-- `rootState` и `rootGetters` дают доступ к другим модулям изнутри namespaced-модуля; `dispatch(..., { root: true })` вызывает action другого модуля.
+- Vuex построен на архитектуре Flux: state изменяется только через mutations (синхронные — иначе DevTools не сопоставит событие и snapshot состояния), асинхронщина — в actions с контекстом `{ commit, dispatch, state, getters, rootState, rootGetters }`.
+- Getters — кэшиемые вычисляемые свойства стора; actions могут возвращать Promise и поддерживать `await store.dispatch(...)`.
+- Модули с `namespaced: true` изолируют пространство имён (`commit('mod/MUT')`, `getters['mod/x']`); `rootState`, `rootGetters` и `dispatch(..., { root: true })` дают доступ к другим модулям.
 - Строгий режим (`strict: true`) выбрасывает ошибку при мутациях state вне mutations — обязателен в dev, отключается в production ради производительности.
-- Vuex 4 адаптирован под Vue 3: `createStore()` вместо `new Vuex.Store()`, `useStore()` в Composition API, реактивность через Proxy.
-- TypeScript в Vuex работает слабо: `commit` и `dispatch` принимают строковые ключи без строгой типизации — одна из главных причин появления Pinia.
-- Официальный путь миграции: Vuex → Pinia. Оба стейт-менеджера могут сосуществовать, что позволяет переносить модули постепенно.
+- Vuex 4 адаптирован под Vue 3: `createStore()`, `useStore()` в Composition API, реактивность через Proxy. TypeScript работает слабо: `commit` и `dispatch` — строковые ключи без типизации, одна из главных причин появления Pinia.
+- Официальный путь миграции — Vuex → Pinia. Оба стейт-менеджера могут сосуществовать в одном приложении, что позволяет переносить модули постепенно.
 
 ## Заключение
 

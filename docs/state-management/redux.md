@@ -5,16 +5,12 @@ description: "Redux Toolkit — современный способ писать
 order: 5
 tags: ["redux", "redux-toolkit", "rtk", "rtk-query", "state-management", "flux"]
 questions:
-  - "Чем Redux Toolkit отличается от классического Redux?"
-  - "Как createSlice убирает бойлерплейт action creators и reducers?"
-  - "Почему в reducers Redux Toolkit можно мутировать state напрямую?"
-  - "Когда использовать createAsyncThunk, а когда RTK Query?"
-  - "Как работает middleware Redux и зачем нужен redux-thunk?"
-  - "В чём разница между useSelector с shallowEqual и без него?"
-  - "Как RTK Query кэширует запросы и инвалидирует теги?"
-  - "Что такое нормализация состояния и зачем нужен createEntityAdapter?"
-  - "Почему Redux считается «избыточным» для маленьких приложений?"
-  - "Как тестировать редьюсеры и thunks изолированно?"
+  - "Как архитектура Flux в Redux (единый стор, чистые reducers, однонаправленный поток) обеспечивает предсказуемость и работу DevTools"
+  - "Как createSlice устраняет бойлерплейт классического Redux и почему в reducers можно писать «мутации» благодаря Immer"
+  - "Как createAsyncThunk обрабатывает асинхронные операции и чем отличается от RTK Query для работы с серверными данными"
+  - "Как middleware в Redux формирует цепочку между dispatch и reducer и что configureStore включает по умолчанию"
+  - "Как RTK Query организует кэширование, инвалидацию через теги и автогенерацию хуков для запросов"
+  - "Когда состояние должно оставаться в useState, а когда выносится в Redux — какие данные действительно нуждаются в глобальном сторе"
 ---
 
 # Redux Toolkit: предсказуемое состояние, слайсы, RTK Query
@@ -1313,18 +1309,13 @@ const uiSlice = createSlice({ name: 'ui', ... })
 
 ## Ключевые тезисы для интервью
 
-- Redux — предсказуемый стор на архитектуре Flux: единственный источник истины, изменения через actions, чистые reducers, однонаправленный поток данных.
-- Redux Toolkit — официальная надстройка, устраняющая бойлерплейт: `createSlice`, `configureStore`, Immer, `createAsyncThunk`, RTK Query.
-- `createSlice` генерирует action creators и reducer из одного объекта, тип action формируется как `slice/reducerName`.
-- В reducers Redux Toolkit можно писать «мутации» благодаря Immer — под капотом создаётся новый иммутабельный state.
-- `createAsyncThunk` описывает асинхронное действие с автоматической генерацией pending/fulfilled/rejected actions, обрабатываемых в `extraReducers`.
-- Middleware — цепочка обработчиков между dispatch и reducer; `configureStore` включает `redux-thunk`, проверки иммутабельности и сериализуемости по умолчанию.
-- Selectors + `createSelector` (Reselect) мемоизируют вычисления и предотвращают ненужные ре-рендеры при чтении производных данных.
-- RTK Query — встроенный кэш и слой запросов: автогенерация хуков, теги для инвалидации, polling, оптимистичные обновления.
-- `createEntityAdapter` даёт нормализованный стор `{ ids, entities }` с CRUD-редьюсерами и готовыми селекторами.
-- Локальное состояние компонента (input, dropdown, hover) держите в `useState` — Redux нужен для действительно глобальных данных.
-- В reducers и state запрещены несериализуемые значения (функции, промисы, Date, Map) — иначе сломаются DevTools, персистентность и SSR.
-- Тренд 2020+: новые проекты выбирают Zustand + TanStack Query вместо Redux; Redux остаётся в больших легаси и там, где важна строгость.
+- Redux — предсказуемый стор на архитектуре Flux: единственный источник истины, изменения через actions, чистые reducers, однонаправленный поток данных. Redux Toolkit устраняет бойлерплейт: `createSlice`, `configureStore`, Immer, `createAsyncThunk`, RTK Query.
+- `createSlice` генерирует action creators и reducer из одного объекта (`slice/reducerName`); в reducers можно писать «мутации» благодаря Immer — под капотом создаётся новый иммутабельный state.
+- `createAsyncThunk` описывает асинхронное действие с автогенерацией pending/fulfilled/rejected actions, обрабатываемых в `extraReducers`. Middleware — цепочка между dispatch и reducer; `configureStore` включает `redux-thunk`, проверки иммутабельности и сериализуемости.
+- Selectors + `createSelector` (Reselect) мемоизируют производные данные и предотвращают лишние ре-рендеры.
+- RTK Query — встроенный слой запросов и кэш: автогенерация хуков, теги для инвалидации, polling, оптимистичные обновления. `createEntityAdapter` даёт нормализованный стор `{ ids, entities }` с CRUD-редьюсерами.
+- Локальное состояние (input, dropdown, hover) — в `useState`; Redux — для действительно глобальных данных. В reducers и state запрещены несериализуемые значения (функции, промисы, Date) — иначе сломаются DevTools, персистентность и SSR.
+- Тренд 2020+: новые проекты выбирают Zustand + TanStack Query; Redux остаётся в крупных легаси и там, где важна строгость архитектуры и DevTools.
 
 ## Заключение
 
