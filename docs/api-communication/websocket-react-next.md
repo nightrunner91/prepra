@@ -1,12 +1,23 @@
 ---
 title: "WebSocket в React и Next.js"
 section: api-communication
-description: "WebSocket в React и Next.js"
+description: "WebSocket в React и Next.js: подключение, переподключения, интеграция с Zustand и TanStack Query, масштабирование через Redis и managed-сервисы."
 order: 6
-tags: ["websocket", "react", "nextjs"]
+tags: ["websocket", "usewebsocket", "socket-io", "sse", "exponential-backoff", "redis"]
+questions:
+  - "Чем WebSocket отличается от HTTP и SSE"
+  - "Как установить WebSocket-соединение в React"
+  - "Зачем нужен exponential backoff при переподключении"
+  - "Как интегрировать WebSocket с Zustand"
+  - "Почему WebSocket нельзя использовать в Server Components"
+  - "Как масштабировать WebSocket через Redis Pub/Sub"
+  - "Чем Socket.IO отличается от нативного WebSocket"
+  - "Какие антипаттерны встречаются при работе с WebSocket в React"
 ---
 
 # WebSocket в React и Next.js
+
+WebSocket обеспечивает полнодуплексную связь между клиентом и сервером в реальном времени. В React-приложениях он требует аккуратного управления соединением, переподключениями и интеграцией с состоянием. Разберём паттерны использования WebSocket, особенности в Next.js и способы масштабирования.
 
 ## Содержание
 
@@ -992,3 +1003,27 @@ ws.onopen = () => {
   ws.send(JSON.stringify({ type: "auth", token: authToken }));
 };
 ```
+
+## Ключевые тезисы для интервью
+
+- WebSocket — протокол полнодуплексной связи поверх TCP, обе стороны могут отправлять данные в любой момент.
+- Соединение устанавливается через HTTP Upgrade handshake, затем переключается на WebSocket-протокол.
+- В React WebSocket создаётся в `useEffect`, объект хранится в `useRef`, а не в `useState`.
+- Cleanup в `useEffect` закрывает соединение при размонтировании компонента.
+- Exponential backoff увеличивает задержку между переподключениями: `1000 * 2^attempt`.
+- Очередь сообщений буферизует данные при разорванном соединении и отправляет при восстановлении.
+- Heartbeat (ping/pong) обнаруживает «мёртвые» соединения.
+- Socket.IO — библиотека над WebSocket с встроенным переподключением, rooms и namespaces.
+- В Next.js WebSocket работает только на клиенте, Server Components не поддерживают WebSocket.
+- Масштабирование через sticky sessions и Redis Pub/Sub для рассылки между серверами.
+
+## Заключение
+
+WebSocket решает задачу real-time двусторонней связи. Для React-приложений ключевое — управление жизненным циклом соединения через `useEffect` и `useRef`, обработка переподключений с exponential backoff и интеграция с глобальным состоянием. В Next.js WebSocket-сервер должен быть отдельным сервисом. Для односторонней передачи данных SSE проще и эффективнее.
+
+## Полезные ссылки
+
+- [MDN: WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket)
+- [RFC 6455: The WebSocket Protocol](https://datatracker.ietf.org/doc/html/rfc6455)
+- [Socket.IO Documentation](https://socket.io/docs/v4/)
+- [WebSocket vs SSE](https://websockets.readthedocs.io/en/stable/intro.html)

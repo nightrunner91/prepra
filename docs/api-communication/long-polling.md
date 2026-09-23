@@ -1,12 +1,23 @@
 ---
 title: "Long Polling — обновления через обычный HTTP"
 section: api-communication
-description: "Long Polling — обновления через обычный HTTP"
+description: "Long Polling — техника real-time обновлений через обычный HTTP. Реализация на fetch и в React, обработка ошибок, сравнение с WebSocket и SSE."
 order: 3
-tags: ["long", "polling", "обновления", "через", "обычный"]
+tags: ["long-polling", "real-time", "abortcontroller", "exponential-backoff", "sse", "websocket"]
+questions:
+  - "Чем long polling отличается от обычного polling"
+  - "Как сервер удерживает соединение открытым при long polling"
+  - "Зачем нужен AbortController при реализации long polling"
+  - "Что такое exponential backoff и зачем он нужен"
+  - "Как управлять жизненным циклом long polling в React"
+  - "Чем long polling отличается от WebSocket и SSE"
+  - "Какие проблемы возникают при масштабировании long polling"
+  - "Когда long polling предпочтительнее WebSocket"
 ---
 
 # Long Polling — обновления через обычный HTTP
+
+Long Polling — техника получения обновлений в реальном времени через обычный HTTP. Сервер держит соединение открытым до появления новых данных, что позволяет обойтись без WebSocket. Разберём, как это работает, как реализовать в React и когда long polling оправдан.
 
 ## Содержание
 
@@ -468,9 +479,20 @@ setTimeout(() => controller.abort(), 35000);
 
 ---
 
-## Итог
+## Ключевые тезисы для интервью
 
-**Long Polling** — это простой способ получать обновления с сервера через обычный HTTP. Он проигрывает WebSocket и SSE по эффективности, но остаётся полезным, когда WebSocket недоступен, а SSE не подходит.
+- Long Polling держит соединение открытым до появления новых данных, в отличие от обычного polling.
+- Сервер возвращает ответ при появлении данных или по таймауту (30–60 секунд).
+- Клиент сразу отправляет новый запрос после получения ответа.
+- AbortController останавливает polling при размонтировании компонента.
+- Exponential backoff увеличивает задержку при повторных ошибках.
+- `visibilitychange` позволяет приостановить polling при скрытии вкладки.
+- Long Polling создаёт нагрузку на сервер — каждое соединение удерживается открытым.
+- SSE проще для односторонней доставки, WebSocket — для двусторонней.
+
+## Заключение
+
+**Long Polling** — простой способ получать обновления с сервера через обычный HTTP. Он проигрывает WebSocket и SSE по эффективности, но остаётся полезным, когда WebSocket недоступен, а SSE не подходит.
 
 Ключевые моменты для Middle+ разработчика:
 
@@ -478,3 +500,8 @@ setTimeout(() => controller.abort(), 35000);
 - Понимать разницу между polling, long polling, SSE и WebSocket.
 - Обрабатывать ошибки и переподключения с exponential backoff.
 - Управлять жизненным циклом: останавливать при размонтировании и скрытии вкладки.
+
+## Полезные ссылки
+
+- [MDN: Long Polling](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+- [Socket.IO vs WebSocket](https://socket.io/docs/v4/how-it-works/)

@@ -1,12 +1,23 @@
 ---
 title: "Отмена HTTP-запросов: AbortController, Race Conditions и cleanup"
 section: api-communication
-description: "Отмена HTTP-запросов: AbortController, Race Conditions и cleanup"
+description: "Отмена HTTP-запросов через AbortController в fetch, axios и ky. Предотвращение race conditions, cleanup в useEffect, интеграция с TanStack Query."
 order: 4
-tags: ["отмена", "http-запросов", "abortcontroller", "race", "conditions"]
+tags: ["abortcontroller", "abortsignal", "race-condition", "useeffect", "tanstack-query", "cleanup"]
+questions:
+  - "Зачем отменять HTTP-запросы при размонтировании компонента"
+  - "Как AbortController связан с AbortSignal"
+  - "Что такое race condition и как его предотвратить через AbortController"
+  - "Как отменить fetch, axios и ky через AbortController"
+  - "Зачем проверять error.name === 'AbortError'"
+  - "Как TanStack Query автоматически отменяет запросы"
+  - "Как комбинировать debounce и AbortController для поиска"
+  - "Почему флаг cancelled хуже AbortController"
 ---
 
 # Отмена HTTP-запросов: AbortController, Race Conditions и cleanup
+
+Отмена запросов — обязательный навык Middle+ разработчика. Без неё компонент, размонтировавшийся до получения ответа, может обновить state и вызвать ошибку, а старый запрос перезапишет результат нового. AbortController — стандартный способ решить эти проблемы.
 
 ## Содержание
 
@@ -472,12 +483,30 @@ useEffect(() => {
 
 ---
 
-## Итог
+## Ключевые тезисы для интервью
 
-**Отмена запросов** — обязательный навык Middle+ разработчика. Ключевые моменты:
+- Отмена запросов экономит ресурсы, предотвращает race conditions и утечки памяти.
+- `AbortController` — стандартный браузерный API для отмены асинхронных операций.
+- `fetch`, `axios` и `ky` поддерживают `AbortController` через опцию `signal`.
+- В React запросы отменяются в `useEffect` cleanup через `controller.abort()`.
+- Race condition — старый ответ перезаписывает новый. AbortController решает эту проблему.
+- Флаг `cancelled` предотвращает обновление state, но не отменяет сам запрос.
+- TanStack Query автоматически отменяет запросы — нужно передать `signal` в `queryFn`.
+- `AbortError` нужно проверять отдельно и не логировать как ошибку.
+- Debounce + AbortController — стандартный паттерн для поиска.
+
+## Заключение
+
+Отмена запросов — обязательный навык Middle+ разработчика.
 
 - `AbortController` — стандартный способ отмены для `fetch`, `axios`, `ky`.
 - В React отменяйте запросы в `useEffect` cleanup.
 - `AbortController` решает проблему race conditions при быстрой смене зависимостей.
 - TanStack Query поддерживает сигнал — передавайте его в `queryFn`.
 - Всегда разделяйте `AbortError` и реальные ошибки.
+
+## Полезные ссылки
+
+- [MDN: AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
+- [MDN: AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal)
+- [TanStack Query: Query Cancellation](https://tanstack.com/query/latest/docs/react/guides/query-cancellation)
