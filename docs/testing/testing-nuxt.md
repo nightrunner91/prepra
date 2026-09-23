@@ -5,15 +5,11 @@ description: "Как тестировать Nuxt 3-приложения: нас�
 order: 10
 tags: ["nuxt", "vitest", "mountSuspended", "registerEndpoint", "mockNuxtImport", "composables"]
 questions:
-  - "Почему для тестирования Nuxt 3 недостаточно обычного Vue Test Utils"
-  - "Как настроить Vitest с environment: 'nuxt'"
-  - "Когда использовать mountSuspended вместо обычного mount"
-  - "Как зарегистрировать endpoint для тестирования useFetch"
-  - "Как протестировать composable в изоляции от Nuxt-рантайма"
-  - "Какие способы тестирования server routes существуют и чем они отличаются"
-  - "Как мокировать useRoute, useRouter и useRuntimeConfig"
-  - "Как стабить NuxtLink в компонентных тестах"
-  - "Какие антипаттерны чаще всего встречаются при тестировании Nuxt"
+  - "Почему тестирование Nuxt 3 требует специального окружения и чем `environment: 'nuxt'` отличается от обычного Vue Test Utils"
+  - "Как `mountSuspended` решает проблему SSR-компонентов с асинхронными данными и почему это критично для `useFetch` и `useAsyncData`"
+  - "Как тестировать server routes и composables в изоляции от Nuxt-рантайма, и какие подходы существуют"
+  - "Как мокировать Nuxt API (`useRoute`, `useRouter`, `useRuntimeConfig`) и почему это важно для изоляции тестов"
+  - "Какие антипаттерны (избыточное мокирование, хардкод, тестирование фреймворка) делают тесты Nuxt хрупкими и как их избежать"
 ---
 
 # Тестирование в Nuxt 3
@@ -716,17 +712,12 @@ const createUser = (overrides) => ({
 
 ## Ключевые тезисы для интервью
 
-- Nuxt 3 добавляет слои абстракции (auto-imports, server routes, SSR), которые требуют специального окружения `@nuxt/test-utils` для тестирования.
-- `environment: "nuxt"` в Vitest эмулирует Nuxt-рантайм и отличается от стандартного `jsdom` для Vue.
-- `mountSuspended` дожидается завершения асинхронных операций компонента, что критично для SSR-компонентов с `useFetch` или `useAsyncData`.
-- `registerEndpoint` позволяет стабить server routes, не запуская реальный Nitro-сервер.
-- Composables удобно тестировать через тестовый компонент с `mountSuspended` или с помощью `mockNuxtImport`.
-- Server routes можно тестировать через `registerEndpoint` для реалистичности или напрямую вызывать обработчик h3 для скорости и изоляции.
-- Middleware — это чистые функции `to, from → navigateTo/abortNavigation`, которые мокируются через `mockNuxtImport`.
-- Plugins проверяют глобальные provide-значения и side-эффекты, часто проще через интеграционный тест с `mountSuspended`.
-- Встроенные Nuxt-composables (`useRoute`, `useRouter`, `useRuntimeConfig`, `navigateTo`) мокируются через `mockNuxtImport` или `vi.mock`.
-- `NuxtLink` стабится через `global.stubs` или глобальную моку в `vitest.config.ts`.
-- Тестируйте бизнес-логику, а не фреймворк; избегайте избыточного мокирования и хардкода данных.
+- Nuxt 3 добавляет слои абстракции (auto-imports, server routes, SSR), которые требуют `@nuxt/test-utils` с `environment: "nuxt"` для эмуляции Nuxt-рантайма.
+- `mountSuspended` дожидается завершения асинхронных операций компонента, что критично для SSR-компонентов с `useFetch` или `useAsyncData`; `registerEndpoint` позволяет стабить server routes без запуска Nitro-сервера.
+- Composables тестируются через тестовый компонент с `mountSuspended` или `mockNuxtImport`; server routes — через `registerEndpoint` для реалистичности или прямой вызов обработчика h3 для скорости.
+- Middleware — чистые функции (`to, from → navigateTo/abortNavigation`), мокируемые через `mockNuxtImport`; plugins проверяют provide-значения и side-эффекты, часто проще через интеграционный тест.
+- Встроенные Nuxt-composables (`useRoute`, `useRouter`, `useRuntimeConfig`) мокируются через `mockNuxtImport` или `vi.mock`; `NuxtLink` стабится через `global.stubs` или глобальную моку.
+- Тестируйте бизнес-логику, а не фреймворк; избегайте избыточного мокирования, хардкода данных и тестирования самого Nuxt — это делает тесты хрупкими.
 
 ## Заключение
 
