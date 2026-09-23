@@ -5,15 +5,13 @@ description: "Паттерны React-компонентов (Compound, Render Pr
 order: 2
 tags: ["react", "nextjs", "compound-components", "render-props", "custom-hooks", "feature-sliced-design"]
 questions:
-  - "В чём разница между Compound Components и Render Props"
-  - "Почему custom hooks заменили render props в большинстве случаев"
-  - "Как реализовать паттерн Control Props для двух режимов работы компонента"
-  - "Какие есть подходы к организации файлов в React-проекте и когда какой выбрать"
-  - "Что такое Feature-Sliced Design и какие у него правила импортов"
-  - "Как App Router в Next.js меняет структуру проекта"
-  - "Что такое colocation и почему баррел-файлы могут ухудшить tree-shaking"
-  - "Какие антипаттерны организации кода встречаются чаще всего"
-  - "Как трансформировался паттерн Container/Presentational в эпоху Server Components"
+  - "Как Compound Components используют Context для разделения состояния и почему это даёт больше гибкости, чем Render Props"
+  - "Почему custom hooks вытеснили render props и в каких случаях render props всё ещё полезны"
+  - "Как паттерн Container/Presentational трансформировался с появлением Server Components"
+  - "Как Control Props позволяют компоненту работать в controlled и uncontrolled режимах одновременно"
+  - "Чем feature-based структура отличается от type-based и когда стоит переходить к Feature-Sliced Design"
+  - "Как App Router в Next.js меняет подход к организации файлов по сравнению с Pages Router"
+  - "Почему colocation предпочтительнее отдельных `__tests__/` и какие компромиссы у баррел-файлов"
 ---
 
 # Паттерны компонентов и файловая структура в React
@@ -1030,17 +1028,13 @@ import { LoginForm } from "@/features/auth";
 
 ## Ключевые тезисы для интервью
 
-- Композиция — главный паттерн React: сложное поведение строится через вложение компонентов, а не через наследование.
-- Compound Components разделяют состояние через Context и дают полный контроль над структурой DOM — основа Radix UI, Headless UI.
-- Render Props почти полностью вытеснены custom hooks; остаются полезны для инверсии контроля над рендерингом.
-- Custom Hooks — основной способ переиспользования логики в современном React: инкапсуляция DOM-логики, API-запросов и композиции.
-- Container/Presentational в эпоху Server Components трансформировался: серверные компоненты — контейнеры, клиентские — презентационные.
-- Control Props позволяют компоненту работать в двух режимах — controlled и uncontrolled (как `<input>`).
-- Feature-based структура масштабируется лучше type-based: всё, что относится к фиче, живёт рядом.
-- Feature-Sliced Design задаёт строгие правила импортов между слоями (app → pages → widgets → features → entities → shared).
-- В Next.js App Router структура задаётся файловой системой: route groups, parallel routes, intercepting routes расширяют возможности маршрутизации.
-- Colocation (тесты, сторибуки, схемы рядом с компонентом) удобнее, чем отдельные `__tests__/`.
-- Баррел-файлы (`index.ts`) полезны для публичных API, но могут ломать tree-shaking в UI-китах с десятками компонентов.
+- Композиция — главный паттерн React: сложное поведение строится через вложение компонентов, а не наследование. Compound Components реализуют это через Context, разделяя состояние между подкомпонентами и давая контроль над DOM-структурой (основа Radix UI, Headless UI).
+- Render Props почти полностью вытеснены custom hooks — основным способом переиспользования логики в современном React; render props остаются полезны для инверсии контроля над рендерингом.
+- Container/Presentational трансформировался в эпоху Server Components: серверные компоненты стали контейнерами (загрузка данных, логика), клиентские — презентационными (интерактивность, UI).
+- Control Props позволяют компоненту работать в двух режимах — controlled (внешнее состояние) и uncontrolled (внутреннее), как `<input>` с `value`/`defaultValue`.
+- Feature-based структура масштабируется лучше type-based: всё, что относится к фиче, живёт рядом. Feature-Sliced Design формализует это строгими правилами импортов между слоями (app → pages → widgets → features → entities → shared).
+- В Next.js App Router структура задаётся файловой системой: route groups, parallel routes и intercepting routes расширяют возможности маршрутизации без дополнительных конфигов.
+- Colocation (тесты, сторибуки, схемы рядом с компонентом) удобнее отдельных `__tests__/`. Баррел-файлы (`index.ts`) полезны для публичных API, но могут ломать tree-shaking в UI-китах с десятками компонентов.
 
 ## Заключение
 

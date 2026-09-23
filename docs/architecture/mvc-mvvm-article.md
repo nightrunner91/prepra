@@ -5,15 +5,13 @@ description: "Три классических паттерна — MVC, MVP и M
 order: 5
 tags: ["mvc", "mvp", "mvvm", "react", "vue", "architecture-patterns", "data-binding"]
 questions:
-  - "В чём разница между MVC, MVP и MVVM"
-  - "Почему React официально не следует ни одному из классических паттернов"
-  - "Как компоненты React объединяют Model, View и Controller"
-  - "Почему Vue считается MVVM-фреймворком"
-  - "Что такое двустороннее связывание и как оно работает через v-model"
-  - "Как custom hooks в React приближают архитектуру к MVVM"
-  - "В чём отличие Presenter от Controller"
-  - "Как Redux/Pinia меняют роль компонента в архитектуре"
-  - "Какие недостатки у MVVM при большом количестве bindings"
+  - "Как MVC, MVP и MVVM различаются в организации связи между Model, View и логикой"
+  - "Почему React не следует строго одному паттерну и как компонент объединяет Model, View и Controller"
+  - "Почему Vue считается MVVM-фреймворком и как двустороннее связывание через v-model реализует эту модель"
+  - "Как custom hooks в React позволяют приблизить архитектуру к MVVM"
+  - "Как Redux и Pinia меняют роль компонента в архитектуре"
+  - "Какие недостатки у каждого из трёх паттернов и почему MVC часто превращается в Massive View Controller"
+  - "В каких контекстах чаще встречается MVC, а в каких — MVVM"
 ---
 
 # MVC, MVP и MVVM в React и Vue
@@ -745,16 +743,13 @@ export const useUserStore = defineStore('user', {
 
 ## Ключевые тезисы для интервью
 
-- MVC разделяет приложение на Model (данные), View (отображение) и Controller (посредник, обрабатывает ввод).
-- MVP заменяет Controller на Presenter, полностью изолируя View от Model — View становится пассивным.
-- MVVM использует двустороннее связывание: ViewModel и View синхронизируются автоматически через реактивные свойства.
-- Основной недостаток MVC — «Massive View Controller», недостаток MVP — много boilerplate, недостаток MVVM — сложность отладки скрытых binding.
-- React не следует ни одному классическому паттерну — использует компонентный подход с однонаправленным потоком данных.
-- В React компонент объединяет Model (state), View (JSX) и Controller (event handlers).
+- MVC разделяет приложение на Model (данные), View (отображение) и Controller (посредник); MVP заменяет Controller на Presenter, полностью изолируя View от Model; MVVM использует двустороннее связывание, автоматически синхронизируя ViewModel и View через реактивные свойства.
+- Основные недостатки: MVC превращается в «Massive View Controller», MVP требует много boilerplate, MVVM усложняет отладку из-за скрытых binding.
+- React не следует ни одному классическому паттерну — использует компонентный подход с однонаправленным потоком данных, где компонент объединяет Model (state), View (JSX) и Controller (event handlers).
 - Vue официально позиционируется как MVVM-фреймворк: `data`/`ref` — ViewModel, шаблон — View, `v-model` — двустороннее связывание.
-- Custom hooks в React позволяют вынести ViewModel-логику, приблизив архитектуру к MVVM.
-- Redux/Pinia играют роль внешнего Model, компоненты становятся View + Controller.
-- MVC чаще всего встречается в серверных фреймворках (Express, Rails, Django), MVVM — во фронтенде с реактивностью.
+- Custom hooks в React позволяют вынести ViewModel-логику (состояние и бизнес-правила) из компонентов, приблизив архитектуру к MVVM.
+- Redux/Pinia играют роль внешнего Model, разгружая компоненты до View + Controller.
+- MVC чаще встречается в серверных фреймворках (Express, Rails, Django), MVVM — во фронтенде с реактивностью (Vue, Knockout, Angular).
 
 ## Заключение
 
