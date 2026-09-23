@@ -5,15 +5,13 @@ description: "Security-заголовки: HSTS, CSP, X-Frame-Options, Referrer-
 order: 5
 tags: ["http-headers", "hsts", "x-frame-options", "coop", "coep", "permissions-policy"]
 questions:
-  - "Зачем нужен HSTS и что делают `includeSubDomains` и `preload`?"
-  - "Чем `X-Frame-Options: DENY` отличается от CSP `frame-ancestors 'none'`?"
-  - "От чего защищает `X-Content-Type-Options: nosniff`?"
-  - "Как выбрать значение `Referrer-Policy`?"
-  - "Что такое cross-origin isolated режим и зачем нужны COOP + COEP?"
-  - "Как COOP защищает от tabnabbing и window.opener атак?"
-  - "Когда использовать `Clear-Site-Data` и что он очищает?"
-  - "Почему для чувствительных страниц важен `Cache-Control: no-store`?"
-  - "Какие security-заголовки закрывают clickjacking, mime sniffing, mixed content?"
+  - "Зачем нужен HSTS и что делают `includeSubDomains` и `preload`"
+  - "Чем `X-Frame-Options: DENY` отличается от CSP `frame-ancestors 'none'` и почему второй — современный подход"
+  - "Как `X-Content-Type-Options: nosniff` и `Referrer-Policy` закрывают классы атак без изменений в бизнес-логике"
+  - "Что такое cross-origin isolated режим и как COOP + COEP защищают от tabnabbing и атак через `window.opener`"
+  - "Как `Permissions-Policy` уменьшает поверхность атаки, блокируя ненужные браузерные API"
+  - "Когда использовать `Clear-Site-Data` при logout и почему `Cache-Control: no-store` важен для чувствительных страниц"
+  - "Как настроить security-заголовки в Next.js и Nuxt и что просят аудиторы SOC2"
 ---
 
 # HTTP-заголовки безопасности
@@ -291,16 +289,12 @@ export default defineNuxtConfig({
 
 ## Ключевые тезисы для интервью
 
-- Security-заголовки — самый дешёвый способ защиты: только конфигурация, никаких изменений в коде.
-- HSTS (`Strict-Transport-Security`) заставляет браузер использовать HTTPS даже при вводе `http://`. Перед включением убедитесь, что весь сайт работает по HTTPS.
-- `X-Frame-Options: DENY` и CSP `frame-ancestors 'none'` защищают от clickjacking; современный подход — второе.
-- `X-Content-Type-Options: nosniff` запрещает браузеру угадывать MIME-тип и интерпретировать `.txt` как JavaScript.
-- `Referrer-Policy: strict-origin-when-cross-origin` — баланс приватности и функциональности.
-- `Permissions-Policy` блокирует ненужные API (камера, микрофон, геолокация); уменьшает поверхность атаки.
-- COOP + COEP включают cross-origin isolated режим, необходимый для SharedArrayBuffer и точных таймеров.
-- COOP защищает от tabnabbing и атак через `window.opener`.
-- `Clear-Site-Data` при logout удаляет cookies, storage и cache — важно для общих устройств.
-- `Cache-Control: no-store` для чувствительных страниц предотвращает кэширование в браузере и прокси.
+- Security-заголовки — самый дешёвый слой защиты: только конфигурация, никаких изменений в коде; HSTS (`Strict-Transport-Security`) заставляет браузер использовать HTTPS, `X-Content-Type-Options: nosniff` запрещает угадывать MIME-тип.
+- `X-Frame-Options: DENY` и CSP `frame-ancestors 'none'` защищают от clickjacking; современный подход — `frame-ancestors` в CSP.
+- `Referrer-Policy: strict-origin-when-cross-origin` — баланс приватности и функциональности; `Permissions-Policy` блокирует ненужные API (камера, микрофон, геолокация), уменьшая поверхность атаки.
+- COOP + COEP включают cross-origin isolated режим, необходимый для SharedArrayBuffer; COOP защищает от tabnabbing и атак через `window.opener`.
+- `Clear-Site-Data` при logout удаляет cookies, storage и cache — критично для общих устройств; `Cache-Control: no-store` для чувствительных страниц предотвращает кэширование в браузере и прокси.
+- Все заголовки настраиваются в Next.js middleware и Nuxt server routes; для SOC2/CASA наличие и документирование — стандартный evidence.
 
 ## Заключение
 

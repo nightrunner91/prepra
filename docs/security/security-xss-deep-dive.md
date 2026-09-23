@@ -5,15 +5,13 @@ description: "XSS-атаки во фронтенде: reflected, stored, DOM-bas
 order: 10
 tags: ["xss", "sanitization", "dompurify", "dangerouslysetinnerhtml", "v-html", "trusted-types"]
 questions:
-  - "В чём разница между reflected, stored и DOM-based XSS?"
-  - "Что такое mutation XSS и почему нельзя писать свой санитайзер?"
-  - "Чем экранирование отличается от санитизации и валидации?"
-  - "Как React защищает от XSS и где эта защита не работает?"
-  - "Почему `dangerouslySetInnerHTML` и `v-html` требуют особого обращения?"
-  - "Как `javascript:` URL могут обойти защиту фреймворка?"
-  - "Что делает Trusted Types и как их включить?"
-  - "Почему HttpOnly cookies надёжнее `localStorage` для хранения токенов?"
-  - "Какие места в SSR/Nuxt/Next.js особенно уязвимы к XSS?"
+  - "В чём разница между reflected, stored и DOM-based XSS и почему mutation XSS делает невозможным написание своего санитайзера"
+  - "Чем экранирование, санитизация и валидация решают разные задачи и когда применять каждый подход"
+  - "Как React и Vue защищают от XSS автоматически и где эта защита заканчивается (`dangerouslySetInnerHTML`, `v-html`, `javascript:` URL, refs)"
+  - "Почему SSR в Next.js и Nuxt увеличивает риск XSS и как stored XSS попадает в исходный HTML до гидратации"
+  - "Что делают Trusted Types и как они закрывают DOM-based XSS через требование доверенных объектов вместо строк"
+  - "Почему HttpOnly cookies надёжнее `localStorage` для хранения токенов и как это связано с XSS"
+  - "Какие sources и sinks — ключевые точки для code review и как CSP работает как вторая линия обороны"
 ---
 
 # XSS: анатомия атаки и методы защиты
@@ -411,16 +409,12 @@ element.innerHTML = policy.createHTML(userInput);
 
 ## Ключевые тезисы для интервью
 
-- XSS — это не одна уязвимость, а класс атак: reflected, stored, DOM-based, mutation, self-XSS, blind XSS.
-- Reflected XSS приходит в HTTP-запросе, stored — сохраняется на сервере и поражает всех, DOM-based — живёт полностью на клиенте.
-- Экранирование, санитизация и валидация решают разные задачи: экранируй текст, санитизируй HTML, валидируй формат.
-- React и Vue автоматически экранируют текстовые вставки (`{...}`, `{{ ... }}`), но не защищают от `dangerouslySetInnerHTML`/`v-html`, `javascript:` URL и прямого доступа к DOM.
-- Санитайзер писать самому нельзя — mXSS использует различия в парсинге HTML. Используйте DOMPurify.
-- SSR (Next.js, Nuxt) увеличивает риск: stored XSS попадает в исходный HTML ещё до гидратации.
-- CSP — вторая линия обороны: даже если XSS случился, `script-src 'self'` с nonce блокирует выполнение.
-- Trusted Types требуют «доверенные» объекты вместо строк для `innerHTML`, полностью закрывая DOM-based XSS.
-- Токены сессии храните в HttpOnly cookies, а не в `localStorage` — XSS не сможет их прочитать.
-- Sources (URL, form, `postMessage`) и sinks (`innerHTML`, `eval`, `document.write`) — ключевые точки для code review.
+- XSS — класс атак: reflected (в HTTP-запросе), stored (сохраняется на сервере, поражает всех), DOM-based (полностью на клиенте); mutation XSS использует различия в парсинге HTML.
+- Экранирование, санитизация и валидация решают разные задачи: экранируй текст, санитизируй HTML, валидируй формат; санитайзер писать самому нельзя — используйте DOMPurify.
+- React и Vue автоматически экранируют текстовые вставки, но не защищают от `dangerouslySetInnerHTML`/`v-html`, `javascript:` URL и прямого доступа к DOM через refs.
+- SSR (Next.js, Nuxt) увеличивает риск: stored XSS попадает в исходный HTML ещё до гидратации; CSP — вторая линия обороны, `script-src 'self'` с nonce блокирует выполнение вредоносного кода.
+- Trusted Types требуют «доверенные» объекты вместо строк для `innerHTML`, полностью закрывая DOM-based XSS; токены сессии храните в HttpOnly cookies, а не в `localStorage` — XSS не сможет их прочитать.
+- Sources (URL, form, `postMessage`) и sinks (`innerHTML`, `eval`, `document.write`) — ключевые точки для code review и аудита.
 
 ## Заключение
 

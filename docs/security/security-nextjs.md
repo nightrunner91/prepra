@@ -5,15 +5,13 @@ description: "Server Components, Server Actions, middleware, Route Handlers, CSP
 order: 6
 tags: ["nextjs", "server-components", "server-actions", "middleware", "route-handlers"]
 questions:
-  - "Как Next.js размывает границу между фронтендом и бэкендом?"
-  - "Как данные из Server Component утекают в клиентский бандл через RSC Payload?"
-  - "Какие проверки обязательны в каждом Server Action?"
-  - "Как использовать middleware для защиты маршрутов и установки заголовков?"
-  - "Как настроить nonce-based CSP через middleware?"
-  - "Что такое CVE-2025-55182 и как от него защититься?"
-  - "Как защитить приложение от Open Redirect?"
-  - "Чем App Router отличается от Pages Router с точки зрения безопасности?"
-  - "Почему Edge Runtime ограничивает возможности middleware?"
+  - "Как Next.js размывает границу между фронтендом и бэкендом и какие новые риски это создаёт"
+  - "Как данные из Server Component попадают в клиентский бандл через RSC Payload и как предотвратить утечку"
+  - "Какие проверки обязательны в каждом Server Action и почему CVE-2025-55182 показал важность мониторинга серверного кода"
+  - "Как middleware на Edge Runtime защищает маршруты, устанавливает заголовки и генерирует nonce для CSP"
+  - "Чем Route Handlers отличаются от middleware и когда выносить логику в API endpoints"
+  - "Как защитить приложение от Open Redirect и почему Pages Router создаёт риск stored XSS"
+  - "Чем App Router отличается от Pages Router с точки зрения модели безопасности"
 ---
 
 # Безопасность Next.js
@@ -478,16 +476,12 @@ redirect(isInternal ? callbackUrl : '/');
 
 ## Ключевые тезисы для интервью
 
-- В App Router все компоненты по умолчанию серверные; `"use client"` явно помечает клиентские — только они попадают в бандл.
-- Данные из Server Component, переданные в Client Component, целиком сериализуются в RSC Payload — передавайте только нужные поля через `select`.
-- Server Action — это HTTP-endpoint, доступный из любого клиента; всегда валидируйте вход (Zod), проверяйте авторизацию и владение ресурсом.
-- CVE-2025-55182 в Server Actions (React 19.0.0–19.2.2) показал: серверный код Next.js требует такого же мониторинга и обновлений, как любой другой сервер.
-- Middleware — Edge Runtime до рендеринга; хорош для редиректов, заголовков и генерации nonce, но не заменяет проверку авторизации в Server Actions.
-- Route Handlers (`route.ts`) — это API endpoints App Router; валидируйте query, body и заголовки.
+- В App Router все компоненты серверные по умолчанию; `"use client"` помечает клиентские — только они попадают в бандл; данные из Server Component, переданные в Client Component, сериализуются в RSC Payload — передавайте только нужные поля.
+- Server Action — HTTP-endpoint, доступный из любого клиента; всегда валидируйте вход (Zod), проверяйте авторизацию и владение ресурсом; CVE-2025-55182 показал, что серверный код требует такого же мониторинга, как любой сервер.
+- Middleware работает на Edge Runtime до рендеринга; хорош для редиректов, заголовков и генерации nonce, но не заменяет проверку авторизации в Server Actions; тяжёлую логику выносите в Route Handlers.
+- Route Handlers (`route.ts`) — API endpoints App Router; валидируйте query, body и заголовки.
 - Nonce-based CSP через middleware — рекомендуемый подход в Next.js 15+; nonce читается через `headers()` и передаётся в `<script nonce=...>`.
-- Open Redirect защищается проверкой префикса URL или белым списком; никогда не делайте `redirect(searchParams.get('callbackUrl'))` без валидации.
-- В Pages Router `getServerSideProps` сериализует данные в HTML — риск stored XSS при попадании необработанного ввода.
-- Middleware работает на Edge Runtime с ограниченным API; тяжёлую логику выносите в Route Handlers.
+- Open Redirect защищается проверкой префикса URL или белым списком; в Pages Router `getServerSideProps` сериализует данные в HTML — риск stored XSS при необработанном вводе.
 
 ## Заключение
 

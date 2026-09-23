@@ -5,15 +5,13 @@ description: "Как фронтендеру участвовать в SOC2 и CA
 order: 8
 tags: ["soc2", "casa", "compliance", "audit", "secure-sdlc", "incident-response"]
 questions:
-  - "Что такое SOC2 Type II и чем он отличается от Type I?"
-  - "Когда приложение обязано пройти CASA?"
-  - "Какие controls SOC2 напрямую касаются фронтенда?"
-  - "Что такое evidence и почему один скриншот CSP недостаточен?"
-  - "Как проходит access review и зачем он нужен?"
-  - "Как change management формализует изменения в production?"
-  - "Какие фазы включает incident response?"
-  - "Что обычно проверяют пентестеры во фронтенд-коде?"
-  - "Как встроить безопасность в SDLC и что такое threat modeling?"
+  - "Что такое SOC2 Type II и чем он отличается от Type I по принципу оценки соблюдения политик"
+  - "Какие controls SOC2 напрямую касаются фронтенда и какие evidence просят аудиторы"
+  - "Когда приложение обязано пройти CASA и какие области проверяет Google"
+  - "Как change management формализует изменения в production и почему emergency changes требуют отдельного процесса"
+  - "Какие пять фаз включает incident response и какую роль играет фронтендер в каждой"
+  - "Что проверяют пентестеры во фронтенд-коде и как подготовиться к penetration test"
+  - "Как Secure SDLC встраивает безопасность на всех этапах от planning до operations"
 ---
 
 # SOC2 и CASA для фронтенд-разработчика
@@ -369,16 +367,12 @@ Secure SDLC (Software Development Life Cycle) — это встраивание 
 
 ## Ключевые тезисы для интервью
 
-- SOC2 Type II оценивает не только наличие политик, но и их соблюдение в течение 3–12 месяцев по пяти принципам: Security, Availability, Processing Integrity, Confidentiality, Privacy.
-- CASA — программа Google для приложений, использующих чувствительные API (Gmail, Drive); фокус на OAuth-токенах, защите данных, OWASP Top 10.
-- Аудитор проверяет не строки кода, а процессы и evidence того, что команда систематически управляет рисками.
-- Ключевые controls для фронтенда: CC6.1 (доступ), CC6.6 (инфраструктура), CC6.7 (детекция), CC7.1 (change management), CC7.2 (операции), CC8.1 (контроль изменений).
-- Evidence должно быть систематическим: один скриншот CSP недостаточен — нужно показать, что политика действует непрерывно.
-- Change management формализует все изменения через git → PR → review → CI → deploy; emergency changes требуют отдельного documented процесса.
+- SOC2 Type II оценивает соблюдение политик в течение 3–12 месяцев по пяти принципам; CASA — программа Google для приложений с чувствительными API (Gmail, Drive), фокус на OAuth-токенах и OWASP Top 10.
+- Аудитор проверяет не строки кода, а процессы и evidence; ключевые controls для фронтенда: CC6.1 (доступ), CC6.6 (инфраструктура), CC6.7 (детекция), CC7.1 (change management), CC7.2 (операции), CC8.1 (контроль изменений).
+- Evidence должно быть систематическим: один скриншот CSP недостаточен — нужно показать, что политика действует непрерывно; change management формализует все изменения через git → PR → review → CI → deploy.
 - Incident response — пять фаз: Detection, Containment, Eradication, Recovery, Lessons learned; фронтендер участвует в детекции и расследовании клиентских инцидентов.
 - Pentest во фронтенде проверяет XSS, CSRF, Open Redirect, IDOR, утечку секретов, слабые cookies, отсутствие security-заголовков.
 - Secure SDLC встраивает безопасность на всех этапах: planning (threat modeling), design (least privilege), development (линтеры), testing (SAST/DAST), deployment (secret management), operations (monitoring).
-- На аудите — будьте честны, показывайте процессы, готовьте evidence заранее, не паникуйте при findings; важно показать план remediation.
 
 ## Заключение
 

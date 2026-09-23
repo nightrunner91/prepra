@@ -5,15 +5,13 @@ description: "CSP: директивы, nonce, hash, strict-dynamic, Report-Only,
 order: 2
 tags: ["csp", "content-security-policy", "nonce", "strict-dynamic", "xss"]
 questions:
-  - "Зачем нужен CSP, если фреймворки уже экранируют ввод?"
-  - "Какие директивы CSP отвечают за скрипты, стили, соединения и iframe?"
-  - "Почему `'unsafe-inline'` в `script-src` сводит защиту на нет?"
-  - "Как работает nonce-based CSP и почему nonce должен меняться при каждом запросе?"
-  - "Чем hash-based CSP отличается от nonce-based?"
-  - "Что делает `strict-dynamic` и зачем он нужен для бандлеров?"
-  - "Как внедрить CSP в Next.js через middleware с nonce?"
-  - "Зачем нужен режим `Content-Security-Policy-Report-Only`?"
-  - "Какие типичные ошибки допускают при внедрении CSP?"
+  - "Почему CSP — вторая линия обороны после экранирования и как `default-src` задаёт базу для остальных директив"
+  - "Почему `'unsafe-inline'` в `script-src` сводит защиту на нет и как nonce и hash решают проблему inline-скриптов"
+  - "Как `strict-dynamic` упрощает работу с бандлерами и динамическими импортами без жёсткого списка источников"
+  - "Как `frame-ancestors` защищает от clickjacking и чем отличается от `X-Frame-Options`"
+  - "Зачем нужен `Content-Security-Policy-Report-Only` и как он помогает внедрять CSP без поломки продакшена"
+  - "Какие типичные ошибки в CSP делают её бесполезной и как их избежать"
+  - "Как Next.js middleware и Nuxt Security автоматизируют генерацию nonce и политики"
 ---
 
 # Content Security Policy: директивы и практика
@@ -417,16 +415,12 @@ connect-src *;
 
 ## Ключевые тезисы для интервью
 
-- CSP — это HTTP-заголовок, указывающий браузеру, откуда разрешено загружать ресурсы. Даже при XSS вредоносный `<script>` не выполнится.
-- `default-src` задаёт значение по умолчанию; `script-src`, `style-src`, `img-src`, `connect-src`, `frame-ancestors` — самые важные директивы.
-- `'unsafe-inline'` в `script-src` сводит защиту от XSS на нет. Используйте nonce или hash.
-- Nonce — криптографически случайный токен (128 бит), генерируется на каждый запрос, встраивается в тег и в CSP-заголовок.
-- Hash-based CSP разрешает конкретный inline-скрипт по SHA-хэшу; удобно для статики, но любое изменение требует пересчёта.
-- `'strict-dynamic'` доверяет скриптам, загруженным доверенным корневым скриптом — упрощает работу с бандлерами и динамическими импортами.
-- `frame-ancestors 'none'` защищает от clickjacking-атак; современный аналог `X-Frame-Options: DENY`.
-- `Content-Security-Policy-Report-Only` позволяет собирать отчёты о нарушениях, не блокируя ресурсы — оптимальный способ внедрения.
-- Nuxt Security и Next.js middleware автоматизируют nonce и генерацию политики.
-- Типичные ошибки: `'unsafe-inline'`, `https:` в `script-src`, `*` в `connect-src`, отсутствие `frame-ancestors`, предсказуемый nonce.
+- CSP — вторая линия обороны после экранирования; `default-src` задаёт базу, а `script-src`, `style-src`, `connect-src`, `frame-ancestors` — ключевые директивы.
+- `'unsafe-inline'` в `script-src` сводит защиту на нет; nonce (случайный токен на каждый запрос) и hash (SHA конкретного inline-скрипта) — два способа разрешить inline без `'unsafe-inline'`.
+- `'strict-dynamic'` доверяет скриптам, загруженным доверенным корневым скриптом, — упрощает работу с бандлерами и динамическими импортами без жёсткого списка источников.
+- `frame-ancestors 'none'` защищает от clickjacking; `Content-Security-Policy-Report-Only` позволяет собирать отчёты о нарушениях без блокировки — оптимальный путь внедрения.
+- Типичные ошибки: `'unsafe-inline'` или `https:` в `script-src`, `*` в `connect-src`, отсутствие `frame-ancestors`, предсказуемый nonce.
+- Next.js middleware и Nuxt Security автоматизируют генерацию nonce и политики; CSP без `'unsafe-inline'` и `'unsafe-eval'` — идеал, к которому приходят через Report-Only.
 
 ## Заключение
 

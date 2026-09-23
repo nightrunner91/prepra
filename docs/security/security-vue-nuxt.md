@@ -5,15 +5,13 @@ description: "Vue/Nuxt: `v-html`, refs, серверные маршруты Nitr
 order: 9
 tags: ["vue", "nuxt", "v-html", "nuxt-security", "nitro", "runtime-config"]
 questions:
-  - "Как Vue экранирует текстовые интерполяции и что остаётся уязвимым?"
-  - "Почему `v-html` опасен и как его безопасно использовать?"
-  - "Как валидировать URL в `:href` и что делает `rel=\"noopener noreferrer\"`?"
-  - "Почему `innerHTML` через ref обходит защиту Vue?"
-  - "Чем `runtimeConfig` отличается от `appConfig` в Nuxt?"
-  - "Как настроить CSP через `nuxt-security` с nonce?"
-  - "Что такое Nitro и как валидировать вход в серверных маршрутах?"
-  - "Почему `v-html` в SSR особенно опасен?"
-  - "Как добавить CSRF-защиту в Nuxt?"
+  - "Как Vue экранирует текстовые интерполяции и какие инструменты (`v-html`, refs, URL-атрибуты) обходят защиту фреймворка"
+  - "Почему `v-html` в SSR особенно опасен и почему санитизация обязательна и на сервере, и на клиенте"
+  - "Как валидировать URL в `:href` и почему `javascript:` протокол — XSS-вектор, который Vue не блокирует"
+  - "Чем `runtimeConfig` отличается от `runtimeConfig.public` и как правильно хранить секреты в Nuxt"
+  - "Как `nuxt-security` настраивает CSP с nonce, security-заголовки и rate limiting из коробки"
+  - "Как валидировать вход и проверять авторизацию в серверных маршрутах Nitro"
+  - "Как добавить CSRF-защиту в Nuxt и почему cookie-based auth требует токенов"
 ---
 
 # Безопасность Vue и Nuxt
@@ -516,15 +514,11 @@ export default defineEventHandler((event) => {
 
 ## Ключевые тезисы для интервью
 
-- Vue автоматически экранирует `{{ }}` через `textContent` — прямая аналогия с JSX в React.
-- `v-html` — прямой эквивалент `dangerouslySetInnerHTML`; без DOMPurify — XSS-уязвимость.
-- Vue не проверяет протоколы URL: `javascript:alert(1)` в `:href` выполнится при клике.
-- `rel="noopener noreferrer"` для `target="_blank"` защищает от tabnabbing через `window.opener`.
-- `innerHTML` через `ref` обходит защиту фреймворка — избегайте прямой манипуляции DOM.
-- Токен сессии в памяти (через composable) защищён от XSS лучше, чем в `localStorage`.
+- Vue автоматически экранирует `{{ }}` через `textContent` — прямая аналогия с JSX в React; `v-html` — прямой эквивалент `dangerouslySetInnerHTML`, без DOMPurify — XSS-уязвимость.
+- Vue не проверяет протоколы URL: `javascript:alert(1)` в `:href` выполнится при клике; `rel="noopener noreferrer"` для `target="_blank"` защищает от tabnabbing через `window.opener`.
+- `innerHTML` через `ref` обходит защиту фреймворка — избегайте прямой манипуляции DOM; токен сессии в памяти (через composable) защищён от XSS лучше, чем в `localStorage`.
 - В Nuxt `v-html` в SSR попадает в исходный HTML, который выполняется мгновенно до гидратации — санитизация обязательна и на сервере.
-- `runtimeConfig` без `public` — только сервер; `runtimeConfig.public` — клиент и сервер.
-- `nuxt-security` из коробки настраивает CSP с nonce, security-заголовки, rate limiting и SRI.
+- `runtimeConfig` без `public` — только сервер; `runtimeConfig.public` — клиент и сервер; `nuxt-security` из коробки настраивает CSP с nonce, security-заголовки, rate limiting и SRI.
 - Nitro — серверный движок Nuxt; серверные маршруты (`server/api/`) требуют валидации (Zod) и проверки авторизации/владения ресурсом.
 
 ## Заключение
