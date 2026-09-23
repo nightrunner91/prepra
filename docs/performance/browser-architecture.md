@@ -5,14 +5,11 @@ description: "Современный браузер — это многопро�
 order: 1
 tags: ["browser-process", "renderer-process", "critical-rendering-path", "reflow", "site-isolation"]
 questions:
-  - "В чём разница между Browser Process и Renderer Process?"
-  - "Что такое Site Isolation и почему она увеличивает потребление памяти?"
-  - "Какие потоки работают внутри Renderer Process и за что каждый отвечает?"
-  - "Что происходит на каждом этапе от ввода URL до отображения страницы?"
-  - "В чём разница между Reflow и Repaint? Какой дороже и почему?"
-  - "Какие CSS-свойства можно анимировать без участия Main Thread?"
-  - "Что такое TTFB и как его улучшить?"
-  - "В чём разница между async и defer для тегов script?"
+  - "Как устроена многопроцессная архитектура браузера и почему Site Isolation увеличивает потребление памяти"
+  - "Почему Reflow дороже Repaint и какие CSS-свойства можно анимировать без участия Main Thread"
+  - "Как TTFB связан с Critical Rendering Path и какие этапы загрузки влияют на время до первого байта"
+  - "Что такое layout thrashing и почему `will-change` — это компромисс между производительностью и памятью"
+  - "Как `async` и `defer` влияют на парсинг HTML и порядок выполнения скриптов"
 ---
 
 # Браузерная архитектура: процессы, потоки, рендеринг
@@ -865,16 +862,12 @@ Script:              [load]              [exec]
 
 ## Ключевые тезисы для интервью
 
-- Браузер — многопроцессная система: Browser Process управляет UI и навигацией, Renderer Process — парсингом и рендерингом, GPU Process — графикой.
-- Site Isolation помещает каждый сайт в отдельный renderer-процесс, защищая от Spectre, но увеличивая потребление памяти.
-- Main Thread выполняет JS, layout и paint; Compositor Thread — анимации и скролл независимо от Main Thread.
-- Critical Rendering Path: DNS → TCP → TLS → HTTP → DOM → CSSOM → Render Tree → Layout → Paint → Composite.
-- Reflow пересчитывает геометрию всего дерева; Repaint перерисовывает пиксели без изменения позиций.
-- `transform` и `opacity` — composite-only свойства: анимируются на GPU без reflow и repaint.
-- Layout thrashing — чередование чтения и записи layout-свойств (offsetWidth + style.width) вызывает цепочку reflow.
-- TTFB = DNS + TCP + TLS + Server Processing + Network Latency; улучшается кэшированием, CDN и оптимизацией запросов.
-- `defer` сохраняет порядок выполнения и запускает скрипт после парсинга HTML; `async` выполняет немедленно после загрузки без гарантии порядка.
-- `will-change: transform` создаёт отдельный GPU-слой, но каждый слой потребляет память.
+- Браузер — многопроцессная система: Browser Process (UI, навигация), Renderer Process (парсинг, рендеринг), GPU Process (графика). Site Isolation помещает каждый сайт в отдельный renderer, защищая от Spectre, но увеличивая память.
+- Main Thread выполняет JS, layout и paint; Compositor Thread анимирует `transform` и `opacity` на GPU независимо от Main Thread — поэтому эти свойства дешевле для анимаций.
+- Critical Rendering Path: DNS → TCP → TLS → HTTP → DOM → CSSOM → Render Tree → Layout → Paint → Composite. TTFB складывается из DNS, TCP, TLS, Server Processing и Network Latency.
+- Reflow пересчитывает геометрию всего дерева, Repaint перерисовывает пиксели без изменения позиций. Layout thrashing — чередование чтения и записи layout-свойств — вызывает принудительные reflow на каждом чтении.
+- `will-change: transform` создаёт отдельный GPU-слой для ускорения анимации, но каждый слой потребляет память — нельзя добавлять `will-change` ко всему.
+- `defer` сохраняет порядок выполнения и запускает скрипт после парсинга HTML; `async` выполняется немедленно после загрузки без гарантии порядка — подходит для независимых скриптов (аналитика).
 
 ## Заключение
 
