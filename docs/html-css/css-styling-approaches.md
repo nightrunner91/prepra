@@ -5,16 +5,13 @@ description: "На современном фронтенде стили можн
 order: 9
 tags: ["css-modules", "css-in-js", "tailwind", "vanilla-extract", "shadow-dom"]
 questions:
-  - "В чём основные отличия CSS Modules от глобального CSS?"
-  - "Как runtime CSS-in-JS (styled-components) генерирует и вставляет стили?"
-  - "Чем zero-runtime CSS-in-JS (Vanilla Extract) отличается от runtime-решений?"
-  - "Почему runtime CSS-in-JS сложнее использовать с React Server Components?"
-  - "Как Tailwind CSS формирует итоговый CSS-файл?"
-  - "Какие ограничения у inline styles и когда их стоит использовать?"
-  - "Что такое Shadow DOM и как он обеспечивает инкапсуляцию стилей?"
-  - "Как CSS-переменные помогают реализовать динамические стили без runtime-кода?"
-  - "Что такое CSS `@scope` и чем он отличается от CSS Modules?"
-  - "Почему индустрия движется от runtime CSS-in-JS к compile-time решениям?"
+  - "Чем CSS Modules отличаются от глобального CSS и почему они оптимальны для React/Next.js"
+  - "Как runtime CSS-in-JS (styled-components) генерирует стили и почему это создаёт проблемы с RSC, performance и CSP"
+  - "Чем zero-runtime CSS-in-JS (Vanilla Extract) отличается от runtime-решений и какие преимущества даёт"
+  - "Как Tailwind CSS формирует итоговый CSS-файл и почему utility-first подход ускоряет разработку"
+  - "Что такое Shadow DOM и `@scope`, и как они обеспечивают инкапсуляцию стилей без инструментов сборки"
+  - "Как CSS-переменные помогают реализовать динамические стили без runtime-кода"
+  - "Почему индустрия движется от runtime CSS-in-JS к compile-time решениям и какой стек рекомендуется в 2025–2026"
 ---
 
 # Способы применения CSS в клиентских приложениях
@@ -929,16 +926,13 @@ function Card({ highlighted, children }) {
 
 ## Ключевые тезисы для интервью
 
-- Inline styles: полный доступ к JS, но нет псевдоклассов, медиа-запросов и кеширования. Только для единичных динамических значений.
-- Глобальный CSS: прост и быстр, но требует дисциплины (BEM, `@layer`) на крупных проектах.
-- CSS Modules: локальные классы через хэширование, нулевой runtime, полная поддержка CSS. Оптимальный выбор для React/Next.js.
-- Runtime CSS-in-JS (styled-components, Emotion): максимальная гибкость и DX, но runtime-накладные расходы, увеличение JS-бандла, сложности с SSR и CSP.
-- Zero-runtime CSS-in-JS (Vanilla Extract, Panda CSS): DX CSS-in-JS + производительность чистого CSS. Компиляция на этапе сборки.
-- Tailwind CSS: utility-first, минимальный CSS-бандл, быстрота разработки. Комбинируется с `cva` для компонентного подхода.
-- `@scope`: нативная инкапсуляция CSS без инструментов сборки. Ограниченная поддержка браузеров.
-- Shadow DOM: полная изоляция стилей для Web Components. Custom properties проникают через границу.
-- Тренд 2025–2026: переход от runtime CSS-in-JS к compile-time решениям из-за RSC, performance и CSP.
-- Рекомендуемый стек: CSS Modules + CSS-переменные + `@layer` + Tailwind (или Vanilla Extract для типизированного DX).
+- Inline styles дают полный доступ к JS, но не поддерживают псевдоклассы, медиа-запросы и кеширование — только для единичных динамических значений. Глобальный CSS прост и быстр, но требует дисциплины (BEM, `@layer`) на крупных проектах.
+- CSS Modules создают локальные классы через хэширование с нулевым runtime и полной поддержкой CSS — оптимальный выбор для React/Next.js.
+- Runtime CSS-in-JS (styled-components, Emotion) даёт максимальную гибкость и DX, но создаёт runtime-накладные расходы, увеличивает JS-бандл, усложняет SSR и CSP.
+- Zero-runtime CSS-in-JS (Vanilla Extract, Panda CSS) сочетает DX CSS-in-JS с производительностью чистого CSS через компиляцию на этапе сборки.
+- Tailwind CSS — utility-first подход с минимальным CSS-бандлом и быстротой разработки; комбинируется с `cva` для компонентного подхода.
+- `@scope` — нативная инкапсуляция CSS без инструментов сборки (ограниченная поддержка браузеров); Shadow DOM — полная изоляция стилей для Web Components, но Custom properties проникают через границу.
+- Тренд 2025–2026: переход от runtime CSS-in-JS к compile-time решениям из-за RSC, performance и CSP. Рекомендуемый стек: CSS Modules + CSS-переменные + `@layer` + Tailwind (или Vanilla Extract для типизированного DX).
 
 ---
 

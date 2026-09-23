@@ -5,16 +5,12 @@ description: "Формы — это не просто набор полей вв
 order: 11
 tags: ["forms", "constraint-validation", "elementinternals", "formdata", "form-associated"]
 questions:
-  - "Как браузер собирает данные из формы при отправке?"
-  - "Какие HTML-атрибуты задействуют встроенную валидацию?"
-  - "Что такое Constraint Validation API и какие методы оно предоставляет?"
-  - "Что содержит объект `ValidityState` и какие флаги в нём есть?"
-  - "Почему `setCustomValidity('')` нужно вызывать явно при успешной валидации?"
-  - "Чем `:user-invalid` отличается от `:invalid`?"
-  - "Что такое `ElementInternals` и зачем custom element нужен `formAssociated = true`?"
-  - "Какие жизненные колбэки доступны form-associated custom element?"
-  - "Как событие `formdata` позволяет изменить данные формы перед отправкой?"
-  - "Почему клиентская валидация не заменяет серверную?"
+  - "Как встроенная HTML-валидация работает через атрибуты `required`, `pattern`, `min`/`max` и блокирует отправку формы"
+  - "Что такое Constraint Validation API и как `checkValidity()`, `reportValidity()`, `setCustomValidity()` управляют проверкой"
+  - "Чем `:user-valid`/`:user-invalid` отличаются от `:valid`/`:invalid` и почему это важно для UX"
+  - "Что такое `ElementInternals` и как custom element становится полноценным участником формы через `formAssociated = true`"
+  - "Как событие `formdata` позволяет модифицировать данные формы перед отправкой"
+  - "Почему клиентская валидация — это UX, а не безопасность, и почему сервер всегда должен проверять данные"
 ---
 
 # Формы, валидация и `ElementInternals`
@@ -382,13 +378,12 @@ form.addEventListener('submit', async (event) => {
 
 ## Ключевые тезисы для интервью
 
-- Встроенная HTML-валидация работает через атрибуты `required`, `pattern`, `min`/`max`, `minlength`/`maxlength` и блокирует отправку формы при ошибках.
-- Constraint Validation API даёт полный контроль: `checkValidity()`, `reportValidity()`, `setCustomValidity()` и объект `ValidityState`.
-- `:user-valid` и `:user-invalid` удобнее `:valid`/`:invalid`, потому что не срабатывают до взаимодействия пользователя.
-- `ElementInternals` позволяет custom element участвовать в форме: передавать значение через `setFormValue`, валидироваться, реагировать на `reset` и `disabled`.
-- Form-associated custom element должен объявить `static formAssociated = true` и получить `this.attachInternals()`.
-- Событие `formdata` позволяет модифицировать данные формы непосредственно перед отправкой.
-- Клиентская валидация — это UX, а не безопасность. Сервер всегда должен проверять данные повторно.
+- Встроенная HTML-валидация работает через атрибуты `required`, `pattern`, `min`/`max`, `minlength`/`maxlength` и блокирует отправку формы при ошибках — без JavaScript.
+- Constraint Validation API даёт полный контроль: `checkValidity()` проверяет без UI, `reportValidity()` показывает ошибки, `setCustomValidity()` задаёт кастомное сообщение; объект `ValidityState` содержит флаги (`valueMissing`, `typeMismatch`, `patternMismatch` и др.).
+- `:user-valid` и `:user-invalid` удобнее `:valid`/`:invalid`, потому что не срабатывают до взаимодействия пользователя — не пугают красным сразу при загрузке формы.
+- `ElementInternals` позволяет custom element участвовать в форме: передавать значение через `setFormValue`, валидироваться через `setValidity`, реагировать на `reset` и `disabled`. Form-associated custom element должен объявить `static formAssociated = true` и получить `this.attachInternals()`.
+- Событие `formdata` позволяет модифицировать данные формы непосредственно перед отправкой — удобная точка для добавления скрытых полей или трансформации значений.
+- Клиентская валидация — это UX, а не безопасность. Сервер всегда должен проверять данные повторно, так как клиентскую проверку можно обойти.
 
 ## Заключение
 

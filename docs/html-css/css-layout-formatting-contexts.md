@@ -5,16 +5,12 @@ description: "CSS рисует элементы не по одному, а гр�
 order: 5
 tags: ["bfc", "ifc", "ffc", "containing-block", "margin-collapse"]
 questions:
-  - "Что такое formatting context и зачем его понимать?"
-  - "Какие условия создают новый BFC?"
-  - "Почему `display: flow-root` предпочтительнее `overflow: hidden` для создания BFC?"
-  - "Как BFC предотвращает схлопывание margin'ов и обтекание float?"
-  - "Что такое containing block и как он определяется для `absolute` и `fixed` элементов?"
-  - "Когда `transform` или `filter` на предке влияют на containing block `position: absolute`?"
-  - "Что такое margin collapse и при каких условиях он происходит?"
-  - "Чем FFC и GFC отличаются от BFC?"
-  - "Почему в flex/grid-контекстах margin'ы не схлопываются?"
-  - "Чем `border-box` отличается от `content-box`?"
+  - "Что такое formatting context и какие виды (BFC, IFC, FFC, GFC) существуют в CSS"
+  - "Какие условия создают новый BFC и почему `display: flow-root` предпочтительнее `overflow: hidden`"
+  - "Как BFC предотвращает схлопывание margin'ов и обтекание float"
+  - "Что такое containing block и как `transform` на предке влияет на позиционирование `position: absolute`"
+  - "При каких условиях происходит margin collapse и почему в flex/grid-контекстах margin'ы не схлопываются"
+  - "Как `box-sizing: border-box` упрощает рассуждение о размерах элемента"
 ---
 
 # BFC, IFC, FFC, GFC: formatting contexts и containing block
@@ -298,14 +294,12 @@ article {
 
 ## Ключевые тезисы для интервью
 
-- Formatting context — область с едиными правилами раскладки: BFC, IFC, FFC, GFC.
-- BFC создаёт `display: flow-root`, `overflow` не `visible`, `float`, `position: absolute/fixed` и другие условия.
-- Внутри BFC блочные элементы располагаются вертикально, а их вертикальные margin’ы схлопываются.
-- `display: flow-root` — современный способ создать BFC без побочных эффектов.
-- Containing block — область, относительно которой считаются размеры и позиция. Для `absolute` — ближайший позиционированный предок; для `fixed` — viewport.
-- Margin collapse работает только в BFC, для соседних блоков и между родителем и крайними потомками.
-- В flex/grid-контекстах margin’ы не схлопываются, а `z-index` работает без `position`.
-- `box-sizing: border-box` включает padding и border в `width`/`height` и упрощает рассуждение о размерах.
+- Formatting context — область с едиными правилами раскладки: BFC (блочный), IFC (inline), FFC (flex), GFC (grid). Каждый контекст определяет, как дочерние элементы располагаются и взаимодействуют.
+- BFC создаётся условиями: `display: flow-root`, `overflow` не `visible`, `float`, `position: absolute/fixed`, flex/grid-контейнер. `display: flow-root` — современный способ без побочных эффектов (не обрезает контент, не создаёт scrollbar).
+- Внутри BFC блочные элементы располагаются вертикально, а их вертикальные margin'ы схлопываются; BFC также предотвращает обтекание float и выпадение margin'ов.
+- Containing block — система координат для `position: absolute/fixed`. Для `absolute` — ближайший позиционированный предок; для `fixed` — viewport. `transform` или `filter` на предке создают новый containing block, что ломает ожидаемое позиционирование.
+- Margin collapse работает только в BFC для соседних блоков и между родителем и крайними потомками; в flex/grid-контекстах margin'ы не схлопываются, а `z-index` работает без `position`.
+- `box-sizing: border-box` включает padding и border в `width`/`height`, упрощая рассуждение о размерах: заданная ширина = реальная ширина элемента.
 
 ## Заключение
 

@@ -5,16 +5,12 @@ description: "Web Components — это набор стандартов, поз�
 order: 14
 tags: ["custom-elements", "shadow-dom", "slots", "web-components", "lifecycle"]
 questions:
-  - "Почему имя custom element должно содержать дефис?"
-  - "Какие lifecycle callbacks есть у custom element и когда каждый из них вызывается?"
-  - "Что происходит с атрибутами в `constructor` и почему рендер лучше делать в `connectedCallback`?"
-  - "Чем отличаются `open` и `closed` режимы Shadow DOM?"
-  - "Как стили внутри Shadow DOM взаимодействуют с внешним документом?"
-  - "Что такое slots и как работает распределение light DOM?"
-  - "Чем именованный слот отличается от слота по умолчанию?"
-  - "Что такое retargeting событий в Shadow DOM?"
-  - "Почему кастомные события нужно создавать с `composed: true` для всплытия наружу?"
-  - "Как стилизовать части shadow root снаружи через `::part`?"
+  - "Почему имя custom element должно содержать дефис и какие lifecycle callbacks есть у custom element"
+  - "Что происходит с атрибутами в `constructor` и почему рендер лучше делать в `connectedCallback`"
+  - "Чем отличаются `open` и `closed` режимы Shadow DOM и почему `closed` не даёт реальной безопасности"
+  - "Как стили внутри Shadow DOM взаимодействуют с внешним документом и как стилизовать компоненты через `:host`, `::part`, CSS custom properties"
+  - "Что такое slots и как работает распределение light DOM: слот по умолчанию vs именованный слот"
+  - "Что такое retargeting событий в Shadow DOM и почему кастомные события нужно создавать с `composed: true`"
 ---
 
 # Custom elements, Shadow DOM и slots
@@ -418,13 +414,12 @@ customElements.define('my-tooltip', TooltipElement);
 
 ## Ключевые тезисы для интервью
 
-- Custom element регистрируется через `customElements.define('my-tag', MyClass)`; имя обязательно содержит дефис.
-- Основные lifecycle callbacks: `connectedCallback`, `disconnectedCallback`, `adoptedCallback`, `attributeChangedCallback` + статический `observedAttributes`.
-- Shadow DOM создаёт изолированное дерево через `attachShadow({ mode: 'open' | 'closed' })`; стили и разметка внутри не просачиваются наружу.
-- Slots распределяют light DOM внутрь shadow root: `<slot>` — по умолчанию, `<slot name="x">` — именованный слот.
-- События из Shadow DOM подвергаются retargeting; кастомные события, которые должны всплыть наружу, нужно создавать с `composed: true`.
-- `:host`, `::part`, `::slotted` и CSS custom properties — основные способы стилизовать компоненты снаружи и изнутри.
-- `closed` shadow root не даёт реальной безопасности, а лишь затрудняет отладку; предпочитайте `open`.
+- Custom element регистрируется через `customElements.define('my-tag', MyClass)`; имя обязательно содержит дефис, чтобы браузер отличал пользовательские элементы от нативных.
+- Основные lifecycle callbacks: `connectedCallback` (элемент добавлен в DOM), `disconnectedCallback` (удалён), `adoptedCallback` (перемещён в другой документ), `attributeChangedCallback` (атрибут изменён) + статический `observedAttributes` для отслеживания конкретных атрибутов.
+- Shadow DOM создаёт изолированное дерево через `attachShadow({ mode: 'open' | 'closed' })`; стили и разметка внутри не просачиваются наружу. `open` позволяет доступ через `element.shadowRoot`, `closed` возвращает `null` — но это не даёт реальной безопасности, а лишь затрудняет отладку; предпочитайте `open`.
+- Slots распределяют light DOM внутрь shadow root: `<slot>` — слот по умолчанию, `<slot name="x">` — именованный слот. Элементы со `slot="x"` попадают в именованный слот, остальные — в слот по умолчанию.
+- События из Shadow DOM подвергаются retargeting: `event.target` меняется на хост-элемент при выходе наружу. Кастомные события, которые должны всплыть через границу Shadow DOM, нужно создавать с `composed: true`.
+- `:host` стилизует хост-элемент изнутри, `::part` позволяет стилизовать части shadow root снаружи (через атрибут `part`), `::slotted` — стилизует контент, переданный через slots. CSS custom properties проникают через границу Shadow DOM — основной способ настройки снаружи.
 
 ## Заключение
 

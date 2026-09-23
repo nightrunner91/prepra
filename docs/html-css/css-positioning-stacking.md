@@ -5,16 +5,12 @@ description: "Позиционирование — это один из самы
 order: 7
 tags: ["positioning", "stacking-context", "z-index", "sticky", "containing-block"]
 questions:
-  - "Чем `position: absolute` отличается от `position: fixed`?"
-  - "Как определяется containing block для `position: absolute` и `position: fixed`?"
-  - "Что такое stacking context и какие свойства его создают?"
-  - "Почему дочерний элемент с огромным `z-index` не может перекрыть элемент вне stacking context'а родителя?"
-  - "Как `z-index` работает в flex/grid-контейнерах без `position`?"
-  - "Почему `position: sticky` может не работать?"
-  - "Что делает `isolation: isolate` и зачем оно нужно?"
-  - "Почему `position: fixed` перестаёт работать относительно viewport, если у предка есть `transform`?"
-  - "В каком порядке браузер рисует элементы внутри stacking context'а?"
-  - "Как центрировать абсолютно позиционированный элемент с помощью `inset: 0` и `margin: auto`?"
+  - "Как определяется containing block для `position: absolute` и `position: fixed` и почему `transform` на предке ломает `fixed`"
+  - "Что такое stacking context, какие свойства его создают и почему дочерний `z-index` не может перекрыть элемент вне контекста родителя"
+  - "В каком порядке браузер рисует элементы внутри stacking context: фон, отрицательный z-index, поток, float, inline, позиционированные"
+  - "Почему `position: sticky` может не работать и какие условия нужны для его корректной работы"
+  - "Как `z-index` работает в flex/grid-контейнерах без `position` и чем это отличается от обычного потока"
+  - "Что делает `isolation: isolate` и почему это чистый способ создать stacking context без побочных эффектов"
 ---
 
 # Positioning, stacking context, `z-index` и paint order
@@ -295,14 +291,12 @@ thead th {
 
 ## Ключевые тезисы для интервью
 
-- `position` бывает `static`, `relative`, `absolute`, `fixed`, `sticky`. Только `relative`/`absolute`/`fixed`/`sticky` создают позиционированный элемент.
-- Containing block для `absolute` — ближайший не-static предок или предок с `transform`/`filter`/`perspective`/`contain`; для `fixed` — обычно viewport.
-- `position: sticky` требует порога (`top`/`bottom`/`left`/`right`) и прокручиваемого предка.
-- Stacking context — изолированная группа слоёв. `z-index` работает только внутри одного stacking context’а.
-- Stacking context создаёт `z-index` у позиционированного элемента, `opacity < 1`, `transform`, `filter`, `isolation: isolate`, flex/grid-контейнер с `z-index` у детей и ряд других свойств.
-- Дочерний элемент не может перекрыть элемент за пределами stacking context’а своего родителя, даже с огромным `z-index`.
+- `position` бывает `static`, `relative`, `absolute`, `fixed`, `sticky`. Containing block для `absolute` — ближайший не-static предок или предок с `transform`/`filter`/`perspective`/`contain`; для `fixed` — обычно viewport, но `transform` у предка ломает это поведение.
+- `position: sticky` требует порога (`top`/`bottom`/`left`/`right`) и прокручиваемого предка; не работает, если предок имеет `overflow: hidden` или `overflow: scroll`.
+- Stacking context — изолированная группа слоёв; `z-index` работает только внутри одного контекста. Дочерний элемент не может перекрыть элемент за пределами stacking context'а своего родителя, даже с огромным `z-index`.
+- Stacking context создают: `z-index` у позиционированного элемента, `opacity < 1`, `transform`, `filter`, `isolation: isolate`, flex/grid-контейнер с `z-index` у детей, `contain: paint`, `will-change` с позиционированием.
 - Порядок отрисовки внутри stacking context: фон контекста → отрицательный `z-index` → поток → float → inline → позиционированные → положительный `z-index`.
-- `transform`/`filter`/`perspective` у предка ломает `position: fixed`, делая предка containing block’ом.
+- `isolation: isolate` создаёт stacking context без побочных эффектов — чистый способ изолировать наложение, в отличие от `opacity` или `transform`.
 
 ## Заключение
 

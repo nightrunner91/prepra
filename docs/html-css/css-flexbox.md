@@ -5,16 +5,12 @@ description: "Flexbox — первый по-настоящему осевой la
 order: 3
 tags: ["flexbox", "flex-basis", "flex-grow", "flex-shrink", "alignment"]
 questions:
-  - "Что такое main axis и cross axis в Flexbox?"
-  - "Чем `flex-basis` отличается от `width`?"
-  - "Как `flex-grow` делит свободное пространство между элементами?"
-  - "Как рассчитывается сжатие элементов при `flex-shrink`?"
-  - "Чем `flex: 1` отличается от `flex: auto`?"
-  - "Чем `align-items` отличается от `align-content`?"
-  - "Почему `text-overflow: ellipsis` не работает в flex-элементе без `min-width: 0`?"
-  - "Как `order` влияет на accessibility и DOM-порядок?"
-  - "Когда использовать `flex-wrap: wrap` и как это влияет на выравнивание?"
-  - "Что делает `margin: auto` в flex-контексте?"
+  - "Как оси main/cross определяют работу `justify-*` и `align-*` во Flexbox"
+  - "Как алгоритм `flex-basis` → `flex-grow` → `flex-shrink` распределяет пространство между элементами"
+  - "Чем `flex: 1` отличается от `flex: auto` и когда какой шортханд использовать"
+  - "Почему `text-overflow: ellipsis` не работает во flex-элементе без `min-width: 0`"
+  - "Как `order` влияет на accessibility, если DOM-порядок не меняется"
+  - "Чем `align-items` отличается от `align-content` и когда что применять"
 ---
 
 # Flexbox в глубину: оси, `flex-basis`, grow/shrink, alignment
@@ -373,14 +369,12 @@ flex: 1;         /* 1 1 0% — занять всё доступное место
 
 ## Ключевые тезисы для интервью
 
-- Flexbox работает с двумя осями: main axis (`justify-*`) и cross axis (`align-*`).
-- `flex-basis` — начальный размер элемента до распределения места; для row заменяет `width`, для column — `height`.
-- `flex-grow` делит **свободное** пространство пропорционально коэффициентам, а не всю ширину контейнера.
-- `flex-shrink` управляет сжатием при переполнении; формула учитывает `flex-basis * flex-shrink`.
-- `flex: 1` = `1 1 0%`; `flex: auto` = `1 1 auto`; `flex: initial` = `0 1 auto`.
-- `align-items` выравнивает элементы внутри строки по cross axis; `align-content` — распределяет сами строки при `flex-wrap: wrap`.
-- `order` меняет только визуальный порядок, не DOM-порядок; это может нарушить accessibility.
-- По умолчанию flex-элементы имеют `min-width: auto`, поэтому для обрезки текста нужно явно задавать `min-width: 0`.
+- Flexbox работает с двумя осями: main axis (`justify-*`) и cross axis (`align-*`); `flex-basis` задаёт начальный размер до распределения места.
+- `flex-grow` делит свободное пространство пропорционально коэффициентам; `flex-shrink` сжимает при переполнении по формуле `flex-basis * flex-shrink`.
+- Шортханды: `flex: 1` = `1 1 0%` (равные колонки), `flex: auto` = `1 1 auto` (пропорционально контенту), `flex: initial` = `0 1 auto`.
+- `align-items` выравнивает элементы внутри строки по cross axis; `align-content` распределяет сами строки при `flex-wrap: wrap`.
+- `order` меняет только визуальный порядок, не DOM-порядок — это нарушает accessibility при навигации с клавиатуры и для скринридеров.
+- Flex-элементы по умолчанию имеют `min-width: auto`, поэтому `text-overflow: ellipsis` работает только после явного `min-width: 0`.
 
 ## Заключение
 

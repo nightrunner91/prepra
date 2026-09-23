@@ -5,16 +5,11 @@ description: "CSS-анимации — не просто «украшатель�
 order: 1
 tags: ["transitions", "animations", "will-change", "compositor", "prefers-reduced-motion"]
 questions:
-  - "Чем `transition` отличается от `animation` и `@keyframes`?"
-  - "Какие этапы проходит браузер при отрисовке каждого кадра анимации?"
-  - "Почему `transform` и `opacity` безопасны для анимации, а `width` и `top` — нет?"
-  - "Что такое compositor thread и как он связан с производительностью анимаций?"
-  - "Когда использовать `will-change` и какие риски несёт его злоупотребление?"
-  - "Что делает свойство `contain` и как `contain: layout paint` помогает при анимации?"
-  - "Как работает `content-visibility: auto` и почему нужен `contain-intrinsic-size`?"
-  - "Как адаптировать анимации для пользователей с `prefers-reduced-motion: reduce`?"
-  - "Почему анимация `box-shadow` или `filter` дороже анимации `transform`?"
-  - "Что происходит при анимации свойств, вызывающих layout (reflow)?"
+  - "Как этапы Style → Layout → Paint → Composite объясняют, почему `transform` и `opacity` безопасны, а `width` и `top` — нет"
+  - "Чем `transition` отличается от `animation` с `@keyframes` и когда что использовать"
+  - "Что произойдёт, если злоупотребить `will-change`, и как `contain: layout paint` помогает ограничить перерисовку"
+  - "Как `content-visibility: auto` ускоряет рендеринг длинных списков и зачем нужен `contain-intrinsic-size`"
+  - "Как адаптировать анимации для `prefers-reduced-motion: reduce` и почему нельзя отключать все анимации разом"
 ---
 
 # Transitions, animations и производительность CSS
@@ -354,14 +349,12 @@ Compositor thread отвечает за сборку финального кад
 
 ## Ключевые тезисы для интервью
 
-- Браузер рисует кадр через этапы: Style → Layout → Paint → Composite. Чем раньше этап, который затрагивает анимация, тем дороже она обходится.
-- Безопасные для производительности свойства: `transform` и `opacity`. Они выполняются на compositor thread и не вызывают layout/paint.
-- Опасные для анимации: `width`, `height`, `top`, `left`, `margin`, `padding` — всё, что меняет геометрию.
-- `will-change` подсказывает браузеру подготовить слой, но злоупотребление им вредит: каждый слой требует памяти.
-- `contain: layout paint` изолирует элемент и ограничивает область перерисовки.
-- `content-visibility: auto` пропускает рендеринг элементов вне viewport, ускоряя первичный рендеринг длинных списков.
-- `prefers-reduced-motion: reduce` нужно уважать; лучше отключать конкретные анимации, а не все сразу.
-- `transition` — между двумя состояниями; `animation`/@keyframes — для многошаговых и циклических сценариев.
+- Браузер рисует кадр через Style → Layout → Paint → Composite; `transform` и `opacity` выполняются на compositor thread и не вызывают layout/paint, а `width`, `top`, `margin` — вызывают, поэтому дороги.
+- `transition` interpolates между двумя состояниями; `animation` с `@keyframes` — для многошаговых и циклических сценариев.
+- `will-change` подсказывает браузеру подготовить отдельный слой, но каждый слой расходует память — применять точечно, только к анимируемым элементам.
+- `contain: layout paint` изолирует элемент: изменения внутри не вызывают layout/paint снаружи, ограничивая область перерисовки.
+- `content-visibility: auto` пропускает рендеринг элементов вне viewport, ускоряя первичную отрисовку; `contain-intrinsic-size` задаёт плейсхолдер, чтобы scrollbar не прыгал.
+- `prefers-reduced-motion: reduce` нужно уважать: отключать конкретные анимации (transition, animation), а не все эффекты подряд.
 
 ## Заключение
 

@@ -5,16 +5,12 @@ description: "Адаптивность изначально строилась �
 order: 8
 tags: ["media-queries", "container-queries", "viewport-units", "container-type", "prefers-color-scheme"]
 questions:
-  - "Чем container queries отличаются от media queries?"
-  - "Что нужно сделать, чтобы включить container queries для элемента?"
-  - "В чём разница между `container-type: size` и `container-type: inline-size`?"
-  - "Зачем нужны `svh`, `lvh` и `dvh` в дополнение к `vh`?"
-  - "Что такое container query units (`cqi`, `cqw`) и как они применяются?"
-  - "Как реализовать тёмную тему через `prefers-color-scheme`?"
-  - "Почему `prefers-reduced-motion` нужно обрабатывать избирательно, а не глобальным сбросом?"
-  - "Как `hover: none` и `pointer: coarse` помогают адаптироваться под тачскрины?"
-  - "Как именовать контейнер через `container-name` и зачем это нужно?"
-  - "Когда media queries предпочтительнее container queries?"
+  - "Чем container queries отличаются от media queries и когда какой подход предпочтительнее"
+  - "Как включить container queries: `container-type`, `container-name` и разница между `size` и `inline-size`"
+  - "Зачем нужны `svh`, `lvh` и `dvh` в дополнение к `vh` и как они решают проблему мобильных браузеров"
+  - "Что такое container query units (`cqi`, `cqw`) и как они применяются для адаптации компонентов"
+  - "Как `prefers-color-scheme`, `prefers-reduced-motion` и `prefers-contrast` позволяют уважать системные настройки пользователя"
+  - "Почему `prefers-reduced-motion` нужно обрабатывать избирательно, а не глобальным сбросом всех анимаций"
 ---
 
 # Media queries, container queries, viewport units и `prefers-*`
@@ -328,15 +324,12 @@ Media query управляет глобальной раскладкой стр�
 
 ## Ключевые тезисы для интервью
 
-- Media queries реагируют на характеристики viewport и устройства: `width`, `height`, `orientation`, `hover`, `pointer`, `prefers-*`.
-- Container queries реагируют на размер контейнера, а не экрана; требуют `container-type` у родителя.
-- `container-type: inline-size` позволяет запрашивать ширину контейнера; `size` — и ширину, и высоту.
-- Контейнеры можно именовать через `container-name` и использовать в `@container name (условие)`.
-- Viewport units: `vw`/`vh`, `vmin`/`vmax`, а также `svh`/`lvh`/`dvh` для мобильных браузеров.
-- Container query units: `cqw`/`cqh`/`cqi`/`cqb` выражают размер относительно контейнера.
-- `prefers-color-scheme` — тёмная/светлая тема; `prefers-reduced-motion` — уменьшение анимаций; `prefers-contrast` и `prefers-reduced-transparency` — accessibility.
-- `prefers-reduced-motion` стоит обрабатывать избирательно, а не отключать все transition и animation глобально.
-- Container queries лучше media queries для компонентов, которые могут находиться в разных частях layout’а.
+- Media queries реагируют на характеристики viewport и устройства: `width`, `height`, `orientation`, `hover`, `pointer`, `prefers-*`. Container queries реагируют на размер контейнера, а не экрана — лучше для компонентов в разных частях layout'а.
+- Container queries требуют `container-type` у родителя: `inline-size` позволяет запрашивать ширину, `size` — и ширину, и высоту. Контейнеры можно именовать через `container-name` и использовать в `@container name (условие)`.
+- Viewport units: `vw`/`vh`, `vmin`/`vmax`; `svh`/`lvh`/`dvh` решают проблему мобильных браузеров, где `100vh` не совпадает с видимой областью из-за адресной строки.
+- Container query units: `cqw`/`cqh`/`cqi`/`cqb` выражают размер относительно контейнера, позволяя адаптировать типографику и отступы без media queries.
+- `prefers-color-scheme` управляет тёмной/светлой темой; `prefers-reduced-motion` уменьшает анимации; `prefers-contrast` и `prefers-reduced-transparency` улучшают accessibility.
+- `prefers-reduced-motion` стоит обрабатывать избирательно: отключать конкретные анимации (transition, animation, transform), а не все эффекты глобально — некоторые анимации важны для UX.
 
 ## Заключение
 
