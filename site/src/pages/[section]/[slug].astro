@@ -6,6 +6,7 @@ import Sidebar from "../../components/layout/Sidebar.astro";
 import TableOfContents from "../../components/content/TableOfContents.astro";
 import PrevNextNav from "../../components/content/PrevNextNav.astro";
 import { ReadingProgress } from "../../components/content/ReadingProgress";
+import { QuizOverlay } from "../../components/content/QuizOverlay";
 import Badge from "../../components/ui/Badge.astro";
 import { withBase } from "../../lib/urls";
 
@@ -124,6 +125,16 @@ const { headings } = await render(entry);
       <Content />
     </div>
 
+    {
+      data.questions && data.questions.length > 0 && (
+        <QuizOverlay
+          client:only="react"
+          questions={data.questions}
+          articleId={withBase(`/${data.section}/${entry.id}`)}
+        />
+      )
+    }
+
     <button
       id="read-toggle"
       type="button"
@@ -131,24 +142,6 @@ const { headings } = await render(entry);
     >
       Отметить прочитанным
     </button>
-
-    {
-      data.questions && data.questions.length > 0 && (
-        <section class="mt-12 border-[3px] border-border bg-surface-alt/50 p-6">
-          <h2 class="font-mono text-xl font-extrabold uppercase tracking-tight text-text mb-4">
-            Вопросы для самопроверки
-          </h2>
-          <ul class="space-y-3">
-            {data.questions.map((q: string, i: number) => (
-              <li class="flex items-start gap-3 text-[14px] text-text-secondary leading-relaxed font-medium">
-                <span class="flex-shrink-0 mt-1 block h-2 w-2 bg-accent" />
-                <span>{q}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )
-    }
 
     <PrevNextNav
       prev={prev}
