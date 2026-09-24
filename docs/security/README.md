@@ -2,12 +2,12 @@
 
 Раздел объясняет, как защищать веб-приложения на уровне фронтенда: от классических XSS и CSRF до Server Actions, CSP, секретов, авторизации, безопасности зависимостей.
 
-## Начни с базы 📚
+## Начни с базы
 
 1. **[Безопасность веб-приложений](./security.md)** — комплексный обзор угроз и защит.
 2. **[Управление секретами](./security-secrets-management.md)** — `NEXT_PUBLIC_`, `runtimeConfig`, vaults, ротация, защита от утечек в git.
 
-## Углубись в детали 🔎
+## Углубись в детали
 
 - **[XSS: анатомия атаки](./security-xss-deep-dive.md)** — виды XSS, экранирование, санитизация, защита в React/Vue/Nuxt/Next.js, Trusted Types.
 - **[CSRF: как браузер становится оружием](./security-csrf-deep-dive.md)** — механика атаки, SameSite cookies, CSRF-токены, double submit cookie.
@@ -18,6 +18,6 @@
 - **[Безопасность Vue и Nuxt](./security-vue-nuxt.md)** — `v-html`, refs, Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP.
 - **[Безопасность зависимостей и supply chain](./security-dependency-supply-chain.md)** — npm audit, lock-файлы, Snyk, Socket, SBOM, provenance.
 
-## Не будет лишним ✍
+## Не будет лишним
 
 - **[Подготовка к SOC2 и CASA](./security-soc2-casa-workflows.md)** — как фронтендеру участвовать в security аудите.
