@@ -442,14 +442,14 @@ function QuizView({
       {flipped && (
         <div className={`mt-8 flex flex-col items-center gap-4 transition-all duration-300 ${savingStatus === currentIndex ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
           <div className="font-mono text-sm font-bold uppercase tracking-wider text-white">
-            Как ты ответил?
+            Оцени свой ответ
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 w-full">
             <button
               type="button"
               onClick={() => onAnswer('good')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
               aria-label="Ответил уверенно"
             >
               <ThumbsUp size={24} weight="bold" className="text-pale-green-text" />
@@ -459,7 +459,7 @@ function QuizView({
               type="button"
               onClick={() => onAnswer('unsure')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
               aria-label="Ответил неуверенно"
             >
               <SmileyMeh size={24} weight="bold" className="text-pale-yellow-text" />
@@ -469,7 +469,7 @@ function QuizView({
               type="button"
               onClick={() => onAnswer('failed')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
               aria-label="Не смог ответить"
             >
               <ThumbsDown size={24} weight="bold" className="text-pale-red-text" />
