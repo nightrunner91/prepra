@@ -1,0 +1,49 @@
+---
+import { ArrowRight, Lightning } from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+
+interface Props {
+  question: {
+    text: string;
+    sectionId: string;
+    articleSlug: string;
+  };
+}
+
+const { question } = Astro.props;
+---
+
+<div class="mt-16 lg:mt-20">
+  <div class="animate-fade-in border-[3px] border-border bg-pale-yellow-bg p-6">
+    <div class="flex items-center gap-3">
+      <div
+        class="flex h-10 w-10 items-center justify-center border-2 border-border bg-pale-yellow-text text-canvas"
+      >
+        <Lightning size={20} weight="bold" />
+      </div>
+      <div>
+        <h2 class="font-mono text-xl font-extrabold uppercase tracking-tight">
+          Вопрос дня
+        </h2>
+        <p
+          class="text-xs font-mono font-bold uppercase tracking-wider text-text-tertiary"
+        >
+          Попробуй ответить без подглядывания
+        </p>
+      </div>
+    </div>
+    <p
+      id="daily-question-text"
+      class="mt-4 text-lg font-medium text-text leading-relaxed"
+    >
+      {question.text}
+    </p>
+    <a
+      id="daily-question-link"
+      href={withBase(`/${question.sectionId}/${question.articleSlug}`)}
+      class="group mt-4 inline-flex items-center gap-1 font-mono text-sm font-bold uppercase tracking-wider text-accent hover:text-accent-hover transition-colors"
+    >
+      Читать статью <span class="inline-block transition-transform group-hover:translate-x-1"><ArrowRight size={16} weight="bold" /></span>
+    </a>
+  </div>
+</div>

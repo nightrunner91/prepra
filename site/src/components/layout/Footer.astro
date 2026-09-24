@@ -2,23 +2,50 @@
 import { withBase } from "../../lib/urls";
 ---
 
-<footer class="border-t border-border bg-canvas">
-  <div class="mx-auto max-w-7xl px-4 lg:px-8 py-8">
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-[13px] text-text-tertiary">&copy; 2026 Prepra</p>
-      <div class="flex items-center gap-4 text-[13px] text-text-tertiary">
-        <a href={withBase("/")} class="hover:text-accent transition-colors"
-          >Главная</a
-        >
-        <span class="text-border">/</span>
-        <a
-          href={withBase("/javascript")}
-          class="hover:text-accent transition-colors">JavaScript</a
-        >
-        <span class="text-border">/</span>
-        <a href={withBase("/react")} class="hover:text-accent transition-colors"
-          >React</a
-        >
+<footer class="border-t-[3px] border-border bg-surface">
+  <div class="mx-auto max-w-7xl px-6 py-14 lg:px-12">
+    <div class="flex flex-col gap-8">
+      <div class="flex flex-col sm:flex-row items-start justify-between gap-6">
+        <div>
+          <a
+            href={withBase("/")}
+            class="font-mono text-2xl font-extrabold uppercase tracking-tight text-text hover:text-accent transition-colors"
+          >
+            <span class="text-text">PRE</span><span class="text-accent"
+              >PRA</span
+            >
+          </a>
+          <p class="mt-2 text-sm text-text-tertiary font-medium">
+            Интерактивная платформа для подготовки к фронтенд-собеседованию.
+          </p>
+        </div>
+        <div class="flex flex-col items-start sm:items-end gap-3">
+          <div
+            class="flex items-center gap-3 text-sm font-mono font-bold uppercase tracking-wider text-text-tertiary"
+          >
+            <a
+              href="https://github.com/nightrunner91/prepra"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-accent transition-colors">GitHub</a
+            >
+            <span class="text-border">/</span>
+            <a
+              href="https://t.me/nightrunner91"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-accent transition-colors">Telegram</a
+            >
+          </div>
+        </div>
+      </div>
+      <div
+        class="border-t-2 border-border pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2"
+      >
+        <p class="text-sm font-mono text-text-tertiary">&copy; 2026 Prepra</p>
+        <p class="text-sm font-mono text-text-tertiary">
+          Сделано с ❤ к фронтенду
+        </p>
       </div>
     </div>
   </div>

@@ -1,0 +1,53 @@
+---
+import type { Icon } from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+import SectionCard from "./SectionCard.astro";
+
+interface SectionItem {
+  id: string;
+  label: string;
+  icon?: Icon;
+  description: string;
+  color: "red" | "blue" | "green" | "yellow" | "neutral";
+  articleCount: number;
+  questionCount: number;
+}
+
+interface Props {
+  sections: SectionItem[];
+  totalArticles: number;
+  totalQuestions: number;
+}
+
+const { sections, totalArticles, totalQuestions } = Astro.props;
+---
+
+<div class="" id="sections">
+  <!-- <h2
+    class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl"
+  >
+    Все разделы
+  </h2>
+  <p
+    class="mt-2 text-sm font-bold uppercase tracking-wide text-text-secondary"
+  >
+    {totalArticles} статей и {totalQuestions} вопросов для самопроверки.
+  </p> -->
+  <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {
+      sections.map((s, i) => (
+        <div class="animate-fade-in" style={`animation-delay: ${i * 40}ms`}>
+          <SectionCard
+            title={s.label}
+            description={s.description}
+            href={withBase(`/${s.id}`)}
+            articleCount={s.articleCount}
+            questionCount={s.questionCount}
+            color={s.color}
+            icon={s.icon}
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>

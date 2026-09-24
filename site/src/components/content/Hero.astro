@@ -1,0 +1,30 @@
+---
+import { withBase } from "../../lib/urls";
+---
+
+<div class="border-b-[3px] border-border pb-10">
+  <h1
+    class="font-mono text-5xl sm:text-6xl lg:text-8xl leading-[0.9] font-extrabold uppercase tracking-tight text-text"
+  >
+    <span class="text-text">PRE</span><span class="text-accent">PRA</span>
+  </h1>
+  <p
+    class="mt-4 text-base font-bold uppercase tracking-wide text-text-secondary"
+  >
+    Интерактивная платформа для подготовки к фронтенд-собеседованию.
+  </p>
+  <div class="mt-8 flex flex-wrap items-center gap-4">
+    <a
+      href={withBase("/javascript")}
+      class="inline-flex items-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+    >
+      Начать изучение
+    </a>
+    <a
+      href="#sections"
+      class="inline-flex items-center gap-2 border-[3px] border-border bg-surface px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-text transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+    >
+      Посмотреть разделы
+    </a>
+  </div>
+</div>

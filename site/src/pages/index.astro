@@ -1,10 +1,14 @@
 ---
 import { getCollection } from "astro:content";
 import PageLayout from "../layouts/PageLayout.astro";
-import SectionCard from "../components/content/SectionCard.astro";
+import Hero from "../components/content/Hero.astro";
+import SectionsGrid from "../components/content/SectionsGrid.astro";
+import ProgressBlock from "../components/content/ProgressBlock.astro";
+import HowItWorks from "../components/content/HowItWorks.astro";
+import DailyQuestion from "../components/content/DailyQuestion.astro";
 import FAQ from "../components/content/FAQ.astro";
+import Footer from "../components/layout/Footer.astro";
 import { sections } from "../lib/sections";
-import { withBase } from "../lib/urls";
 
 const sectionDescriptions: Record<string, string> = {
   javascript: "Основы JavaScript, ES6+, замыкания, прототипы, асинхронность",
@@ -61,6 +65,27 @@ const totalQuestions = sectionStats.reduce(
   0,
 );
 
+const allQuestions: { text: string; sectionId: string; articleSlug: string }[] =
+  [];
+for (const s of sectionStats) {
+  const articles = await getCollection(s.id as any);
+  for (const a of articles) {
+    for (const q of a.data.questions || []) {
+      allQuestions.push({ text: q, sectionId: s.id, articleSlug: a.id });
+    }
+  }
+}
+
+const today = new Date();
+const dayOfYear = Math.floor(
+  (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) /
+    (1000 * 60 * 60 * 24),
+);
+const dailyQuestion =
+  allQuestions.length > 0
+    ? allQuestions[dayOfYear % allQuestions.length]
+    : null;
+
 const faqItems = [
   {
     question: "Для кого создана prepra?",
@@ -112,55 +137,42 @@ const faqItems = [
 
 <PageLayout title="Главная">
   <div class="mx-auto px-6 py-12 lg:py-16 lg:px-12">
-    <div class="border-b-[3px] border-border pb-10">
-      <h1
-        class="font-mono text-5xl sm:text-6xl lg:text-8xl leading-[0.9] font-extrabold uppercase tracking-tight text-text"
-      >
-        <span class="text-text">PRE</span><span class="text-accent">PRA</span>
-      </h1>
-      <p
-        class="mt-4 text-base font-bold uppercase tracking-wide text-text-secondary"
-      >
-        Интерактивная платформа для подготовки к фронтенд-собеседованию.
-      </p>
-      <div
-        class="mt-6 flex items-center gap-4 font-mono text-sm font-bold uppercase tracking-wider text-text-tertiary"
-      >
-        <span class="border-2 border-border px-2 py-1 bg-surface"
-          >{totalArticles} статей</span
-        >
-        <span class="border-2 border-border px-2 py-1 bg-surface"
-          >{totalQuestions} вопросов</span
-        >
-        <span class="border-2 border-border px-2 py-1 bg-surface"
-          >{sections.length} разделов</span
-        >
-      </div>
-    </div>
+    <Hero />
 
-    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {
-        sectionStats.map((s, i) => (
-          <div class="animate-fade-in" style={`animation-delay: ${i * 40}ms`}>
-            <SectionCard
-              title={s.label}
-              description={s.description}
-              href={withBase(`/${s.id}`)}
-              articleCount={s.articleCount}
-              questionCount={s.questionCount}
-              color={s.color}
-              icon={s.icon}
-            />
-          </div>
-        ))
-      }
-    </div>
+    <ProgressBlock
+      totalArticles={totalArticles}
+      totalQuestions={totalQuestions}
+      sectionsCount={sections.length}
+    />
 
-    <div class="mt-20 lg:mt-24">
+    <SectionsGrid sections={sectionStats} />
+
+    <HowItWorks />
+
+    {dailyQuestion && <DailyQuestion question={dailyQuestion} />}
+
+    <div class="mt-20 lg:mt-24 mb-12">
       <FAQ items={faqItems} />
     </div>
   </div>
+
+  <Footer slot="footer" />
 </PageLayout>
+
+<style>
+  .animate-fade-in {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 300ms ease,
+      transform 300ms ease;
+  }
+
+  .animate-fade-in.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
 
 <script>
   const observer = new IntersectionObserver(

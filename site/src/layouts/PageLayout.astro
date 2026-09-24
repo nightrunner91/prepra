@@ -29,4 +29,5 @@ const { title, description, currentSection, showLeftSidebar = false, showRightSi
       {showRightSidebar && <slot name="right-sidebar" />}
     </div>
   </div>
+  <slot name="footer" />
 </BaseLayout>

@@ -1,0 +1,54 @@
+---
+import { ProgressBar } from "../ui/ProgressBar.tsx";
+
+interface Props {
+  totalArticles: number;
+  totalQuestions: number;
+  sectionsCount: number;
+}
+
+const { totalArticles, totalQuestions, sectionsCount } = Astro.props;
+---
+
+<div class="mt-16 lg:mt-20">
+  <div class="animate-fade-in border-[3px] border-border bg-pale-green-bg p-6">
+    <div
+      class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div>
+        <h2
+          class="font-mono text-2xl font-extrabold uppercase tracking-tight text-text sm:text-3xl"
+        >
+          Твой прогресс
+        </h2>
+        <p class="mt-1 text-sm text-text-secondary font-medium">
+          Отслеживай подготовку и двигайся к цели.
+        </p>
+      </div>
+      <div
+        class="flex items-center gap-6 font-mono text-sm font-bold uppercase tracking-wider"
+      >
+        <div class="text-center">
+          <div class="text-2xl text-accent">{totalArticles}</div>
+          <div class="text-[10px] text-text-tertiary">Статей</div>
+        </div>
+        <div class="h-8 w-[2px] bg-border"></div>
+        <div class="text-center">
+          <div class="text-2xl text-accent">{totalQuestions}</div>
+          <div class="text-[10px] text-text-tertiary">Вопросов</div>
+        </div>
+        <div class="h-8 w-[2px] bg-border"></div>
+        <div class="text-center">
+          <div class="text-2xl text-accent">{sectionsCount}</div>
+          <div class="text-[10px] text-text-tertiary">Разделов</div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-6">
+      <ProgressBar value={0} max={totalQuestions} showLabel={true} />
+      <p class="mt-2 text-xs font-mono text-text-tertiary">
+        Отмечай вопросы как изученные — прогресс обновляется автоматически.
+      </p>
+    </div>
+  </div>
+</div>

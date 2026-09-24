@@ -1,0 +1,77 @@
+---
+const steps = [
+  {
+    number: "1",
+    title: "Выбери раздел",
+    description:
+      "Начни с базы или иди к продвинутым темам. Материал выстроен последовательно.",
+    bgClass: "bg-pale-yellow-bg",
+    textClass: "text-pale-yellow-text",
+    delay: "0ms",
+  },
+  {
+    number: "2",
+    title: "Читай и разбирайся",
+    description:
+      "Каждая статья — глубокий разбор темы с примерами кода и пояснениями.",
+    bgClass: "bg-pale-blue-bg",
+    textClass: "text-pale-blue-text",
+    delay: "80ms",
+  },
+  {
+    number: "3",
+    title: "Проверяй себя",
+    description:
+      "Чеклист вопросов в конце каждой статьи. Отвечай вслух, без подглядывания.",
+    bgClass: "bg-pale-green-bg",
+    textClass: "text-pale-green-text",
+    delay: "160ms",
+  },
+  {
+    number: "4",
+    title: "Повторяй",
+    description:
+      "Возвращайся к сложным темам. Используй интервальное повторение для закрепления.",
+    bgClass: "bg-pale-red-bg",
+    textClass: "text-pale-red-text",
+    delay: "240ms",
+  },
+];
+---
+
+<div class="mt-16">
+  <h2
+    class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl"
+  >
+    Как это работает
+  </h2>
+  <p
+    class="mt-2 text-sm font-bold uppercase tracking-wide text-text-secondary"
+  >
+    Четыре простых шага к систематизации знаний.
+  </p>
+  <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      steps.map((step) => (
+        <div
+          class="animate-fade-in border-[3px] border-border bg-surface p-5"
+          style={`animation-delay: ${step.delay}`}
+        >
+          <div
+            class={`flex h-10 w-10 items-center justify-center border-2 border-border ${step.bgClass} ${step.textClass}`}
+          >
+            <span class="font-mono text-lg font-extrabold">{step.number}</span>
+          </div>
+          <h3
+            class="mt-3 font-mono text-base font-extrabold uppercase tracking-tight"
+          >
+            {step.title}
+          </h3>
+          <p class="mt-1 text-sm text-text-secondary leading-relaxed">
+            {step.description}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+</div>
