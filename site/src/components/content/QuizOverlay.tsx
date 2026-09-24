@@ -1,13 +1,10 @@
 import {
-  CheckCircle,
   Eye,
-  MinusCircle,
   PauseCircle,
   SmileyMeh,
   ThumbsDown,
   ThumbsUp,
-  X,
-  XCircle
+  X
 } from '@phosphor-icons/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -102,30 +99,34 @@ function formatDate(timestamp: number): string {
 
 type Phase = 'idle' | 'results' | 'quiz';
 
-const STATUS_META: Record<AnswerStatus, { label: string; icon: React.ReactNode; bg: string; border: string }> = {
+const STATUS_META: Record<AnswerStatus, { label: string; icon: React.ReactNode; bg: string; border: string; color: string }> = {
   good: {
     label: 'Ответил хорошо',
-    icon: <CheckCircle size={18} weight="fill" />,
+    icon: <ThumbsUp size={24} weight="bold" />,
     bg: 'bg-pale-green-bg',
     border: 'border-pale-green-text',
+    color: 'text-pale-green-text',
   },
   unsure: {
     label: 'Ответил неуверенно',
-    icon: <MinusCircle size={18} weight="fill" />,
+    icon: <SmileyMeh size={24} weight="bold" />,
     bg: 'bg-pale-yellow-bg',
     border: 'border-pale-yellow-text',
+    color: 'text-pale-yellow-text',
   },
   failed: {
     label: 'Не смог ответить',
-    icon: <XCircle size={18} weight="fill" />,
+    icon: <ThumbsDown size={24} weight="bold" />,
     bg: 'bg-pale-red-bg',
     border: 'border-pale-red-text',
+    color: 'text-pale-red-text',
   },
   skipped: {
     label: 'Пропущено',
-    icon: <PauseCircle size={18} weight="fill" />,
+    icon: <PauseCircle size={24} weight="fill" />,
     bg: 'bg-surface-alt',
     border: 'border-border',
+    color: 'text-text-secondary',
   },
 };
 
@@ -226,13 +227,12 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
       {phase !== 'idle' && (
         <div
           ref={overlayRef}
-          className={`fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-12 md:py-20 transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
+          className={`fixed inset-0 z-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 bg-black/70 backdrop-blur-sm ${isClosing ? 'opacity-0' : 'opacity-100'}`}
           role="dialog"
           aria-modal="true"
         >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
-          <div className="relative z-10 flex w-full max-w-2xl flex-col">
+          <div className="absolute inset-x-4 w-full top-12 md:inset-x-auto md:left-1/2 md:right-auto md:-translate-x-1/2 md:max-w-2xl bottom-12 md:bottom-20">
             {phase === 'results' && lastAttempt && (
               <ResultsView
                 questions={questions}
@@ -296,30 +296,30 @@ function ResultsView({ questions, attempt, onRetake, onClose }: ResultsViewProps
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 border-b-[3px] border-border p-6 md:grid-cols-4 md:p-8">
+      <div className="grid grid-cols-2 gap-3 p-6 md:grid-cols-4 md:p-8">
         <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-green-bg p-3">
-          <CheckCircle size={22} weight="fill" className="text-pale-green-text" />
+          <ThumbsUp size={22} weight="bold" className="text-pale-green-text" />
           <span className="font-mono text-2xl font-extrabold text-pale-green-text">{counts.good}</span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
         </div>
         <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-yellow-bg p-3">
-          <MinusCircle size={22} weight="fill" className="text-pale-yellow-text" />
+          <SmileyMeh size={22} weight="bold" className="text-pale-yellow-text" />
           <span className="font-mono text-2xl font-extrabold text-pale-yellow-text">{counts.unsure}</span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-yellow-text">Неуверенно</span>
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">Неуверенно</span>
         </div>
         <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-red-bg p-3">
-          <XCircle size={22} weight="fill" className="text-pale-red-text" />
+          <ThumbsDown size={22} weight="bold" className="text-pale-red-text" />
           <span className="font-mono text-2xl font-extrabold text-pale-red-text">{counts.failed}</span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
         </div>
         <div className="flex flex-col items-center gap-1 border-2 border-border bg-surface-alt p-3">
           <PauseCircle size={22} weight="fill" className="text-text-secondary" />
           <span className="font-mono text-2xl font-extrabold text-text-secondary">{counts.skipped}</span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary">Пропущено</span>
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">Пропущено</span>
         </div>
       </div>
 
-      <div className="border-b-[3px] border-border p-6 md:p-8">
+      <div className="px-6 md:px-8">
         <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
           Ответы по вопросам
         </div>
@@ -332,11 +332,8 @@ function ResultsView({ questions, attempt, onRetake, onClose }: ResultsViewProps
                 key={i}
                 className={`flex items-start gap-3 border-2 ${meta.border} ${meta.bg} p-3`}
               >
-                <span className="mt-0.5 flex-shrink-0 text-text">{meta.icon}</span>
+                <span className={`mt-0.5 flex-shrink-0 ${meta.color}`}>{meta.icon}</span>
                 <div className="min-w-0 flex-1">
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary">
-                    #{i + 1}
-                  </span>
                   <p className="text-sm leading-snug text-text">{q}?</p>
                 </div>
               </li>
@@ -456,7 +453,7 @@ function QuizView({
               aria-label="Ответил уверенно"
             >
               <ThumbsUp size={24} weight="bold" className="text-pale-green-text" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
             </button>
             <button
               type="button"
@@ -466,7 +463,7 @@ function QuizView({
               aria-label="Ответил неуверенно"
             >
               <SmileyMeh size={24} weight="bold" className="text-pale-yellow-text" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-yellow-text">Так себе</span>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">Так себе</span>
             </button>
             <button
               type="button"
@@ -476,7 +473,7 @@ function QuizView({
               aria-label="Не смог ответить"
             >
               <ThumbsDown size={24} weight="bold" className="text-pale-red-text" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
             </button>
           </div>
         </div>
