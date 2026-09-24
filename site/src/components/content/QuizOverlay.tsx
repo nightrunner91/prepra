@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  Brain,
-  X,
-  ThumbsUp,
-  Smiley,
-  ThumbsDown,
   CheckCircle,
-  MinusCircle,
-  XCircle,
-  PauseCircle,
-  ArrowRight,
   Eye,
+  MinusCircle,
+  PauseCircle,
+  SmileyMeh,
+  ThumbsDown,
+  ThumbsUp,
+  X,
+  XCircle
 } from '@phosphor-icons/react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 type AnswerStatus = 'good' | 'unsure' | 'failed' | 'skipped';
 
@@ -104,6 +102,33 @@ function formatDate(timestamp: number): string {
 
 type Phase = 'idle' | 'results' | 'quiz';
 
+const STATUS_META: Record<AnswerStatus, { label: string; icon: React.ReactNode; bg: string; border: string }> = {
+  good: {
+    label: 'Ответил хорошо',
+    icon: <CheckCircle size={18} weight="fill" />,
+    bg: 'bg-pale-green-bg',
+    border: 'border-pale-green-text',
+  },
+  unsure: {
+    label: 'Ответил неуверенно',
+    icon: <MinusCircle size={18} weight="fill" />,
+    bg: 'bg-pale-yellow-bg',
+    border: 'border-pale-yellow-text',
+  },
+  failed: {
+    label: 'Не смог ответить',
+    icon: <XCircle size={18} weight="fill" />,
+    bg: 'bg-pale-red-bg',
+    border: 'border-pale-red-text',
+  },
+  skipped: {
+    label: 'Пропущено',
+    icon: <PauseCircle size={18} weight="fill" />,
+    bg: 'bg-surface-alt',
+    border: 'border-border',
+  },
+};
+
 export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -129,19 +154,13 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
     setPhase('quiz');
   }, []);
 
-  const finishQuiz = useCallback((finalAnswers: Record<number, AnswerStatus>) => {
-    const attempt: QuizAttempt = {
-      timestamp: Date.now(),
-      answers: finalAnswers,
-    };
-    saveQuizData(articleId, { version: 1, lastAttempt: attempt });
-    setLastAttempt(attempt);
+  const closeOverlay = useCallback(() => {
     setIsClosing(true);
     setTimeout(() => {
       setPhase('idle');
       setIsClosing(false);
     }, 300);
-  }, [articleId]);
+  }, []);
 
   const handleAnswer = useCallback((status: AnswerStatus) => {
     const newAnswers = { ...answers, [currentIndex]: status };
@@ -154,36 +173,31 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
         setCurrentIndex(currentIndex + 1);
         setFlipped(false);
       } else {
-        finishQuiz(newAnswers);
+        const attempt: QuizAttempt = { timestamp: Date.now(), answers: newAnswers };
+        saveQuizData(articleId, { version: 1, lastAttempt: attempt });
+        setLastAttempt(attempt);
+        setPhase('results');
       }
     }, 400);
-  }, [answers, currentIndex, questions.length, finishQuiz]);
+  }, [answers, currentIndex, questions.length, articleId]);
 
   const handleClose = useCallback(() => {
-    if (phase !== 'quiz') {
-      setPhase('idle');
-      return;
-    }
-    const finalAnswers = { ...answers };
-    for (let i = 0; i < questions.length; i++) {
-      if (!(i in finalAnswers)) {
-        finalAnswers[i] = 'skipped';
-      }
-    }
-    finishQuiz(finalAnswers);
-  }, [phase, answers, questions.length, finishQuiz]);
-
-  useEffect(() => {
-    if (phase !== 'quiz') return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleClose();
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [phase, handleClose]);
-
-  useEffect(() => {
     if (phase === 'quiz') {
+      const finalAnswers = { ...answers };
+      for (let i = 0; i < questions.length; i++) {
+        if (!(i in finalAnswers)) {
+          finalAnswers[i] = 'skipped';
+        }
+      }
+      const attempt: QuizAttempt = { timestamp: Date.now(), answers: finalAnswers };
+      saveQuizData(articleId, { version: 1, lastAttempt: attempt });
+      setLastAttempt(attempt);
+    }
+    closeOverlay();
+  }, [phase, answers, questions.length, articleId, closeOverlay]);
+
+  useEffect(() => {
+    if (phase !== 'idle') {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -204,31 +218,27 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
             startQuiz();
           }
         }}
-        className="mb-3 w-full flex items-center justify-center gap-2 border-[3px] border-border bg-surface px-6 py-3 font-mono font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
+        className="w-full flex items-center justify-center border-[3px] border-border bg-surface px-6 py-3 font-mono font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
       >
-        <Brain size={20} weight="bold" />
         {hasAttempt ? 'Перепройти тест' : 'Пройти тест'}
       </button>
 
       {phase !== 'idle' && (
         <div
           ref={overlayRef}
-          className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
+          className={`fixed inset-0 z-50 flex items-start justify-center overflow-y-auto px-4 py-12 md:py-20 transition-opacity duration-300 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
           role="dialog"
           aria-modal="true"
         >
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={handleClose}
-          />
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
-          <div className="relative z-10 flex w-full max-w-2xl flex-col items-center">
+          <div className="relative z-10 flex w-full max-w-2xl flex-col">
             {phase === 'results' && lastAttempt && (
               <ResultsView
                 questions={questions}
                 attempt={lastAttempt}
                 onRetake={startQuiz}
-                onClose={handleClose}
+                onClose={closeOverlay}
               />
             )}
 
@@ -237,7 +247,6 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
                 questions={questions}
                 currentIndex={currentIndex}
                 flipped={flipped}
-                answers={answers}
                 savingStatus={savingStatus}
                 onFlip={() => setFlipped(true)}
                 onAnswer={handleAnswer}
@@ -260,94 +269,91 @@ interface ResultsViewProps {
 }
 
 function ResultsView({ questions, attempt, onRetake, onClose }: ResultsViewProps) {
-  const statusIcon = (status: AnswerStatus) => {
-    switch (status) {
-      case 'good':
-        return <CheckCircle size={20} weight="fill" className="text-pale-green-text" />;
-      case 'unsure':
-        return <MinusCircle size={20} weight="fill" className="text-pale-yellow-text" />;
-      case 'failed':
-        return <XCircle size={20} weight="fill" className="text-pale-red-text" />;
-      case 'skipped':
-        return <PauseCircle size={20} weight="fill" className="text-text-tertiary" />;
-    }
-  };
-
-  const statusBg = (status: AnswerStatus) => {
-    switch (status) {
-      case 'good': return 'bg-pale-green-bg';
-      case 'unsure': return 'bg-pale-yellow-bg';
-      case 'failed': return 'bg-pale-red-bg';
-      case 'skipped': return 'bg-surface-alt';
-    }
-  };
-
-  const counts = {
-    good: 0, unsure: 0, failed: 0, skipped: 0,
-  };
+  const counts = { good: 0, unsure: 0, failed: 0, skipped: 0 };
   Object.values(attempt.answers).forEach(s => { counts[s]++; });
 
+  const total = questions.length;
+  const answered = total - counts.skipped;
+
   return (
-    <div className="w-full max-w-xl border-[3px] border-border bg-surface p-8 md:p-10">
-      <div className="mb-6 flex items-start justify-between">
+    <div className="w-full border-[3px] border-border bg-surface">
+      <div className="flex items-start justify-between border-b-[3px] border-border p-6 md:p-8">
         <div>
           <h2 className="font-mono text-xl font-extrabold uppercase tracking-tight text-text">
             Результат теста
           </h2>
-          <p className="mt-1 font-mono text-xs text-text-tertiary">
+          <p className="mt-1 font-mono text-sm text-text-secondary">
             {formatDate(attempt.timestamp)} · {timeAgo(attempt.timestamp)}
           </p>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center border-2 border-border bg-surface-alt text-text-secondary transition-all hover:bg-text hover:text-canvas"
+          className="flex h-9 w-9 items-center justify-center border-2 border-border bg-surface-alt text-text-secondary transition-all hover:bg-text hover:text-canvas"
           aria-label="Закрыть"
         >
-          <X size={16} weight="bold" />
+          <X size={18} weight="bold" />
         </button>
       </div>
 
-      <div className="mb-6 flex flex-wrap gap-3 font-mono text-xs font-bold uppercase tracking-wider">
-        <span className="flex items-center gap-1.5 text-pale-green-text">
-          <CheckCircle size={14} weight="fill" /> {counts.good}
-        </span>
-        <span className="flex items-center gap-1.5 text-pale-yellow-text">
-          <MinusCircle size={14} weight="fill" /> {counts.unsure}
-        </span>
-        <span className="flex items-center gap-1.5 text-pale-red-text">
-          <XCircle size={14} weight="fill" /> {counts.failed}
-        </span>
-        {counts.skipped > 0 && (
-          <span className="flex items-center gap-1.5 text-text-tertiary">
-            <PauseCircle size={14} weight="fill" /> {counts.skipped}
-          </span>
-        )}
+      <div className="grid grid-cols-2 gap-3 border-b-[3px] border-border p-6 md:grid-cols-4 md:p-8">
+        <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-green-bg p-3">
+          <CheckCircle size={22} weight="fill" className="text-pale-green-text" />
+          <span className="font-mono text-2xl font-extrabold text-pale-green-text">{counts.good}</span>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
+        </div>
+        <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-yellow-bg p-3">
+          <MinusCircle size={22} weight="fill" className="text-pale-yellow-text" />
+          <span className="font-mono text-2xl font-extrabold text-pale-yellow-text">{counts.unsure}</span>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-yellow-text">Неуверенно</span>
+        </div>
+        <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-red-bg p-3">
+          <XCircle size={22} weight="fill" className="text-pale-red-text" />
+          <span className="font-mono text-2xl font-extrabold text-pale-red-text">{counts.failed}</span>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
+        </div>
+        <div className="flex flex-col items-center gap-1 border-2 border-border bg-surface-alt p-3">
+          <PauseCircle size={22} weight="fill" className="text-text-secondary" />
+          <span className="font-mono text-2xl font-extrabold text-text-secondary">{counts.skipped}</span>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary">Пропущено</span>
+        </div>
       </div>
 
-      <div className="mb-8 flex flex-wrap gap-2">
-        {questions.map((_, i) => {
-          const status = attempt.answers[i] || 'skipped';
-          return (
-            <div
-              key={i}
-              className={`flex h-10 w-10 items-center justify-center border-2 border-border font-mono text-xs font-bold ${statusBg(status)}`}
-              title={questions[i]}
-            >
-              {statusIcon(status)}
-            </div>
-          );
-        })}
+      <div className="border-b-[3px] border-border p-6 md:p-8">
+        <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
+          Ответы по вопросам
+        </div>
+        <ul className="space-y-2">
+          {questions.map((q, i) => {
+            const status = attempt.answers[i] || 'skipped';
+            const meta = STATUS_META[status];
+            return (
+              <li
+                key={i}
+                className={`flex items-start gap-3 border-2 ${meta.border} ${meta.bg} p-3`}
+              >
+                <span className="mt-0.5 flex-shrink-0 text-text">{meta.icon}</span>
+                <div className="min-w-0 flex-1">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+                    #{i + 1}
+                  </span>
+                  <p className="text-sm leading-snug text-text">{q}?</p>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
-      <button
-        type="button"
-        onClick={onRetake}
-        className="w-full flex items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
-      >
-        <Brain size={18} weight="bold" />
-        Перепройти
-      </button>
+      <div className="p-6 md:p-8">
+        <button
+          type="button"
+          onClick={onRetake}
+          className="w-full flex items-center justify-center border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
+        >
+          Перепройти
+        </button>
+      </div>
     </div>
   );
 }
@@ -356,7 +362,6 @@ interface QuizViewProps {
   questions: string[];
   currentIndex: number;
   flipped: boolean;
-  answers: Record<number, AnswerStatus>;
   savingStatus: number | null;
   onFlip: () => void;
   onAnswer: (status: AnswerStatus) => void;
@@ -379,20 +384,20 @@ function QuizView({
   const progress = ((currentIndex) / total) * 100;
 
   return (
-    <div className="w-full max-w-xl flex flex-col">
-      <div className="mb-4 flex items-center justify-between font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
+    <div className="w-full flex flex-col">
+      <div className="mb-4 flex items-center justify-between font-mono text-sm font-bold uppercase tracking-wider text-white">
         <span>Вопрос {currentIndex + 1} / {total}</span>
         <button
           type="button"
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center border-2 border-border bg-surface-alt text-text-secondary transition-all hover:bg-text hover:text-canvas"
+          className="flex h-9 w-9 items-center justify-center border-2 border-white/30 bg-white/10 text-white transition-all hover:bg-white/20"
           aria-label="Закрыть"
         >
-          <X size={16} weight="bold" />
+          <X size={18} weight="bold" />
         </button>
       </div>
 
-      <div className="mb-6 h-1 w-full border border-border bg-surface-alt">
+      <div className="mb-8 h-1.5 w-full border border-border bg-surface-alt">
         <div
           className="h-full bg-accent transition-all duration-300"
           style={{ width: `${progress}%` }}
@@ -401,36 +406,36 @@ function QuizView({
 
       <div
         className="quiz-card relative w-full cursor-pointer"
-        style={{ minHeight: '320px' }}
+        style={{ minHeight: '400px' }}
         onClick={() => { if (!flipped) onFlip(); }}
       >
         <div className={`quiz-card-inner relative h-full w-full ${flipped ? 'flipped' : ''}`}
-          style={{ minHeight: '320px' }}
+          style={{ minHeight: '400px' }}
         >
-          <div className="quiz-card-face flex flex-col items-center justify-center border-[3px] border-border bg-surface p-8 md:p-10"
-            style={{ minHeight: '320px' }}
+          <div className="quiz-card-face flex flex-col justify-center border-[3px] border-border bg-surface p-8 md:p-12"
+            style={{ minHeight: '400px' }}
           >
-            <div className="mb-6 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
+            <div className="mb-6 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
               Вопрос
             </div>
-            <p className="text-center text-lg font-medium leading-relaxed text-text md:text-xl">
+            <p className="text-left text-lg font-medium leading-relaxed text-text md:text-xl">
               {question}?
             </p>
             {!flipped && (
-              <div className="mt-8 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
+              <div className="mt-10 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
                 <Eye size={14} />
                 Нажмите, чтобы увидеть ответ
               </div>
             )}
           </div>
 
-          <div className="quiz-card-face quiz-card-back flex flex-col items-center justify-center border-[3px] border-border bg-surface p-8 md:p-10"
-            style={{ minHeight: '320px' }}
+          <div className="quiz-card-face quiz-card-back flex flex-col justify-center border-[3px] border-border bg-surface p-8 md:p-12"
+            style={{ minHeight: '400px' }}
           >
             <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-accent">
               Ответ
             </div>
-            <p className="text-center text-base leading-relaxed text-text-secondary md:text-lg">
+            <p className="text-left text-base leading-relaxed text-text-secondary md:text-lg">
               {answer}
             </p>
           </div>
@@ -438,40 +443,40 @@ function QuizView({
       </div>
 
       {flipped && (
-        <div className={`mt-6 flex flex-col items-center gap-3 transition-all duration-300 ${savingStatus === currentIndex ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
-          <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
-            Как вы ответили?
+        <div className={`mt-8 flex flex-col items-center gap-4 transition-all duration-300 ${savingStatus === currentIndex ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
+          <div className="font-mono text-sm font-bold uppercase tracking-wider text-white">
+            Как ты ответил?
           </div>
           <div className="flex gap-3">
             <button
               type="button"
               onClick={() => onAnswer('good')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn group flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-5 py-3 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
-              aria-label="Ответил хорошо"
+              className="quiz-rate-btn flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              aria-label="Ответил уверенно"
             >
-              <ThumbsUp size={22} weight="bold" className="text-pale-green-text transition-transform group-hover:scale-110" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-green-text">Хорошо</span>
+              <ThumbsUp size={24} weight="bold" className="text-pale-green-text" />
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
             </button>
             <button
               type="button"
               onClick={() => onAnswer('unsure')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn group flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-5 py-3 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              className="quiz-rate-btn flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
               aria-label="Ответил неуверенно"
             >
-              <Smiley size={22} weight="bold" className="text-pale-yellow-text transition-transform group-hover:scale-110" />
+              <SmileyMeh size={24} weight="bold" className="text-pale-yellow-text" />
               <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-yellow-text">Так себе</span>
             </button>
             <button
               type="button"
               onClick={() => onAnswer('failed')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn group flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-5 py-3 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              className="quiz-rate-btn flex flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
               aria-label="Не смог ответить"
             >
-              <ThumbsDown size={22} weight="bold" className="text-pale-red-text transition-transform group-hover:scale-110" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-red-text">Не знаю</span>
+              <ThumbsDown size={24} weight="bold" className="text-pale-red-text" />
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
             </button>
           </div>
         </div>

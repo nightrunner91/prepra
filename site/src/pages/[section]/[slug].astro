@@ -125,23 +125,25 @@ const { headings } = await render(entry);
       <Content />
     </div>
 
-    {
-      data.questions && data.questions.length > 0 && (
-        <QuizOverlay
-          client:only="react"
-          questions={data.questions}
-          articleId={withBase(`/${data.section}/${entry.id}`)}
-        />
-      )
-    }
+    <div class="mt-16">
+      {
+        data.questions && data.questions.length > 0 && (
+          <QuizOverlay
+            client:only="react"
+            questions={data.questions}
+            articleId={withBase(`/${data.section}/${entry.id}`)}
+          />
+        )
+      }
 
-    <button
-      id="read-toggle"
-      type="button"
-      class="mt-10 w-full flex items-center justify-center border-[3px] border-border bg-surface-alt px-6 py-3 font-mono font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
-    >
-      Отметить прочитанным
-    </button>
+      <button
+        id="read-toggle"
+        type="button"
+        class="mt-5 w-full flex items-center justify-center border-[3px] border-border bg-surface-alt px-6 py-3 font-mono font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
+      >
+        Отметить пройденным
+      </button>
+    </div>
 
     <PrevNextNav
       prev={prev}
@@ -185,8 +187,7 @@ const { headings } = await render(entry);
 
   function applyState(isRead: boolean) {
     if (isRead) {
-      btn.innerHTML =
-        '<i class="ph ph-check" style="margin-right:6px"></i>Прочитано';
+      btn.innerHTML = "Пройдено";
       btn.classList.add(
         "!bg-pale-green-bg-hover",
         "!text-pale-green-text-hover",
@@ -194,7 +195,7 @@ const { headings } = await render(entry);
         "!shadow-none",
       );
     } else {
-      btn.textContent = "Отметить прочитанным";
+      btn.textContent = "Отметить пройденным";
       btn.classList.remove(
         "!bg-pale-green-bg-hover",
         "!text-pale-green-text-hover",
