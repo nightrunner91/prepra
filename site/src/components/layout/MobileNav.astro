@@ -12,30 +12,30 @@ const { currentSection } = Astro.props;
 
 <div
   id="mobile-drawer"
-  class="fixed inset-y-0 right-0 z-50 w-72 translate-x-full border-l border-border bg-canvas transition-transform duration-300 ease-in-out lg:hidden"
+  class="fixed inset-y-0 right-0 z-50 w-72 translate-x-full border-l-[3px] border-border bg-canvas transition-transform duration-200 ease-in-out lg:hidden"
 >
   <div
-    class="flex items-center justify-between border-b border-border px-4 h-14"
+    class="flex items-center justify-between border-b-[3px] border-border px-4 h-14"
   >
-    <span class="font-serif text-lg tracking-tight text-text">Навигация</span>
+    <span class="font-mono text-lg font-extrabold uppercase tracking-tight text-text">Навигация</span>
     <button
       id="mobile-drawer-close"
-      class="flex items-center justify-center h-8 w-8 rounded-[5px] text-text-secondary hover:text-accent transition-colors"
+      class="flex items-center justify-center h-9 w-9 border-2 border-border text-text hover:bg-text hover:text-canvas transition-colors"
       aria-label="Close menu"
     >
       <X size={18} weight="bold" />
     </button>
   </div>
   <nav class="overflow-y-auto h-[calc(100vh-3.5rem)] py-4 px-3">
-    <div class="space-y-0.5">
+    <div class="space-y-0">
       {
         sections.map((s) => (
           <a
             href={withBase(`/${s.id}`)}
-            class={`block rounded-[5px] px-3 py-2.5 text-sm transition-colors ${
+            class={`block border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide transition-colors ${
               currentSection === s.id
-                ? "bg-surface-alt text-text font-medium"
-                : "text-text-secondary hover:text-accent hover:bg-surface-alt/50"
+                ? "bg-text text-canvas"
+                : "text-text-secondary hover:bg-surface-alt hover:text-text"
             }`}
           >
             {s.label}
@@ -48,7 +48,7 @@ const { currentSection } = Astro.props;
 
 <div
   id="mobile-drawer-overlay"
-  class="fixed inset-0 z-40 bg-black/20 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
+  class="fixed inset-0 z-40 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-200 lg:hidden"
 >
 </div>
 

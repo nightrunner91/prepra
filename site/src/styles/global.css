@@ -1,71 +1,71 @@
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Code:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Google Sans', 'SF Pro Display', 'Helvetica Neue', sans-serif;
-  --font-serif: 'Google Sans', sans-serif;
-  --font-mono: 'Google Sans Code', 'SF Mono', monospace;
+  --font-sans: 'JetBrains Mono', 'Space Mono', 'SF Mono', 'Consolas', monospace;
+  --font-serif: 'JetBrains Mono', monospace;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
 
-  --color-canvas: #FBFBFA;
+  --color-canvas: #F2F2EC;
   --color-surface: #FFFFFF;
-  --color-surface-alt: #F7F6F3;
-  --color-border: #EAEAEA;
-  --color-border-strong: #D4D4D4;
-  --color-text: #111111;
-  --color-text-secondary: #787774;
-  --color-text-tertiary: #9A9A97;
-  --color-accent: #2E7A58;
-  --color-accent-hover: #24684A;
+  --color-surface-alt: #E8E8E0;
+  --color-border: #000000;
+  --color-border-strong: #000000;
+  --color-text: #000000;
+  --color-text-secondary: #333333;
+  --color-text-tertiary: #666666;
+  --color-accent: #1A7D4A;
+  --color-accent-hover: #14613A;
 
-  --color-pale-red-bg: #FDEBEC;
-  --color-pale-red-text: #9F2F2D;
-  --color-pale-red-bg-hover: #FAD5D7;
-  --color-pale-red-text-hover: #7A2422;
-  --color-pale-blue-bg: #E1F3FE;
-  --color-pale-blue-text: #1F6C9F;
-  --color-pale-blue-bg-hover: #C5E7FD;
-  --color-pale-blue-text-hover: #175580;
-  --color-pale-green-bg: #EDF3EC;
-  --color-pale-green-text: #346538;
-  --color-pale-green-bg-hover: #D9E6D7;
-  --color-pale-green-text-hover: #274D2A;
-  --color-pale-yellow-bg: #FBF3DB;
-  --color-pale-yellow-text: #956400;
-  --color-pale-yellow-bg-hover: #F5E6B8;
-  --color-pale-yellow-text-hover: #704B00;
+  --color-pale-red-bg: #FFE0E0;
+  --color-pale-red-text: #B91C1C;
+  --color-pale-red-bg-hover: #FFC7C7;
+  --color-pale-red-text-hover: #7F1D1D;
+  --color-pale-blue-bg: #D6ECFF;
+  --color-pale-blue-text: #1E40AF;
+  --color-pale-blue-bg-hover: #B3DAFE;
+  --color-pale-blue-text-hover: #1E3A8A;
+  --color-pale-green-bg: #D4F5D4;
+  --color-pale-green-text: #166534;
+  --color-pale-green-bg-hover: #B5EBB5;
+  --color-pale-green-text-hover: #14532D;
+  --color-pale-yellow-bg: #FFF3BF;
+  --color-pale-yellow-text: #854D0E;
+  --color-pale-yellow-bg-hover: #FDE68A;
+  --color-pale-yellow-text-hover: #713F12;
 }
 
 .dark {
-  --color-canvas: #111110;
-  --color-surface: #1A1A19;
-  --color-surface-alt: #222220;
-  --color-border: #2A2A28;
-  --color-border-strong: #3A3A38;
-  --color-text: #EDEDEC;
-  --color-text-secondary: #8A8A87;
-  --color-text-tertiary: #6A6A67;
-  --color-accent: #6DD39F;
-  --color-accent-hover: #85DBAE;
+  --color-canvas: #0A0A0A;
+  --color-surface: #141414;
+  --color-surface-alt: #1C1C1C;
+  --color-border: #FFFFFF;
+  --color-border-strong: #FFFFFF;
+  --color-text: #F0F0F0;
+  --color-text-secondary: #B0B0B0;
+  --color-text-tertiary: #707070;
+  --color-accent: #4ADE80;
+  --color-accent-hover: #86EFAC;
 
-  --color-pale-red-bg: #2D1A1B;
-  --color-pale-red-text: #E8888A;
-  --color-pale-red-bg-hover: #3D2425;
-  --color-pale-red-text-hover: #F0A5A7;
-  --color-pale-blue-bg: #152530;
-  --color-pale-blue-text: #7BB8DE;
-  --color-pale-blue-bg-hover: #1D3342;
-  --color-pale-blue-text-hover: #9CCCE8;
-  --color-pale-green-bg: #1A2519;
-  --color-pale-green-text: #8BBF8E;
-  --color-pale-green-bg-hover: #243323;
-  --color-pale-green-text-hover: #A8D4AA;
-  --color-pale-yellow-bg: #2A2415;
-  --color-pale-yellow-text: #D4B55A;
-  --color-pale-yellow-bg-hover: #3A3220;
-  --color-pale-yellow-text-hover: #E0C878;
+  --color-pale-red-bg: #2D1111;
+  --color-pale-red-text: #F87171;
+  --color-pale-red-bg-hover: #3D1818;
+  --color-pale-red-text-hover: #FCA5A5;
+  --color-pale-blue-bg: #0C1929;
+  --color-pale-blue-text: #60A5FA;
+  --color-pale-blue-bg-hover: #132B42;
+  --color-pale-blue-text-hover: #93C5FD;
+  --color-pale-green-bg: #0A1F0A;
+  --color-pale-green-text: #4ADE80;
+  --color-pale-green-bg-hover: #143314;
+  --color-pale-green-text-hover: #86EFAC;
+  --color-pale-yellow-bg: #1F1A05;
+  --color-pale-yellow-text: #FACC15;
+  --color-pale-yellow-bg-hover: #2D2608;
+  --color-pale-yellow-text-hover: #FDE047;
 }
 
 @layer base {
@@ -77,7 +77,6 @@
     font-family: var(--font-sans);
     background-color: var(--color-canvas);
     color: var(--color-text);
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -88,8 +87,8 @@
   }
 
   ::selection {
-    background-color: var(--color-pale-yellow-bg);
-    color: var(--color-text);
+    background-color: var(--color-accent);
+    color: #FFFFFF;
   }
 
   a {
@@ -103,9 +102,11 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-serif);
-    letter-spacing: -0.02em;
-    line-height: 1.15;
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 
   code,
@@ -115,8 +116,7 @@
   }
 
   kbd {
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
+    border: 2px solid var(--color-border);
     background: var(--color-surface-alt);
     padding: 2px 6px;
     font-size: 0.8em;
@@ -127,9 +127,8 @@
 @layer components {
   .animate-fade-in {
     opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(8px);
+    transition: opacity 300ms ease, transform 300ms ease;
   }
 
   .animate-fade-in.is-visible {
@@ -138,53 +137,48 @@
   }
 
   .card-hover {
-    transition: box-shadow 200ms ease, border-color 200ms ease;
+    transition: transform 100ms ease, box-shadow 100ms ease;
   }
 
   .card-hover:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    border-color: var(--color-accent);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px var(--color-border);
   }
 
   .dark .card-hover:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 4px 0px var(--color-border);
   }
 
   .badge-hover-red:hover {
     background-color: var(--color-pale-red-bg-hover);
     color: var(--color-pale-red-text-hover);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pale-red-text) 30%, transparent);
   }
 
   .badge-hover-blue:hover {
     background-color: var(--color-pale-blue-bg-hover);
     color: var(--color-pale-blue-text-hover);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pale-blue-text) 30%, transparent);
   }
 
   .badge-hover-green:hover {
     background-color: var(--color-pale-green-bg-hover);
     color: var(--color-pale-green-text-hover);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pale-green-text) 30%, transparent);
   }
 
   .badge-hover-yellow:hover {
     background-color: var(--color-pale-yellow-bg-hover);
     color: var(--color-pale-yellow-text-hover);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-pale-yellow-text) 30%, transparent);
   }
 
   .badge-hover-neutral:hover {
     background-color: var(--color-surface-alt);
     color: var(--color-text);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-text) 20%, transparent);
   }
 }
 
 .prose {
-  --tw-prose-body: var(--color-text);
+  --tw-prose-body: var(--color-text-secondary);
   --tw-prose-headings: var(--color-text);
-  --tw-prose-links: var(--color-text);
+  --tw-prose-links: var(--color-accent);
   --tw-prose-bold: var(--color-text);
   --tw-prose-code: var(--color-text);
   --tw-prose-pre-bg: var(--color-surface-alt);
@@ -197,21 +191,23 @@
 }
 
 .prose pre {
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border: 2px solid var(--color-border);
+  border-radius: 0;
 }
 
 .prose code {
   background: var(--color-surface-alt);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 0.875em;
   font-weight: 500;
+  border: 1px solid var(--color-border);
 }
 
 .prose pre code {
   background: transparent;
   padding: 0;
+  border: none;
 }
 
 .dark .astro-code-themes {

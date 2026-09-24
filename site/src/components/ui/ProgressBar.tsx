@@ -11,14 +11,14 @@ export function ProgressBar({ value, max = 100, showLabel = false, className = '
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <div className="h-1 flex-1 overflow-hidden rounded-full bg-border">
+      <div className="h-2 flex-1 border-2 border-border overflow-hidden">
         <div
-          className="h-full rounded-full bg-accent transition-all duration-500"
+          className="h-full bg-accent transition-all duration-300"
           style={{ width: `${pct}%` }}
         />
       </div>
       {showLabel && (
-        <span className="font-mono text-sm text-text-tertiary tabular-nums">
+        <span className="font-mono text-sm font-bold text-text-tertiary tabular-nums">
           {pct}%
         </span>
       )}

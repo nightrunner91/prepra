@@ -22,7 +22,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="flex items-center justify-center h-8 w-8 rounded-[5px] text-text-secondary hover:text-accent hover:bg-surface-alt transition-colors"
+      className="flex items-center justify-center h-9 w-9 border-2 border-border text-text-secondary hover:bg-text hover:text-canvas transition-colors"
       aria-label="Toggle theme"
     >
       {dark ? (

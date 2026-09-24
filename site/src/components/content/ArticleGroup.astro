@@ -23,7 +23,7 @@ const { title, items, subgroups } = Astro.props;
 
 <section class="animate-fade-in">
   <h2
-    class="font-serif text-2xl text-text leading-snug tracking-tight font-medium"
+    class="font-mono text-2xl text-text leading-tight tracking-tight font-extrabold uppercase border-b-[3px] border-border pb-3"
   >
     {title}
   </h2>
@@ -50,7 +50,7 @@ const { title, items, subgroups } = Astro.props;
       <div class="mt-6 space-y-6">
         {subgroups.map((subgroup) => (
           <div>
-            <h3 class="font-serif text-lg text-text-secondary leading-snug">
+            <h3 class="font-mono text-lg font-bold uppercase tracking-tight text-text-secondary border-l-[3px] border-accent pl-3">
               {subgroup.title}
             </h3>
             <div class="mt-3 space-y-3">

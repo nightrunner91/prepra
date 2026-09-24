@@ -24,42 +24,46 @@ const {
 
 <a
   href={href}
-  class="card-hover group flex h-full flex-col rounded-[8px] border border-border bg-surface p-6 transition-colors"
+  class="card-hover group flex h-full flex-col border-[3px] border-border bg-surface p-6 transition-all"
 >
   <div class="flex items-start justify-between">
     <h3
-      class="font-serif text-xl text-text leading-snug group-hover:text-accent transition-colors"
+      class="font-mono text-xl font-extrabold uppercase tracking-tight text-text leading-tight group-hover:text-accent transition-colors"
     >
       {title}
     </h3>
     {
       Icon && (
         <span
-          class={`shrink-0 mt-1 opacity-75 ${
+          class={`shrink-0 border-2 border-border p-1 ${
             color === "red"
-              ? "text-pale-red-text"
+              ? "bg-pale-red-bg text-pale-red-text"
               : color === "green"
-                ? "text-pale-green-text"
+                ? "bg-pale-green-bg text-pale-green-text"
                 : color === "yellow"
-                  ? "text-pale-yellow-text"
-                  : "text-pale-blue-text"
+                  ? "bg-pale-yellow-bg text-pale-yellow-text"
+                  : "bg-pale-blue-bg text-pale-blue-text"
           }`}
         >
-          <Icon size={20} />
+          <Icon size={20} weight="bold" />
         </span>
       )
     }
   </div>
 
-  <p class="mt-2 text-sm text-text-secondary leading-relaxed pe-20">
+  <p
+    class="mt-3 text-sm text-text-secondary leading-relaxed font-medium lg:pe-16"
+  >
     {description}
   </p>
 
   <div
-    class="mt-auto pt-4 flex items-center gap-4 font-mono text-xs text-text-tertiary"
+    class="mt-auto pt-4 flex items-center gap-3 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary"
   >
-    <span>{articleCount} статей</span>
-    <span class="text-border">/</span>
-    <span>{questionCount} вопросов</span>
+    <span class="border border-border px-1.5 py-0.5">{articleCount} статей</span
+    >
+    <span class="border border-border px-1.5 py-0.5"
+      >{questionCount} вопросов</span
+    >
   </div>
 </a>

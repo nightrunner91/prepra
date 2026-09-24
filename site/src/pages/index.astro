@@ -65,32 +65,32 @@ const faqItems = [
   {
     question: "Для кого создана prepra?",
     answer:
-      "<p>Для фронтенд-разработчиков уровня Middle и Senior, которые готовятся к техническим собеседованиям в 2026–2027 году.</p>",
+      "<p>Для фронтенд-разработчиков уровня Middle и Senior, которые готовятся к техническим собеседованиям в 2026-2027 году и хотят систематизировать знания.</p>",
   },
   {
     question: "Подойдёт ли prepra начинающим?",
     answer:
-      "<p>Если ты только начинаешь путь во фронтенде — честно, материал будет сложноват. Prepra рассчитана на разработчиков с опытом, которые хотят систематизировать знания.</p>",
+      "<p>Конечно. Но буду честен: если ты только-только начинаешь путь во фронтенде - материал местами будет сложноват. Желателен хотя бы небольшой опыт разработки.</p>",
   },
   {
     question: "Чем prepra отличается от других ресурсов?",
     answer:
-      "<p>Prepra — это не сборник статей, а готовый roadmap подготовки к собеседованию с системой самопроверки и повторения. Каждый раздел идёт в логичном порядке, прогресс сохраняется. Всё полностью бесплатно.</p>",
+      "<p>Prepra - это не сборник статей, а готовый roadmap подготовки к собеседованию с системой самопроверки и повторения. Каждый раздел идёт в логичном порядке, прогресс сохраняется. Всё полностью бесплатно.</p>",
   },
   {
     question: "Нужно ли регистрироваться?",
     answer:
-      "<p>Нет. Но без регистрации прогресс хранится только в браузере. Хочешь синхронизацию между устройствами — <a href='#'>зарегистрируйся</a>, это быстро.</p>",
+      "<p>Нет. Но без регистрации прогресс хранится только в браузере. Хочешь синхронизацию между устройствами - <a href='#'>зарегистрируйся</a>, это быстро.</p>",
   },
   {
     question: "Нужно ли платить?",
     answer:
-      "<p>Нет, prepra полностью бесплатна. Но если хочешь отблагодарить — <a href='#'>криптокошелёк</a> к твоим услугам, не откажусь.</p>",
+      "<p>Нет, prepra полностью бесплатна. Но если хочешь отблагодарить - <a href='#'>криптокошелёк</a> к твоим услугам, не откажусь.</p>",
   },
   {
     question: "Как лучше использовать prepra?",
     answer:
-      "<p>Советую начать с базы — <a href='#'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд и статьи логично связаны.</p>",
+      "<p>Советую начать с базы - <a href='#'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд. У каждой статьи есть практическая часть для самопроверки - не пропускай её.</p>",
   },
   {
     question: "Какие темы покрывают материалы prepra?",
@@ -100,44 +100,48 @@ const faqItems = [
   {
     question: "Зачем мне prepra, если есть ChatGPT?",
     answer:
-      "<p>ИИ не даёт структуры, может ошибаться и давать устаревшую информацию. На prepra материалы систематизированы, проверены и собраны в одном месте — это готовый план, а не хаотичный диалог.</p>",
+      "<p>ИИ не даёт структуры и может давать устаревшую информацию. На prepra материалы систематизированы, проверены и собраны в одном месте - это готовый план, а не спонтанный диалог.</p>",
   },
   {
     question: "Как часто здесь обновляются статьи?",
     answer:
-      "<p>Фронтэнд стремительно меняется — и я регулярно добавляю новые темы и обновляю существующие. Обновления не реже раза в месяц.</p>",
+      "<p>Фронтэнд стремительно меняется - и я регулярно добавляю новые темы и обновляю существующие. Обновления не реже раза в месяц.</p>",
   },
 ];
 ---
 
 <PageLayout title="Главная">
-  <div class="mx-auto max-w-7xl px-4 py-12 lg:py-16 lg:px-8">
-    <div class="">
+  <div class="mx-auto px-6 py-12 lg:py-16 lg:px-12">
+    <div class="border-b-[3px] border-border pb-10">
       <h1
-        class="font-serif text-4xl text-text sm:text-5xl lg:text-7xl leading-[1.1] tracking-tight font-medium"
+        class="font-mono text-5xl sm:text-6xl lg:text-8xl leading-[0.9] font-extrabold uppercase tracking-tight text-text"
       >
-        <span class="text-text">pre</span><span class="text-pale-green-text"
-          >pra</span
-        >.
+        <span class="text-text">PRE</span><span class="text-accent">PRA</span>
       </h1>
-      <p class="mt-4 text-lg text-text-secondary leading-relaxed">
+      <p
+        class="mt-4 text-base font-bold uppercase tracking-wide text-text-secondary"
+      >
         Интерактивная платформа для подготовки к фронтенд-собеседованию.
       </p>
       <div
-        class="mt-6 flex items-center gap-4 font-mono text-sm text-text-tertiary"
+        class="mt-6 flex items-center gap-4 font-mono text-sm font-bold uppercase tracking-wider text-text-tertiary"
       >
-        <span>{totalArticles} статей</span>
-        <span class="text-border">/</span>
-        <span>{totalQuestions} вопросов</span>
-        <span class="text-border">/</span>
-        <span>{sections.length} разделов</span>
+        <span class="border-2 border-border px-2 py-1 bg-surface"
+          >{totalArticles} статей</span
+        >
+        <span class="border-2 border-border px-2 py-1 bg-surface"
+          >{totalQuestions} вопросов</span
+        >
+        <span class="border-2 border-border px-2 py-1 bg-surface"
+          >{sections.length} разделов</span
+        >
       </div>
     </div>
 
-    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {
         sectionStats.map((s, i) => (
-          <div class="animate-fade-in" style={`animation-delay: ${i * 60}ms`}>
+          <div class="animate-fade-in" style={`animation-delay: ${i * 40}ms`}>
             <SectionCard
               title={s.label}
               description={s.description}

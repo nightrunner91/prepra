@@ -10,22 +10,22 @@ const { currentSection } = Astro.props;
 ---
 
 <aside
-  class="fixed top-14 left-0 w-56 h-[calc(100vh-3.5rem)] overflow-y-auto border-r border-border py-6 px-3"
+  class="fixed top-14 left-0 w-56 h-[calc(100vh-3.5rem)] overflow-y-auto border-r-[3px] border-border py-6 px-3 bg-canvas"
 >
-  <div class="space-y-0.5">
+  <div class="space-y-0">
     {
       sections.map((s) => {
         const Icon = s.icon;
         return (
           <a
             href={withBase(`/${s.id}`)}
-            class={`flex items-center gap-2 rounded-[5px] px-3 py-2 text-[14px] transition-colors ${
+            class={`flex items-center gap-2 border-b-2 border-border px-3 py-2.5 text-[13px] font-bold uppercase tracking-wide transition-colors ${
               currentSection === s.id
-                ? "bg-surface-alt text-text font-medium"
-                : "text-text-secondary hover:text-accent hover:bg-surface-alt/50"
+                ? "bg-text text-canvas"
+                : "text-text-secondary hover:bg-surface-alt hover:text-text"
             }`}
           >
-            <Icon size={16} class="shrink-0" />
+            <Icon size={16} weight="bold" class="shrink-0" />
             <span>{s.label}</span>
           </a>
         );

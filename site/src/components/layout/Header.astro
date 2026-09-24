@@ -20,17 +20,15 @@ const sections = [
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-border bg-canvas/80 backdrop-blur-md"
+  class="sticky top-0 z-50 border-b-[3px] border-border bg-canvas"
 >
   <div class="mx-auto flex h-14 items-center justify-between px-3">
     <div class="flex items-center gap-6">
       <a
         href={withBase("/")}
-        class="flex font-serif text-lg tracking-tight text-text transition-colors font-medium px-3 pt-0.5 pb-1.5 rounded bg-transparent hover:bg-surface"
+        class="flex font-mono text-lg font-extrabold uppercase tracking-tight text-text transition-colors px-3 pt-0.5 pb-1.5 hover:text-accent"
       >
-        <span class="text-text">pre</span><span class="text-pale-green-text"
-          >pra</span
-        >.
+        <span class="text-text">PRE</span><span class="text-accent">PRA</span>
       </a>
     </div>
 
@@ -38,7 +36,7 @@ const sections = [
       <ThemeToggle client:load />
       <button
         id="mobile-menu-btn"
-        class="lg:hidden flex items-center justify-center h-8 w-8 rounded-[5px] text-text-secondary hover:text-accent hover:bg-surface-alt transition-colors"
+        class="lg:hidden flex items-center justify-center h-9 w-9 border-2 border-border text-text hover:bg-text hover:text-canvas transition-colors"
         aria-label="Menu"
       >
         <List size={18} weight="bold" />

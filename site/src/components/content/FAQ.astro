@@ -13,53 +13,53 @@ const { items } = Astro.props;
 
 <section class="mx-auto max-w-3xl">
   <h2
-    class="font-serif text-3xl text-text sm:text-5xl leading-snug tracking-tight font-medium"
+    class="font-mono text-3xl text-text sm:text-4xl leading-tight tracking-tight font-extrabold uppercase"
   >
     Вопросы и ответы
   </h2>
-  <p class="mt-2 text-lg text-text-secondary leading-relaxed">
+  <p class="mt-2 text-sm font-bold uppercase tracking-wide text-text-secondary">
     Всё что нужно знать о prepra.
   </p>
 
   <div
-    class="mt-8 divide-y divide-border border-t border-b border-border"
+    class="mt-8 border-t-[3px] border-border"
     data-faq
   >
     {
       items.map((item, i) => (
-        <div class="faq-item" data-faq-item>
+        <div class="faq-item border-b-[3px] border-border" data-faq-item>
           <button
             type="button"
-            class="faq-trigger flex w-full cursor-pointer items-center justify-between py-4 text-left font-serif text-lg text-text transition-colors hover:text-accent"
+            class="faq-trigger flex w-full cursor-pointer items-center justify-between py-4 text-left font-mono text-base font-bold uppercase tracking-tight text-text transition-colors hover:text-accent"
             aria-expanded="false"
             aria-controls={`faq-panel-${i}`}
             id={`faq-btn-${i}`}
           >
             <span>{item.question}</span>
             <svg
-              class="faq-chevron ml-4 shrink-0 size-5 text-text-tertiary transition-transform duration-300"
+              class="faq-chevron ml-4 shrink-0 size-5 text-text-tertiary transition-transform duration-200"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              stroke-width="2"
               stroke="currentColor"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                stroke-linecap="square"
+                stroke-linejoin="miter"
                 d="m19.5 8.25-7.5 7.5-7.5-7.5"
               />
             </svg>
           </button>
           <div
-            class="faq-panel grid transition-[grid-template-rows] duration-300 ease-out"
+            class="faq-panel grid transition-[grid-template-rows] duration-200 ease-out"
             style="grid-template-rows: 0fr"
             id={`faq-panel-${i}`}
             role="region"
             aria-labelledby={`faq-btn-${i}`}
           >
             <div class="overflow-hidden">
-              <div class="pb-4 text text-text-secondary leading-relaxed">
+              <div class="pb-4 text-sm text-text-secondary leading-relaxed font-medium">
                 <Fragment set:html={item.answer} />
               </div>
             </div>

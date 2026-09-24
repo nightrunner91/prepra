@@ -9,24 +9,24 @@ interface Props {
 const { prev, next, sectionLabel, sectionHref } = Astro.props;
 ---
 
-<nav class="mt-12 border-t border-border pt-8">
+<nav class="mt-12 border-t-[3px] border-border pt-8">
   <div class="flex items-center justify-between gap-4">
     {
       prev ? (
-        <a href={prev.href} class="group flex flex-col gap-1 text-left">
-          <span class="font-mono text-sm uppercase tracking-wider text-text-tertiary">
+        <a href={prev.href} class="group flex flex-col gap-1 text-left border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all">
+          <span class="font-mono text-xs font-bold uppercase tracking-widest text-text-tertiary group-hover:text-canvas/70">
             Предыдущая
           </span>
-          <span class="text-sm text-text-secondary group-hover:text-accent transition-colors">
+          <span class="text-sm font-bold text-text-secondary group-hover:text-canvas">
             {prev.title}
           </span>
         </a>
       ) : (
-        <a href={sectionHref} class="group flex flex-col gap-1 text-left">
-          <span class="font-mono text-sm uppercase tracking-wider text-text-tertiary">
+        <a href={sectionHref} class="group flex flex-col gap-1 text-left border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all">
+          <span class="font-mono text-xs font-bold uppercase tracking-widest text-text-tertiary group-hover:text-canvas/70">
             Раздел
           </span>
-          <span class="text-sm text-text-secondary group-hover:text-accent transition-colors">
+          <span class="text-sm font-bold text-text-secondary group-hover:text-canvas">
             {sectionLabel}
           </span>
         </a>
@@ -35,11 +35,11 @@ const { prev, next, sectionLabel, sectionHref } = Astro.props;
 
     {
       next && (
-        <a href={next.href} class="group flex flex-col gap-1 text-right">
-          <span class="font-mono text-sm uppercase tracking-wider text-text-tertiary">
+        <a href={next.href} class="group flex flex-col gap-1 text-right border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all">
+          <span class="font-mono text-xs font-bold uppercase tracking-widest text-text-tertiary group-hover:text-canvas/70">
             Следующая
           </span>
-          <span class="text-sm text-text-secondary group-hover:text-accent transition-colors">
+          <span class="text-sm font-bold text-text-secondary group-hover:text-canvas">
             {next.title}
           </span>
         </a>
