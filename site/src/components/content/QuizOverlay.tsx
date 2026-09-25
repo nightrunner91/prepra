@@ -1,4 +1,6 @@
 import {
+  ArrowsClockwise,
+  ClipboardText,
   Eye,
   PauseCircle,
   SmileyMeh,
@@ -144,7 +146,6 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
     const data = loadQuizData(articleId);
     if (data?.lastAttempt) {
       setLastAttempt(data.lastAttempt);
-      setPhase('results');
     }
   }, [articleId]);
 
@@ -221,7 +222,10 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
         }}
         className="w-full flex items-center justify-center border-[3px] border-border bg-surface px-6 py-3 font-mono font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
       >
-        {hasAttempt ? 'Перепройти тест' : 'Пройти тест'}
+        <span className="flex items-center gap-2">
+          {hasAttempt ? <ArrowsClockwise size={20} weight="bold" /> : <ClipboardText size={20} weight="bold" />}
+          {hasAttempt ? 'Перепройти тест' : 'Пройти тест'}
+        </span>
       </button>
 
       {phase !== 'idle' && (
