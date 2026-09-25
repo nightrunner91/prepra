@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function ReadingProgress() {
   const [progress, setProgress] = useState(0);
@@ -29,7 +29,7 @@ export function ReadingProgress() {
   }, []);
 
   return (
-    <div className="fixed top-14 left-0 right-0 z-40 h-[4px] bg-border/20">
+    <div className="fixed top-14 left-0 right-0 z-[60] h-[3px] bg-border/20">
       <div
         className="h-full bg-accent transition-[width] duration-100"
         style={{ width: `${progress}%` }}

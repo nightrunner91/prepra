@@ -232,7 +232,7 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
       {phase !== 'idle' && (
         <div
           ref={overlayRef}
-          className={`fixed inset-0 z-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 bg-black/70 backdrop-blur-sm ${isClosing ? 'opacity-0' : 'opacity-100'}`}
+          className={`fixed inset-0 z-[60] overflow-x-hidden overflow-y-auto transition-opacity duration-300 bg-black/70 backdrop-blur-sm ${isClosing ? 'opacity-0' : 'opacity-100'}`}
           role="dialog"
           aria-modal="true"
         >
