@@ -1,6 +1,4 @@
 ---
-import { ProgressBar } from "../ui/ProgressBar.tsx";
-
 interface Props {
   totalArticles: number;
   totalQuestions: number;
@@ -45,10 +43,56 @@ const { totalArticles, totalQuestions, sectionsCount } = Astro.props;
       </div>
     </div>
     <div class="mt-6">
-      <ProgressBar value={0} max={totalQuestions} showLabel={true} />
+      <div class="flex items-center gap-3">
+        <div class="h-2 flex-1 border-2 border-border bg-surface overflow-hidden">
+          <div
+            id="progress-bar-fill"
+            class="h-full bg-accent transition-all duration-300"
+            style="width: 0%"
+          />
+        </div>
+        <span id="progress-bar-label" class="font-mono text-sm font-bold text-text-tertiary tabular-nums">
+          0%
+        </span>
+      </div>
       <p class="mt-2 text-xs font-mono text-text-tertiary">
         Отмечай вопросы как изученные — прогресс обновляется автоматически.
       </p>
     </div>
   </div>
 </div>
+
+<script define:vars={{ totalQuestions }}>
+  function countAnsweredQuestions() {
+    let count = 0;
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('prepra:quiz:')) {
+          const data = JSON.parse(localStorage.getItem(key) || '{}');
+          if (data.lastAttempt && data.lastAttempt.answers) {
+            count += Object.keys(data.lastAttempt.answers).length;
+          }
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+    return count;
+  }
+
+  function updateProgress() {
+    const answered = countAnsweredQuestions();
+    const max = totalQuestions || 1;
+    const pct = Math.min(100, Math.round((answered / max) * 100));
+    const fill = document.getElementById('progress-bar-fill');
+    const label = document.getElementById('progress-bar-label');
+    if (fill) fill.style.width = pct + '%';
+    if (label) label.textContent = pct + '%';
+  }
+
+  updateProgress();
+  window.addEventListener('quiz:update', updateProgress);
+  window.addEventListener('read:update', updateProgress);
+  window.addEventListener('storage', updateProgress);
+</script>

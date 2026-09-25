@@ -28,6 +28,7 @@ export function ReadToggle({ articleId }: { articleId: string }) {
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
     setIsRead(idx === -1);
+    window.dispatchEvent(new CustomEvent('read:update'));
   }, [articleId]);
 
   return (

@@ -55,6 +55,7 @@ function loadQuizData(articleId: string): QuizData | null {
 
 function saveQuizData(articleId: string, data: QuizData): void {
   localStorage.setItem(storageKey(articleId), JSON.stringify(data));
+  window.dispatchEvent(new CustomEvent('quiz:update'));
 }
 
 function timeAgo(timestamp: number): string {
