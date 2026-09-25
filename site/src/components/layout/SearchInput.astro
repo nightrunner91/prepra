@@ -1,0 +1,25 @@
+---
+import { MagnifyingGlass } from "@phosphor-icons/react";
+---
+
+<div class="relative hidden sm:flex items-center">
+  <MagnifyingGlass
+    size={18}
+    weight="bold"
+    className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text/60"
+  />
+  <input
+    type="text"
+    placeholder="Поиск..."
+    readonly
+    aria-label="Поиск по сайту"
+    title="Поиск по сайту (скоро)"
+    class="h-9 w-48 md:w-64 lg:w-80 border-2 border-border bg-canvas pl-9 pr-3 md:pr-14 text-sm text-text placeholder:text-text/50 focus:border-accent focus:outline-none transition-colors"
+  />
+  <kbd
+    class="absolute right-2.5 top-1/2 hidden md:flex -translate-y-1/2 items-center gap-1 border border-border px-1.5 py-0.5 text-xs font-mono text-text/50"
+    aria-hidden="true"
+  >
+    <span>Ctrl</span><span>K</span>
+  </kbd>
+</div>

@@ -2,6 +2,8 @@
 import { List } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
 import { ThemeToggle } from "./ThemeToggle.tsx";
+import SearchInput from "./SearchInput.astro";
+import UserAccount from "./UserAccount.astro";
 
 interface Props {
   currentSection?: string;
@@ -19,9 +21,7 @@ const sections = [
 ];
 ---
 
-<header
-  class="sticky top-0 z-50 border-b-[3px] border-border bg-canvas"
->
+<header class="sticky top-0 z-50 border-b-[3px] border-border bg-canvas">
   <div class="mx-auto flex h-14 items-center justify-between px-3">
     <div class="flex items-center gap-6">
       <a
@@ -33,7 +33,12 @@ const sections = [
     </div>
 
     <div class="flex items-center gap-2">
+      <SearchInput />
+
       <ThemeToggle client:load />
+
+      <UserAccount />
+
       <button
         id="mobile-menu-btn"
         class="lg:hidden flex items-center justify-center h-9 w-9 border-2 border-border text-text hover:bg-text hover:text-canvas transition-colors"
