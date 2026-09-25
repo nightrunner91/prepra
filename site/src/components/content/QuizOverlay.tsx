@@ -420,7 +420,7 @@ function QuizView({
             <div className="mb-6 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
               Вопрос
             </div>
-            <p className="text-left text-lg font-medium leading-relaxed text-text md:text-xl">
+            <p className="text-left text-lg font-bold leading-relaxed text-text md:text-xl">
               {question}?
             </p>
             {!flipped && (

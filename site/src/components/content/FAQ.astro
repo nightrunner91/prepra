@@ -17,9 +17,7 @@ const { items } = Astro.props;
   >
     Вопросы и ответы
   </h2>
-  <p
-    class="mt-2 font-medium text-sm uppercase tracking-wide text-text-secondary"
-  >
+  <p class="mt-2 font-bold text-sm uppercase tracking-wide text-text-secondary">
     Всё что нужно знать о prepra.
   </p>
   <div class="mt-8 border-t-[3px] border-border" data-faq>
@@ -57,7 +55,7 @@ const { items } = Astro.props;
             aria-labelledby={`faq-btn-${i}`}
           >
             <div class="overflow-hidden">
-              <div class="pb-4 text-sm text-text-secondary leading-relaxed font-medium">
+              <div class="pb-4 text-sm text-text-secondary leading-relaxed font-bold">
                 <Fragment set:html={item.answer} />
               </div>
             </div>

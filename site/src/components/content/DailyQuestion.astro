@@ -34,7 +34,7 @@ const { question } = Astro.props;
     </div>
     <p
       id="daily-question-text"
-      class="mt-4 text-lg font-medium text-text leading-relaxed"
+      class="mt-4 text-lg font-bold text-text leading-relaxed"
     >
       {question.text}
     </p>
@@ -43,7 +43,10 @@ const { question } = Astro.props;
       href={withBase(`/${question.sectionId}/${question.articleSlug}`)}
       class="group mt-4 inline-flex items-center gap-1 font-mono text-sm font-bold uppercase tracking-wider text-accent hover:text-accent-hover transition-colors"
     >
-      Читать статью <span class="inline-block transition-transform group-hover:translate-x-1"><ArrowRight size={16} weight="bold" /></span>
+      Читать статью <span
+        class="inline-block transition-transform group-hover:translate-x-1"
+        ><ArrowRight size={16} weight="bold" /></span
+      >
     </a>
   </div>
 </div>

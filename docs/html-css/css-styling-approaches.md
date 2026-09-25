@@ -543,7 +543,7 @@ import { cva } from 'class-variance-authority';
 import { cn } from './utils';
 
 const button = cva(
-  'rounded-md font-medium transition-colors',
+  'rounded-md font-bold transition-colors',
   {
     variants: {
       variant: {
@@ -833,7 +833,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from './utils';
 
 const badge = cva(
-  'inline-flex items-center rounded-full font-medium',
+  'inline-flex items-center rounded-full font-bold',
   {
     variants: {
       variant: {
