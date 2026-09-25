@@ -7,12 +7,13 @@ interface Props {
   currentSection?: string;
   showLeftSidebar?: boolean;
   showRightSidebar?: boolean;
+  showFooter?: boolean;
 }
 
-const { title, description, currentSection, showLeftSidebar = false, showRightSidebar = false } = Astro.props;
+const { title, description, currentSection, showLeftSidebar = false, showRightSidebar = false, showFooter = true } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} currentSection={currentSection}>
+<BaseLayout title={title} description={description} currentSection={currentSection} showFooter={showFooter}>
   <div class="flex">
     <!-- Left sidebar column: reserves space on lg+ even when empty -->
     <div class="hidden lg:block w-56 flex-shrink-0">

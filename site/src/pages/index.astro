@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import PageLayout from "../layouts/PageLayout.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/content/Hero.astro";
 import SectionsGrid from "../components/content/SectionsGrid.astro";
 import ProgressBlock from "../components/content/ProgressBlock.astro";
@@ -135,11 +135,15 @@ const faqItems = [
 ];
 ---
 
-<PageLayout title="Главная">
-  <div class="mx-auto px-6 py-12 lg:py-16 lg:px-12">
-    <Hero />
+<BaseLayout title="Главная">
+  <Hero />
 
-    <SectionsGrid sections={sectionStats} totalArticles={totalArticles} totalQuestions={totalQuestions} />
+  <div class="mx-auto px-6 pb-12 lg:pb-16 lg:px-12 max-w-[1600px]">
+    <SectionsGrid
+      sections={sectionStats}
+      totalArticles={totalArticles}
+      totalQuestions={totalQuestions}
+    />
 
     <ProgressBlock
       totalArticles={totalArticles}
@@ -157,7 +161,7 @@ const faqItems = [
   </div>
 
   <Footer slot="footer" />
-</PageLayout>
+</BaseLayout>
 
 <style>
   .animate-fade-in {
