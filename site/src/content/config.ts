@@ -1,11 +1,12 @@
-import { z, defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { defineCollection, z } from 'astro:content';
 
 const articleSchema = z.object({
   title: z.string(),
   section: z.enum([
     'javascript',
     'typescript',
+    'html-css',
     'react',
     'nextjs',
     'testing',
@@ -14,7 +15,6 @@ const articleSchema = z.object({
     'state-management',
     'api-communication',
     'build-and-deployment',
-    'html-css',
     'security',
     'ai',
   ]),
@@ -35,6 +35,7 @@ function articles(section: string) {
 export const collections = {
   javascript: articles('javascript'),
   typescript: articles('typescript'),
+  'html-css': articles('html-css'),
   react: articles('react'),
   nextjs: articles('nextjs'),
   testing: articles('testing'),
@@ -43,7 +44,6 @@ export const collections = {
   'state-management': articles('state-management'),
   'api-communication': articles('api-communication'),
   'build-and-deployment': articles('build-and-deployment'),
-  'html-css': articles('html-css'),
   security: articles('security'),
   ai: articles('ai'),
 };

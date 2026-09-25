@@ -22,17 +22,15 @@ interface Props {
 const { sections, totalArticles, totalQuestions } = Astro.props;
 ---
 
-<div class="" id="sections">
-  <!-- <h2
+<div class="pt-16" id="sections">
+  <h2
     class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl"
   >
     Все разделы
   </h2>
-  <p
-    class="mt-2 text-sm font-bold uppercase tracking-wide text-text-secondary"
-  >
+  <p class="mt-2 text-sm font-bold uppercase tracking-wide text-text-secondary">
     {totalArticles} статей и {totalQuestions} вопросов для самопроверки.
-  </p> -->
+  </p>
   <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
     {
       sections.map((s, i) => (

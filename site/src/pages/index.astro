@@ -139,13 +139,13 @@ const faqItems = [
   <div class="mx-auto px-6 py-12 lg:py-16 lg:px-12">
     <Hero />
 
+    <SectionsGrid sections={sectionStats} totalArticles={totalArticles} totalQuestions={totalQuestions} />
+
     <ProgressBlock
       totalArticles={totalArticles}
       totalQuestions={totalQuestions}
       sectionsCount={sections.length}
     />
-
-    <SectionsGrid sections={sectionStats} />
 
     <HowItWorks />
 

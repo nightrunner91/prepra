@@ -17,10 +17,10 @@ import {
 export const sections = [
   { id: "javascript", label: "JavaScript", icon: Code },
   { id: "typescript", label: "TypeScript", icon: BracketsCurly },
+  { id: "html-css", label: "HTML и CSS", icon: FileCode },
   { id: "react", label: "React", icon: Atom },
   { id: "nextjs", label: "Next.js", icon: Rocket },
   { id: "testing", label: "Тестирование", icon: CheckSquare },
-  { id: "html-css", label: "HTML и CSS", icon: FileCode },
   { id: "performance", label: "Производительность", icon: Lightning },
   { id: "architecture", label: "Архитектура", icon: TreeStructure },
   { id: "state-management", label: "Хранилища", icon: Database },

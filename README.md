@@ -90,50 +90,7 @@
 
 ---
 
-## 2. HTML, CSS и браузерный фундамент
-
-Здесь не про синтаксис и не про «чем div отличается от span» — это должно быть уже в крови. Раздел про то, как браузер строит страницу, как работают современные механизмы раскладки и почему CSS ведёт себя именно так. Это то, что отличает разработчика, который «натянул стили», от инженера, который понимает платформу.
-
-- [ ] Как браузер парсит HTML: tokenizer, tree construction, preload scanner.
-- [ ] Что такое критический путь рендеринга: DOM → CSSOM → Render Tree → Layout → Paint → Composite.
-- [ ] Что такое семантический HTML и как он влияет на accessibility, SEO и парсинг.
-- [ ] Какие семантические landmarks есть и как они связаны с default ARIA roles.
-- [ ] Как работает нативная валидация форм, Constraint Validation API и `ElementInternals`.
-- [ ] Что такое Shadow DOM, slots и lifecycle кастомных элементов.
-- [ ] Как устроен cascade: origin, `@layer`, `!important`, inline styles, specificity, inheritance.
-- [ ] Что создаёт новый stacking context и почему `z-index` иногда «не работает».
-- [ ] BFC / IFC / FFC / GFC: зачем `display: flow-root`, почему схлопываются вертикальные margin’ы.
-- [ ] Что такое containing block и как он влияет на размеры positioned-элементов.
-- [ ] Flexbox: `flex-basis` vs `width`, `flex-grow/shrink`, alignment, auto margins, `gap`.
-- [ ] Grid: explicit/implicit grid, `fr`, `minmax`, `auto-fit`/`auto-fill`, areas, subgrid.
-- [ ] Container queries: `@container`, `container-type`, ограничения и use cases.
-- [ ] Responsive: viewport units (`dvh`/`svh`/`lvh`), `clamp()`/`min()`/`max()`, `prefers-*` media features.
-- [ ] Performance: composite-only свойства, `will-change`, `contain`, `content-visibility`.
-- [ ] CSS-архитектура: BEM, CUBE, cascade layers, utility-first, CSS Modules vs CSS-in-JS.
-- [ ] Современные селекторы: `:is`/`:where`/`:has`/`:not`, nesting, logical properties.
-- [ ] CSS custom properties: наследование, fallback, область видимости, JS API.
-- [ ] Способы применения CSS: inline, глобальный CSS, CSS Modules, CSS-in-JS (runtime и zero-runtime), utility-first (Tailwind), `@scope`, Shadow DOM — trade-offs, производительность, влияние на бандл и SSR.
-
-[Парсинг HTML и рендеринг](./docs/html-css/html-rendering-pipeline.md) · [Семантика и доступность](./docs/html-css/html-semantics-accessibility.md) · [Формы и валидация](./docs/html-css/html-forms-validation.md) · [Web Components](./docs/html-css/html-web-components.md) · [Каскад и специфичность](./docs/html-css/css-cascade-specificity.md) · [Форматирование контекстов](./docs/html-css/css-layout-formatting-contexts.md) · [Flexbox](./docs/html-css/css-flexbox.md) · [Grid](./docs/html-css/css-grid.md) · [Позиционирование](./docs/html-css/css-positioning-stacking.md) · [Container queries](./docs/html-css/css-responsive-container-queries.md) · [Анимации и производительность](./docs/html-css/css-animations-performance.md) · [CSS-переменные](./docs/html-css/css-variables-architecture.md) · [Современные селекторы](./docs/html-css/css-modern-selectors.md) · [Способы применения CSS](./docs/html-css/css-styling-approaches.md)
-
----
-
-## 3. Алгоритмическая сложность и Big O
-
-На собеседованиях в 2026 году всё чаще спрашивают не только React, но и алгоритмы. Тебе не нужно решать олимпиадные задачи — но понимать, почему один подход быстрее другого при росте данных, обязательно.
-
-- [ ] Что такое Big O и почему описывает худший случай
-- [ ] Чем `O(1)` отличается от `O(n)`, `O(log n)` и `O(n²)` — и как это выглядит в коде
-- [ ] Почему поиск в `Map`/`Set` — `O(1)`, а в массиве — `O(n)`
-- [ ] Что такое бинарный поиск и почему его сложность `O(log n)`
-- [ ] Как оценить сложность вложенных циклов и рекурсивных функций
-- [ ] Какие структуры данных чаще встречаются во фронтенде (Map, Set, очередь, стек) и где они применяются
-
-[Алгоритмическая сложность и Big O](./docs/javascript/js-big-o.md)
-
----
-
-## 4. TypeScript
+## 2. TypeScript
 
 TypeScript стал стандартом в React-разработке. На собеседовании спрашивают не «знаешь ли ты TS», а насколько глубоко ты понимаешь дженерики, utility-типы и умеешь типизировать хуки и компоненты.
 
@@ -159,6 +116,49 @@ TypeScript стал стандартом в React-разработке. На с�
 - [ ] Что такое covariance и contravariance в TypeScript
 
 [TypeScript Generics](./docs/typescript/typescript-generics.md) · [Utility Types](./docs/typescript/typescript-utility-types.md) · [TypeGuard](./docs/typescript/typescript-typeguard.md) · [Хуки и async-паттерны](./docs/typescript/typescript-hooks-async.md) · [`infer`](./docs/typescript/typescript-infer.md) · [Enums](./docs/typescript/typescript-enums.md) · [Decorators](./docs/typescript/typescript-decorators.md) · [TypeScript в React](./docs/typescript/typescript-react.md) · [Return Types](./docs/typescript/typescript-function-return-types.md)
+
+---
+
+## 3. HTML, CSS и браузерный фундамент
+
+Здесь не про синтаксис и не про «чем div отличается от span» — это должно быть уже в крови. Раздел про то, как браузер строит страницу, как работают современные механизмы раскладки и почему CSS ведёт себя именно так. Это то, что отличает разработчика, который «натянул стили», от инженера, который понимает платформу.
+
+- [ ] Как браузер парсит HTML: tokenizer, tree construction, preload scanner.
+- [ ] Что такое критический путь рендеринга: DOM → CSSOM → Render Tree → Layout → Paint → Composite.
+- [ ] Что такое семантический HTML и как он влияет на accessibility, SEO и парсинг.
+- [ ] Какие семантические landmarks есть и как они связаны с default ARIA roles.
+- [ ] Как работает нативная валидация форм, Constraint Validation API и `ElementInternals`.
+- [ ] Что такое Shadow DOM, slots и lifecycle кастомных элементов.
+- [ ] Как устроен cascade: origin, `@layer`, `!important`, inline styles, specificity, inheritance.
+- [ ] Что создаёт новый stacking context и почему `z-index` иногда «не работает».
+- [ ] BFC / IFC / FFC / GFC: зачем `display: flow-root`, почему схлопываются вертикальные margin'ы.
+- [ ] Что такое containing block и как он влияет на размеры positioned-элементов.
+- [ ] Flexbox: `flex-basis` vs `width`, `flex-grow/shrink`, alignment, auto margins, `gap`.
+- [ ] Grid: explicit/implicit grid, `fr`, `minmax`, `auto-fit`/`auto-fill`, areas, subgrid.
+- [ ] Container queries: `@container`, `container-type`, ограничения и use cases.
+- [ ] Responsive: viewport units (`dvh`/`svh`/`lvh`), `clamp()`/`min()`/`max()`, `prefers-*` media features.
+- [ ] Performance: composite-only свойства, `will-change`, `contain`, `content-visibility`.
+- [ ] CSS-архитектура: BEM, CUBE, cascade layers, utility-first, CSS Modules vs CSS-in-JS.
+- [ ] Современные селекторы: `:is`/`:where`/`:has`/`:not`, nesting, logical properties.
+- [ ] CSS custom properties: наследование, fallback, область видимости, JS API.
+- [ ] Способы применения CSS: inline, глобальный CSS, CSS Modules, CSS-in-JS (runtime и zero-runtime), utility-first (Tailwind), `@scope`, Shadow DOM — trade-offs, производительность, влияние на бандл и SSR.
+
+[Парсинг HTML и рендеринг](./docs/html-css/html-rendering-pipeline.md) · [Семантика и доступность](./docs/html-css/html-semantics-accessibility.md) · [Формы и валидация](./docs/html-css/html-forms-validation.md) · [Web Components](./docs/html-css/html-web-components.md) · [Каскад и специфичность](./docs/html-css/css-cascade-specificity.md) · [Форматирование контекстов](./docs/html-css/css-layout-formatting-contexts.md) · [Flexbox](./docs/html-css/css-flexbox.md) · [Grid](./docs/html-css/css-grid.md) · [Позиционирование](./docs/html-css/css-positioning-stacking.md) · [Container queries](./docs/html-css/css-responsive-container-queries.md) · [Анимации и производительность](./docs/html-css/css-animations-performance.md) · [CSS-переменные](./docs/html-css/css-variables-architecture.md) · [Современные селекторы](./docs/html-css/css-modern-selectors.md) · [Способы применения CSS](./docs/html-css/css-styling-approaches.md)
+
+---
+
+## 4. Алгоритмическая сложность и Big O
+
+На собеседованиях в 2026 году всё чаще спрашивают не только React, но и алгоритмы. Тебе не нужно решать олимпиадные задачи — но понимать, почему один подход быстрее другого при росте данных, обязательно.
+
+- [ ] Что такое Big O и почему описывает худший случай
+- [ ] Чем `O(1)` отличается от `O(n)`, `O(log n)` и `O(n²)` — и как это выглядит в коде
+- [ ] Почему поиск в `Map`/`Set` — `O(1)`, а в массиве — `O(n)`
+- [ ] Что такое бинарный поиск и почему его сложность `O(log n)`
+- [ ] Как оценить сложность вложенных циклов и рекурсивных функций
+- [ ] Какие структуры данных чаще встречаются во фронтенде (Map, Set, очередь, стек) и где они применяются
+
+[Алгоритмическая сложность и Big O](./docs/javascript/js-big-o.md)
 
 ---
 
