@@ -3,28 +3,161 @@ import { withBase } from "../../lib/urls";
 ---
 
 <div class="border-b-[3px] border-border pb-10">
-  <h1
-    class="font-mono text-5xl sm:text-6xl lg:text-8xl leading-[0.9] font-extrabold uppercase tracking-tight text-text"
-  >
-    <span class="text-text">PRE</span><span class="text-accent">PRA</span>
-  </h1>
-  <p
-    class="mt-4 text-base font-bold uppercase tracking-wide text-text-secondary"
-  >
-    Интерактивная платформа для подготовки к фронтенд-собеседованию.
-  </p>
-  <div class="mt-8 flex flex-wrap items-center gap-4">
-    <a
-      href={withBase("/javascript")}
-      class="inline-flex items-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider !text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
-    >
-      Начать изучение
-    </a>
-    <a
-      href="#sections"
-      class="inline-flex items-center gap-2 border-[3px] border-border bg-surface px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-text transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
-    >
-      Посмотреть разделы
-    </a>
+  <div class="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+    <div>
+      <h1
+        class="font-mono text-5xl sm:text-6xl lg:text-8xl leading-[0.9] font-extrabold uppercase tracking-tight text-text"
+      >
+        <span class="text-text">PRE</span><span class="text-accent">PRA</span>
+      </h1>
+      <p
+        class="mt-4 text-base font-bold uppercase tracking-wide text-text-secondary"
+      >
+        Интерактивная платформа для подготовки к фронтенд-собеседованию.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a
+          href={withBase("/javascript")}
+          class="inline-flex items-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider !text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+        >
+          Начать изучение
+        </a>
+        <a
+          href="#sections"
+          class="inline-flex items-center gap-2 border-[3px] border-border bg-surface px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-text transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+        >
+          Посмотреть разделы
+        </a>
+      </div>
+    </div>
+    <div class="hidden lg:flex lg:justify-end">
+      <div
+        id="glitch-box"
+        class="w-[450px] border-[3px] border-border bg-surface shadow-[4px_4px_0px_var(--color-border)]"
+      >
+        <div
+          class="flex items-center gap-2 border-b-[3px] border-border px-4 py-2"
+        >
+          <span class="h-3 w-3 rounded-full bg-red-500"></span>
+          <span class="h-3 w-3 rounded-full bg-yellow-400"></span>
+          <span class="h-3 w-3 rounded-full bg-green-500"></span>
+        </div>
+        <div id="glitch-lines" class="font-mono text-sm leading-6 p-4"></div>
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  :global(.g-kw) {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+  :global(.g-str) {
+    color: #b45309;
+  }
+  :global(.g-fn) {
+    color: var(--color-text);
+  }
+  :global(.g-ln) {
+    color: var(--color-text-tertiary);
+    user-select: none;
+    display: inline-block;
+    width: 2ch;
+    text-align: right;
+    margin-right: 4ch;
+  }
+  :global(.g-cursor) {
+    display: inline-block;
+    background: var(--color-accent);
+    width: 0.6ch;
+    height: 1.1em;
+    vertical-align: text-bottom;
+    margin-left: 1px;
+  }
+  :global([data-theme="dark"]) :global(.g-str) {
+    color: #fbbf24;
+  }
+</style>
+
+<script>
+  import gsap from "gsap";
+
+  type Token = { text: string; type: string };
+  const LINES: Token[][] = [
+    [
+      { text: "const", type: "kw" },
+      { text: " ", type: "" },
+      { text: "prepra", type: "fn" },
+      { text: " = () => {", type: "" },
+    ],
+    [
+      { text: "    await", type: "kw" },
+      { text: " ", type: "" },
+      { text: "learn", type: "fn" },
+      { text: "(", type: "" },
+      { text: "'react'", type: "str" },
+      { text: ");", type: "" },
+    ],
+    [
+      { text: "    await", type: "kw" },
+      { text: " ", type: "" },
+      { text: "learn", type: "fn" },
+      { text: "(", type: "" },
+      { text: "'types'", type: "str" },
+      { text: ");", type: "" },
+    ],
+    [
+      { text: "    return", type: "kw" },
+      { text: " success;", type: "" },
+    ],
+    [{ text: "};", type: "" }],
+    [],
+    [{ text: "> ready", type: "kw" }],
+  ];
+
+  const box = document.getElementById("glitch-box");
+  if (!box) throw new Error("#glitch-box not found");
+  const root = box.querySelector("#glitch-lines")!;
+
+  LINES.forEach((tokens, lineIndex) => {
+    const row = document.createElement("div");
+    row.className = "glitch-row";
+
+    const num = document.createElement("span");
+    num.className = "g-ln";
+    num.textContent = String(lineIndex + 1);
+    row.appendChild(num);
+
+    const content = document.createElement("span");
+    tokens.forEach((token) => {
+      [...token.text].forEach((ch) => {
+        const s = document.createElement("span");
+        s.textContent = ch;
+        if (token.type) s.className = `g-${token.type}`;
+        content.appendChild(s);
+      });
+    });
+    row.appendChild(content);
+
+    if (lineIndex === LINES.length - 1) {
+      const cursor = document.createElement("span");
+      cursor.className = "g-cursor";
+      cursor.id = "g-cursor";
+      row.appendChild(cursor);
+    }
+
+    root.appendChild(row);
+  });
+
+  const cursor = root.querySelector<HTMLSpanElement>("#g-cursor");
+  if (cursor) {
+    gsap.to(cursor, {
+      autoAlpha: 0,
+      duration: 0.6,
+      repeat: -1,
+      yoyo: true,
+      ease: "steps(1)",
+    });
+  }
+</script>
