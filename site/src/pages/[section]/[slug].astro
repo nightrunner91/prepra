@@ -7,6 +7,7 @@ import TableOfContents from "../../components/content/TableOfContents.astro";
 import PrevNextNav from "../../components/content/PrevNextNav.astro";
 import { ReadingProgress } from "../../components/content/ReadingProgress";
 import { QuizOverlay } from "../../components/content/QuizOverlay";
+import { ReadToggle } from "../../components/content/ReadToggle";
 import Badge from "../../components/ui/Badge.astro";
 import { withBase } from "../../lib/urls";
 
@@ -125,7 +126,7 @@ const { headings } = await render(entry);
       <Content />
     </div>
 
-    <div class="mt-16">
+    <div class="mt-16 flex flex-col gap-4">
       {
         data.questions && data.questions.length > 0 && (
           <QuizOverlay
@@ -136,13 +137,10 @@ const { headings } = await render(entry);
         )
       }
 
-      <button
-        id="read-toggle"
-        type="button"
-        class="mt-5 w-full flex items-center justify-center border-[3px] border-border bg-surface-alt px-6 py-3 font-mono font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
-      >
-        Отметить пройденным
-      </button>
+      <ReadToggle
+        client:only="react"
+        articleId={withBase(`/${data.section}/${entry.id}`)}
+      />
     </div>
 
     <PrevNextNav
@@ -172,51 +170,4 @@ const { headings } = await render(entry);
   document
     .querySelectorAll(".animate-fade-in")
     .forEach((el) => observer.observe(el));
-
-  const STORAGE_KEY = "prepra:read-articles";
-  const articleId = window.location.pathname.replace(/\/+$/, "");
-  const btn = document.getElementById("read-toggle") as HTMLButtonElement;
-
-  function getReadArticles(): string[] {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    } catch {
-      return [];
-    }
-  }
-
-  function applyState(isRead: boolean) {
-    if (isRead) {
-      btn.innerHTML = "Пройдено";
-      btn.classList.add(
-        "!bg-pale-green-bg-hover",
-        "!text-pale-green-text-hover",
-        "!border-pale-green-text",
-        "!shadow-none",
-      );
-    } else {
-      btn.textContent = "Отметить пройденным";
-      btn.classList.remove(
-        "!bg-pale-green-bg-hover",
-        "!text-pale-green-text-hover",
-        "!border-pale-green-text",
-        "!shadow-none",
-      );
-    }
-  }
-
-  const readArticles = getReadArticles();
-  applyState(readArticles.includes(articleId));
-
-  btn.addEventListener("click", () => {
-    const current = getReadArticles();
-    const idx = current.indexOf(articleId);
-    if (idx === -1) {
-      current.push(articleId);
-    } else {
-      current.splice(idx, 1);
-    }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
-    applyState(idx === -1);
-  });
 </script>
