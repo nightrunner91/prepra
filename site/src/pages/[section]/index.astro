@@ -116,15 +116,12 @@ function resolveArticle(slug: string): any | undefined {
   return articleMap.get(normalized);
 }
 
-let orderCounter = 0;
-
 const groups = parseSectionReadme(section.id).map((group) => {
   const directItems = group.slugs
     .map((slug) => resolveArticle(slug))
     .filter(Boolean)
     .map((article) => ({
       article,
-      order: ++orderCounter,
       href: withBase(`/${section.id}/${article.id}`),
     }));
 
@@ -136,7 +133,6 @@ const groups = parseSectionReadme(section.id).map((group) => {
         .filter(Boolean)
         .map((article) => ({
           article,
-          order: ++orderCounter,
           href: withBase(`/${section.id}/${article.id}`),
         })),
     }))
@@ -153,7 +149,6 @@ const otherArticles = articles
   .filter((article: any) => !referencedIds.has(normalizeSlug(article.id)))
   .map((article: any) => ({
     article,
-    order: ++orderCounter,
     href: withBase(`/${section.id}/${article.id}`),
   }));
 
@@ -174,7 +169,7 @@ if (otherArticles.length > 0) {
 >
   <Sidebar currentSection={section.id} slot="left-sidebar" />
 
-  <div class="mx-auto max-w-4xl px-4 py-10 lg:px-8 lg:py-14">
+  <div class="mx-auto max-w-5xl px-4 py-10 lg:px-8 lg:py-14">
     <div class="">
       <Breadcrumbs
         items={[
@@ -185,18 +180,24 @@ if (otherArticles.length > 0) {
 
       <header class="mt-6 mb-10 border-b-[3px] border-border pb-6">
         <h1
-          class="font-mono text-3xl text-text sm:text-4xl leading-tight tracking-tight font-extrabold uppercase"
+          class="font-mono text-3xl text-text sm:text-5xl leading-tight tracking-tight font-extrabold uppercase"
         >
           {section.label}
         </h1>
-        <p class="mt-3 text-sm font-bold uppercase tracking-wide text-text-secondary">
+        <p
+          class="mt-3 text-sm font-bold uppercase tracking-wide text-text-secondary"
+        >
           {description}
         </p>
         <div
           class="mt-4 flex items-center gap-3 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary"
         >
-          <span class="border-2 border-border px-2 py-1 bg-surface">{articles.length} статей</span>
-          <span class="border-2 border-border px-2 py-1 bg-surface">{totalQuestions} вопросов</span>
+          <span class="border-2 border-border px-2 py-1 bg-surface"
+            >{articles.length} статей</span
+          >
+          <span class="border-2 border-border px-2 py-1 bg-surface"
+            >{totalQuestions} вопросов</span
+          >
         </div>
       </header>
     </div>

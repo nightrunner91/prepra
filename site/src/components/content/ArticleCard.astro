@@ -5,27 +5,18 @@ interface Props {
   title: string;
   description?: string;
   href: string;
-  order: number;
   tags?: string[];
   questionCount?: number;
 }
 
-const {
-  title,
-  description,
-  href,
-  order,
-  tags = [],
-  questionCount = 0,
-} = Astro.props;
+const { title, description, href, tags = [], questionCount = 0 } = Astro.props;
 ---
 
-<a
-  href={href}
+<div
   class="card-hover group block border-[3px] border-border bg-surface p-5 transition-all"
 >
   <div class="flex items-start justify-between gap-3">
-    <div class="min-w-0">
+    <a href={href} class="min-w-0 flex-1">
       <h3
         class="font-mono text-base font-extrabold uppercase tracking-tight text-text leading-tight group-hover:text-accent transition-colors"
       >
@@ -33,15 +24,33 @@ const {
       </h3>
       {
         description && (
-          <p class="mt-1.5 text-[13px] text-text-secondary line-clamp-2 leading-relaxed font-medium">
+          <p class="mt-1.5 text-[13px] text-text-secondary line-clamp-2 leading-relaxed font-bold">
             {description}
           </p>
         )
       }
-    </div>
-    <span class="flex-shrink-0 font-mono text-sm font-bold text-text-tertiary border-2 border-border px-1.5 py-0.5 bg-surface-alt"
-      >#{order}</span
+    </a>
+    <button
+      type="button"
+      class="read-toggle flex-shrink-0 w-6 h-6 flex items-center justify-center border-[3px] font-mono font-bold transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[3px_3px_0px_#000000] dark:hover:shadow-[3px_3px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none border-border bg-surface-alt text-text-secondary"
+      data-article-id={href}
+      aria-label="Отметить прочитанной"
+      aria-pressed="false"
     >
+      <svg
+        class="read-toggle-check hidden"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="3"
+        stroke-linecap="square"
+        stroke-linejoin="miter"
+      >
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </button>
   </div>
 
   <div class="mt-3 flex items-center gap-3">
@@ -65,4 +74,82 @@ const {
       )
     }
   </div>
-</a>
+</div>
+
+<script>
+  const STORAGE_KEY = "prepra:read-articles";
+
+  function getReadArticles(): string[] {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    } catch {
+      return [];
+    }
+  }
+
+  function setReadArticles(ids: string[]) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+  }
+
+  function updateToggle(button: Element, isRead: boolean) {
+    const check = button.querySelector(".read-toggle-check");
+    if (isRead) {
+      button.classList.remove(
+        "border-border",
+        "bg-surface-alt",
+        "text-text-secondary",
+      );
+      button.classList.add(
+        "border-pale-green-text",
+        "bg-pale-green-bg-hover",
+        "text-pale-green-text-hover",
+      );
+      check?.classList.remove("hidden");
+      button.setAttribute("aria-label", "Отметить непрочитанной");
+      button.setAttribute("aria-pressed", "true");
+    } else {
+      button.classList.add(
+        "border-border",
+        "bg-surface-alt",
+        "text-text-secondary",
+      );
+      button.classList.remove(
+        "border-pale-green-text",
+        "bg-pale-green-bg-hover",
+        "text-pale-green-text-hover",
+      );
+      check?.classList.add("hidden");
+      button.setAttribute("aria-label", "Отметить прочитанной");
+      button.setAttribute("aria-pressed", "false");
+    }
+  }
+
+  function initToggles() {
+    document.querySelectorAll(".read-toggle").forEach((button) => {
+      const articleId = button.getAttribute("data-article-id");
+      if (!articleId) return;
+
+      updateToggle(button, getReadArticles().includes(articleId));
+
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const current = getReadArticles();
+        const idx = current.indexOf(articleId);
+        const nextRead = idx === -1;
+        if (nextRead) {
+          current.push(articleId);
+        } else {
+          current.splice(idx, 1);
+        }
+        setReadArticles(current);
+        updateToggle(button, nextRead);
+        window.dispatchEvent(new CustomEvent("read:update"));
+      });
+    });
+  }
+
+  initToggles();
+  window.addEventListener("storage", initToggles);
+</script>
