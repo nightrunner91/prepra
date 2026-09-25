@@ -13,10 +13,15 @@ const { items } = Astro.props;
 
 <section class="mx-auto max-w-4xl">
   <h2
-    class="font-mono text-3xl text-text sm:text-4xl leading-tight tracking-tight font-extrabold uppercase"
+    class="font-mono text-3xl text-text sm:text-5xl leading-tight tracking-tight font-extrabold uppercase"
   >
     Вопросы и ответы
   </h2>
+  <p
+    class="mt-2 font-medium text-sm uppercase tracking-wide text-text-secondary"
+  >
+    Всё что нужно знать о prepra.
+  </p>
   <div class="mt-8 border-t-[3px] border-border" data-faq>
     {
       items.map((item, i) => (
