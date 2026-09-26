@@ -29,7 +29,7 @@ const articleSchema = z.object({
 
 function articles(section: string) {
   return defineCollection({
-    loader: glob({ pattern: ['*.md', '!README.md', '!GUIDE.md'], base: `../docs/${section}` }),
+    loader: glob({ pattern: '!(README|GUIDE).md', base: `../docs/${section}` }),
     schema: articleSchema,
   });
 }
