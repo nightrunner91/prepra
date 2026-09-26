@@ -8,6 +8,7 @@ const articleSchema = z.object({
     'typescript',
     'html-css',
     'react',
+    'vue',
     'nextjs',
     'testing',
     'performance',
@@ -27,7 +28,7 @@ const articleSchema = z.object({
 
 function articles(section: string) {
   return defineCollection({
-    loader: glob({ pattern: ['*.md', '!README.md'], base: `../docs/${section}` }),
+    loader: glob({ pattern: ['*.md', '!README.md', '!GUIDE.md'], base: `../docs/${section}` }),
     schema: articleSchema,
   });
 }
@@ -37,6 +38,7 @@ export const collections = {
   typescript: articles('typescript'),
   'html-css': articles('html-css'),
   react: articles('react'),
+  vue: articles('vue'),
   nextjs: articles('nextjs'),
   testing: articles('testing'),
   performance: articles('performance'),
