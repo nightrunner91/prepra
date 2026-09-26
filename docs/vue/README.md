@@ -1,6 +1,6 @@
 # Vue
 
-Раздел охватывает Vue 3 с упором на Composition API и `<script setup>`: SFC, реактивность, жизненный цикл компонентов, Vue Router, обработку ошибок, оптимизацию производительности, TypeScript и экосистему. Options API рассматривается как legacy, необходимый для чтения чужого кода и миграций.
+Раздел охватывает Vue 3 с упором на Composition API и `<script setup>`: SFC, реактивность, жизненный цикл компонентов, Vue Router, обработку ошибок, оптимизацию производительности и экосистему.
 
 ## Начни с базы
 
@@ -16,19 +16,10 @@
 - **[Компоненты, слоты и композиция](./vue-components-slots.md)** — default/named/scoped slots, `render()`/`h()`, `<component :is>`, `keep-alive`, `<teleport>`.
 - **[Оптимизация производительности](./vue-performance.md)** — `computed`, `v-memo`, `defineAsyncComponent`, `shallowRef`, lazy hydration, сравнение с React.
 - **[Suspense и async setup](./vue-suspense.md)** — `<Suspense>`, async `setup()`, fallback, вложенные границы.
-- **Обработка ошибок** — `app.config.errorHandler`, `onErrorCaptured`, error boundary pattern.
-- **Transition и TransitionGroup** — анимация появления/исчезновения и списков.
+- **[Обработка ошибок](./vue-error-handling.md)** — `app.config.errorHandler`, `onErrorCaptured`, error boundary pattern.
+- **[Transition и TransitionGroup](./vue-transitions.md)** — анимация появления/исчезновения и списков.
 
 ## Не будет лишним
 
 - **[Options API vs Composition API](./vue-options-vs-composition.md)** — история, различия, когда что использовать, миграция.
-- **TypeScript во Vue** — типизация пропсов, emits, composables, `defineModel`, generics в SFC.
 - **[Экосистема VueUse](./vueuse.md)** — обзор готовых composables, когда использовать, а когда писать свой.
-- **Создание проекта и структура** — `npm create vue@latest`, Vite, структура папок, dev/prod.
-
-## Смежные материалы
-
-- [Pinia](../state-management/pinia.md) и [Vuex](../state-management/vuex.md) — управление состоянием.
-- [Тестирование Vue-компонентов](../testing/testing-vue-components.md) — Vue Test Utils, Vitest.
-- [Тестирование Nuxt](../testing/testing-nuxt.md) — компоненты, composables, серверные роуты.
-- [Безопасность Vue/Nuxt](../security/security-vue-nuxt.md) — XSS, CSRF, CSP и особенности фреймворка.
