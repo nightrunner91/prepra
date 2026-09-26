@@ -29,7 +29,7 @@ export async function getStaticPaths() {
       id: "react",
       label: "React",
       description:
-        "Хуки, паттерны, оптимизация производительности, архитектура компонентов",
+        "JSX, хуки, паттерны, оптимизация производительности, архитектура компонентов",
     },
     {
       id: "nextjs",
@@ -47,7 +47,7 @@ export async function getStaticPaths() {
       id: "testing",
       label: "Тестирование",
       description:
-        "Unit, integration, E2E тестирование, мокирование, визуальное тестирование",
+        "Unit, интеграционное и E2E тестирование, мокирование, визуальное тестирование",
     },
     {
       id: "performance",
@@ -64,12 +64,14 @@ export async function getStaticPaths() {
     {
       id: "state-management",
       label: "Хранилища",
-      description: "Zustand, TanStack Query, клиентские хранилища данных",
+      description:
+        "Redux, Zustand, TanStack Query, Pinia, клиентские хранилища данных",
     },
     {
       id: "api-communication",
       label: "Работа с API",
-      description: "REST, GraphQL, WebSocket, HTTP-клиенты, long polling",
+      description:
+        "REST, GraphQL, WebSocket, HTTP-клиенты, long polling, коды ответов",
     },
     {
       id: "build-and-deployment",
@@ -211,14 +213,12 @@ if (otherArticles.length > 0) {
 
     <div class="space-y-10">
       {
-        groups.map((group, i) => (
-          <div class="animate-fade-in" style={`animation-delay: ${i * 40}ms`}>
-            <ArticleGroup
-              title={group.title}
-              items={group.items}
-              subgroups={group.subgroups}
-            />
-          </div>
+        groups.map((group) => (
+          <ArticleGroup
+            title={group.title}
+            items={group.items}
+            subgroups={group.subgroups}
+          />
         ))
       }
     </div>

@@ -13,15 +13,18 @@ import { sections } from "../lib/sections";
 const sectionDescriptions: Record<string, string> = {
   javascript: "Основы JavaScript, ES6+, замыкания, прототипы, асинхронность",
   typescript: "Типизация, дженерики, утилитарные типы, декораторы",
-  react: "Хуки, паттерны, оптимизация, архитектура компонентов",
-  nextjs: "Роутинг, серверные компоненты, кэширование, деплой",
+  react:
+    "JSX, хуки, паттерны, оптимизация производительности, архитектура компонентов",
+  nextjs: "Роутинг, серверные и клиентские компоненты, кэширование, деплой",
   vue: "SFC, Composition API, реактивность, Vue Router, TypeScript и экосистема",
-  testing: "Unit, integration, E2E тестирование, мокирование",
+  testing:
+    "Unit, интеграционное и E2E тестирование, мокирование, визуальное тестирование",
   "html-css": "Семантика, CSS-методологии, flexbox, grid, адаптивность",
   performance: "Метрики, виртуализация, hydration, web workers",
   architecture: "Паттерны проектирования, SOLID, DRY/KISS/YAGNI, BFF",
   "state-management": "Zustand, TanStack Query, клиентские хранилища",
-  "api-communication": "REST, GraphQL, WebSocket, HTTP-клиенты",
+  "api-communication":
+    "REST, GraphQL, WebSocket, HTTP-клиенты, long polling, коды ответов",
   "build-and-deployment": "Сборка бандлов, CI/CD, стратегии деплоя",
   security: "XSS, CSRF, CSP, аутентификация, HTTP-заголовки",
   ai: "Ментальная модель, паттерны промптинга, агенты, RAG",
@@ -168,7 +171,7 @@ const faqItems = [
 <style>
   .animate-fade-in {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translate(4px, 4px);
     transition:
       opacity 300ms ease,
       transform 300ms ease;
@@ -176,7 +179,7 @@ const faqItems = [
 
   .animate-fade-in.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate(0, 0);
   }
 </style>
 
