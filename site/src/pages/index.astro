@@ -17,12 +17,14 @@ const sectionDescriptions: Record<string, string> = {
     "JSX, хуки, паттерны, оптимизация производительности, архитектура компонентов",
   nextjs: "Роутинг, серверные и клиентские компоненты, кэширование, деплой",
   vue: "SFC, Composition API, реактивность, Vue Router, TypeScript и экосистема",
+  nuxt: "Файловая маршрутизация, Nitro, composables, роуты и деплой",
   testing:
     "Unit, интеграционное и E2E тестирование, мокирование, визуальное тестирование",
   "html-css": "Семантика, CSS-методологии, flexbox, grid, адаптивность",
   performance: "Метрики, виртуализация, hydration, web workers",
   architecture: "Паттерны проектирования, SOLID, DRY/KISS/YAGNI, BFF",
-  "state-management": "Zustand, TanStack Query, клиентские хранилища",
+  "state-management":
+    "Redux, Zustand, TanStack Query, Pinia, клиентские хранилища данных",
   "api-communication":
     "REST, GraphQL, WebSocket, HTTP-клиенты, long polling, коды ответов",
   "build-and-deployment": "Сборка бандлов, CI/CD, стратегии деплоя",
@@ -36,6 +38,7 @@ const sectionColors: Record<string, "red" | "blue" | "green" | "yellow"> = {
   react: "blue",
   nextjs: "neutral",
   vue: "green",
+  nuxt: "green",
   testing: "green",
   "html-css": "red",
   performance: "green",
