@@ -17,6 +17,7 @@
     "@astrojs/mdx": "^4.3.14",
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
+    "@dev.icons/react": "^1.1.0",
     "@phosphor-icons/react": "^2.1.10",
     "@phosphor-icons/web": "^2.1.2",
     "@tailwindcss/typography": "^0.5.20",
