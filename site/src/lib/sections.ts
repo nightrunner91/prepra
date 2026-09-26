@@ -1,8 +1,7 @@
 import {
   Atom,
   BracketsCurly,
-  Brain,
-  CheckSquare,
+  Check,
   Code,
   Database,
   Hexagon,
@@ -12,6 +11,7 @@ import {
   Package,
   PlugsConnected,
   Shield,
+  StarFour,
   TreeStructure,
   Triangle,
 } from "@phosphor-icons/react";
@@ -24,12 +24,12 @@ export const sections = [
   { id: "nextjs", label: "Next.js", icon: Triangle },
   { id: "vue", label: "Vue", icon: Leaf },
   { id: "nuxt", label: "Nuxt", icon: Hexagon },
-  { id: "testing", label: "Тестирование", icon: CheckSquare },
+  { id: "testing", label: "Тестирование", icon: Check },
   { id: "performance", label: "Производительность", icon: Lightning },
   { id: "architecture", label: "Архитектура", icon: TreeStructure },
   { id: "state-management", label: "Хранилища", icon: Database },
   { id: "api-communication", label: "API", icon: PlugsConnected },
   { id: "build-and-deployment", label: "Сборка и деплой", icon: Package },
   { id: "security", label: "Безопасность", icon: Shield },
-  { id: "ai", label: "AI и LLM", icon: Brain },
+  { id: "ai", label: "AI и LLM", icon: StarFour },
 ];
