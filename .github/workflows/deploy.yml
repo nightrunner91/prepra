@@ -39,8 +39,9 @@ jobs:
         run: npm ci
 
       - name: Build with Astro
-        rm -rf .astro node_modules/.astro
-        run: npm run build
+        run: |
+          rm -rf .astro node_modules/.astro
+          npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
