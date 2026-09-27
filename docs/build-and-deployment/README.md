@@ -1,22 +1,22 @@
 # Сборка, CI/CD и деплой
 
-Раздел про весь путь от исходного кода до production: бандлеры, оптимизация бандла, CI/CD, стратегии деплоя, рендеринг, CDN, Edge и платформы хостинга.
+Раздел про путь от исходного кода до production: бандлеры, CI/CD, стратегии деплоя, платформы хостинга и zero-downtime.
 
 ## Начни с базы
 
-1. **[Сборка и CI/CD](./build-tools-ci-cd.md)** — эволюция бандлеров, Webpack vs Vite, code splitting, tree shaking, GitHub Actions, Docker.
+1. **[Сборка и CI/CD](./build-tools-ci-cd.md)** — эволюция бандлеров, Webpack vs Vite, GitHub Actions, Docker, preview deployments.
 2. **[Стратегии деплоя](./deployment-strategies.md)** — blue-green, canary, feature flags, rollback, zero-downtime.
-3. **[Стратегии рендеринга, SSG, CDN и Edge](./deployment-rendering-strategies.md)** — CSR, SSR, SSG, ISR, CDN, кэширование и Edge Functions. База, без которой непонятны остальные статьи.
 
 ## Углубись в детали
 
-- **[Продвинутая оптимизация бандла](./advanced-bundle-optimization.md)** — анализ, chunks, lazy loading, compression, bundle budget.
-- **[Монорепозитории](./monorepos.md)** — workspaces, Turborepo, Nx, CI/CD в монорепо.
-- **[Деплой Next.js](./deployment-nextjs.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Image Optimization, Vercel, Docker.
-- **[Деплой Nuxt 3](./deployment-nuxt.md)** — Nitro, prerender, SSR, edge-пресеты, `routeRules`, хостинги.
-- **[GitLab CI/CD для тестов](./gitlab-frontend-testing.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
+- **[Платформы деплоя](./deployment-platforms.md)** — Vercel, Netlify, Railway, Render, Fly.io, Cloudflare, AWS/GCP/Azure. Сравнение, цены, ограничения.
 
-## Не будет лишним
+## Смежные разделы
 
-- **[Платформы деплоя](./deployment-platforms.md)** — Vercel, Netlify, Railway, Render, Fly.io, Cloudflare Pages/Workers, AWS/GCP/Azure. Сравнение, цены, ограничения.
-- **[PWA](./pwa.md)** — манифест, Service Workers, офлайн, push, кэширование, установка на устройство.
+- **[Методы рендеринга, CDN и Edge](../performance/rendering-methods.md)** — CSR/SSR/SSG/ISR/RSC/PPR, CDN, Edge Functions, HTTP-кэширование.
+- **[Оптимизация бандла](../performance/bundle-optimization.md)** — анализ бандла, tree shaking, code splitting, vendor chunks, bundle budget.
+- **[Монорепозитории](../architecture/monorepos.md)** — workspaces, Turborepo, Nx, CI/CD в монорепо.
+- **[Деплой Next.js](../nextjs/deployment.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Vercel, Docker.
+- **[PWA в Next.js](../nextjs/pwa.md)** — манифест, Service Workers, офлайн, push.
+- **[Деплой Nuxt 3](../nuxt/deployment.md)** — Nitro, presets, `routeRules`, edge-хостинги.
+- **[GitLab CI/CD для тестов](../testing/gitlab-ci-cd.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.

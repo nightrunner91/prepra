@@ -15,10 +15,12 @@
 - **[Кэширование](./next_caching.md)** — четыре уровня кэша, revalidate, tags.
 - **[Next.js Server API](./next-server-api.md)** — серверные возможности фреймворка.
 - **[Оптимизация Next.js](./next_optimization.md)** — бандл, изображения, метрики, анализ.
+- **[Деплой Next.js](./deployment.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Vercel, Docker.
 - **[Тестирование Next.js](./testing.md)** — Server Components, Server Actions, Route Handlers.
 
 ## Не будет лишним
 
 - **[RSC Payload](./next_rsc_payload.md)** — механизм сериализации серверных компонентов.
 - **[Edge Runtime](./next_edge_runtime.md)** — edge-функции, ограничения, деплой.
+- **[PWA в Next.js](./pwa.md)** — манифест, Service Workers, офлайн, push.
 - **[Next.js как монолит](./next_monolith_direct_db.md)** — прямое обращение к базе данных без отдельного API.

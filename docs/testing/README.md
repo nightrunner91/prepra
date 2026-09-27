@@ -35,6 +35,6 @@
 
 ## Смежные разделы
 
-- **[GitLab CI/CD для тестов](../build-and-deployment/gitlab-frontend-testing.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
+- **[GitLab CI/CD для тестов](./gitlab-ci-cd.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
 - **[Тестирование производительности](../performance/performance-testing.md)** — Lighthouse CI, Web Vitals, bundle size, нагрузочные тесты.
 - **[Spec-Driven Development](../ai/spec-driven-development.md)** — разработка через спецификации с помощью LLM.

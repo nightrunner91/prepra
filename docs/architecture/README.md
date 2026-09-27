@@ -12,6 +12,7 @@
 - **[MVC, MVP, MVVM](./mvc-mvvm-article.md)** — классические архитектурные паттерны в контексте React и Vue.
 - **[Паттерны GoF](./gof_patterns_frontend.md)** — фабрика, декоратор, синглтон, наблюдатель.
 - **[Паттерны проектирования React / Next.js](./design_patterns.md)** — композиция, render props, custom hooks, структура файлов.
+- **[Монорепозитории](./monorepos.md)** — workspaces, Turborepo, Nx, CI/CD в монорепо.
 
 ## Не будет лишним
 

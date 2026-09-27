@@ -26,9 +26,8 @@ questions:
 3. [Что такое бандлер и зачем он нужен](#что-такое-бандлер-и-зачем-он-нужен)
 4. [Webpack — как работает и почему стал стандартом](#webpack--как-работает-и-почему-стал-стандартом)
 5. [Vite — почему появился и чем отличается](#vite--почему-появился-и-чем-отличается)
-6. [Code splitting и lazy loading](#code-splitting-и-lazy-loading)
-7. [Tree shaking — удаление мёртвого кода](#tree-shaking--удаление-мёртвого-кода)
-8. [CI/CD — что это и зачем нужно фронтендеру](#cicd--что-это-и-зачем-нужно-фронтендеру)
+6. [Оптимизация бандла](#оптимизация-бандла)
+7. [CI/CD — что это и зачем нужно фронтендеру](#cicd--что-это-и-зачем-нужно-фронтендеру)
 9. [GitHub Actions — автоматизация для фронтенда](#github-actions--автоматизация-для-фронтенда)
 10. [Docker для фронтенда](#docker-для-фронтенда)
 11. [Preview deployments — деплой каждого PR](#preview-deployments--деплой-каждого-pr)
@@ -344,201 +343,15 @@ Vite использует эту возможность. В режиме раз�
 
 ---
 
-## Code splitting и lazy loading
+## Оптимизация бандла
 
-**Code splitting** — это техника разделения бандла на меньшие части (чанки), которые загружаются по требованию. Вместо одного большого файла `bundle.js` вы получаете несколько меньших файлов, которые загружаются только когда нужны.
+Подробно о том, как анализировать бандл, настраивать tree shaking, code splitting, vendor chunks, compression и bundle budget — в разделе **[Оптимизация бандла](../performance/bundle-optimization.md)**. Здесь краткая сводка:
 
-### Зачем это нужно
-
-Представьте, что у вас есть приложение с тремя страницами: `Home`, `Dashboard` и `Settings`. Если все три страницы включены в один бандл, пользователь загружает весь код при первом посещении, даже если он собирается смотреть только `Home`.
-
-С code splitting каждая страница загружается отдельно:
-- Пользователь заходит на `Home` → загружается только код `Home`
-- Пользователь переходит на `Dashboard` → загружается код `Dashboard`
-- Пользователь переходит на `Settings` → загружается код `Settings`
-
-Это уменьшает время начальной загрузки и улучшает производительность.
-
-### Как это работает в React
-
-В React code splitting реализуется через `React.lazy` и `Suspense`:
-
-```jsx
-import { lazy, Suspense } from 'react';
-
-// Ленивая загрузка компонента
-const Dashboard = lazy(() => import('./Dashboard'));
-const Settings = lazy(() => import('./Settings'));
-
-function App() {
-  return (
-    <div>
-      <Home /> {/* Загружается сразу */}
-      
-      <Suspense fallback={<div>Loading...</div>}>
-        <Dashboard /> {/* Загружается по требованию */}
-      </Suspense>
-      
-      <Suspense fallback={<div>Loading...</div>}>
-        <Settings /> {/* Загружается по требованию */}
-      </Suspense>
-    </div>
-  );
-}
-```
-
-Когда React встречает `lazy(() => import('./Dashboard'))`, он не загружает компонент сразу. Вместо этого он создаёт «ленивый» компонент, который загружается только при первом рендере. `Suspense` показывает fallback (например, спиннер), пока компонент загружается.
-
-### Маршрутизация и code splitting
-
-Code splitting особенно эффективен в сочетании с маршрутизацией. Каждая страница загружается только при переходе на неё:
-
-```jsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
-
-const Home = lazy(() => import('./pages/Home'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Settings = lazy(() => import('./pages/Settings'));
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
-  );
-}
-```
-
-Теперь каждая страница — это отдельный чанк, который загружается только при переходе на соответствующий маршрут.
-
-### Автоматическое разделение в Vite и Webpack
-
-Современные бандлеры могут автоматически разделять код:
-
-**Vite** автоматически разделяет код из `node_modules` на отдельные чанки (vendor chunks). Это означает, что библиотеки (например, React) загружаются отдельно от вашего кода и кэшируются браузером.
-
-**Webpack** использует `SplitChunksPlugin` для автоматического разделения:
-
-```js
-// webpack.config.js
-module.exports = {
-  optimization: {
-    splitChunks: {
-      chunks: 'all', // разделять все чанки
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/, // модули из node_modules
-          name: 'vendors',
-          chunks: 'all'
-        }
-      }
-    }
-  }
-};
-```
-
-Это создаёт отдельный чанк `vendors.js` для всех библиотек из `node_modules`, что улучшает кэширование.
-
----
-
-## Tree shaking — удаление мёртвого кода
-
-**Tree shaking** — это процесс удаления неиспользуемого кода из бандла. Если вы импортируете функцию из модуля, но не используете её, tree shaking удалит её из финального бандла.
-
-### Как это работает
-
-Tree shaking работает только с **ES-модулями** (статическими импортами/экспортами), потому что они позволяют статически анализировать код (без выполнения).
-
-```js
-// utils.js
-export function add(a, b) {
-  return a + b;
-}
-
-export function subtract(a, b) {
-  return a - b;
-}
-
-export function multiply(a, b) {
-  return a * b;
-}
-
-// app.js
-import { add } from './utils';
-
-console.log(add(2, 3));
-```
-
-В этом примере импортируется только `add`. Функции `subtract` и `multiply` не используются, поэтому tree shaking удалит их из бандла.
-
-### Почему это важно для ES-модулей
-
-CommonJS (используется в Node.js) не поддерживает tree shaking, потому что импорты динамические:
-
-```js
-// CommonJS
-const utils = require('./utils'); // загружает ВСЁ, даже если нужно только add
-```
-
-ES-модули используют статические импорты, которые можно проанализировать без выполнения кода:
-
-```js
-// ES-модули
-import { add } from './utils'; // можно statically определить, что нужно только add
-```
-
-### Side effects и package.json
-
-Некоторые модули имеют **побочные эффекты** (side effects) — например,.polyfill'ы, которые добавляют методы в глобальные объекты. Такие модули нельзя удалять через tree shaking, даже если они не используются явно.
-
-Чтобы бандлер знал, какие модули имеют побочные эффекты, используется поле `sideEffects` в `package.json`:
-
-```json
-{
-  "name": "my-library",
-  "sideEffects": [
-    "./src/polyfill.js" // этот файл имеет побочные эффекты
-  ]
-}
-```
-
-Если `sideEffects` не указан, бандлер предполагает, что все модули могут иметь побочные эффекты, и не удаляет их. Если `sideEffects: false`, бандлер агрессивно удаляет неиспользуемый код.
-
-### Практические советы
-
-**1. Используйте именованные импорты вместо импорта всего модуля:**
-
-```js
-// ❌ Плохо — импортирует всё
-import _ from 'lodash';
-_.get(obj, 'path.to.value');
-
-// ✅ Хорошо — импортирует только нужное
-import { get } from 'lodash';
-get(obj, 'path.to.value');
-```
-
-**2. Используйте библиотеки, оптимизированные для tree shaking:**
-
-```js
-// ❌ Плохо — lodash не оптимизирован для tree shaking
-import { get } from 'lodash';
-
-// ✅ Хорошо — lodash-es оптимизирован
-import { get } from 'lodash-es';
-
-// ✅ Ещё лучше — используйте отдельные пакеты
-import get from 'lodash.get';
-```
-
-**3. Проверяйте размер бандла.** Используйте инструменты вроде `webpack-bundle-analyzer` или `rollup-plugin-visualizer` для анализа того, что попало в бандл.
+- **Code splitting** разбивает бандл на чанки, которые загружаются по требованию. В React — через `React.lazy` + `Suspense`, в Next.js — через `next/dynamic`.
+- **Tree shaking** удаляет неиспользуемый код, но работает только со статическими ES-модулями. CommonJS, побочные эффекты и `export * from` мешают удалению мёртвого кода.
+- **Vendor chunks** и `contenthash` в именах файлов улучшают долгосрочное кэширование: обновление одной библиотеки не инвалидирует весь бандл.
+- **gzip/brotli** сжатие уменьшает размер передаваемых файлов на 60–80%. Предварительное сжатие при сборке снимает нагрузку с сервера.
+- **Bundle budget** через `bundlesize` или `size-limit` позволяет автоматически проверять размер бандла в CI и блокировать PR при превышении.
 
 ---
 
@@ -947,55 +760,20 @@ Netlify автоматически создаст preview deployment для ка
 
 ### Оптимизация размера бандла
 
-**1. Анализируйте бандл.** Используйте `webpack-bundle-analyzer` или `rollup-plugin-visualizer` для понимания того, что попало в бандл:
+См. подробную статью **[Оптимизация бандла](../performance/bundle-optimization.md)**. В CI/CD полезно добавить проверку размера бандла (`bundlesize`, `size-limit`) и Lighthouse CI:
 
-```bash
-# Для Webpack
-npx webpack --profile --json > stats.json
-npx webpack-bundle-analyzer stats.json
+```yaml
+- name: Check bundle size
+  run: npx bundlesize
+  env:
+    BUNDLESIZE_GITHUB_TOKEN: ${{ secrets.BUNDLESIZE_GITHUB_TOKEN }}
 
-# Для Vite
-npm install -D rollup-plugin-visualizer
-```
-
-**2. Используйте dynamic imports для больших библиотек.** Если библиотека нужна только на определённых страницах, загружайте её лениво:
-
-```jsx
-// Вместо
-import moment from 'moment';
-
-// Используйте
-const formatDate = async (date) => {
-  const moment = await import('moment');
-  return moment(date).format('DD.MM.YYYY');
-};
-```
-
-**3. Заменяйте тяжёлые библиотеки на лёгкие альтернативы.**
-
-| Тяжёлая | Лёгкая | Экономия |
-|---|---|---|
-| moment (330 КБ) | date-fns (75 КБ) или dayjs (2 КБ) | ~90% |
-| lodash (530 КБ) | lodash-es (только используемые функции) | ~80% |
-| axios (55 КБ) | fetch (нативный API) | 100% |
-
-**4. Включите gzip/brotli сжатие.** Настройте nginx или CDN для сжатия статических файлов:
-
-```nginx
-# nginx.conf
-gzip on;
-gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
-gzip_min_length 1000;
-```
-
-**5. Используйте кэширование.** Настройте длинные сроки кэширования для статических файлов с хэшами в именах:
-
-```nginx
-# nginx.conf
-location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
-    expires 1y;
-    add_header Cache-Control "public, immutable";
-}
+- name: Lighthouse CI
+  uses: treosh/lighthouse-ci-action@v10
+  with:
+    urls: |
+      http://localhost:3000
+    uploadArtifacts: true
 ```
 
 ### Оптимизация CI/CD
@@ -1096,31 +874,9 @@ jobs:
 
 ### Мониторинг и аналитика
 
-**1. Отслеживайте размер бандла.** Используйте GitHub Actions для проверки размера бандла при каждом PR:
+**1. Размер бандла и производительность.** Проверяйте размер бандла (`bundlesize`, `size-limit`) и запускайте Lighthouse CI в CI — см. примеры в разделе [Оптимизация размера бандла](#оптимизация-размера-бандла) выше.
 
-```yaml
-- name: Check bundle size
-  uses: actions/checkout@v4
-- run: npm ci
-- run: npm run build
-- name: Analyze bundle
-  run: npx bundlesize
-  env:
-    BUNDLESIZE_GITHUB_TOKEN: ${{ secrets.BUNDLESIZE_GITHUB_TOKEN }}
-```
-
-**2. Используйте Lighthouse CI для проверки производительности.**
-
-```yaml
-- name: Lighthouse CI
-  uses: treosh/lighthouse-ci-action@v10
-  with:
-    urls: |
-      http://localhost:3000
-    uploadArtifacts: true
-```
-
-**3. Настройте уведомления о падении CI.** Используйте Slack, Discord или email для уведомлений:
+**2. Настройте уведомления о падении CI.** Используйте Slack, Discord или email для уведомлений:
 
 ```yaml
 - name: Notify on failure

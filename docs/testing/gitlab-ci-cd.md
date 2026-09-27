@@ -1,8 +1,8 @@
 ﻿---
 title: "GitLab CI/CD для фронтенд-тестов"
-section: build-and-deployment
+section: testing
 description: "Как построить pipeline GitLab CI/CD для фронтенд-тестов: stages, кэш, артефакты, шардинг, JUnit-отчёты и безопасность."
-order: 2
+order: 10
 tags:
   - "gitlab-ci"
   - "cicd"

@@ -1,8 +1,8 @@
 ---
 title: "Деплой Nuxt 3: Nitro, presets и routeRules"
-section: build-and-deployment
+section: nuxt
 description: "Как устроен Nitro и почему он ключевой для деплоя Nuxt 3, чем `nuxt build` отличается от `nuxt generate`, как работают `routeRules` и edge-пресеты."
-order: 4
+order: 6
 tags: ["nuxt", "nitro", "ssr", "routerules", "deployment"]
 questions:
   - "Что такое Nitro и за что он отвечает в архитектуре Nuxt 3?"
@@ -174,6 +174,8 @@ export default defineNuxtConfig({
 
 ## SSG и Prerender
 
+> Базовые режимы рендеринга (SSR, SSG, CSR, ISR) подробнее разобраны в [Режимы рендеринга](./nuxt-rendering-modes.md). Здесь — deployment-аспекты.
+
 ### Глобальная генерация
 
 ```bash
@@ -242,6 +244,8 @@ export default defineNuxtConfig({
 ---
 
 ## ISR через `routeRules`
+
+> Подробнее про ISR и другие режимы см. [Режимы рендеринга](./nuxt-rendering-modes.md). Здесь — настройка под деплой.
 
 Nuxt 3 поддерживает ISR через `routeRules` в `nuxt.config.ts`.
 
