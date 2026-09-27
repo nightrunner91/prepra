@@ -251,3 +251,7 @@
 .dark .astro-code-themes span {
   color: var(--shiki-dark) !important;
 }
+
+.prose :where(ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  padding-inline-start: 2.5rem;
+}
