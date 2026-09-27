@@ -13,7 +13,7 @@
 
 ## Смежные разделы
 
-- **[Методы рендеринга, CDN и Edge](../performance/rendering-methods.md)** — CSR/SSR/SSG/ISR/RSC/PPR, CDN, Edge Functions, HTTP-кэширование.
+- **[Методы рендеринга, CDN и Edge](../performance/rendering-methods.md)** — CSR/SSR/SSG/ISR/SWR, CDN, Edge, HTTP-кэширование. Реализация в [Next.js](../nextjs/nextjs-rendering-methods.md) и [Nuxt](../nuxt/nuxt-rendering-modes.md).
 - **[Оптимизация бандла](../performance/bundle-optimization.md)** — анализ бандла, tree shaking, code splitting, vendor chunks, bundle budget.
 - **[Монорепозитории](../architecture/monorepos.md)** — workspaces, Turborepo, Nx, CI/CD в монорепо.
 - **[Деплой Next.js](../nextjs/deployment.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Vercel, Docker.

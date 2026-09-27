@@ -22,6 +22,7 @@
 ## Смежные материалы
 
 - [Vue 3](../vue/README.md) — реактивность, Composition API, Vue Router, SFC.
+- [Методы рендеринга](../performance/rendering-methods.md) — общие концепции CSR, SSR, SSG, ISR, SWR, Streaming и HTTP-кэширования.
 - [Pinia](../state-management/pinia.md) — управление состоянием во Vue/Nuxt.
 - [Тестирование Nuxt](./testing.md) — тесты компонентов, composables и серверных роутов.
 - [Безопасность Vue/Nuxt](../security/security-vue-nuxt.md) — XSS, CSRF, CSP и особенности фреймворка.
