@@ -1,9 +1,8 @@
 ---
 import { List } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
-import { ThemeToggle } from "./ThemeToggle.tsx";
 import SearchInput from "./SearchInput.astro";
-import UserAccount from "./UserAccount.astro";
+import { ThemeToggle } from "./ThemeToggle.tsx";
 
 interface Props {
   currentSection?: string;
@@ -36,8 +35,6 @@ const sections = [
       <SearchInput />
 
       <ThemeToggle client:load />
-
-      <UserAccount />
 
       <button
         id="mobile-menu-btn"
