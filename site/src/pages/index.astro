@@ -73,13 +73,22 @@ const totalQuestions = sectionStats.reduce(
   0,
 );
 
-const allQuestions: { text: string; sectionId: string; articleSlug: string }[] =
-  [];
+const allQuestions: {
+  text: string;
+  sectionId: string;
+  sectionLabel: string;
+  articleSlug: string;
+}[] = [];
 for (const s of sectionStats) {
   const articles = await getCollection(s.id as any);
   for (const a of articles) {
     for (const q of a.data.questions || []) {
-      allQuestions.push({ text: q, sectionId: s.id, articleSlug: a.id });
+      allQuestions.push({
+        text: q,
+        sectionId: s.id,
+        sectionLabel: s.label,
+        articleSlug: a.id,
+      });
     }
   }
 }
