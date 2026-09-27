@@ -1,5 +1,5 @@
 ---
-title: "Файловая маршрутизация в Nuxt 3: pages/, динамические роуты, useRoute и useRouter"
+title: "Файловая маршрутизация в Nuxt 3"
 section: nuxt
 description: "Как устроен роутинг в Nuxt 3: файловая маршрутизация в pages/, динамические и вложенные роуты, catch-all, 404, useRoute, useRouter, definePageMeta и программная навигация navigateTo."
 order: 2
@@ -16,7 +16,7 @@ questions:
   - "В чём разница между useRoute и useRouter"
 ---
 
-# Файловая маршрутизация в Nuxt 3: pages/, динамические роуты, useRoute и useRouter
+# Файловая маршрутизация в Nuxt 3
 
 Nuxt 3 использует **файловую маршрутизацию** (file-based routing): каждый Vue-файл в папке `pages/` автоматически становится страницей приложения. Это избавляет от ручного описания маршрутов в `router/index.ts` — структура URL повторяет структуру папок и файлов.
 

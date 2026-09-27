@@ -1,5 +1,5 @@
 ---
-title: "Composables и auto-imports в Nuxt 3: useFetch, useAsyncData, useState, useHead и свои composables"
+title: "Composables и авто-импорты в Nuxt 3"
 section: nuxt
 description: "Как устроены composables и auto-imports в Nuxt 3: встроенные composables useFetch, useAsyncData, useState, useHead, useRoute, useRuntimeConfig; создание своих composables; SSR-safe подход и отличия от Vue composables."
 order: 4
@@ -16,7 +16,7 @@ questions:
   - "Чем Nuxt composables отличаются от Vue composables"
 ---
 
-# Composables и auto-imports в Nuxt 3: useFetch, useAsyncData, useState, useHead и свои composables
+# Composables и авто-импорты в Nuxt 3
 
 Nuxt 3 активно использует паттерн composables: небольших функций, инкапсулирующих переиспользуемую логику с доступом к реактивности Vue, lifecycle hooks и инфраструктуре фреймворка. В отличие от Vue SPA, где composables пишутся вручную и импортируются явно, Nuxt предоставляет богатую библиотеку встроенных composables и автоматический импорт для пользовательских.
 

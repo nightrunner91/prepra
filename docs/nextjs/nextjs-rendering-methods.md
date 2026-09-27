@@ -1,5 +1,5 @@
 ---
-title: "Методы рендеринга в Next.js: CSR, SSR, SSG, ISR, RSC, Streaming, Static Export и PPR"
+title: "Методы рендеринга в Next.js"
 section: nextjs
 description: "Next.js поддерживает CSR, SSR, SSG, ISR, RSC, Streaming и PPR — каждая стратегия решает свои задачи по балансу между производительностью, актуальностью данных и SEO. Разбираем App Router-конфиги, on-demand revalidation и ограничения Static Export."
 order: 2
@@ -17,7 +17,7 @@ questions:
   - "Как включить CSR, SSR и SSG через Route Segment Config и опции fetch"
 ---
 
-# Методы рендеринга в Next.js: CSR, SSR, SSG, ISR, RSC, Streaming, Static Export и PPR
+# Методы рендеринга в Next.js
 
 Next.js поддерживает несколько стратегий рендеринга, и выбор между ними определяет баланс производительности, актуальности данных и SEO. Каждый метод решает конкретный сценарий: статические блоги, персонализированные дашборды, e-commerce с частыми обновлениями цен.
 
