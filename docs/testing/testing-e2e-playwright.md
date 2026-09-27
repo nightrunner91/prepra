@@ -38,9 +38,10 @@ Playwright позволяет автоматизировать браузерн�
 17. [Трейсы и отладка](#трейсы-и-отладка)
 18. [Лучшие практики](#лучшие-практики)
 19. [Антипаттерны](#антипаттерны)
-20. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
-21. [Заключение](#заключение)
-22. [Полезные ссылки](#полезные-ссылки)
+20. [Оптимизация E2E-тестов](#оптимизация-e2e-тестов)
+21. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+22. [Заключение](#заключение)
+23. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -873,68 +874,21 @@ test("modifies request", async ({ page }) => {
 
 ---
 
-## Визуальное тестирование: toHaveScreenshot
+## Визуальное тестирование
 
-Визуальное тестирование сравнивает скриншоты pixel-by-pixel и находит различия, невидимые глазу. Это мощный инструмент для регрессии UI, но он же — источник ложных срабатываний. Любое изменение рендеринга (шрифт, антиалиасинг, субпиксельный рендеринг) ломает скриншот. Стратегия: используйте визуальные тесты для стабильных компонентов (кнопки, иконки, layout), но не для динамического контента (даты, аватары, тексты). Маскируйте изменяемые области через `mask`.
-
-### Базовые скриншоты
-
-`toHaveScreenshot()` делает скриншот страницы и сравнивает с эталоном. При первом запуске скриншот сохраняется как baseline, при последующих — сравнивается с ним. Разница хранится в директории `test-results`.
+Playwright умеет делать скриншоты через `toHaveScreenshot()` и сравнивать их с эталоном pixel-by-pixel. Это удобно для регрессии UI, но требует дисциплины: динамичные области (даты, аватары, тексты) нужно маскировать, а baseline-скриншоты обновлять только после ручной проверки diff'а.
 
 ```ts
 test("homepage looks correct", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveScreenshot();
-});
-```
-
-Playwright создаёт файл `homepage-looks-correct-1-chromium-Darwin.png` в директории `tests/`.
-
-### Скриншоты элементов
-
-Скриншот конкретного элемента точнее, чем всей страницы: он не ломается при изменении других частей UI. Используйте его для компонентов, которые должны выглядеть одинаково независимо от контекста: кнопки, карточки, модальные окна.
-
-```ts
-test("button looks correct", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.getByRole("button", { name: /submit/i })).toHaveScreenshot();
-});
-```
-
-### Настройки скриншотов
-
-`maxDiffPixelRatio` задаёт допустимый процент различий — 0.01 означает, что 1% пикселей могут отличаться без падения теста. Это критично для кроссбраузерного тестирования: рендеринг в Chrome и Safari отличается на субпиксельном уровне. `threshold` определяет чувствительность к различиям цвета. `mask` скрывает элементы (навигация, футер, даты), которые меняются между прогонами. `animations: "disabled"` отключает анимации, чтобы они не влияли на скриншот.
-
-```ts
-test("homepage with options", async ({ page }) => {
-  await page.goto("/");
   await expect(page).toHaveScreenshot({
-    maxDiffPixelRatio: 0.01, // Допустимая разница 1%
-    threshold: 0.2, // Порог различия пикселей
-    animations: "disabled", // Отключить анимации
-    mask: [page.getByRole("navigation")], // Замаскировать навигацию
+    animations: "disabled",
+    mask: [page.getByRole("navigation")],
   });
 });
 ```
 
-### Обновление скриншотов
-
-Команда `--update-snapshots` перезаписывает baseline-скриншоты. Используйте её только после визуальной проверки: если тест упал из-за реального бага, обновление скриншота закрепит баг как эталон. Всегда проверяйте diff перед обновлением.
-
-```bash
-npx playwright test --update-snapshots
-```
-
-### Полностраничные скриншоты
-
-`page.screenshot({ fullPage: true })` делает скриншот всей страницы, включая прокручиваемую область. Это полезно для документации или ручного сравнения, но не для автоматических тестов: полностраничные скриншоты слишком чувствительны к изменениям контента. Используйте их для лендингов с фиксированным контентом.
-
-```ts
-test("full page screenshot", async ({ page }) => {
-  await page.goto("/");
-  await page.screenshot({ path: "full-page.png", fullPage: true });
-});
-```
+> 📚 Подробнее о визуальной регрессии, Chromatic/Percy, Storybook и настройках скриншотов — в статье **[Визуальное тестирование](./testing-visual-regression.md)**.
 
 ---
 
@@ -1563,6 +1517,322 @@ export default defineConfig({
 
 ---
 
+## Оптимизация E2E-тестов
+
+E2E-тесты дают максимальную уверенность, но длинный прогон в CI сводит их пользу на нет. Ниже — практические приёмы ускорения: параллелизм, шардинг, подготовка состояния через API, моки внешних зависимостей и селективный запуск.
+
+### Почему E2E медленные
+
+| Фактор | Влияние |
+|---|---|
+| Запуск браузера | Секунды на каждый тест |
+| Навигация по страницам | Сеть, рендеринг, гидратация |
+| Заполнение форм через UI | Медленнее, чем API-вызов |
+| Ожидание элементов и анимаций | Добавляет задержки |
+| Последовательный запуск | Не использует мощности CI |
+| Нестабильные тесты | Retries умножают время |
+
+Чтобы ускорить E2E, нужно уменьшить время каждого теста **и** увеличить параллелизм.
+
+### Параллельный запуск
+
+Playwright запускает тесты в изолированных браузерных контекстах, поэтому параллелизм безопасен.
+
+```ts
+// playwright.config.ts
+export default defineConfig({
+  fullyParallel: true,
+  workers: process.env.CI ? 4 : undefined,
+  retries: process.env.CI ? 1 : 0,
+});
+```
+
+| Параметр | Назначение |
+|---|---|
+| `fullyParallel: true` | Тесты в одном файле тоже идут параллельно |
+| `workers` | Количество параллельных воркеров |
+| `retries` | Повторный запуск упавших тестов в CI |
+
+> ⚠️ `fullyParallel` требует полной изоляции тестов. Если тесты делят состояние — будут flaky.
+
+### Шардинг (sharding) в CI
+
+Шардинг разбивает набор тестов на части и запускает их на разных runner'ах.
+
+```yaml
+# .gitlab-ci.yml
+playwright-shard-1:
+  script:
+    - npx playwright test --shard=1/3
+
+playwright-shard-2:
+  script:
+    - npx playwright test --shard=2/3
+
+playwright-shard-3:
+  script:
+    - npx playwright test --shard=3/3
+```
+
+Playwright автоматически распределяет тесты по шардам. Если в одном шарде много тяжёлых тестов — время будет неравномерным.
+
+Для равномерного распределения используй `--shard` вместе с предварительным анализом длительности тестов. Playwright в новых версиях умеет балансировать по истории (`blob` + `merge` reports).
+
+```bash
+# Запуск с blob-отчётами
+npx playwright test --shard=1/3 --reporter=blob
+npx playwright test --shard=2/3 --reporter=blob
+npx playwright test --shard=3/3 --reporter=blob
+
+# Merge отчётов
+npx playwright merge-reports --from blob-dir
+```
+
+### Готовь состояние через API, а не через UI
+
+Самая частая ошибка: логиниться через UI перед каждым тестом.
+
+```ts
+// ❌ Плохо: 5–10 секунд на логин в каждом тесте
+test.beforeEach(async ({ page }) => {
+  await page.goto("/login");
+  await page.getByLabel("Email").fill("user@example.com");
+  await page.getByLabel("Password").fill("password");
+  await page.getByRole("button", { name: /login/i }).click();
+});
+
+// ✅ Хорошо: логинимся через API один раз
+const authFile = "playwright/.auth/user.json";
+
+test("user can access dashboard", async ({ page }) => {
+  await page.goto("/dashboard");
+  await expect(page.getByRole("heading", { name: /dashboard/i })).toBeVisible();
+});
+```
+
+Аналогично создавай тестовые данные через API или seed базы данных, а не через клики по формам.
+
+### Reuse auth state
+
+Playwright позволяет сохранить состояние аутентификации и переиспользовать его.
+
+```ts
+// playwright.config.ts
+export default defineConfig({
+  use: {
+    storageState: "playwright/.auth/user.json",
+  },
+});
+```
+
+Создание auth-файла:
+
+```ts
+// e2e/auth.setup.ts
+import { test as setup } from "@playwright/test";
+
+setup("authenticate", async ({ page }) => {
+  await page.goto("/login");
+  await page.getByLabel("Email").fill(process.env.TEST_USER_EMAIL!);
+  await page.getByLabel("Password").fill(process.env.TEST_USER_PASSWORD!);
+  await page.getByRole("button", { name: /login/i }).click();
+
+  await page.waitForURL("/dashboard");
+  await page.context().storageState({ path: "playwright/.auth/user.json" });
+});
+```
+
+```ts
+// playwright.config.ts
+export default defineConfig({
+  projects: [
+    { name: "setup", testMatch: /auth\.setup\.ts/ },
+    {
+      name: "e2e",
+      dependencies: ["setup"],
+      use: { storageState: "playwright/.auth/user.json" },
+    },
+  ],
+});
+```
+
+### Мокируй внешние сервисы
+
+Внешние сервисы — платёжки, аналитика, CDN, сторонние виджеты — замедляют и дестабилизируют тесты.
+
+```ts
+// Блокируем аналитику
+await page.route("**/google-analytics.com/**", (route) => route.abort());
+await page.route("**/sentry.io/api/**", (route) => route.abort());
+
+// Мокируем платёжный шлюз
+await page.route("**/api/payment", (route) => {
+  route.fulfill({
+    status: 200,
+    body: JSON.stringify({ status: "success" }),
+  });
+});
+```
+
+Для собственного бэкенда решай сам: реальные данные дают уверенность, моки — скорость. Частый компромисс: использовать staging API, но seed'ить данные.
+
+### Стабильные селекторы
+
+Тесты падают не потому, что сломан функционал, а потому, что поменялся CSS-класс.
+
+```ts
+// ❌ Плохо
+await page.click(".btn-primary");
+
+// ✅ Хорошо
+await page.getByRole("button", { name: /checkout/i }).click();
+
+// ⚠️ Приемлемо
+await page.getByTestId("checkout-button").click();
+```
+
+Flaky-тесты из-за селекторов — один из главных источников потерь времени.
+
+### Избегай sleep и waitForTimeout
+
+Фиксированные задержки — убийца скорости и стабильности.
+
+```ts
+// ❌ Плохо
+await page.waitForTimeout(2000);
+
+// ✅ Хорошо: ждём конкретного состояния
+await expect(page.getByText("Order confirmed")).toBeVisible();
+
+// ✅ Хорошо: ждём сетевого ответа
+const responsePromise = page.waitForResponse("**/api/order");
+await page.getByRole("button", { name: /pay/i }).click();
+await responsePromise;
+```
+
+Playwright автоматически ждёт элементы перед действиями. Явные `waitFor` нужны только для сетевых событий, навигации и исчезновения элементов.
+
+### Разделяй тесты по тегам
+
+Не все E2E нужны на каждом коммите. Используй теги:
+
+```ts
+// e2e/checkout.spec.ts
+test.describe("checkout", () => {
+  test("completes order with card @smoke", async ({ page }) => {
+    // ...
+  });
+
+  test("applies promo code @regression", async ({ page }) => {
+    // ...
+  });
+
+  test("handles paypal @slow", async ({ page }) => {
+    // ...
+  });
+});
+```
+
+Запуск по тегам:
+
+```bash
+# Только smoke на каждый PR
+npx playwright test --grep @smoke
+
+# Полная регрессия ночью
+npx playwright test --grep-invert @slow
+```
+
+### Retries и flaky-тесты
+
+Retries — это пластырь, не лечение. Но в CI они необходимы, чтобы отделить случайные падения от системных.
+
+```ts
+export default defineConfig({
+  retries: process.env.CI ? 1 : 0,
+});
+```
+
+Если тест падает регулярно:
+
+1. Собери trace (`trace: "on-first-retry"`).
+2. Найди причину: race condition, нестабильный селектор, сеть.
+3. Исправь тест или код.
+4. Не увеличивай retries без причины — это замаскирует проблему.
+
+### Запускай E2E против production-сборки
+
+Dev-сервер медленнее production-сборки из-за компиляции на лету.
+
+```ts
+// playwright.config.ts
+webServer: {
+  command: "npm run build && npm run start",
+  url: "http://localhost:3000",
+  timeout: 120000,
+  reuseExistingServer: !process.env.CI,
+},
+```
+
+Для Next.js: `next build && next start` вместо `next dev`.
+
+### Селективный запуск E2E
+
+Не запускай все E2E, если изменился один компонент.
+
+#### По изменённым файлам
+
+```bash
+# Запускаем только тесты, относящиеся к изменённым файлам
+npx playwright test $(git diff --name-only HEAD~1 | grep "e2e/")
+```
+
+#### По областям приложения
+
+```bash
+# PR меняет корзину — запускаем только e2e/cart/
+npx playwright test e2e/cart/
+```
+
+#### По impact analysis
+
+Некоторые команды используют статический анализ зависимостей, чтобы определить, какие E2E затронуты изменениями.
+
+### Мониторинг времени тестов
+
+Следи за метриками:
+
+- среднее время E2E-прогона;
+- время отдельных тестов (топ самых медленных);
+- flaky rate;
+- распределение по шардам.
+
+Инструменты:
+
+- Playwright HTML report
+- Playwright blob + merge reports
+- GitLab CI analytics
+- Внешние dashboards: Currents, Playwright Cloud
+
+> 💡 Регулярно просматривай самые медленные тесты. Обычно 10% тестов занимают 50% времени.
+
+### Чеклист оптимизации
+
+- [ ] Включён `fullyParallel` и адекватное число `workers`.
+- [ ] E2E запускаются в шардах на нескольких CI-раннерах.
+- [ ] Аутентификация подготавливается один раз через `storageState`.
+- [ ] Тестовые данные создаются через API/seed, а не через UI.
+- [ ] Внешние сервисы мокируются или блокируются.
+- [ ] Используются стабильные селекторы (роли, label, `data-testid`).
+- [ ] Нет `waitForTimeout` / `sleep`.
+- [ ] Тесты размечены тегами (`@smoke`, `@regression`, `@slow`).
+- [ ] Retries настроены, но flaky-тесты исправляются, а не маскируются.
+- [ ] E2E запускаются против production-сборки.
+- [ ] В CI используется селективный запуск по изменениям.
+- [ ] Время прогона мониторится и анализируется.
+
+---
+
 ## Ключевые тезисы для интервью
 
 - Playwright поддерживает Chromium, Firefox и WebKit через единый API с изолированными контекстами; локаторы работают лениво (поиск в момент действия), а `expect`-assertions — это retry-циклы до таймаута.
@@ -1571,6 +1841,7 @@ export default defineConfig({
 - `toHaveScreenshot` сравнивает скриншоты pixel-by-pixel; динамичные области (даты, аватары) нужно маскировать, чтобы избежать ложных срабатываний.
 - Page Object Model централизует локаторы и действия страницы; `storageState` и setup project переиспользуют аутентификацию, ускоряя прогон тестов.
 - Тесты должны быть независимыми (каждый создаёт свои данные), параллельными (`fullyParallel`), с retries в CI (`retries: 2`) для снижения влияния flaky-тестов.
+- Ускорение E2E в CI требует комплекса мер: подготовка состояния через API и `storageState`, моки внешних сервисов, стабильные селекторы, шардинг/blob-отчёты, теги для селективного запуска и мониторинг времени прогона.
 
 ## Заключение
 
@@ -1582,3 +1853,9 @@ Playwright предоставляет полный инструментарий 
 - [Playwright API Reference](https://playwright.dev/docs/api/class-playwright)
 - [Playwright Best Practices](https://playwright.dev/docs/best-practices)
 - [Trace Viewer](https://playwright.dev/docs/trace-viewer-intro)
+- [Playwright: Parallelism and sharding](https://playwright.dev/docs/test-parallel)
+- [Playwright: Authentication](https://playwright.dev/docs/auth)
+- [Playwright: Network mocking with `page.route`](https://playwright.dev/docs/api/class-page#page-route)
+- [Playwright: Retries](https://playwright.dev/docs/test-retries)
+- [Playwright: Web server](https://playwright.dev/docs/test-webserver)
+- [Playwright: Reporters and blob reports](https://playwright.dev/docs/test-reporters)

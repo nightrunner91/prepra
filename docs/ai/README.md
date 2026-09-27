@@ -15,6 +15,7 @@
 - **[RAG-паттерн](./ai-rag.md)** — векторный поиск, chunking, контекстное обогащение
 - **[Управление контекстом](./ai-context-management.md)** — история диалога, сжатие, приоритизация
 - **[Оценка и тестирование LLM-фич](./ai-evaluation.md)** — evals, golden dataset, LLM-as-judge
+- **[Spec-Driven Development](./spec-driven-development.md)** — спецификация как единый источник истины для кода и тестов
 
 ## Не будет лишним
 

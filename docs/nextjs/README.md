@@ -15,6 +15,7 @@
 - **[Кэширование](./next_caching.md)** — четыре уровня кэша, revalidate, tags.
 - **[Next.js Server API](./next-server-api.md)** — серверные возможности фреймворка.
 - **[Оптимизация Next.js](./next_optimization.md)** — бандл, изображения, метрики, анализ.
+- **[Тестирование Next.js](./testing.md)** — Server Components, Server Actions, Route Handlers.
 
 ## Не будет лишним
 

@@ -23,6 +23,6 @@
 
 - [Vue 3](../vue/README.md) — реактивность, Composition API, Vue Router, SFC.
 - [Pinia](../state-management/pinia.md) — управление состоянием во Vue/Nuxt.
-- [Тестирование Nuxt](../testing/testing-nuxt.md) — тесты компонентов, composables и серверных роутов.
+- [Тестирование Nuxt](./testing.md) — тесты компонентов, composables и серверных роутов.
 - [Безопасность Vue/Nuxt](../security/security-vue-nuxt.md) — XSS, CSRF, CSP и особенности фреймворка.
 - [Деплой Nuxt 3](../build-and-deployment/deployment-nuxt.md) — стратегии сборки и развёртывания.

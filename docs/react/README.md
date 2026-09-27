@@ -18,6 +18,7 @@
 - **[Suspense](./react_suspense.md)** — lazy loading, потоковый рендеринг, Error Boundaries.
 - **[HOC](./react_hoc.md)** — композиция, проблемы, сравнение с хуками.
 - **[Конкурентные хуки](./react_concurrent_hooks.md)** — `useTransition`, `useDeferredValue`, приоритеты обновлений.
+- **[Тестирование компонентов](./testing-components.md)** — React Testing Library, хуки, события, провайдеры.
 
 ## Не будет лишним
 

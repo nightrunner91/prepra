@@ -14,6 +14,7 @@
 - **[Монорепозитории](./monorepos.md)** — workspaces, Turborepo, Nx, CI/CD в монорепо.
 - **[Деплой Next.js](./deployment-nextjs.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Image Optimization, Vercel, Docker.
 - **[Деплой Nuxt 3](./deployment-nuxt.md)** — Nitro, prerender, SSR, edge-пресеты, `routeRules`, хостинги.
+- **[GitLab CI/CD для тестов](./gitlab-frontend-testing.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
 
 ## Не будет лишним
 

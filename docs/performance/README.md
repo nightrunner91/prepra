@@ -6,10 +6,11 @@
 
 1. **[Метрики производительности](./web-performance-metrics.md)** — Core Web Vitals, TTFB, FCP, LCP, CLS, инструменты.
 2. **[Методы рендеринга](./rendering-methods.md)** — CSR, SSR, SSG, ISR, RSC, Streaming, PPR.
-3. **[Браузерная архитектура](./browser-architecture.md)** — процессы, потоки, reflow/repaint, async/defer.
+3. **[Браузерная архитектура](./browser-architecture.md)** — процессы, потоки, Site Isolation, сетевой путь, TTFB.
 
 ## Углубись в детали
 
+- **[Тестирование производительности](./performance-testing.md)** — Lighthouse CI, Web Vitals, bundle size, нагрузочные тесты.
 - **[Гидратация](./hydration.md)** — как работает hydration, hydration mismatch и способы борьбы.
 - **[Виртуализация списков](./list_virtualization.md)** — react-window, react-virtuoso, vue-virtual-scroller.
 

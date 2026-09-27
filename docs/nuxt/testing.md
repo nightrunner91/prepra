@@ -1,6 +1,6 @@
 ﻿---
 title: "Тестирование в Nuxt 3"
-section: testing
+section: nuxt
 description: "Как тестировать Nuxt 3-приложения: настройка Vitest, тестирование компонентов, composables, server routes, middleware, мокирование API и антипаттерны."
 order: 10
 tags: ["nuxt", "vitest", "mountSuspended", "registerEndpoint", "mockNuxtImport", "composables"]

@@ -1,6 +1,6 @@
-﻿---
+---
 title: "Тестирование производительности"
-section: testing
+section: performance
 description: "Как автоматизировать проверки скорости фронтенда и API: Lighthouse CI, Web Vitals, размер бандла, нагрузочные тесты, профилирование и мониторинг пользователей."
 order: 11
 tags: ["performance-testing", "lighthouse", "web-vitals", "bundle-size", "k6", "react-profiler"]

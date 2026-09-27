@@ -521,194 +521,32 @@ it("takes long to process", async () => {
 
 ## Мокирование: vi.fn, vi.spyOn, vi.mock
 
-Мокирование заменяет реальные зависимости тестового кода контролируемыми заглушками. Без моков тесты превращаются в интеграционные: они зависят от внешних API, БД, таймеров — становятся медленными и хрупкими.
+Мокирование заменяет реальные зависимости тестового кода контролируемыми заглушками. Без моков тесты зависят от внешних API, БД, таймеров — становятся медленными и хрупкими.
 
-Три уровня мокирования в Vitest:
-- `vi.fn()` — создаёт функцию-пустышку с нуля. Используйте, когда передаёте колбэк или подменяете зависимость целиком.
-- `vi.spyOn()` — оборачивает существующий метод объекта, сохраняя оригинальную реализацию (по умолчанию). Используйте, когда нужно проверить, что метод был вызван, но не менять его поведение.
-- `vi.mock()` — подменяет целый модуль. Используйте, когда зависимость — внешний модуль (API-клиент, роутер, хранилище).
-
-### vi.fn() — создание mock-функции
-
-`vi.fn()` создаёт функцию, которая запоминает все свои вызовы. После выполнения кода можно проверить, сколько раз её вызывали и с какими аргументами. Это основа для проверки взаимодействий — не «что вернул код», а «что код сделал».
+Три базовых инструмента в Vitest:
+- `vi.fn()` — создаёт функцию-пустышку с нуля.
+- `vi.spyOn()` — оборачивает существующий метод, сохраняя оригинал.
+- `vi.mock()` — подменяет целый модуль.
 
 ```ts
-const mockFn = vi.fn();
+// vi.fn() — контролируемая функция
+const submit = vi.fn();
+submit("hello");
+expect(submit).toHaveBeenCalledWith("hello");
 
-mockFn("hello");
-mockFn("world");
-
-expect(mockFn).toHaveBeenCalledTimes(2);
-expect(mockFn).toHaveBeenCalledWith("hello");
-expect(mockFn).toHaveBeenLastCalledWith("world");
-```
-
-### vi.fn() с реализацией
-
-По умолчанию mock-функция возвращает `undefined`. Чтобы она вела себя реалистично, задайте реализацию: `mockReturnValue` для статического значения, `mockResolvedValue` для промиса, `mockReturnValueOnce` для последовательности значений. Последовательные значения полезны, когда нужно протестировать, например, «первый запрос успешен, второй — ошибка».
-
-```ts
-// Mock с возвращаемым значением
-const mockAdd = vi.fn((a: number, b: number) => a + b);
-expect(mockAdd(2, 3)).toBe(5);
-
-// Mock с последовательными возвращаемыми значениями
-const mockFn = vi.fn()
-  .mockReturnValueOnce("first")
-  .mockReturnValueOnce("second")
-  .mockReturnValue("default");
-
-expect(mockFn()).toBe("first");
-expect(mockFn()).toBe("second");
-expect(mockFn()).toBe("default");
-expect(mockFn()).toBe("default");
-
-// Mock с async-реализацией
-const mockFetch = vi.fn().mockResolvedValue({ data: [1, 2, 3] });
-const result = await mockFetch();
-expect(result.data).toEqual([1, 2, 3]);
-
-// Mock с отклонением
-const mockFetch = vi.fn().mockRejectedValue(new Error("Network error"));
-await expect(mockFetch()).rejects.toThrow("Network error");
-```
-
-### vi.spyOn() — шпионаж за методом
-
-`vi.spyOn` оборачивает метод объекта, не меняя его поведение (если не указать `mockReturnValue`). Это менее инвазивно, чем `vi.mock`: оригинальный код остаётся на месте, вы лишь наблюдаете за вызовами. Хорошо подходит для проверки побочных эффектов — вызовов `console.log`, `window.open`, и т.д.
-
-Важно: после теста вызывайте `mockRestore()`, иначе шпон останется на месте и может сломать другие тесты.
-
-```ts
-const consoleSpy = vi.spyOn(console, "log");
-
-doSomething();
-
-expect(consoleSpy).toHaveBeenCalledWith("Processing...");
-
-consoleSpy.mockRestore(); // Восстановить оригинальный метод
-```
-
-### vi.spyOn() для переопределения
-
-`spyOn` можно комбинировать с `mockReturnValue` — тогда метод и шпионится, и подменяется. Это полезно, когда нужно изменить поведение одного метода объекта, не трогая остальные.
-
-```ts
-const user = {
-  getName: () => "Alice",
-};
-
-const spy = vi.spyOn(user, "getName").mockReturnValue("Bob");
-
-expect(user.getName()).toBe("Bob");
-
+// vi.spyOn() — наблюдение за методом
+const spy = vi.spyOn(console, "log");
+console.log("hi");
+expect(spy).toHaveBeenCalled();
 spy.mockRestore();
-expect(user.getName()).toBe("Alice");
-```
 
-### vi.mock() — мокирование модулей
-
-`vi.mock()` подменяет весь модуль. Это необходимо, когда тестируемый код импортирует зависимость — например, API-клиент. Без мока тест будет делать реальные HTTP-запросы. `vi.mock` вызывается *до* импортов (Vitest автоматически «поднимает» его), поэтому переменные из теста недоступны внутри factory-функции — для этого используйте `vi.hoisted()` (см. ниже).
-
-```ts
-// Полное мокирование модуля
+// vi.mock() — подмена модуля
 vi.mock("./api", () => ({
   fetchUsers: vi.fn().mockResolvedValue([{ id: 1, name: "Alice" }]),
-  deleteUser: vi.fn().mockResolvedValue(true),
-}));
-
-// Использование в тесте
-import { fetchUsers } from "./api";
-
-it("loads users", async () => {
-  const users = await fetchUsers();
-  expect(users).toEqual([{ id: 1, name: "Alice" }]);
-});
-```
-
-### vi.mock() с factory-функцией (частичный mock)
-
-Часто нужно подменить только часть модуля, оставив остальное нетронутым. Для этого factory-функция принимает `importOriginal` — вызовите его, чтобы получить реальную реализацию, и перезапишите только нужные экспорты.
-
-```ts
-vi.mock("./api", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./api")>();
-  return {
-    ...actual,
-    fetchUsers: vi.fn().mockResolvedValue([{ id: 1, name: "Mocked" }]),
-    // deleteUser остаётся оригинальным
-  };
-});
-```
-
-### Автоматическое мокирование
-
-Если один и тот же модуль нужно мокать во всех тестах проекта, вынесите мок в setup-файл. Это избавит от дублирования `vi.mock` в каждом тестовом файле.
-
-```ts
-// vitest.config.ts
-export default defineConfig({
-  test: {
-    setupFiles: ["./src/test/setup.ts"],
-  },
-});
-
-// src/test/setup.ts — моки по умолчанию
-vi.mock("./api", () => ({
-  fetchUsers: vi.fn().mockResolvedValue([]),
 }));
 ```
 
-### vi.hoisted() — переменные для vi.mock
-
-`vi.mock` вызывается до импортов, поэтому обычные `const`/`let` из файла недоступны внутри factory-функции. `vi.hoisted()` «поднимает» значения наверх, делая их доступными в factory. Это нужно, когда вы хотите настроить мок в одном месте, а использовать — в другом.
-
-```ts
-// vi.mock вызывается до импортов, поэтому обычные переменные недоступны
-// vi.hoisted() решает эту проблему
-
-const { mockFetchUsers, mockDeleteUser } = vi.hoisted(() => ({
-  mockFetchUsers: vi.fn(),
-  mockDeleteUser: vi.fn(),
-}));
-
-vi.mock("./api", () => ({
-  fetchUsers: mockFetchUsers,
-  deleteUser: mockDeleteUser,
-}));
-
-it("fetches users", async () => {
-  mockFetchUsers.mockResolvedValue([{ id: 1 }]);
-  const users = await fetchUsers();
-  expect(users).toEqual([{ id: 1 }]);
-});
-```
-
-### Очистка моков
-
-Моки сохраняют историю вызовов между тестами. Если не очищать, тест №2 увидит вызовы из теста №1. Настраивайте очистку в `afterEach` глобально — в setup-файле.
-
-Разница между методами: `clearAllMocks` — очищает историю, но сохраняет реализацию; `restoreAllMocks` — убирает моки и восстанавливает оригиналы (важно для `spyOn`).
-
-```ts
-afterEach(() => {
-  vi.clearAllMocks();     // Очищает историю вызовов всех моков
-  vi.restoreAllMocks();   // Восстанавливает оригинальные реализации
-});
-
-// Или для конкретного мока:
-mockFn.mockClear();       // Очищает историю вызовов
-mockFn.mockReset();       // Очищает + убирает реализацию
-mockFn.mockRestore();     // Reset + восстанавливает оригинал (только для spyOn)
-```
-
-### Разница между clear, reset, restore
-
-| Метод | История вызовов | Реализация | Оригинал (spyOn) |
-|---|---|---|---|
-| `mockClear()` | Очищает | Сохраняет | Сохраняет |
-| `mockReset()` | Очищает | Убирает (→ undefined) | Сохраняет |
-| `mockRestore()` | Очищает | Убирает | Восстанавливает |
+> 📚 Глубокое мокирование — `vi.hoisted()`, частичные моки, MSW, мокирование браузерных API и жизненный цикл моков — разобрано в статье **[Мокирование](./testing-mocking.md)**. Здесь сосредоточимся на API Vitest, которое нужно для повседневных unit-тестов.
 
 ---
 
