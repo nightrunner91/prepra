@@ -1,11 +1,11 @@
 # <p align="center">Prepra</p>
 
 <p align="center">
-  <strong>Интерактивная платформа для подготовки к собеседованиям Frontend-разработчика</strong>
+  <strong>Интерактивная платформа для подготовки к фронтенд-собеседованию</strong>
 </p>
 
 <p align="center">
-  <img src="https://via.placeholder.com/800x450/18181b/f4f4f5?text=Prepra+Preview" alt="Prepra - платформа для подготовки к собеседованиям Frontend-разработчика">
+  <img src="site/public/preview.jpg" alt="Prepra - платформа для подготовки к собеседованиям Frontend-разработчика">
 </p>
 
 <p align="center">
@@ -13,7 +13,6 @@
   <img src="https://img.shields.io/badge/License-AGPL--3.0-green?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/Astro-5.18-BC52EE?style=for-the-badge&logo=astro&logoColor=white" alt="Astro">
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
   <img src="https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
 </p>
 
@@ -41,9 +40,9 @@
 
 ## Обзор проекта
 
-**Prepra** — это структурированная образовательная платформа для самостоятельной подготовки frontend-разработчиков к техническим собеседованиям. Проект превращает набор markdown-заметок в полноценный статический сайт с навигацией, трекером прогресса, системой самопроверки и понятным learning roadmap.
+**Prepra** — это структурированная образовательная платформа для самостоятельной подготовки frontend-разработчиков к техническим собеседованиям с трекером прогресса, системой самопроверки и понятным learning roadmap. Это **более 170 учебных статей** в 15 разделах, лично проверенных автором. Платформа охватывает всю современную frontend-разработку — от основ JavaScript до AI/LLM.
 
-Платформа охватывает всю современную frontend-разработку — от основ JavaScript и TypeScript до React, Vue, Next.js, Nuxt, тестирования, производительности, безопасности, архитектуры и AI/LLM. Контент пишется на чистом markdown и рендерится через content collections в Astro: авторы занимаются текстом, а сайт сам строит роутинг, темы и интерактивные элементы.
+Проект построен на связке Astro и React: контент пишется на чистом markdown и рендерится через content collections. Автор занимается текстом, а сайт сам строит роутинг, темы и интерактивные элементы.
 
 > [!NOTE]
 > Опубликованная версия сайта доступна по адресу [https://nightrunner91.github.io/prepra](https://nightrunner91.github.io/prepra).
@@ -52,7 +51,6 @@
 
 ## Возможности
 
-- **Более 170 учебных статей** в 15 разделах — от JavaScript Core до AI и LLM.
 - **Генерация статического сайта** на Astro: быстрые страницы, SEO и минимум клиентского JavaScript.
 - **Контент в Markdown** через Astro Content Collections с типизированной схемой frontmatter.
 - **Интерактивный трекер прогресса** на `localStorage`: отмечай вопросы как "знаю", "частично" или "не знаю".
