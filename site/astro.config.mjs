@@ -9,6 +9,9 @@ export default defineConfig({
   base: '/prepra',
   server: {
     port: 8305,
+    fs: {
+      allow: [".."],
+    },
   },
   integrations: [
     mdx(),
