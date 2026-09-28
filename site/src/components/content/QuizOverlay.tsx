@@ -24,6 +24,7 @@ interface QuizData {
 
 interface QuizOverlayProps {
   questions: string[];
+  answers?: string[];
   articleId: string;
 }
 
@@ -133,7 +134,7 @@ const STATUS_META: Record<AnswerStatus, { label: string; icon: React.ReactNode; 
   },
 };
 
-export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
+export function QuizOverlay({ questions, answers, articleId }: QuizOverlayProps) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -250,6 +251,7 @@ export function QuizOverlay({ questions, articleId }: QuizOverlayProps) {
             {phase === 'quiz' && (
               <QuizView
                 questions={questions}
+                answers={answers}
                 currentIndex={currentIndex}
                 flipped={flipped}
                 savingStatus={savingStatus}
@@ -362,6 +364,7 @@ function ResultsView({ questions, attempt, onRetake, onClose }: ResultsViewProps
 
 interface QuizViewProps {
   questions: string[];
+  answers?: string[];
   currentIndex: number;
   flipped: boolean;
   savingStatus: number | null;
@@ -373,6 +376,7 @@ interface QuizViewProps {
 
 function QuizView({
   questions,
+  answers,
   currentIndex,
   flipped,
   savingStatus,
@@ -382,7 +386,7 @@ function QuizView({
   total,
 }: QuizViewProps) {
   const question = questions[currentIndex];
-  const answer = getDefaultAnswer(question, currentIndex);
+  const answer = answers?.[currentIndex] ?? getDefaultAnswer(question, currentIndex);
   const progress = ((currentIndex) / total) * 100;
 
   return (

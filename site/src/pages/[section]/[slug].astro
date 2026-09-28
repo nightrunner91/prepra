@@ -137,6 +137,7 @@ const { headings } = await render(entry);
           <QuizOverlay
             client:only="react"
             questions={data.questions}
+            answers={data.answers}
             articleId={withBase(`/${data.section}/${entry.id}`)}
           />
         )

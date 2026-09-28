@@ -25,6 +25,7 @@ const articleSchema = z.object({
   tags: z.array(z.string()).optional(),
   relatedArticles: z.array(z.string()).optional(),
   questions: z.array(z.string()).optional(),
+  answers: z.array(z.string()).optional(),
 });
 
 function articles(section: string) {
