@@ -13,6 +13,15 @@ questions:
   - "Когда использовать <router-link>, а когда программную навигацию через useRouter"
   - "Как защитить маршрут с помощью meta-полей и beforeEnter"
   - "Чем Vue Router отличается от React Router по API и концепциям"
+answers:
+  - "Vue Router связывает URL с деревом компонентов в SPA, управляя браузерной историей через History API или hash без перезагрузки страницы; создаётся через createRouter с полями history и routes и подключается через `app.use(router)`."
+  - "Маршруты — массив объектов с обязательным path и component (или components для именованных видов, redirect), например `{ path: '/', component: HomeView }`; `<router-view>` — это «гнездо», в котором роутер рендерит компонент текущего маршрута, и его можно сделать именованным для нескольких областей layout'а."
+  - "params объявляются в path через двоеточие (`/users/:id`) и подходят для идентификаторов ресурсов, а query (`?search=vue&page=2`) — для фильтров, поиска и пагинации; оба всегда строки, и при смене params компонент не пересоздаётся — нужно watch на `() => route.params.id`."
+  - "Порядок строгий: глобальные beforeEach в порядке регистрации → beforeEnter входящего маршрута → компонентные beforeRouteEnter/beforeRouteUpdate/beforeRouteLeave → глобальные beforeResolve → afterEach; в Vue Router 4 рекомендуется возвращать значение вместо next (return false отменяет, return { name } перенаправляет)."
+  - "В поле component передаётся `() => import('../views/DashboardView.vue')` — роутер ждёт разрешения Promise и разбивает бандл на чанки, а несколько маршрутов можно сгруппировать в один чанк через webpackChunkName; асинхронные компоненты маршрутов автоматически работают с `<Suspense>`."
+  - "`<router-link>` подходит для статических ссылок в меню, а useRouter().push/replace/back — когда навигация происходит в ответ на действие (успешный логин, отправка формы, результат API-запроса); push возвращает Promise, который отклоняется при отмене перехода guard'ом."
+  - "В meta маршрута хранят флаги вроде requiresAuth и role, а в глобальном beforeEach проверяют to.meta.requiresAuth и возвращают `{ name: 'Login', query: { redirect: to.fullPath } }`; beforeEnter применяется к конкретному маршруту, но не вызывается повторно при смене params — для этого есть onBeforeRouteUpdate."
+  - "Vue Router объявляет маршруты декларативным массивом конфигурации, имеет встроенные guards, три режима истории и глобальные $route/$router в шаблоне; React Router 6 описывает маршруты в JSX (<Routes>/<Route>) и использует хуки useNavigate/useLocation, а guards реализует через data API loader/action."
 ---
 
 # Vue Router
