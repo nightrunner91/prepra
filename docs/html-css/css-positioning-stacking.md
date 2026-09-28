@@ -11,6 +11,13 @@ questions:
   - "Почему `position: sticky` может не работать и какие условия нужны для его корректной работы"
   - "Как `z-index` работает в flex/grid-контейнерах без `position` и чем это отличается от обычного потока"
   - "Что делает `isolation: isolate` и почему это чистый способ создать stacking context без побочных эффектов"
+answers:
+  - "Для `absolute` containing block — ближайший предок с `position` не `static` (или с `transform`/`filter`/`perspective`/`contain: paint/layout`), иначе `<html>`; для `fixed` по умолчанию viewport, но любой предок с `transform` становится containing block'ом, и элемент позиционируется относительно него — это ломает модалки, вложенные в анимированные контейнеры."
+  - "Stacking context — изолированная группа слоёв, где элементы рисуются от дальних к ближним; его создают `z-index` у позиционированного элемента, `opacity < 1`, `transform`, `filter`, `isolation: isolate`, `mix-blend-mode`, `will-change`, `contain` и flex/grid-контейнер с `z-index` у детей. Дочерний элемент «заперт» в контексте родителя: `child-a` с `z-index: 9999` не перекроет `.parent-b`, чей контекст выше."
+  - "От дальнего к ближнему: фон и border контекста → отрицательный `z-index` → элементы нормального потока → float → inline → позиционированные с `z-index: auto`/без него → положительный `z-index`; поэтому `position: relative` без `z-index` иногда перекрывает float, а иногда нет."
+  - "Sticky требует минимум одного порога (`top`/`right`/`bottom`/`left`) и прокручиваемого предка выше в DOM; он не сработает, если у предков `overflow: hidden`/`scroll` без прокрутки или родительский контейнер слишком низкий — нет области для «прилипания»."
+  - "Flex/grid-контейнер, у которого дети имеют `z-index` отличный от `auto`, сам становится stacking context'ом, и его дети могут получать `z-index` без `position` — в обычном потоке у `static`-элемента `z-index` не работает."
+  - "`isolation: isolate` создаёт новый stacking context, не добавляя трансформаций и не меняя прозрачность (в отличие от `opacity`/`transform`) — dropdown-меню рисуется поверх соседей, но не выходит за пределы своего компонента."
 ---
 
 # Positioning, stacking context, `z-index` и paint order

@@ -11,6 +11,13 @@ questions:
   - "Что такое containing block и как `transform` на предке влияет на позиционирование `position: absolute`"
   - "При каких условиях происходит margin collapse и почему в flex/grid-контекстах margin'ы не схлопываются"
   - "Как `box-sizing: border-box` упрощает рассуждение о размерах элемента"
+answers:
+  - "Formatting context — область документа, где блоки раскладываются по единому набору правил и влияют друг на друга: BFC (блочный, вертикальная раскладка и схлопывание margin'ов), IFC (inline, строки и базовая линия), FFC (flex, оси) и GFC (grid, ячейки сетки)."
+  - "Новый BFC создают `float`, `position: absolute/fixed`, `display: inline-block`/`table-cell`/`flow-root`, `overflow` не `visible` и flex/grid-контейнер; `flow-root` делает это без побочных эффектов, тогда как `overflow: hidden` может обрезать контент и тени или создать скроллбар."
+  - "Внутри BFC вертикальные margin'ы соседних блоков объединяются, остаётся только больший; BFC изолирует границы — margin родителя и крайнего потомка не «выпадает» наружу, а float не обтекается содержимым блока с BFC, поэтому текст не залезает под картинку."
+  - "Containing block — прямоугольная область, относительно которой вычисляются размеры и позиция: для `absolute` это ближайший позиционированный предок, для `fixed` — viewport; но предок с `transform`/`filter`/`perspective`/`contain: paint/layout` становится containing block'ом даже при `position: static`, ломая ожидаемое позиционирование."
+  - "Схлопываются вертикальные margin'ы соседних блочных элементов в одном BFC, margin'ы родителя и первого/последнего потомка (если нет padding/border/BFC) и margin'ы пустых блоков; в FFC/GFC margin'ы не схлопываются, а `z-index` работает даже без `position`."
+  - "`border-box` включает padding и border в `width`/`height`, поэтому заданная ширина равна реальной ширине элемента (контент сжимается), тогда как `content-box` прибавляет padding и border снаружи — это особенно важно в раскладках с процентными ширинами."
 ---
 
 # BFC, IFC, FFC, GFC: formatting contexts и containing block

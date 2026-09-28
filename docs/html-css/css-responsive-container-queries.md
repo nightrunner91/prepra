@@ -11,6 +11,13 @@ questions:
   - "Что такое container query units (`cqi`, `cqw`) и как они применяются для адаптации компонентов"
   - "Как `prefers-color-scheme`, `prefers-reduced-motion` и `prefers-contrast` позволяют уважать системные настройки пользователя"
   - "Почему `prefers-reduced-motion` нужно обрабатывать избирательно, а не глобальным сбросом всех анимаций"
+answers:
+  - "Media queries реагируют на характеристики viewport и устройства (`width`, `orientation`, `hover`, `pointer`, `prefers-*`), а container queries — на размер конкретного контейнера, поэтому один и тот же компонент адаптируется и в узком сайдбаре, и в широком контенте; современная практика — media queries для глобального макета страницы, container queries для поведения компонентов."
+  - "У родителя задаётся `container-type`: `inline-size` позволяет запрашивать только inline-размер (ширину в горизонтальном письме), `size` — и ширину, и высоту; контейнер именуется через `container-name` и используется в `@container cards (min-width: 400px)` — без `container-type` у родителя `@container` не найдёт контекста."
+  - "`100vh` на мобильных включает адресную панель, давая лишний скролл или обрезку контента: `svh` — минимальный видимый размер, `lvh` — максимальный, `dvh` — текущий с учётом появления/скрытия панелей; для полноэкранных секций предпочтительнее `100dvh`."
+  - "`cqi` — 1% inline-размера контейнера, `cqw`/`cqh`/`cqb` — ширина/высота/block-размер; например, `font-size: clamp(1.25rem, 5cqi, 3rem)` масштабирует заголовок относительно ширины баннера, а не viewport, что удобно для переиспользуемых компонентов."
+  - "`prefers-color-scheme` переопределяет CSS-переменные под тёмную/светлую тему, `prefers-reduced-motion` сокращает анимации, `prefers-contrast: more` усиливает контраст (например, `border: 2px solid currentColor`), `prefers-reduced-transparency` убирает полупрозрачность — все реагируют на системные настройки пользователя."
+  - "Грубый сброс `* { animation-duration: 0.01ms !important }` ломает анимации, которые несут смысл — загрузку, открытие модалки, переключение состояний; лучше отключать конкретные анимации, например `.carousel-slide { transition: none; animation: none; }`."
 ---
 
 # Media queries, container queries, viewport units и `prefers-*`

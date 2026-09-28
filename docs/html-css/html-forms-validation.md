@@ -11,6 +11,13 @@ questions:
   - "Что такое `ElementInternals` и как custom element становится полноценным участником формы через `formAssociated = true`"
   - "Как событие `formdata` позволяет модифицировать данные формы перед отправкой"
   - "Почему клиентская валидация — это UX, а не безопасность, и почему сервер всегда должен проверять данные"
+answers:
+  - "Браузер проверяет поля до отправки без JS: `required` — непустое значение, `type=\"email\"`/`url`/`number` — формат, `min`/`max` — диапазон, `minlength`/`maxlength` — длина, `pattern` — регулярное выражение; при ошибке отправка блокируется и показывается нативная подсказка, которую можно переопределить через Constraint Validation API."
+  - "`checkValidity()` проверяет поле без показа UI, `reportValidity()` проверяет и показывает нативную подсказку, `setCustomValidity(message)` задаёт кастомную ошибку через флаг `customError` в объекте `validity` (`valueMissing`, `typeMismatch`, `patternMismatch`, `tooShort` и др.); без `setCustomValidity('')` поле останется невалидным даже при корректном значении."
+  - "`:invalid` применяется сразу к пустым обязательным полям при загрузке формы, а `:user-valid`/`:user-invalid` — только после взаимодействия пользователя с полем, поэтому позволяют не подсвечивать все поля красным с самого начала."
+  - "`ElementInternals` через `this.attachInternals()` даёт custom element'у участие в форме: значение через `setFormValue()`, валидацию через `setValidity(flags, message, anchor)` и колбэки `formAssociatedCallback`, `formDisabledCallback`, `formResetCallback`, `formStateRestoreCallback`; без `static formAssociated = true` форма не увидит значение элемента."
+  - "Перед отправкой на `<form>` генерируется событие `formdata`, в обработчике которого через `event.formData` можно нормализовать значения (`data.set('phone', phone.replace(/\\D/g, ''))`) или добавить скрытые поля (`data.append('submittedAt', ...)`) — удобная точка трансформации без изменения разметки."
+  - "Клиентскую валидацию выполняет браузер на стороне пользователя, поэтому её можно обойти — она лишь улучшает UX и уменьшает нагрузку на сервер; сервер обязан валидировать данные повторно, потому что в `fetch` или `curl` приходит что угодно."
 ---
 
 # Формы, валидация и `ElementInternals`
