@@ -40,6 +40,12 @@ function getDefaultAnswer(question: string, index: number): string {
   return ANSWER_TEMPLATES[index % ANSWER_TEMPLATES.length](question);
 }
 
+function renderInlineCode(text: string): React.ReactNode[] {
+  return text.split('`').map((part, i) =>
+    i % 2 === 1 ? <code key={i}>{part}</code> : part,
+  );
+}
+
 function storageKey(articleId: string): string {
   return `prepra:quiz:${articleId}`;
 }
@@ -441,8 +447,8 @@ function QuizView({
             <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-accent">
               Ответ
             </div>
-            <p className="text-left text-base leading-relaxed text-text-secondary md:text-lg">
-              {answer}
+            <p className="quiz-answer text-left text-base leading-relaxed text-text-secondary md:text-lg">
+              {renderInlineCode(answer)}
             </p>
           </div>
         </div>
