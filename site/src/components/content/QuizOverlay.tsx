@@ -347,7 +347,7 @@ function ResultsView({ questions, attempt, onRetake, onClose }: ResultsViewProps
               >
                 <span className={`mt-0.5 flex-shrink-0 ${meta.color}`}>{meta.icon}</span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm leading-snug text-text">{q}?</p>
+                  <p className="text-sm leading-snug text-text">{renderInlineCode(q)}?</p>
                 </div>
               </li>
             );
@@ -431,7 +431,7 @@ function QuizView({
               Вопрос
             </div>
             <p className="text-left text-lg font-bold leading-relaxed text-text md:text-xl">
-              {question}?
+              {renderInlineCode(question)}?
             </p>
             {!flipped && (
               <div className="mt-10 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
