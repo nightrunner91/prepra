@@ -14,6 +14,16 @@ questions:
   - "Как генерировать метаданные страниц и sitemap в App Router"
   - "Когда стоит использовать `dynamic()` и `ssr: false`"
   - "Зачем нужен `@next/bundle-analyzer` и Edge Runtime"
+answers:
+  - "Link prefetchит страницы автоматически при попадании в viewport (только в production build) и при hover/touch, загружая код и данные заранее. Отключить можно через prefetch={false} для тяжёлых или редко посещаемых страниц, либо сделать условным — prefetch={user?.isAuthenticated}."
+  - "Обязательны src, alt, width и height — явные размеры предотвращают layout shift (CLS). priority включает приоритетную загрузку для above-the-fold изображений, а остальные загружаются лениво."
+  - "next/font самостоятельно хостит шрифты (нет внешних запросов к Google Fonts), делает preload/preconnect, загружает только нужные subsets и не вызывает layout shift за счёт правильного display."
+  - "beforeInteractive — критичные скрипты до гидратации (аналитика, security); afterInteractive (по умолчанию) — большинство скриптов после гидратации; lazyOnload — некритичные, когда браузер в idle (чат-виджеты, соцсети); worker — экспериментально, в web worker."
+  - "SSG — контент меняется редко (блоги, документация): максимальная производительность, генерируется при сборке; SSR — динамические персонализированные данные на каждый запрос; ISR — контент меняется периодически и обновляется в фоне без пересборки."
+  - "Data Cache кэширует fetch-ответы на сервере с управлением через next.revalidate и next.tags; Full Route Cache — готовый HTML + RSC Payload для статических страниц на диске; Router Cache — RSC Payload в браузере для мгновенной навигации, очищается router.refresh(). Валидация — через revalidatePath и revalidateTag."
+  - "export const metadata (статические) или generateMetadata({ params }) (динамические) возвращают title, description, openGraph, robots и canonical; sitemap генерируется через app/sitemap.ts, возвращающий MetadataRoute.Sitemap, а robots.txt — через app/robots.ts."
+  - "dynamic(() => import(...)) — для больших (>50KB) или редко используемых компонентов, чтобы загружать их отдельным чанком по требованию. ssr: false — только для компонентов, завязанных на браузерные API (window, localStorage, карты), потому что теряется SEO."
+  - "@next/bundle-analyzer при ANALYZE=true npm run build показывает размеры бандлов — помогает найти большие модули и решить, что выносить в динамические импорты. Edge Runtime ускоряет ответ за счёт выполнения на CDN-узлах, но не подходит для тяжёлых вычислений и Node.js API."
 ---
 
 # Оптимизация производительности в Next.js

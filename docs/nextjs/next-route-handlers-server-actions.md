@@ -15,6 +15,17 @@ questions:
   - "Как реализовать оптимистичные обновления с useOptimistic и Server Actions"
   - "Как настроить CORS в Route Handlers"
   - "Что такое BFF-паттерн и как его реализовать через Route Handlers"
+answers:
+  - "Route Handlers — явные HTTP-эндпоинты с полным контролем (методы, заголовки, статусы), подходящие для GET, внешних API и webhook'ов; Server Actions — RPC-функции с 'use server', абстрагирующие HTTP-слой (только POST), для форм и мутаций. Мутации → Server Actions, внешний API и кривой бэкенд → Route Handlers."
+  - "route.ts и page.tsx — разные вещи, которые не вызывают друг друга автоматически: page.tsx рендерит страницу, route.ts — API-эндпоинт. На одном уровне оба файла разместить нельзя — Next.js выдаст ошибку, поэтому структура: app/api/posts/route.ts (бэкенд) + app/posts/page.tsx (фронтенд)."
+  - "NextResponse.json() превращает JS-объект в полноценный HTTP-ответ со статусом 200, Content-Type: application/json и сериализованным телом. Вернуть объект или JSON.stringify напрямую нельзя — Route Handler обязан вернуть Response."
+  - "Поддерживаются GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS — имя экспортируемой функции соответствует HTTP-методу. Путь файла = URL: app/api/posts/[id]/route.ts → /api/posts/1, catch-all [...slug] покрывает несколько сегментов."
+  - "'use server' помечает модуль как серверный и создаёт server reference: клиент вызывает функцию как обычную, а Next.js отправляет скрытый POST с сериализованными аргументами (actionId + args). Из формы — <form action={createPost}>, из обработчика события — прямой вызов функции."
+  - "Handler без использования Request кэшируется статически при билде; использование Request делает его динамическим. Через export const dynamic/revalidate, runtime и next: { revalidate } в fetch управляется поведение кэширования."
+  - "После записи в БД они инвалидируют кэшированные данные, чтобы пользователи увидели актуальное состояние: revalidatePath('/posts') чистит конкретный путь, revalidateTag('posts') — все fetch с тегом. Без них Next.js продолжит отдавать закэшированные старые данные."
+  - "useOptimistic принимает исходные данные и reducer: addOptimistic() мгновенно обновляет UI временным значением, затем Server Action выполняет мутацию и ревалидацию, и состояние сходится с сервером."
+  - "Через заголовки в ответе: Access-Control-Allow-Origin/Methods/Headers, плюс OPTIONS-обработчик для preflight со статусом 204. Для динамики по домену заголовки вычисляются из request.headers.get('origin') против allowlist разрешённых origins."
+  - "BFF — прослойка между фронтом и бэком, адаптирующая кривой API: меняет URL и методы, трансформирует данные, объединяет несколько запросов в один, добавляет кэширование и авторизацию. Реализуется в route.ts: GET() ходит на бэкенд, нормализует ответ и возвращает удобный фронту JSON."
 ---
 
 # Next.js: Route Handlers и Server Actions

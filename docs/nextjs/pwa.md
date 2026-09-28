@@ -14,6 +14,16 @@ questions:
   - "Что делает Background Sync и когда он полезен"
   - "Как подключить PWA к Next.js через `next-pwa` и App Router"
   - "Какие ограничения у PWA на iOS и Android"
+answers:
+  - "PWA = HTTPS + Web App Manifest + Service Worker: HTTPS гарантирует целостность сервис-воркера и безопасность push, manifest описывает приложение для браузера, а Service Worker перехватывает сетевые запросы и даёт офлайн, push и фоновую синхронизацию."
+  - "Manifest описывает имя, иконки, display (standalone/fullscreen/minimal-ui/browser), start_url и scope — границы навигации PWA. purpose: maskable нужен для адаптивных иконок Android: система обрезает иконку по маске, поэтому по краям нужны отступы."
+  - "Жизненный цикл SW: register → downloading → installed → waiting → activating → activated; при обновлении новый SW ждёт, пока все вкладки со старым закроются. skipWaiting() активирует новый SW немедленно, а clients.claim() заставляет его сразу контролировать все вкладки."
+  - "Cache First сначала отдаёт ответ из кэша и пишет туда при промахе — для статики (JS, CSS, шрифты); Network First пробует сеть и падает на кэш при ошибке — для API; Stale While Revalidate мгновенно отдаёт кэш и в фоне обновляет его из сети — для контента с фоновым обновлением."
+  - "Offline-страница — отдельный offline.html, который SW отдаёт при провале fetch с request.mode === navigate. Индикатор статуса — хук useOnlineStatus, читающий navigator.onLine и слушающий события online/offline для показа банера."
+  - "Сначала Notification.requestPermission(), затем registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: VAPID-ключ }) и отправка subscription на сервер. В SW обработчик push вызывает self.registration.showNotification, а notificationclick открывает окно через clients.openWindow."
+  - "Background Sync через registration.sync.register(tag) откладывает действие и выполняет его в обработчике sync в SW после восстановления соединения. Полезен для отправки сообщений, аналитики и синхронизации данных, отправленных в офлайне."
+  - "next-pwa оборачивает next.config.js (dest, register, skipWaiting), а manifest объявляется файлом app/manifest.ts, возвращающим MetadataRoute.Manifest. Кастомный Service Worker строится на Workbox: precacheAndRoute и registerRoute со стратегиями StaleWhileRevalidate/CacheFirst."
+  - "iOS: push только с 16.4+ и после установки на экран «Домой», нет beforeinstallprompt (установка через Share → Add to Home Screen), ограниченный Background Sync, нет Bluetooth/NFC/badge API. Android: push требует Google Play Services, поэтому не работает на Huawei."
 ---
 
 # PWA в React и Next.js

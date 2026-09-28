@@ -12,6 +12,14 @@ questions:
   - "Как включить Edge Runtime для Route Handler, страницы или middleware"
   - "Когда лучше использовать Serverless Node.js вместо Edge"
   - "Какие лимиты существуют у Edge функций на Vercel и Cloudflare"
+answers:
+  - "Node.js — полноценный серверный runtime с файловой системой и всеми API, запуск 100-500ms с заметным холодным стартом; Edge — легковесный runtime на V8 Isolate с только Web API, без fs, запуск 5-50ms, работает на CDN-узлах по всему миру ближе к пользователю."
+  - "V8 Isolate — лёгкая изолированная среда выполнения JS: не нужно загружать весь Node.js runtime, каждый isolate занимает ~1-5MB против 50-100MB у Node.js, на одном сервере размещаются тысячи изолятов. Это даёт минимальный холодный старт и низкую задержку."
+  - "Middleware (аутентификация, геолокация, A/B-тесты, редиректы, feature flags), простые API-роуты и страницы с низкой задержкой. Не подходит для тяжёлых вычислений, работы с файловой системой, больших зависимостей вроде Prisma и долгих операций."
+  - "fs (файловая система), child_process, cluster, net/tls (сетевые сокеты); из process доступен только process.env. Доступны Web API: fetch, Request/Response, URL/URLSearchParams, Headers, Web Crypto, TextEncoder/TextDecoder и таймеры с ограничениями."
+  - "Для Route Handler и страницы — export const runtime = 'edge' (или 'nodejs'); middleware всегда выполняется на Edge и настраивается через export const config = { matcher }."
+  - "Когда нужны сложная бизнес-логика, работа с БД, обработка файлов, тяжёлые вычисления или интеграции с внешними сервисами — там необходим полный Node.js runtime. Edge подходит для простых задач, где критична задержка."
+  - "Vercel Edge Functions: бандл до 4MB (сжатый), время выполнения до 30 секунд, память до 128MB. Cloudflare Workers: скрипт до 1MB (free) / 5MB (paid), время выполнения до 30 секунд (free) / 50ms CPU (paid), память до 128MB."
 ---
 
 # Edge Runtime в Next.js

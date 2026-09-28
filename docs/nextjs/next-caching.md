@@ -14,6 +14,16 @@ questions:
   - "Почему персонализированные данные пользователя нельзя кэшировать на сервере?"
   - "Что происходит с Router Cache при изменении searchParams?"
   - "Какой уровень кэша срабатывает первым при навигации пользователя?"
+answers:
+  - "Request Memoization (память Node.js-процесса, один render, дедупликация одинаковых fetch), Data Cache (диск сервера .next/cache/fetch-cache, fetch-ответы, persistent), Full Route Cache (диск .next/server/app, HTML + RSC Payload), Router Cache (память браузера, RSC Payload, сессия до F5 или router.refresh())."
+  - "Request Memoization дедуплицирует одинаковые fetch в рамках одного рендера и живёт только в памяти до конца рендера; Data Cache персистентно хранит fetch-ответы на диске и переживает запросы, управляясь через cache, next.revalidate и next.tags."
+  - "Через next: { revalidate: N } или export const revalidate: когда TTL истёк, пользователь мгновенно получает старые данные из кэша, а в фоне выполняется новый fetch и кэш обновляется. Смысл stale-while-revalidate — пользователь никогда не ждёт запрос к API, но может видеть слегка устаревшие данные."
+  - "revalidatePath — когда данные живут на конкретной странице и известен URL ('/products/123'); revalidateTag — когда одни данные (например, товары) используются на 3+ страницах или приходит webhook из CMS: инвалидирует все fetch с тегом независимо от страницы."
+  - "revalidatePath/revalidateTag очищают серверные кэши (Data Cache, Full Route Cache), но не Router Cache в браузере. Без router.refresh() пользователь продолжит видеть старые данные из клиентского кэша после мутации."
+  - "export const dynamic = 'force-dynamic' или fetch с cache: 'no-store'. Full Route Cache также не используется при наличии cookies(), headers() или searchParams — страница рендерится при каждом запросе."
+  - "Full Route Cache и Data Cache общие для всех пользователей: закэшированный ответ для одного пользователя вернётся другому. Персонализированные данные делают страницу динамической (no-store, force-dynamic) и не кэшируются на сервере."
+  - "Router Cache кэширует по маршруту, а не по searchParams: переход /products?category=electronics → /products?category=clothing находит тот же маршрут в кэше, но раз searchParams изменились, сервер всё равно вызывается и кэш обновляется."
+  - "Router Cache на клиенте: если RSC Payload найден — навигация мгновенная, без запроса к серверу. При промахе запрос идёт на сервер, где проверяется Full Route Cache, а внутри рендера — Request Memoization, затем Data Cache."
 ---
 
 # Кэширование в Next.js: уровни и ревалидация

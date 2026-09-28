@@ -13,6 +13,15 @@ questions:
   - "Какие API делают маршрут динамическим"
   - "Где можно изменять cookies: в Server Component или Server Action"
   - "Как работает draftMode и зачем нужен режим черновика"
+answers:
+  - "В next/headers входят headers() для чтения HTTP-заголовков, cookies() для работы с cookies и draftMode() для управления режимом черновика при предпросмотре неопубликованного контента из CMS. Все три работают только на сервере и делают маршрут динамическим."
+  - "headers() возвращает read-only объект — доступны только чтение (get, has, entries), нет методов set/delete; cookies() в Server Components тоже только читается, но в Server Functions и Route Handlers можно писать через set/delete с опциями httpOnly, maxAge, sameSite."
+  - "redirect() не возвращает управление, а бросает ошибку NEXT_REDIRECT, которую обрабатывает Next.js на верхнем уровне. Внутри try/catch она будет перехвачена как обычная ошибка, и редирект не сработает."
+  - "useRouter в Client Components даёт push (навигация с добавлением в историю), replace (без добавления), refresh (обновление текущей страницы), prefetch (предзагрузка маршрута), back и forward. Для обычной навигации предпочтительнее <Link>."
+  - "revalidatePath инвалидирует кэш конкретного пути (revalidatePath('/blog/post-1') или с типом 'page'/'layout'); revalidateTag — все fetch-данные, помеченные тегом через next: { tags }. Оба работают только в Server Functions и Route Handlers."
+  - "headers(), cookies(), draftMode() и использование searchParams в page-компонентах автоматически отключают статическую генерацию. Страница рендерится при каждом запросе вместо кэширования."
+  - "В Server Components cookies можно только читать — вызов set() приведёт к ошибке. Писать (set/delete) можно только в Server Functions и Route Handlers."
+  - "draftMode() работает через cookie __prerender_bypass, который генерируется при каждом next build, и при включении обходит кэширование. Нужен для предпросмотра неопубликованного контента из CMS: draft.enable() вызывается в Route Handler, а isEnabled проверяет статус."
 ---
 
 # Next.js Server API: headers, cookies, cache
