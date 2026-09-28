@@ -12,6 +12,14 @@ questions:
   - "Как типизировать useImperativeHandle в TypeScript"
   - "Чем useImperativeHandle отличается от Vue defineExpose"
   - "Когда НЕ стоит использовать useImperativeHandle"
+answers:
+  - "Для императивного доступа к дочернему компоненту, когда декларативных props недостаточно: фокус, прокрутка, выделение текста, управление плеером (play/pause/seek), анимации и интеграция со сторонними императивными библиотеками."
+  - "forwardRef пробрасывает ref из родителя в дочерний компонент, а useImperativeHandle(ref, createHandle) определяет, какие методы/свойства попадут в этот ref — createHandle возвращает объект-API (focus, getValue), скрывая внутренний DOM."
+  - "deps — массив зависимостей как в useEffect: если handle использует значения из пропсов/состояния (например, name), их нужно указать, иначе метод будет пересоздаваться при каждом рендере и ссылка в ref станет нестабильной."
+  - "В React 19 forwardRef больше не нужен — ref передаётся как обычный проп function CustomInput({ label, ref }), что упрощает типизацию и убирает обёртку."
+  - "Нужно определить интерфейс handle (InputHandle { focus: () => void; getValue: () => string }) и передать его дженериком forwardRef<InputHandle, InputProps>, а ref в родителе типизировать useRef<InputHandle>(null)."
+  - "Оба механизма ограничивают публичный API дочернего компонента, доступный через ref, но Vue defineExpose работает без обёрток, а в React до 19 нужен forwardRef."
+  - "Когда данные можно передать через props, для потока данных в обратном направлении (используйте callback-пропсы) и как замену state management — это сделает архитектуру запутанной и непредсказуемой."
 ---
 
 # useImperativeHandle: императивный API компонента через ref

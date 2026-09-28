@@ -12,6 +12,14 @@ questions:
   - "Почему defaultProps deprecated для функциональных компонентов в React 19+"
   - "Чем TypeScript лучше propTypes для типизации пропсов"
   - "Как во Vue аналогичные механизмы встроены в defineProps"
+answers:
+  - "propTypes — статическое свойство компонента для runtime-валидации props; доступны валидаторы string, number, func, node, element, oneOf (enum), oneOfType, arrayOf, shape и exact."
+  - ".isRequired делает пропс обязательным — в консоли появится предупреждение, если он не передан (валидация работает только в development)."
+  - "propTypes убирается из production-сборки для производительности — предупреждения о типах видны только разработчику в dev, а в проде код выполняется без лишних проверок."
+  - "Приоритет такой: значение из JSX → значение из defaultProps → undefined, то есть дефолт применяется только если пропс явно не передан."
+  - "Для функциональных компонентов в React 19+ defaultProps deprecated — рекомендуемый способ это деструктуризация с дефолтами function Button({ size = 'md' }); для class-компонентов defaultProps остаётся поддерживаемым."
+  - "TypeScript проверяет типы на этапе компиляции, а не в runtime, даёт автодополнение в IDE, не требует пакета prop-types и поддерживает более выразительные конструкции (union types, generics, utility types)."
+  - "В Vue defineProps объединяет объявление типов и дефолтов внутри <script setup> — { type: String, default: 'md', validator: ... } — без отдельных пакетов, а withDefaults задаёт значения по умолчанию для типизированных props."
 ---
 
 # defaultProps и propTypes в React

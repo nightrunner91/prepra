@@ -14,6 +14,16 @@ questions:
   - "Когда выбирать Expo, а когда Bare CLI"
   - "Что даёт EAS Build и EAS Update"
   - "В каких сценариях React Native не подходит"
+answers:
+  - "React Native рендерит настоящие нативные UI-компоненты (UIView на iOS, android.widget на Android) через нативный рендерер — это не WebView и не кросс-платформенный HTML/CSS."
+  - "Старый Bridge асинхронно сериализовал дерево в JSON и был узким местом для скролла/анимаций; новый JSI — C++-интерфейс прямых синхронных вызовов без сериализации, поверх которого работают Fabric (рендерер) и TurboModules (ленивые нативные модули)."
+  - "Без изменений переносятся компоненты, JSX, хуки, Context, custom hooks, Zustand, TanStack Query и TypeScript; меняются примитивы (div → View, span → Text), события (onClick → onPress, onChange → onChangeText), стили и навигация."
+  - "StyleSheet.create использует подмножество CSS: flexDirection по умолчанию column (не row), нет grid/float/relative, position только relative/absolute, и не работают shorthand-свойства вроде margin: 10px 20px."
+  - "Expo Router — файловая маршрутизация как Next.js App Router: файлы в app/ и _layout.tsx образуют роуты и вложенные layouts; React Navigation — императивный API с NavigationContainer и Stack.Screen name/component."
+  - "AsyncStorage — асинхронный key-value аналог localStorage через setItem/getItem с JSON.stringify; Zustand и TanStack Query работают в React Native точно как в вебе (create(), useQuery)."
+  - "Expo — рекомендуемая стартовая точка: не нужны Xcode/Android Studio, есть EAS Build и готовые модули; Bare CLI — когда нужен полный контроль над нативным кодом и нет ограничений Expo, но требуются ручная настройка нативных модулей."
+  - "EAS Build — облачная сборка iOS/Android без локального Xcode/Android Studio, а EAS Update — OTA-обновления JS-кода без ревью App Store/Google Play."
+  - "Для тяжёлых 3D/игр, AR/VR, критической производительности, глубокой работы с Bluetooth/IoT и если планируется только одна платформа — там лучше нативные SDK или Flutter/Unity."
 ---
 
 # React Native для React-разработчиков
