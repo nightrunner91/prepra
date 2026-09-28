@@ -24,7 +24,7 @@ interface QuizData {
 
 interface QuizOverlayProps {
   questions: string[];
-  answers?: string[];
+  customAnswers?: string[];
   articleId: string;
 }
 
@@ -134,7 +134,7 @@ const STATUS_META: Record<AnswerStatus, { label: string; icon: React.ReactNode; 
   },
 };
 
-export function QuizOverlay({ questions, answers, articleId }: QuizOverlayProps) {
+export function QuizOverlay({ questions, customAnswers, articleId }: QuizOverlayProps) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -251,7 +251,7 @@ export function QuizOverlay({ questions, answers, articleId }: QuizOverlayProps)
             {phase === 'quiz' && (
               <QuizView
                 questions={questions}
-                answers={answers}
+                answers={customAnswers}
                 currentIndex={currentIndex}
                 flipped={flipped}
                 savingStatus={savingStatus}
