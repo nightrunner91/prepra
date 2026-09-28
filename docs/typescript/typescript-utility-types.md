@@ -13,6 +13,15 @@ questions:
   - "Как работает `ReturnType` и `Parameters` через `infer`"
   - "Что делает `NonNullable` и как он реализован"
   - "Как комбинировать utility-типы для сложных трансформаций"
+answers:
+  - "Mapped types — механизм создания новых типов итерацией по ключам существующего: `{ [K in keyof T]: T[K] }`, где `keyof T` — union всех ключей, `[K in keyof T]` — цикл по ключам (аналог for...in), а `T[K]` — indexed access, тип значения для ключа. Модификаторы `?` и `readonly` (и их снятие через `-`) превращают этот шаблон в Partial, Required и Readonly."
+  - "Partial добавляет опциональность каждому ключу: `{ [K in keyof T]?: T[K] }`, Required убирает её: `{ [K in keyof T]-?: T[K] }`, где `-?` означает «удалить модификатор ». Оба — mapped types с разными модификаторами, а не отдельные механизмы."
+  - "`Record<K extends keyof any, T> = { [P in K]: T }` создаёт объект, где каждый ключ из K имеет значение типа T; `keyof any` ограничивает ключи `string | number | symbol`. Используется для словарей с известными ключами, когда TS проверяет, что все ключи указаны — например, `Record<Status, string>` для меток статусов; для неограниченных динамических ключей `Record<string, T>` даёт ложную типобезопасность."
+  - "Pick выбирает указанные ключи: `Pick<T, K extends keyof T> = { [P in K]: T[P] }` — ограничение `K extends keyof T` запрещает выбирать несуществующие поля. Omit исключает их через композицию: `Omit<T, K> = Pick<T, Exclude<keyof T, K>>` — сначала из всех ключей убираются K, потом выбираются оставшиеся."
+  - "Оба — дистрибутивные conditional types: `Exclude<T, U> = T extends U ? never : T` исключает члены union, присутствующие в U, а `Extract<T, U> = T extends U ? T : never` — наоборот, оставляет только присутствующие. TS применяет условие к каждому члену union отдельно, а `never` автоматически исчезает из результата."
+  - "`ReturnType<T> = T extends (...args: any) => infer R ? R : any` через `infer` выводит тип возвращаемого значения в R, а `Parameters<T> = T extends (...args: infer P) => any ? P : never` — параметры функции как кортеж. Оба ограничивают T функциями (`T extends (...args: any) => any`)."
+  - "`NonNullable<T> = T extends null | undefined ? never : T` — дистрибутивный conditional type: для каждого члена union, являющегося null или undefined, возвращается `never`, остальные сохраняются. Поэтому `NonNullable<string | null | undefined>` даёт `string`."
+  - "Utility-типы комбинируются композицией: сам `Omit` построен на `Pick` и `Exclude`, `Awaited<ReturnType<typeof fetchUsers>>` распаковывает Promise из типа возврата, а `Partial<Record<\"email\" | \"password\", string>>` описывает объект ошибок, где каждое поле либо string, либо undefined. Такая композиция выражает сложные трансформации без дублирования определений."
 ---
 
 # Utility-типы TypeScript: от Partial до Awaited

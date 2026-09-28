@@ -13,6 +13,15 @@ questions:
   - "Как типизировать generic-компоненты"
   - "Чем `React.ReactNode` отличается от `React.ReactElement`"
   - "Как типизировать `forwardRef` и когда он необязателен (React 19)"
+answers:
+  - "Пропсы — это параметр функции-компонента, типизируется через `interface ButtonProps` или `type CardProps` и указывается у параметра. Для расширения стандартных HTML-атрибутов используется intersection: `InputProps & React.InputHTMLAttributes<HTMLInputElement>` — ваши кастомные пропсы плюс все атрибуты `<input>`."
+  - "Дефолтные значения в деструктуризации автоматически сужают тип: `function Alert({ type = \"info\" }: AlertProps)` — внутри компонента `type` уже `\"info\" | \"warning\" | \"error\"` без `undefined`, и можно использовать без проверки."
+  - "React использует синтетические события — обёртки над нативными DOM-событиями с дженериком элемента: `React.ChangeEvent<HTMLInputElement>`, `React.MouseEvent<HTMLButtonElement>`, `React.FormEvent<HTMLFormElement>`, `React.KeyboardEvent<HTMLInputElement>`. Через `e.currentTarget` доступен элемент, на котором висит обработчик (в отличие от `e.target`, который может быть дочерним)."
+  - "Для nullable начального значения обязателен явный дженерик: `useState<User | null>(null)` — без него TS выведет тип `null` из начального значения, и `setUser({ name: \"Alice\" })` даст ошибку."
+  - "Discriminated union — тип с общим полем-дискриминатором (`type`), по которому TS сужает тип в каждой ветке switch. В useReducer: `type Action = { type: \"FETCH_START\" } | { type: \"FETCH_SUCCESS\"; data } | ...` — компилятор проверяет exhaustiveness и гарантирует, что обработаны все действия."
+  - "`function List<T>({ items, renderItem, keyExtractor }: ListProps<T>)` — тип T выводится из `items`, поэтому `renderItem` и `keyExtractor` получают типизированный элемент. С forwardRef дженерики не работают напрямую — требуется приведение `as <T>(props: SelectProps<T> & { ref?: React.Ref<HTMLSelectElement> }) => React.ReactElement`."
+  - "`React.ReactNode` — всё, что может быть отрендерено в JSX: string, number, boolean, null, undefined, ReactElement, fragment, portal. `React.ReactElement` — только JSX-элемент, он не принимает string/number/fragment; на практике ReactNode используется в 95% случаев."
+  - "`forwardRef<HTMLInputElement, InputProps>` — первый дженерик — тип ref (DOM-элемент), второй — тип пропсов. С React 19 ref передаётся как обычный пропс (`ref?: React.Ref<HTMLInputElement>`), поэтому forwardRef больше не обязателен, хотя в legacy-коде и библиотеках ещё встречается."
 ---
 
 # TypeScript в React и Vue

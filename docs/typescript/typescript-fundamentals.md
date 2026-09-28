@@ -8,11 +8,18 @@ questions:
   - "Чем TypeScript отличается от JavaScript и какие проблемы решает статическая типизация"
   - "Какие базовые типы существуют в TypeScript и как аннотировать переменные, параметры и возвращаемые значения"
   - "Чем interface отличается от type alias и когда что использовать"
-  - "Что такое tsconfig.json и какие опции самые важные"
   - "Как работает компиляция TypeScript в JavaScript и что такое transpile vs type-check"
   - "Что такое structural typing и duck typing в TypeScript"
   - "Как работают union types, type narrowing и type guards"
   - "Что такое generic types и зачем они нужны"
+answers:
+  - "TypeScript — надмножество JavaScript с системой типов, которая проверяется до запуска программы: опечатки в свойствах и неверные присваивания ловятся на этапе написания кода, а типы становятся контрактом между модулями. Любой валидный JS — валидный TS."
+  - "Примитивы: number, string, boolean, null, undefined, bigint, symbol, а также массив (`number[]`), tuple (`[string, number]`), enum, any, unknown, void и never. Аннотации ставятся через `: тип` у переменной и параметра и после `): тип` у функции, но обычно TS выводит тип сам — явная аннотация нужна, когда тип неочевиден (union, объект)."
+  - "interface описывает объекты и поддерживает declaration merging и `extends`, а type — union, tuple, примитивы и функции. Правило: для объектов — interface, для union/tuple/примитивов — type."
+  - "TS — transpiler: при компиляции аннотации типов удаляются, типы существуют только на этапе компиляции и в runtime их нет. Transpile — преобразование TS в JS, type check — отдельная проверка (`tsc --noEmit`); в Vite/esbuild transpile идёт без проверки типов."
+  - "Structural typing проверяет не имя типа, а структуру: если у объекта есть нужные свойства, он подходит под тип (duck typing). Поэтому объект с `name` и `age` пройдёт как User, даже если не объявлен через него."
+  - "Union type позволяет значение одного из нескольких типов, а type narrowing сужает его после проверки: `typeof`, `in`, `instanceof`, discriminated union через switch. В каждой ветке TS знает конкретный тип."
+  - "Generic — «переменная для типа»: тип передаётся как параметр и сохраняет информацию. `firstElement<T>(arr: T[])` возвращает `T | undefined`, а не any, поэтому результат остаётся типизированным при любом входном типе."
 ---
 
 # Основы TypeScript: типы, интерфейсы и конфигурация

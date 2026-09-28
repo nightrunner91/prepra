@@ -13,6 +13,15 @@ questions:
   - "Можно ли использовать несколько `infer` одновременно"
   - "Какие ограничения есть у `infer` (область действия, конфликты имён)"
   - "Как `infer` используется в React для извлечения props и типов хуков"
+answers:
+  - "`infer` позволяет «залезть» внутрь типа и вывести его содержимое: без него нельзя достать `string` из `Promise<string>` или тип возврата из функции. Он работает только внутри условных типов и лежит в основе utility-типов: `ReturnType`, `Parameters`, элемент массива, значение Promise."
+  - "Конструкция читается по шагам: «если T подходит под шаблон `SomePattern<что-то>`, назовём это X и вернём X, иначе — never». Для `T extends (infer E)[] ? E : never`: если T — массив из чего-то, это «что-то» становится E и возвращается."
+  - "Через сигнатуру функции: `T extends (...args: any[]) => infer R ? R : never` — если T функция, infer выводит тип возвращаемого значения в R. `GetReturnType<() => string>` даёт `string`, а для `string` (не функции) условие не выполняется и возвращается `never`."
+  - "`T extends (infer E)[] ? E : never` выводит тип элемента: `ElementType<string[]>` → `string`, а для кортежа `ElementType<[1, 2, 3]>` → `1 | 2 | 3`. Первый элемент извлекается через `T extends [infer F, ...any[]] ? F : never`."
+  - "Вложенный Promise распаковывается рекурсией: `Awaited<T> = T extends Promise<infer U> ? Awaited<U> : T`. Для `Promise<Promise<string>>` первый проход выводит U = `Promise<string>`, рекурсивный вызов распаковывает его до `string`, а `string`, не подходящий под `Promise<...>`, возвращается как есть."
+  - "Да: `T extends [infer First, ...infer Rest] ? Rest : never` — `infer First` забирает первый элемент, `infer Rest` — остаток, и для `[1, 2, 3]` результат `[2, 3]`. Каждому `infer` нужно своё уникальное имя."
+  - "`infer` работает только в `extends`-ветке условного типа и доступен только в true-ветке (`? R`), в else-ветке он недоступен. Нельзя использовать одно имя infer дважды в одном шаблоне (`[infer X, infer X]` — ошибка) и использовать infer как обычный generic-параметр."
+  - "`PropsOf<T> = T extends React.FC<infer P> ? P : never` извлекает тип пропсов из компонента, `UseStateType<T> = T extends [infer S, any] ? S : never` — тип состояния из хука через `ReturnType<typeof useState<string>>`, а `RefType<T> = T extends React.RefObject<infer R> ? R : never` — тип DOM-элемента из ref."
 ---
 
 # TypeScript infer: извлечение типов из шаблонов
