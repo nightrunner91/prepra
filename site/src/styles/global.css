@@ -255,3 +255,18 @@
 .prose :where(ol):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
   padding-inline-start: 2.5rem;
 }
+
+[data-mermaid-wrapper] {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  padding: 1.5rem 1rem;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface-alt);
+  text-align: center;
+}
+
+[data-mermaid-wrapper] svg {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+}
