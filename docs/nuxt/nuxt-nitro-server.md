@@ -15,6 +15,17 @@ questions:
   - "Что такое пресеты деплоя Nitro"
   - "Как защитить серверные роуты и работать с ошибками"
   - "Как вызывать серверные API из клиентского кода"
+answers:
+  - "Nitro — серверный движок Nuxt 3 от UnJS: запускает dev-сервер, собирает production-сервер в `.output/server/`, исполняет API-роуты и middleware, поддерживает кэширование и генерирует пресеты деплоя; унифицированный `H3Event` API абстрагирует различия runtime, поэтому код работает и на Node, и на Cloudflare Workers."
+  - "Достаточно создать файл в `server/api/`: `server/api/hello.get.ts` с `export default defineEventHandler(...)` становится `GET /api/hello`; суффикс имени файла задаёт HTTP-метод, а динамические сегменты — через `[id]` в имени файла с `getRouterParam`."
+  - "`server/api/` автоматически добавляет префикс `/api` к роутам, `server/routes/` — без префикса; второе подходит для путей, доступных напрямую: sitemap.xml, rss, webhooks, OAuth callback, catch-all `[...slug]`."
+  - "Файлы в `server/middleware/` выполняются перед каждым серверным запросом, включая SSR, в алфавитном порядке; они не должны возвращать ответ, если запрос должен продолжить обработку, но могут бросать `createError` и передавать данные в `event.context`."
+  - "`defineEventHandler` — обёртка для создания серверного обработчика, принимающая функцию с единственным аргументом `event` типа `H3Event`; он даёт доступ к `event.method`, `event.path`, `event.context` и низкоуровневому `event.node.req`, поддерживает async."
+  - "Query-параметры — `getQuery(event)` (например, `?q=nuxt`), тело — `await readBody(event)`, заголовки — `getHeader(event, 'authorization')`, cookies — `getCookie`/`setCookie`; для ответа используются `setResponseHeader`, `setResponseStatus`, `sendRedirect`."
+  - "Через `defineCachedEventHandler` или `defineCachedFunction` с опциями `maxAge`, `getKey`, `swr`, `staleMaxAge`, `varies`, либо через `routeRules: { '/api/posts': { cache: { maxAge: 60 * 5 } } }`."
+  - "Пресеты деплоя — способ собрать один код под конкретную платформу: `node-server`, `static`, `vercel`, `netlify`, `cloudflare-pages`, `cloudflare-module`, `deno-deploy`, `aws-lambda`; задаются через `NITRO_PRESET` env или `nitro.preset` в `nuxt.config.ts`."
+  - "Защита — через серверный middleware с проверкой токена и `throw createError({ statusCode: 401 })`; в обработчиках ошибки бросаются через `createError` с `statusCode` и `statusMessage`, возвращая HTTP-ответ; секреты хранятся в серверной части `runtimeConfig` и читаются только на сервере."
+  - "Через `$fetch('/api/users', { method: 'POST', body })` в обработчиках событий или `useFetch('/api/posts')` в setup; Nuxt автоматически генерирует TypeScript-типы для `server/api/`, поэтому вызовы `$fetch` типизированы по возвращаемым значениям обработчиков."
 ---
 
 # Серверная часть Nuxt 3: Nitro, API-роуты, middleware, кэширование и деплой

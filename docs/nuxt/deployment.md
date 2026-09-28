@@ -13,6 +13,15 @@ questions:
   - "Как edge-пресеты Cloudflare, Vercel и Netlify различаются между собой?"
   - "Почему переменные в `runtimeConfig.public` можно менять без пересборки на некоторых платформах?"
   - "Как настроить ISR через `routeRules` и какие платформы поддерживают его из коробки?"
+answers:
+  - "Nitro — универсальный серверный движок Nuxt 3: рендерит страницы на сервере, генерирует статику, готовит serverless-функции и edge-деплой и обслуживает server routes; сменой одного preset он собирает приложение под Node, Vercel, Cloudflare Workers, Netlify без изменения кода."
+  - "`nuxt build` собирает SSR/ISR-приложение в `.output/` (public + server + nitro.json) и требует сервер; `nuxt generate` создаёт статические HTML в `.output/public/` и подходит для хостинга без сервера — блоги, лендинги, документация."
+  - "В `nuxt.config.ts` для каждого паттерна маршрута задаётся своя стратегия: `prerender: true` (SSG), `ssr: false` (CSR), `isr: 60` (ISR), `swr`, `cors`, `redirect` — без изменения компонентов, так как правила обрабатываются Nitro."
+  - "Preset определяет формат сборки под конкретную платформу: `node-server` для self-hosted/Docker, `vercel`/`vercel-edge`, `netlify`, `cloudflare-pages`, `deno-deploy`; неверный preset даёт output, несовместимый с целевым хостингом."
+  - "В Nuxt переменные `NUXT_*` автоматически маппятся в `runtimeConfig`: `runtimeConfig.public` доступен и на клиенте, и на сервере, а без `public` — только на сервере; в отличие от `NEXT_PUBLIC_`, значения можно менять без пересборки, если preset это поддерживает."
+  - "Edge-пресеты различаются целевой платформой и форматом сборки: `cloudflare-pages` даёт папку `dist/` для Cloudflare Pages, `vercel-edge` — Edge Functions Vercel, `netlify-edge` — Edge Functions Netlify; все они собирают приложение для CDN-узлов без холодного старта."
+  - "На платформах с поддерживающим это preset (serverless) `runtimeConfig` подставляется в рантайм из переменных окружения хостинга, а не зашивается в бандл на этапе сборки, поэтому изменение переменной не требует повторного `nuxt build`."
+  - "`routeRules: { '/blog/**': { isr: 60 } }` в `nuxt.config.ts`; ISR реализован через Nitro и зависит от preset — на Vercel и Netlify работает из коробки, а на self-hosted требует настройки хранилища."
 ---
 
 # Деплой Nuxt 3: Nitro, presets и routeRules

@@ -13,6 +13,15 @@ questions:
   - "Как построить error boundary в Nuxt-приложении"
   - "Как логировать ошибки в production в Nuxt"
   - "Какие антипаттерны встречаются при обработке ошибок в Nuxt"
+answers:
+  - "Создать файл `error.vue` в корне проекта: Nuxt автоматически отобразит его вместо стандартной ошибки при ошибках рендера и навигации, передав prop `error` со свойствами `statusCode`, `message`, `fatal`, `data`, `cause`."
+  - "Оба вызывают `error.vue`, но `showError` не прерывает текущий стек выполнения — код после него продолжится, а `throwError` — это обёртка над `throw createError(...)`, останавливающая выполнение; в серверных обработчиках нужен именно `throw createError`."
+  - "Через хук `vue:error` или `nuxtApp.vueApp.config.errorHandler` в плагине: получает `err`, `instance`, `info` и перехватывает ошибки в пределах дерева компонентов, но не показывает UI ошибки и работает и на сервере."
+  - "Через `throw createError({ statusCode, statusMessage, message })` внутри `defineEventHandler`, который возвращает HTTP-ответ с кодом; на клиенте ошибка прокидывается в `error.value` у `useFetch`/`$fetch`, а `sendError` из h3 отправляет её как результат обработчика без throw."
+  - "При SSR ошибка может возникнуть на сервере, но проявиться на клиенте; она логируется на сервере, а пользователю показывается fallback, при несовпадении серверного и клиентского HTML возникает hydration mismatch, который лечится `onNuxtReady` и `<ClientOnly>`."
+  - "Встроенного компонента нет: Error Boundary создаётся через `onErrorCaptured`, который сохраняет ошибку в `ref`, возвращает `false` для остановки всплытия и рендерит fallback UI с кнопкой сброса вместо `<slot />`."
+  - "Через плагин с `nuxtApp.vueApp.config.errorHandler`, собирающий `message`, `stack`, имя компонента, `info`, `url` и `userAgent` и отправляющий их в Sentry (модуль `@nuxtjs/sentry`) в PROD; на сервере используется отдельный логгер в `server/utils/`."
+  - "Молчаливое игнорирование `error` у `useFetch`, показ сырых стектрейсов пользователю, бросок `createError` без `statusCode` и использование `showError` в серверных обработчиках — код после него продолжает выполняться, там нужен `throw createError`."
 ---
 
 # Обработка ошибок в Nuxt 3

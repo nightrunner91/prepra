@@ -10,6 +10,12 @@ questions:
   - "Как тестировать server routes и composables в изоляции от Nuxt-рантайма, и какие подходы существуют"
   - "Как мокировать Nuxt API (`useRoute`, `useRouter`, `useRuntimeConfig`) и почему это важно для изоляции тестов"
   - "Какие антипаттерны (избыточное мокирование, хардкод, тестирование фреймворка) делают тесты Nuxt хрупкими и как их избежать"
+answers:
+  - "Nuxt добавляет auto-imports, server routes, SSR и Nitro-рантайм, из-за чего `useFetch` или `useRuntimeConfig` падают вне Nuxt-контекста; `environment: 'nuxt'` от `@nuxt/test-utils` эмулирует Nuxt-рантайм (auto-imports, runtime config, серверную часть), тогда как обычный jsdom для Vue Test Utils этого не делает."
+  - "`mountSuspended` дожидается завершения всех асинхронных операций компонента, включая `useFetch`/`useAsyncData`, до возврата wrapper; обычный `mount` может вернуть DOM до загрузки данных, из-за чего тест увидит «Loading...» или пустой контент."
+  - "Server routes тестируются через `registerEndpoint` — для реалистичной проверки через `$fetch` без запуска Nitro, либо прямым вызовом обработчика h3 через `createEvent` — быстрее, но без маршрутизации и middleware; composables — через тестовый компонент с `mountSuspended` или `mockNuxtImport`."
+  - "Через `mockNuxtImport('useRoute', () => () => ({...}))` из `@nuxt/test-utils` или `vi.mock('#app/composables/router')`; эти composables не существуют вне Nuxt-рантайма, и их мокинг изолирует тест от окружения, делая его детерминированным."
+  - "Тестирование самого фреймворка вместо бизнес-логики, избыточное мокирование всего подряд (мокировать нужно только необходимое), игнорирование асинхронности SSR через обычный `mount`, тестирование server routes реальными HTTP-запросами к localhost и хардкод тестовых данных — вместо этого использовать фабрики и `mountSuspended`."
 ---
 
 # Тестирование в Nuxt 3

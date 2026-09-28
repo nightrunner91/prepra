@@ -14,6 +14,16 @@ questions:
   - "Какие composables есть в Nuxt 3 для работы с роутом, конфигом и cookies"
   - "Что значит SSR-safe composable и как его написать"
   - "Чем Nuxt composables отличаются от Vue composables"
+answers:
+  - "Composable — функция, инкапсулирующая логику с Composition API (`ref`, `computed`, `watch`, lifecycle hooks), начинающаяся с префикса `use` и вызываемая только в синхронном Vue-контексте (setup); обычные функции не имеют доступа к реактивности и lifecycle."
+  - "Nuxt автоматически импортирует Vue API (`ref`, `computed`, `onMounted`), встроенные Nuxt composables (`useFetch`, `useState`, `useHead`), компоненты из `components/`, composables из `composables/` и утилиты из `utils/`; отключается через `imports.autoImport: false`, а типы генерируются в `.nuxt/imports.d.ts`."
+  - "`useFetch` — для простых GET-запросов с URL, известным на этапе setup, с минимумом boilerplate; `useAsyncData + $fetch` — когда нужна произвольная функция-обработчик, кастомный ключ или комбинирование нескольких запросов в одну логику."
+  - "`useState` хранит разделяемое состояние по уникальному ключу: все вызовы с одним ключом возвращают одну ссылку, и при SSR значение сериализуется в payload, чтобы не инициализироваться дважды при гидратации; `ref` создаёт новое локальное состояние при каждом вызове и не SSR-safe."
+  - "`useHead({ title, meta, link, script, style, htmlAttrs })` управляет `<head>` и поддерживает реактивные значения через передачу функции; `useSeoMeta` — обёртка для SEO и Open Graph, автоматически генерирующая нужные `meta`-теги с автодополнением и TypeScript-поддержкой."
+  - "Достаточно положить файл `composables/useX.ts` — он автоматически импортируется во всём приложении; имя должно начинаться с `use`, поддерживаются вложенные папки, а дополнительные директории добавляются через `imports.dirs` в конфиге."
+  - "`useRoute`/`useRouter` — текущий маршрут и навигация, `useRuntimeConfig` — переменные окружения (публичная часть `public` доступна на клиенте, остальное — только на сервере), `useCookie` — cookies на сервере и клиенте, `useRequestEvent`/`useRequestHeaders` — серверный запрос и заголовки."
+  - "SSR-safe composable корректно работает на сервере и клиенте: проверять `process.client` перед обращением к `window`/`document`, инициализировать клиентские библиотеки в `onMounted` и избегать `Math.random()`/`Date.now()` на сервере — иначе будет hydration mismatch."
+  - "Nuxt composables — надстройка над Vue composables: добавляют интеграцию с роутингом, сервером (`useRequestEvent`, `useRuntimeConfig`), head-менеджментом и SSR, auto-import, а для разделяемого состояния используют `useState` с ключом и SSR-сериализацией."
 ---
 
 # Composables и авто-импорты в Nuxt 3

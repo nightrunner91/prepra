@@ -13,6 +13,15 @@ questions:
   - "Какие режимы рендеринга поддерживает Nuxt 3"
   - "Как запустить dev-сервер и собрать production-сборку"
   - "Что такое Nitro и какова его роль в Nuxt 3"
+answers:
+  - "Nuxt 3 — full-stack фреймворк на базе Vue 3, Vite и Nitro: поверх Vue 3 (UI-библиотеки) он добавляет файловую маршрутизацию, SSR/SSG, серверную часть, auto-imports, data fetching, SEO и деплой без ручной настройки инфраструктуры."
+  - "Проект создаётся через `npx nuxi@latest init`, dev-сервер запускается `npm run dev`, production-сборка — `npm run build`. Ключевые папки: `pages/` (роуты), `components/` (компоненты), `composables/` (логика), `layouts/` (макеты), `server/` (Nitro API и middleware), `public/` (статика), а `.nuxt/` и `.output/` генерируются автоматически."
+  - "`nuxt.config.ts` — центральный файл конфигурации: модули, CSS, runtimeConfig (секреты сервера и публичные переменные), app.head, routeRules (режимы рендеринга по маршрутам), nitro, ssr и typescript; при этом runtimeConfig отличается от app.config тем, что первый хранит секреты и env, второй — публичную конфигурацию."
+  - "Vue SPA требует ручной настройки роутера, SSR, сервера и импортов; Nuxt даёт из коробки файловую маршрутизацию из `pages/`, SSR по умолчанию, SSG через `nuxi generate`, сервер Nitro, auto-imports и SSR-safe data fetching."
+  - "Auto-imports — доступ к сущностям без явных `import`: API Vue 3 (`ref`, `computed`, `onMounted`), встроенные Nuxt composables (`useFetch`, `useState`, `useRoute`), компоненты из `components/`, composables из `composables/`, утилиты из `utils/` и встроенные компоненты Nuxt (`<NuxtPage />`, `<NuxtLink />`); отключаются через `imports.autoImport: false`."
+  - "SSR (по умолчанию, рендер на каждый запрос), CSR (`ssr: false`), SSG (`nuxi generate`), ISR (`isr: 60`) и SWR — через `routeRules` эти режимы комбинируются на уровне отдельных маршрутов в одном приложении."
+  - "`npm run dev` запускает Vite dev-сервер на localhost:3000 с HMR и DevTools; `npm run build` собирает production-сборку в `.output/` (public + server + nitro.json), а `npm run generate` делает статический SSG-сайт в `.output/public/`."
+  - "Nitro — серверный движок Nuxt 3: запускает dev-сервер, собирает production-сервер, обслуживает API-роуты и middleware, даёт кэширование и пресеты деплоя под Node, Vercel, Netlify, Cloudflare Workers и Deno без изменения кода."
 ---
 
 # Основы Nuxt 3: структура, конфигурация и отличия от Vue SPA

@@ -14,6 +14,16 @@ questions:
   - "Как выполнить код только на клиенте или только на сервере"
   - "Чем плагины отличаются от middleware"
   - "Какие ошибки чаще всего допускают в lifecycle Nuxt"
+answers:
+  - "Жизненный цикл состоит из трёх фаз: инициализация (создание `nuxtApp`, загрузка плагинов), обработка запроса/навигации (middleware, резолв роута, data fetching, рендер) и runtime hooks; ключевой объект — `nuxtApp`, доступный через `useNuxtApp()`."
+  - "Плагин — код, выполняемый при старте приложения для инициализации библиотек, настройки HTTP-клиента и добавления провайдеров; файлы в `plugins/` регистрируются автоматически через `defineNuxtPlugin`, а возвращаемые из `provide` значения доступны как `$name`."
+  - "По умолчанию плагины выполняются в алфавитном порядке имён файлов; порядок можно задать числовыми префиксами (`01.init.ts`) или через `dependsOn: ['api']` в `defineNuxtPlugin`, а асинхронные плагины (возвращающие Promise) блокируют запуск следующих."
+  - "Route middleware — код, выполняемый перед входом на роут: именованный (`middleware/auth.ts` + `definePageMeta({ middleware })`), глобальный (`auth.global.ts`, срабатывает при каждой навигации, включая первую загрузку) и анонимный (функция прямо в `definePageMeta`)."
+  - "При SSR: server middleware → создание `nuxtApp` → `app:created` → плагины → route middleware → резолв роута → `useAsyncData`/`useFetch` → `page:start` → SSR-рендер → `page:finish`/`app:rendered`; при клиентской навигации плагины уже выполнены, идут middleware → asyncData → `page:start` → рендер → `page:finish`."
+  - "`app:created`, `app:beforeMount`, `app:mounted`, `app:rendered`, `app:error`, `app:data:refresh`, `page:start`, `page:finish`, `page:transition:finish`, `link:prefetch`, `vue:setup`, `vue:error`; подписка через `nuxtApp.hook()`; на сервере есть отдельная система Nitro hooks."
+  - "Клиент — плагины с суффиксом `.client.ts` (не попадают в серверный бандл) или код в `onMounted`; сервер — плагины `.server.ts`, server middleware и API-роуты Nitro."
+  - "Плагины выполняются один раз при старте приложения и не имеют доступа к текущему роуту (инициализация, провайдеры); middleware — перед входом на конкретный роут, получает `to`/`from` и используется для защиты и редиректов."
+  - "Вызов `useNuxtApp()` вне синхронного Vue-контекста, использование `window`/`document` в универсальных плагинах без проверки, тяжёлая бизнес-логика в middleware, игнорирование hydration mismatch (разные данные сервера и клиента) и путаница Nuxt-плагинов с Vue-плагинами (`app.use(...)` внутри `defineNuxtPlugin`)."
 ---
 
 # Жизненный цикл приложения в Nuxt 3

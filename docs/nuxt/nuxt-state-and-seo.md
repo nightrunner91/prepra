@@ -15,6 +15,17 @@ questions:
   - "Как избежать дублирования и конфликтов meta-тегов"
   - "Когда выбирать `useState`, а когда Pinia"
   - "Как работает SSR-сериализация состояния в Nuxt"
+answers:
+  - "`useState` требует уникальный ключ, хранит разделяемое состояние (все вызовы с одним ключом возвращают одну ссылку) и сериализуется в payload при SSR — значение не инициализируется дважды при гидратации; `ref` — локальное состояние, каждый вызов создаёт новую ссылку. `useState` используется для sidebar, темы, простых флагов."
+  - "Pinia подключается модулем `@pinia/nuxt`: он автоматически создаёт и подключает экземпляр Pinia, автоимпортирует `defineStore`/`storeToRefs`, автоимпортирует сторы из папки `stores/` и сериализует состояние при SSR, восстанавливая его на клиенте."
+  - "`useHead({ title, meta, link, script, style, htmlAttrs, bodyAttrs, noscript })` управляет `<head>` и поддерживает реактивные значения через функцию; `useSeoMeta` — обёртка для SEO и Open Graph, автоматически генерирующая `meta`-теги с TypeScript-подсказками."
+  - "`definePageMeta` — макрос мета-информации страницы, работающий только в `pages/`: задаёт layout, middleware, alias, name, keepalive, title; напрямую `<head>` не управляет, но SEO-модули читают его поля для генерации meta-тегов."
+  - "Для превью важны `og:title`, `og:description`, `og:image`, `og:url`, `og:type`, `og:site_name`, `og:locale`; для Twitter — `twitter:card` (`summary_large_image`), `twitter:title`, `twitter:description`, `twitter:image`, `twitter:site`, `twitter:creator`; хотя Twitter понимает `og:*`, явные `twitter:*` дают лучший контроль."
+  - "Через `app.head` в `nuxt.config.ts`: `titleTemplate: '%s — My Nuxt App'` (где `%s` заменяется на `title` текущей страницы), `meta` для charset, viewport, description, `link` для favicon; значения на странице переопределяют глобальные."
+  - "При SSR и SSG боты и краулеры получают готовый HTML с meta-тегами; при чистом CSR HTML изначально пустой и не все боты выполняют JavaScript, поэтому индексация плохая. SEO-мета должна загружаться через `useFetch`/`useAsyncData`, чтобы попасть в серверный HTML."
+  - "Nuxt/Unhead автоматически дедуплицирует теги по `name`, `property` или `charset`; для принудительного обновления тега используется `key`; при конфликте на странице побеждает последний по порядку рендера."
+  - "`useState` — простое разделяемое UI-состояние без actions, getters и DevTools; Pinia — полноценный стейт-менеджер для корзины, аутентификации, настроек, где нужны actions, getters и DevTools, с SSR-сериализацией через `@pinia/nuxt`."
+  - "При SSR значение `useState` попадает в глобальный объект `__NUXT__` в HTML, а клиент использует его при гидратации, поэтому состояние не инициализируется дважды; аналогично `@pinia/nuxt` сериализует состояние сторов Pinia."
 ---
 
 # Состояние и SEO в Nuxt 3: useState, Pinia, useHead и Open Graph
