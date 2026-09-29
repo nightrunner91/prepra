@@ -2,7 +2,7 @@
 title: "SOC2 и CASA для фронтенд-разработчика"
 section: security
 description: "Как фронтендеру участвовать в SOC2 и CASA-аудите: controls, evidence, access reviews, change management, pentest, incident response, Secure SDLC."
-order: 7
+order: 11
 tags: ["soc2", "casa", "compliance", "audit", "secure-sdlc", "incident-response"]
 questions:
   - "Что такое SOC2 Type II и чем он отличается от Type I по принципу оценки соблюдения политик"

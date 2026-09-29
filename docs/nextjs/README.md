@@ -25,4 +25,3 @@
 - **[Edge Runtime](./next-edge-runtime.md)** — edge-функции, ограничения, деплой.
 - **[PWA в Next.js](./pwa.md)** — манифест, Service Workers, офлайн, push.
 - **[Next.js как монолит](./next-monolith-direct-db.md)** — прямое обращение к базе данных без отдельного API.
-- **[Безопасность Next.js](./nextjs-security.md)** — Server Components, Server Actions, middleware, CSP, Open Redirect.

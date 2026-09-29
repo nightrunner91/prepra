@@ -22,5 +22,3 @@
 - **[Деплой Nuxt 3](./deployment.md)** — стратегии сборки и развёртывания через Nitro.
 
 ## Не будет лишним
-
-- **[Безопасность Nuxt](./nuxt-security.md)** — SSR и XSS, Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP.

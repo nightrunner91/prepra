@@ -2,7 +2,7 @@
 title: "Безопасность фронтенда: обзор угроз и защит"
 section: security
 description: "Обзор безопасности для фронтендера: XSS, CSRF, CSP, секреты, аутентификация, HTTP-заголовки, supply chain и философия defense in depth."
-order: 9
+order: 13
 tags: ["безопасность", "xss", "csrf", "csp", "authentication", "secrets"]
 questions:
   - "Чем отличаются отражённый, хранимый и DOM-based XSS и где защита React заканчивается"

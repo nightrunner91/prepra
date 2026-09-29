@@ -1,8 +1,8 @@
 ---
 title: "Безопасность Vue"
-section: vue
+section: security
 description: "Vue: `v-html`, refs, URL-атрибуты, экранирование интерполяций, хранение токенов и защита от XSS в Composition API."
-order: 15
+order: 2
 tags: ["vue", "security", "v-html", "xss", "dompurify"]
 questions:
   - "Как Vue экранирует текстовые интерполяции и какие инструменты (`v-html`, refs, URL-атрибуты) обходят защиту фреймворка"
@@ -259,11 +259,11 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}) {
 
 ## Заключение
 
-Vue предоставляет хорошую базовую защиту от XSS через автоматическое экранирование, но у него есть мощные инструменты — `v-html` и refs — которые требуют осознанного подхода. Санитизация через DOMPurify, валидация URL и аккуратное хранение токенов закрывают основные векторы. Для более глубокого понимания XSS смотрите статью [XSS: анатомия атаки](../security/security-xss-deep-dive.md), а про безопасность Nuxt — [Безопасность Nuxt](../nuxt/nuxt-security.md).
+Vue предоставляет хорошую базовую защиту от XSS через автоматическое экранирование, но у него есть мощные инструменты — `v-html` и refs — которые требуют осознанного подхода. Санитизация через DOMPurify, валидация URL и аккуратное хранение токенов закрывают основные векторы. Для более глубокого понимания XSS смотрите статью [XSS: анатомия атаки](./security-xss-deep-dive.md), а про безопасность Nuxt — [Безопасность Nuxt](./security-nuxt.md).
 
 ## Полезные ссылки
 
 - [Vue.js — Security](https://vuejs.org/guide/best-practices/security.html)
 - [DOMPurify](https://github.com/cure53/DOMPurify)
 - [MDN — noopener](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/noopener)
-- [XSS: анатомия атаки](../security/security-xss-deep-dive.md)
+- [XSS: анатомия атаки](./security-xss-deep-dive.md)

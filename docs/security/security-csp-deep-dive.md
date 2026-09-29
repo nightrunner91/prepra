@@ -2,7 +2,7 @@
 title: "Content Security Policy: директивы и практика"
 section: security
 description: "CSP: директивы, nonce, hash, strict-dynamic, Report-Only, интеграция с Next.js и Nuxt. Вторая линия обороны против XSS и clickjacking."
-order: 2
+order: 6
 tags: ["csp", "content-security-policy", "nonce", "strict-dynamic", "xss"]
 questions:
   - "Почему CSP — вторая линия обороны после экранирования и как `default-src` задаёт базу для остальных директив"

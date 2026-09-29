@@ -2,7 +2,7 @@
 title: "XSS: анатомия атаки и методы защиты"
 section: security
 description: "XSS-атаки во фронтенде: reflected, stored, DOM-based, mXSS. Экранирование, санитизация, `dangerouslySetInnerHTML`, `v-html`, Trusted Types."
-order: 8
+order: 12
 tags: ["xss", "sanitization", "dompurify", "dangerouslysetinnerhtml", "v-html", "trusted-types"]
 questions:
   - "В чём разница между reflected, stored и DOM-based XSS и почему mutation XSS делает невозможным написание своего санитайзера"
@@ -261,7 +261,7 @@ Vue использует текстовые интерполяции `{{ }}`, к
 
 Защита Vue заканчивается там, где разработчик обходит её вручную: `v-html`, динамические URL в `:href`/`:src`, `innerHTML` в хуках жизненного цикла, render-функции и JSX.
 
-**Подробный разбор:** [Безопасность Vue](../vue/vue-security.md).
+**Подробные разборы:** [Безопасность React](./security-react.md), [Безопасность Vue](./security-vue.md).
 
 ---
 
@@ -272,7 +272,7 @@ Server-Side Rendering меняет картину XSS: вредоносный к
 - В Next.js App Router Server Components рендерятся на сервере, и JSX-экранирование работает и там. Но `dangerouslySetInnerHTML` в Server Component несёт такой же риск, как на клиенте, а Pages Router с `getServerSideProps` сериализует данные в HTML — риск stored XSS.
 - В Nuxt `v-html` работает и в SSR-контексте, поэтому опасен вдвойне: вредоносный код попадает в исходный HTML, который индексируется и выполняется мгновенно.
 
-**Подробные разборы:** [Безопасность Next.js](../nextjs/nextjs-security.md), [Безопасность Nuxt](../nuxt/nuxt-security.md).
+**Подробные разборы:** [Безопасность Next.js](./security-nextjs.md), [Безопасность Nuxt](./security-nuxt.md).
 
 ---
 
@@ -368,6 +368,7 @@ XSS — не одна уязвимость, а целый класс атак с
 - [React — Rendering values as text](https://react.dev/reference/react-dom/components/common#rendering-values-as-text)
 - [Vue — Security](https://vuejs.org/guide/best-practices/security.html)
 - [Nuxt Security](https://nuxt-security.vercel.app/)
-- [Безопасность Next.js](../nextjs/nextjs-security.md)
-- [Безопасность Vue](../vue/vue-security.md)
-- [Безопасность Nuxt](../nuxt/nuxt-security.md)
+- [Безопасность React](./security-react.md)
+- [Безопасность Next.js](./security-nextjs.md)
+- [Безопасность Vue](./security-vue.md)
+- [Безопасность Nuxt](./security-nuxt.md)

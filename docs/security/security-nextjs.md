@@ -1,8 +1,8 @@
 ---
 title: "Безопасность Next.js"
-section: nextjs
+section: security
 description: "Server Components, Server Actions, middleware, Route Handlers, CSP с nonce, security-заголовки, защита от Open Redirect в Next.js App Router."
-order: 11
+order: 4
 tags: ["nextjs", "security", "server-components", "server-actions", "middleware", "route-handlers"]
 questions:
   - "Как Next.js размывает границу между фронтендом и бэкендом и какие новые риски это создаёт"
@@ -496,5 +496,5 @@ Next.js размывает границу между фронтендом и б�
 - [Auth.js (NextAuth.js)](https://authjs.dev/)
 - [Vercel — Security Best Practices](https://vercel.com/docs/security)
 - [CVE-2025-55182 advisory](https://github.com/facebook/react/security/advisories)
-- [Безопасность фронтенда: обзор](../security/security.md)
-- [Управление секретами во фронтенде](../security/security-secrets-management.md)
+- [Безопасность фронтенда: обзор](./security.md)
+- [Управление секретами во фронтенде](./security-secrets-management.md)
