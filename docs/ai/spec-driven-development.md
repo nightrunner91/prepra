@@ -2,7 +2,7 @@
 title: "Spec-Driven Development: разработка по спецификациям"
 section: ai
 description: "Spec-Driven Development: спецификация как единый источник истины, LLM генерирует код и тесты, а разработчик управляет процессом."
-order: 4
+order: 8
 tags: ["spec-driven-development", "llm", "tdd", "specification", "behavior-driven-development"]
 questions:
   - "Как Spec-Driven Development эволюционирует TDD и почему спецификация становится единственным источником истины"
