@@ -2,7 +2,7 @@
 title: "XSS: анатомия атаки и методы защиты"
 section: security
 description: "XSS-атаки во фронтенде: reflected, stored, DOM-based, mXSS. Экранирование, санитизация, `dangerouslySetInnerHTML`, `v-html`, Trusted Types."
-order: 10
+order: 8
 tags: ["xss", "sanitization", "dompurify", "dangerouslysetinnerhtml", "v-html", "trusted-types"]
 questions:
   - "В чём разница между reflected, stored и DOM-based XSS и почему mutation XSS делает невозможным написание своего санитайзера"
@@ -27,7 +27,7 @@ XSS (Cross-Site Scripting) — класс атак, при которых зло
 5. [Экранирование vs санитизация vs валидация](#экранирование-vs-санитизация-vs-валидация)
 6. [Как React защищает от XSS и где его защита заканчивается](#как-react-защищает-от-xss-и-где-его-защита-заканчивается)
 7. [Как Vue защищает от XSS и где его защита заканчивается](#как-vue-защищает-от-xss-и-где-его-защита-заканчивается)
-8. [Nuxt и Next.js: SSR добавляет сложности](#nuxt-и-nextjs-ssr-добавляет-сложности)
+8. [SSR в Next.js и Nuxt: специфические риски](#ssr-в-nextjs-и-nuxt-специфические-риски)
 9. [Trusted Types: последний рубеж](#trusted-types-последний-рубеж)
 10. [Практический чек-лист защиты от XSS](#практический-чек-лист-защиты-от-xss)
 11. [Термины, которые должен знать фронтендер](#термины-которые-должен-знать-фронтендер)
@@ -251,89 +251,20 @@ Vue использует текстовые интерполяции `{{ }}`, к
 
 Если `userComment` содержит `<script>`, Vue отрендерит его как текст.
 
-### Где защита Vue не работает
+Защита Vue заканчивается там, где разработчик обходит её вручную: `v-html`, динамические URL в `:href`/`:src`, `innerHTML` в хуках жизненного цикла, render-функции и JSX.
 
-#### 1. `v-html`
-
-```vue
-<!-- ❌ Опасно без санитизации -->
-<div v-html="userHtml"></div>
-```
-
-`v-html` — это прямой аналог `dangerouslySetInnerHTML`. Vue даже предупреждает в документации, что его можно использовать только для доверенного контента.
-
-```vue
-<script setup>
-import DOMPurify from 'dompurify';
-
-const props = defineProps(['rawHtml']);
-const safeHtml = DOMPurify.sanitize(props.rawHtml);
-</script>
-
-<template>
-  <div v-html="safeHtml"></div>
-</template>
-```
-
-#### 2. Динамические URL в `:href` и `:src`
-
-```vue
-<!-- ❌ Опасно -->
-<a :href="userUrl">click me</a>
-```
-
-Vue экранирует значение, но не блокирует `javascript:`.
-
-#### 3. `innerHTML` в хуках жизненного цикла
-
-```vue
-<script setup>
-import { ref, onMounted } from 'vue';
-
-const el = ref(null);
-
-onMounted(() => {
-  el.value.innerHTML = props.userInput; // ❌ XSS
-});
-</script>
-```
-
-#### 4. Render-функции и JSX во Vue
-
-Если вы используете JSX или `h()` с `innerHTML`, вы берёте ответственность на себя.
+**Подробный разбор:** [Безопасность Vue](../vue/vue-security.md).
 
 ---
 
-## Nuxt и Next.js: SSR добавляет сложности
+## SSR в Next.js и Nuxt: специфические риски
 
 Server-Side Rendering меняет картину XSS: вредоносный код может попасть в HTML, который сервер отправляет клиенту, ещё до гидратации.
 
-### Next.js
+- В Next.js App Router Server Components рендерятся на сервере, и JSX-экранирование работает и там. Но `dangerouslySetInnerHTML` в Server Component несёт такой же риск, как на клиенте, а Pages Router с `getServerSideProps` сериализует данные в HTML — риск stored XSS.
+- В Nuxt `v-html` работает и в SSR-контексте, поэтому опасен вдвойне: вредоносный код попадает в исходный HTML, который индексируется и выполняется мгновенно.
 
-- В Pages Router данные из `getServerSideProps` и `getStaticProps` сериализуются в HTML. Если в них попадает пользовательский ввод без экранирования, это stored XSS.
-- В App Router Server Components рендерятся на сервере, и JSX-экранирование работает и там. Но если вы используете `dangerouslySetInnerHTML` в Server Component, риск такой же, как на клиенте.
-- Гидратация: если серверный HTML отличается от клиентского, React может выполнить неожиданный код. Поэтому важно, чтобы пользовательские данные обрабатывались одинаково на сервере и клиенте.
-
-### Nuxt
-
-- Nuxt автоматически экранирует `{{ }}` интерполяции как на сервере, так и на клиенте.
-- `v-html` работает и в SSR-контексте, поэтому опасен вдвойне: вредоносный код попадает в исходный HTML, который индексируется и выполняется мгновенно.
-- Nuxt Security — официальный модуль, который помогает настроить CSP, CORS, заголовки безопасности, rate limiting и защиту от XSS.
-
-```ts
-// nuxt.config.ts
-export default defineNuxtConfig({
-  modules: ['nuxt-security'],
-  security: {
-    headers: {
-      contentSecurityPolicy: {
-        'script-src': ["'self'", "'nonce-{{nonce}}'"],
-      },
-    },
-    xssValidator: true,
-  },
-});
-```
+**Подробные разборы:** [Безопасность Next.js](../nextjs/nextjs-security.md), [Безопасность Nuxt](../nuxt/nuxt-security.md).
 
 ---
 
@@ -429,3 +360,6 @@ XSS — не одна уязвимость, а целый класс атак с
 - [React — Rendering values as text](https://react.dev/reference/react-dom/components/common#rendering-values-as-text)
 - [Vue — Security](https://vuejs.org/guide/best-practices/security.html)
 - [Nuxt Security](https://nuxt-security.vercel.app/)
+- [Безопасность Next.js](../nextjs/nextjs-security.md)
+- [Безопасность Vue](../vue/vue-security.md)
+- [Безопасность Nuxt](../nuxt/nuxt-security.md)

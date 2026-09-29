@@ -24,3 +24,4 @@
 
 - **[Options API vs Composition API](./vue-options-vs-composition.md)** — история, различия, когда что использовать, миграция.
 - **[Экосистема VueUse](./vueuse.md)** — обзор готовых composables, когда использовать, а когда писать свой.
+- **[Безопасность Vue](./vue-security.md)** — `v-html`, refs, URL-атрибуты, хранение токенов, защита от XSS.

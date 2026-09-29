@@ -2,7 +2,7 @@
 title: "Управление секретами во фронтенде"
 section: security
 description: "Секреты во фронтенде: `NEXT_PUBLIC_`, `runtimeConfig`, серверный прокси, vaults, ротация, защита `.env` от утечек в git."
-order: 7
+order: 6
 tags: ["secrets", "env-variables", "next-public", "runtime-config", "vault"]
 questions:
   - "Что такое секрет и почему всё, что попадает в клиентский бандл, доступно через DevTools"

@@ -25,5 +25,5 @@
 - [Методы рендеринга](../performance/rendering-methods.md) — общие концепции CSR, SSR, SSG, ISR, SWR, Streaming и HTTP-кэширования.
 - [Pinia](../state-management/pinia.md) — управление состоянием во Vue/Nuxt.
 - [Тестирование Nuxt](./testing.md) — тесты компонентов, composables и серверных роутов.
-- [Безопасность Vue/Nuxt](../security/security-vue-nuxt.md) — XSS, CSRF, CSP и особенности фреймворка.
+- [Безопасность Nuxt](./nuxt-security.md) — SSR и XSS, Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP.
 - [Деплой Nuxt 3](./deployment.md) — стратегии сборки и развёртывания.
