@@ -13,12 +13,6 @@
 - **[Docker для фронтенда](./docker-frontend.md)** — multi-stage build, nginx и SPA fallback, runtime-переменные, docker-compose, публикация образа.
 - **[Платформы деплоя](./deployment-platforms.md)** — Vercel, Netlify, Railway, Render, Fly.io, Cloudflare, AWS/GCP/Azure. Сравнение, цены, ограничения.
 
-## Смежные разделы
+## Не будет лишним
 
-- **[Методы рендеринга, CDN и Edge](../performance/rendering-methods.md)** — CSR/SSR/SSG/ISR/SWR, CDN, Edge, HTTP-кэширование. Реализация в [Next.js](../nextjs/nextjs-rendering-methods.md) и [Nuxt](../nuxt/nuxt-rendering-modes.md).
-- **[Оптимизация бандла](../performance/bundle-optimization.md)** — анализ бандла, tree shaking, code splitting, vendor chunks, bundle budget.
-- **[Монорепозитории](../architecture/monorepos.md)** — workspaces, Turborepo, Nx, CI/CD в монорепо.
-- **[Деплой Next.js](../nextjs/deployment.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Vercel, Docker.
-- **[PWA в Next.js](../nextjs/pwa.md)** — манифест, Service Workers, офлайн, push.
-- **[Деплой Nuxt 3](../nuxt/deployment.md)** — Nitro, presets, `routeRules`, edge-хостинги.
-- **[GitLab CI/CD для тестов](../testing/gitlab-ci-cd.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
+_Нет статей в этой категории — всё перечисленное выше относится к обязательному минимуму раздела._

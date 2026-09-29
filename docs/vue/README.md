@@ -9,10 +9,10 @@
 3. **[Composition API и `<script setup>`](./vue-composition-api.md)** — `setup()`, `<script setup>`, composables, `provide`/`inject`, правила организации кода.
 4. **[Vue Router](./vue-router.md)** — маршрутизация, guards, lazy loading, `useRoute`/`useRouter`, динамические маршруты.
 5. **[Жизненный цикл компонента](./vue-lifecycle.md)** — lifecycle hooks, render → patch, сравнение с React.
-6. **[События во Vue](./vue-events.md)** — модификаторы, компонентные события, нативные события, `v-model` под капотом.
 
 ## Углубись в детали
 
+- **[События во Vue](./vue-events.md)** — модификаторы, компонентные события, нативные события, `v-model` под капотом.
 - **[Компоненты, слоты и композиция](./vue-components-slots.md)** — default/named/scoped slots, `render()`/`h()`, `<component :is>`, `keep-alive`, `<teleport>`.
 - **[Оптимизация производительности](./vue-performance.md)** — `computed`, `v-memo`, `defineAsyncComponent`, `shallowRef`, lazy hydration, сравнение с React.
 - **[Suspense и async setup](./vue-suspense.md)** — `<Suspense>`, async `setup()`, fallback, вложенные границы.

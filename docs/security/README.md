@@ -19,9 +19,3 @@
 
 - **[Безопасность зависимостей и supply chain](./security-dependency-supply-chain.md)** — npm audit, lock-файлы, Snyk, Socket, SBOM, provenance.
 - **[Подготовка к SOC2 и CASA](./security-soc2-casa-workflows.md)** — как фронтендеру участвовать в security аудите.
-
-## Смежные разделы
-
-- **[Безопасность Next.js](../nextjs/nextjs-security.md)** — Server Components, Server Actions, middleware, CSP, Open Redirect.
-- **[Безопасность Vue](../vue/vue-security.md)** — `v-html`, refs, URL-атрибуты, хранение токенов.
-- **[Безопасность Nuxt](../nuxt/nuxt-security.md)** — SSR, Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP.

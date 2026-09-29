@@ -18,12 +18,9 @@
 - **[Обработка ошибок](./nuxt-error-handling.md)** — `error.vue`, `throwError`, `showError`, `vue:error` hook, логирование.
 - **[Nuxt Layers](./nuxt-layers.md)** — переиспользование конфигурации, компонентов, composables и middleware между проектами.
 - **[Модули и экосистема](./nuxt-modules-ecosystem.md)** — официальные модули (`@nuxt/image`, `@nuxt/content`, `@nuxtjs/tailwindcss`), поиск и выбор сторонних, создание собственных через `defineNuxtModule`.
+- **[Тестирование Nuxt](./testing.md)** — тесты компонентов, composables и серверных роутов.
+- **[Деплой Nuxt 3](./deployment.md)** — стратегии сборки и развёртывания через Nitro.
 
-## Смежные материалы
+## Не будет лишним
 
-- [Vue 3](../vue/README.md) — реактивность, Composition API, Vue Router, SFC.
-- [Методы рендеринга](../performance/rendering-methods.md) — общие концепции CSR, SSR, SSG, ISR, SWR, Streaming и HTTP-кэширования.
-- [Pinia](../state-management/pinia.md) — управление состоянием во Vue/Nuxt.
-- [Тестирование Nuxt](./testing.md) — тесты компонентов, composables и серверных роутов.
-- [Безопасность Nuxt](./nuxt-security.md) — SSR и XSS, Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP.
-- [Деплой Nuxt 3](./deployment.md) — стратегии сборки и развёртывания.
+- **[Безопасность Nuxt](./nuxt-security.md)** — SSR и XSS, Nitro, `nuxt-security`, `runtimeConfig`, CSRF, CSP.

@@ -6,23 +6,23 @@
 
 1. **[Основы Next.js](./nextjs-fundamentals.md)** — что такое Next.js, файловый роутинг, SSR/SSG/ISR, серверные и клиентские компоненты, оптимизация. Самая база для начинающих.
 2. **[Методы рендеринга](./nextjs-rendering-methods.md)** — CSR, SSR, SSG, ISR, RSC, Streaming, Static Export, PPR: Route Segment Config, on-demand revalidation.
-3. **[Роутинг в App Router](./next_routing.md)** — маршруты, динамические сегменты, группы, middleware.
-4. **[Серверные и клиентские компоненты](./next_server_client_composition.md)** — правила композиции, interleaving, границы.
-5. **[Data Fetching](./next_data_fetching.md)** — fetch на сервере, клиенте, паттерны загрузки.
+3. **[Роутинг в App Router](./next-routing.md)** — маршруты, динамические сегменты, группы, middleware.
+4. **[Серверные и клиентские компоненты](./next-server-client-composition.md)** — правила композиции, interleaving, границы.
+5. **[Data Fetching](./next-data-fetching.md)** — fetch на сервере, клиенте, паттерны загрузки.
 
 ## Углубись в детали
 
-- **[Route Handlers и Server Actions](./next_route_handlers_server_actions.md)** — API-роуты, мутации, optimistic UI, ревалидация.
-- **[Кэширование](./next_caching.md)** — четыре уровня кэша, revalidate, tags.
+- **[Route Handlers и Server Actions](./next-route-handlers-server-actions.md)** — API-роуты, мутации, optimistic UI, ревалидация.
+- **[Кэширование](./next-caching.md)** — четыре уровня кэша, revalidate, tags.
 - **[Next.js Server API](./next-server-api.md)** — серверные возможности фреймворка.
-- **[Оптимизация Next.js](./next_optimization.md)** — бандл, изображения, метрики, анализ.
+- **[Оптимизация Next.js](./next-optimization.md)** — бандл, изображения, метрики, анализ.
 - **[Деплой Next.js](./deployment.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Vercel, Docker.
 - **[Тестирование Next.js](./testing.md)** — Server Components, Server Actions, Route Handlers.
 
 ## Не будет лишним
 
-- **[RSC Payload](./next_rsc_payload.md)** — механизм сериализации серверных компонентов.
-- **[Edge Runtime](./next_edge_runtime.md)** — edge-функции, ограничения, деплой.
+- **[RSC Payload](./next-rsc-payload.md)** — механизм сериализации серверных компонентов.
+- **[Edge Runtime](./next-edge-runtime.md)** — edge-функции, ограничения, деплой.
 - **[PWA в Next.js](./pwa.md)** — манифест, Service Workers, офлайн, push.
-- **[Next.js как монолит](./next_monolith_direct_db.md)** — прямое обращение к базе данных без отдельного API.
+- **[Next.js как монолит](./next-monolith-direct-db.md)** — прямое обращение к базе данных без отдельного API.
 - **[Безопасность Next.js](./nextjs-security.md)** — Server Components, Server Actions, middleware, CSP, Open Redirect.

@@ -9,7 +9,6 @@
 1. **[Основы тестирования](./testing-fundamentals.md)** — пирамида, Testing Trophy, FIRST, AAA, TDD, code coverage.
 2. **[Vitest](./testing-vitest.md)** — настройка и возможности тестового раннера.
 3. **[Мокирование](./testing-mocking.md)** — `vi.fn`, `vi.spyOn`, `vi.mock`, MSW.
-4. **[Тестирование React-компонентов](../react/testing-components.md)** — React Testing Library, хуки, события.
 
 ## Углубись в детали
 
@@ -19,22 +18,8 @@
 - **[Подводные камни и антипаттерны](./testing-pitfalls.md)** — flaky-тесты, shared state, моки, false confidence.
 - **[E2E с Playwright](./testing-e2e-playwright.md)** — локаторы, действия, ожидания, моки, POM, CI и оптимизация прогонов.
 - **[Визуальное тестирование](./testing-visual-regression.md)** — Chromatic, Percy, скриншоты.
-
-## Тестирование по фреймворкам
-
-Фреймворк-специфичные статьи живут в своих разделах:
-
-- **[React-компоненты](../react/testing-components.md)**
-- **[Vue-компоненты](../vue/testing-components.md)**
-- **[Next.js](../nextjs/testing.md)** — Server Components, Server Actions, Route Handlers.
-- **[Nuxt](../nuxt/testing.md)** — компоненты, composables, серверные роуты.
+- **[GitLab CI/CD для тестов](./gitlab-ci-cd.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
 
 ## Не будет лишним
 
 - **[Sentry](./sentry-guide.md)** — мониторинг ошибок в production.
-
-## Смежные разделы
-
-- **[GitLab CI/CD для тестов](./gitlab-ci-cd.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
-- **[Тестирование производительности](../performance/performance-testing.md)** — Lighthouse CI, Web Vitals, bundle size, нагрузочные тесты.
-- **[Spec-Driven Development](../ai/spec-driven-development.md)** — разработка через спецификации с помощью LLM.

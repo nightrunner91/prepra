@@ -10,11 +10,11 @@
 
 ## Углубись в детали
 
-- **[Тестирование производительности](./performance-testing.md)** — Lighthouse CI, Web Vitals, bundle size, нагрузочные тесты.
 - **[Гидратация](./hydration.md)** — как работает hydration, hydration mismatch и способы борьбы.
-- **[Виртуализация списков](./list_virtualization.md)** — react-window, react-virtuoso, vue-virtual-scroller.
 - **[Оптимизация бандла](./bundle-optimization.md)** — анализ бандла, tree shaking, code splitting, vendor chunks, bundle budget.
+- **[Виртуализация списков](./list-virtualization.md)** — react-window, react-virtuoso, vue-virtual-scroller.
+- **[Тестирование производительности](./performance-testing.md)** — Lighthouse CI, Web Vitals, bundle size, нагрузочные тесты.
 
 ## Не будет лишним
 
-- **[Web Workers](./web_workers.md)** — вынос тяжёлых вычислений из основного потока.
+- **[Web Workers](./web-workers.md)** — вынос тяжёлых вычислений из основного потока.

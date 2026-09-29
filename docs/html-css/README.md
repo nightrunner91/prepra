@@ -7,17 +7,17 @@
 Если хочешь закрыть пробелы в фундаменте — иди по порядку:
 
 1. **[Основы HTML и CSS](./html-css-fundamentals.md)** — семантическая разметка, селекторы, box model, flexbox, grid, позиционирование, адаптивная вёрстка. Самая база для начинающих.
-2. **[Парсинг HTML и критический путь рендеринга](./html-rendering-pipeline.md)** — DOM/CSSOM/Render Tree, Layout/Paint/Composite, preload scanner.
 2. **[Каскад и специфичность](./css-cascade-specificity.md)** — cascade, origin, `@layer`, specificity, inheritance, `!important`.
-3. **[Formatting контексты и блочная модель](./css-layout-formatting-contexts.md)** — BFC/IFC/FFC/GFC, containing block, margin collapse, box-sizing.
-4. **[Flexbox](./css-flexbox.md)** — оси, `flex-basis`, grow/shrink, alignment.
-5. **[Grid](./css-grid.md)** — explicit/implicit, `fr`, `minmax`, `auto-fit`/`auto-fill`, subgrid.
-6. **[Позиционирование и stacking context](./css-positioning-stacking.md)** — positioning, stacking context, z-index, paint order.
+3. **[Flexbox](./css-flexbox.md)** — оси, `flex-basis`, grow/shrink, alignment.
+4. **[Grid](./css-grid.md)** — explicit/implicit, `fr`, `minmax`, `auto-fit`/`auto-fill`, subgrid.
+5. **[Позиционирование и stacking context](./css-positioning-stacking.md)** — positioning, stacking context, z-index, paint order.
 
 ## Углубись в детали
 
 После базы переходи к глубоким и прикладным темам:
 
+- **[Парсинг HTML и критический путь рендеринга](./html-rendering-pipeline.md)** — DOM/CSSOM/Render Tree, Layout/Paint/Composite, preload scanner.
+- **[Formatting контексты и блочная модель](./css-layout-formatting-contexts.md)** — BFC/IFC/FFC/GFC, containing block, margin collapse, box-sizing.
 - **[Семантический HTML и доступность](./html-semantics-accessibility.md)** — landmarks, default ARIA roles, доступность.
 - **[Формы и валидация](./html-forms-validation.md)** — Constraint Validation API, `ElementInternals`, custom elements.
 - **[Web Components](./html-web-components.md)** — custom elements, Shadow DOM, slots, lifecycle callbacks.
@@ -29,4 +29,4 @@
 
 ## Не будет лишним
 
-
+_Нет статей в этой категории — всё перечисленное выше относится к обязательному минимуму раздела._
