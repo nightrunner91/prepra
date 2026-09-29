@@ -11,6 +11,13 @@ questions:
   - "Какой путь проходит запрос от ввода URL до получения HTML: DNS, TCP, TLS, HTTP"
   - "Из чего складывается TTFB и как его уменьшить"
   - "Как связаны браузерная архитектура и критический путь рендеринга"
+answers:
+  - "Браузер делит работу между процессами: Browser Process — UI, навигация и хранилища, Renderer Process — рендеринг вкладки, GPU Process — графика. Site Isolation даёт каждому origin отдельный renderer-процесс (защита от Spectre), но накладные расходы — V8 heap, стеки потоков — умножаются на число изолированных сайтов, а IPC медленнее внутрипроцессных вызовов."
+  - "Browser Process управляет UI браузера, навигацией, сетевыми запросами и хранилищами (cookies, localStorage, IndexedDB) и имеет повышенные привилегии; Renderer Process парсит HTML/CSS, выполняет JS и строит DOM/CSSOM, layout и paint вкладки; GPU Process растеризует слои и компонует кадр через видеокарту; Utility Process выполняет вспомогательные задачи — audio, network, storage service."
+  - "Main Thread выполняет JS, парсит HTML/CSS и делает layout/paint; Worker Threads обслуживают Web/Service Workers; Compositor Thread независимо от main thread управляет скроллом и анимациями, поэтому transform/opacity остаются плавными даже при загруженном основном потоке; Raster Threads растеризуют слои в пиксели параллельно с композитингом."
+  - "Сначала парсинг URL и проверка HSTS/DNS-кэша, затем DNS resolution (браузер → OS → роутер → рекурсивный сервер → root → TLD → authoritative) до IP, TCP three-way handshake (1 RTT), TLS handshake (1 RTT в TLS 1.3), HTTP-запрос и ответ 200, после чего Browser Process передаёт HTML в renderer-процесс с учётом Site Isolation."
+  - "TTFB = DNS lookup + TCP handshake + TLS handshake + Server Processing + Network Latency. Уменьшают его кэшированием на сервере (Redis, nginx proxy_cache), CDN ближе к пользователю, HTTP/2 или HTTP/3, DNS prefetch и keep-alive для переиспользования TCP-соединения."
+  - "Renderer-процесс получает HTML от Browser Process и запускает критический путь на Main Thread: DOM → CSSOM → Render Tree → Layout → Paint, а финальную сборку кадра выполняют Compositor Thread и GPU Process. Поэтому занятый Main Thread блокирует JS, layout и paint, а transform/opacity анимируются на композиторе независимо от него."
 ---
 
 # Браузерная архитектура: процессы, потоки, сеть
