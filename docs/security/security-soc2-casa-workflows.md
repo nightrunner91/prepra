@@ -12,6 +12,14 @@ questions:
   - "Какие пять фаз включает incident response и какую роль играет фронтендер в каждой"
   - "Что проверяют пентестеры во фронтенд-коде и как подготовиться к penetration test"
   - "Как Secure SDLC встраивает безопасность на всех этапах от planning до operations"
+answers:
+  - "SOC2 Type II проверяет не только наличие политик, но и их соблюдение в течение 3–12 месяцев по пяти принципам (Security, Availability, Processing Integrity, Confidentiality, Privacy) — в отличие от оценки лишь факта существования политик."
+  - "Ключевые controls: CC6.1 (доступ), CC6.6 (CSP, security-заголовки, HTTPS), CC6.7 (детекция: Sentry, CSP violation reports), CC7.1 (change management), CC7.2 (секреты), CC8.1 (контроль изменений). Evidence — скриншоты PR с approve, настройки CI с `npm audit`, конфиг CSP, `.gitignore`, lock-файлы."
+  - "CASA обязателен, когда приложение работает с данными Google Users — OAuth Google, Gmail API, Google Drive API. Google проверяет защиту данных пользователей, безопасную обработку OAuth-токенов и соответствие OWASP Top 10."
+  - "Change management проводит все изменения через git → PR + code review → CI/CD pipeline → rollback plan → release notes. Для emergency changes нужен documented process: кто может approve, как фиксируется причина и как проводится post-review."
+  - "Пять фаз: Detection (мониторинг, алерты), Containment (локализация compromised систем), Eradication (устранение причины), Recovery (восстановление), Lessons learned (post-mortem). Фронтендер должен распознавать признаки инцидента (подозрительные скрипты, CSP reports) и участвовать в расследовании клиентских инцидентов."
+  - "Пентестеры проверяют XSS (reflected, stored, DOM-based), CSRF, Open Redirect, IDOR, утечку секретов в бандле, слабые настройки cookies и отсутствие security-заголовков. Подготовка — self-assessment по чек-листам, исправление очевидных проблем и подготовка тестовых аккаунтов с документацией."
+  - "Secure SDLC встраивает безопасность на всех этапах: Planning — threat modeling, Design — least privilege, Development — линтеры и pre-commit hooks, Testing — SAST/DAST и pentest, Deployment — secret management и мониторинг, Operations — patching и incident response."
 ---
 
 # SOC2 и CASA для фронтенд-разработчика
