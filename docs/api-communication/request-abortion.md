@@ -13,6 +13,15 @@ questions:
   - "Как TanStack Query автоматически отменяет запросы"
   - "Как комбинировать debounce и AbortController для поиска"
   - "Почему флаг cancelled хуже AbortController"
+answers:
+  - "Отмена решает три проблемы: экономит ресурсы (ответ больше не актуален), предотвращает race conditions (старый запрос не перезапишет результат нового) и избегает утечек — callback размонтированного компонента не обновит state."
+  - "AbortController — объект с методом abort(), а AbortSignal — его свойство signal, которое передаётся в запрос: при вызове abort() сигнал уведомляет запрос о необходимости прерваться."
+  - "Race condition — когда несколько запросов выполняются параллельно и более старый приходит позже нового, перезаписывая его результат. В useEffect при смене query cleanup вызывает controller.abort(), поэтому старый запрос отменяется автоматически."
+  - "Во всех трёх передаётся опция signal: controller.signal, а затем вызывается controller.abort(): fetch и ky (обёртка над fetch) выбрасывают AbortError, который проверяется через error.name === 'AbortError', axios — через axios.isCancel(error). Устаревший CancelToken в axios объявлен deprecated."
+  - "AbortError — не ошибка, а нормальный результат отмены: его нужно отсекать в catch, чтобы не логировать как ошибку и не выполнять обработку ошибок, тогда как реальные сетевые ошибки обрабатываются отдельно."
+  - "TanStack Query передаёт signal в queryFn и при размонтировании компонента или изменении queryKey сам отменяет запрос, а fetch получает AbortError, который библиотека обрабатывает корректно. Mutation отменяется через mutation.cancel()."
+  - "В useEffect по query создаются AbortController и setTimeout на 300 мс: debounce откладывает сам запрос, clearTimeout в cleanup отменяет ещё не начатый запрос, а controller.abort() — уже запущенный при новом вводе."
+  - "Флаг cancelled предотвращает обновление state, но не отменяет сам запрос — сеть и ресурсы продолжают тратиться, тогда как AbortController реально прерывает запрос и освобождает ресурсы."
 ---
 
 # Отмена HTTP-запросов: AbortController, Race Conditions и cleanup

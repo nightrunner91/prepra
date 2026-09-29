@@ -13,6 +13,15 @@ questions:
   - "Какие переменные окружения безопасны для клиентского бандла"
   - "Какие антипаттерны встречаются при работе с HTTP-клиентами"
   - "Когда достаточно fetch, а когда нужна библиотека"
+answers:
+  - "fetch не бросает исключение на HTTP-ошибках (4xx, 5xx) — нужно вручную проверять response.ok, а axios бросает исключение на status >= 400 из коробки."
+  - "ky — лёгкая обёртка над fetch (~4 KB gzipped против ~13 KB у axios) с автоматическим .json(), встроенными retry и timeout, hooks вместо interceptors, при этом бросает исключения на HTTP-ошибках и использует нативные возможности браузера."
+  - "Единый экземпляр с baseURL, timeout, hooks и обработкой ошибок избавляет от повторения https://api.example.com в каждом запросе, дублирования заголовков Content-Type/Authorization и разрозненной обработки ошибок по компонентам."
+  - "В axios — api.interceptors.request.use((config) => { config.headers.Authorization = 'Bearer ' + token; return config; }), в ky и ofetch — hooks beforeRequest/onRequest, где заголовок ставится через request.headers.set('Authorization', ...), а токен берётся из localStorage."
+  - "Для development, staging и production используются разные адреса API, поэтому baseURL берётся из переменных окружения (import.meta.env.VITE_API_URL или NEXT_PUBLIC_API_URL), которые меняются под окружение без переписывания кода."
+  - "Только переменные с публичными префиксами (VITE_, NEXT_PUBLIC_, NUXT_PUBLIC_, REACT_APP_) встраиваются в клиентский бандл на этапе сборки, поэтому в них можно хранить только несекретные значения вроде NEXT_PUBLIC_API_URL; секретные ключи (например, Stripe) в бандл класть нельзя."
+  - "Дублирование baseURL в каждом запросе, игнорирование HTTP-ошибок с fetch (парсинг JSON без проверки response.ok), хардкод статусов по проекту, тихое проглатывание ошибок в interceptor через () => null и использование разных клиентов в разных модулях."
+  - "fetch достаточно для маленького проекта с малым числом запросов и приоритетом на размер бандла (0 KB), когда готовы писать небольшую обёртку сами. Библиотека нужна при росте проекта: baseURL, interceptors, retry, timeout и единообразные ошибки."
 ---
 
 # HTTP-клиенты: fetch, axios, ky и ofetch
