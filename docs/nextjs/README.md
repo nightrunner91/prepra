@@ -16,7 +16,7 @@
 - **[Кэширование](./next-caching.md)** — четыре уровня кэша, revalidate, tags.
 - **[Next.js Server API](./next-server-api.md)** — серверные возможности фреймворка.
 - **[Оптимизация Next.js](./next-optimization.md)** — бандл, изображения, метрики, анализ.
-- **[Деплой Next.js](./deployment.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Vercel, Docker.
+- **[Деплой Next.js](../build-and-deployment/nextjs-deployment.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Vercel, Docker.
 
 ## Не будет лишним
 

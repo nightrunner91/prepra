@@ -544,7 +544,7 @@ npm run build
 # Создаёт папку 'out' с статическими файлами
 ```
 
-Подробнее про деплой и режимы вывода — в статье [Деплой Next.js](./deployment.md).
+Подробнее про деплой и режимы вывода — в статье [Деплой Next.js](../build-and-deployment/nextjs-deployment.md).
 
 ---
 
@@ -720,7 +720,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
 - **Кэширование.** Четыре уровня кэша Next.js, `unstable_cache`, поведение `Cache-Control` для ISR-страниц — в статье [Кэширование](./next-caching.md).
 - **Edge Runtime.** Middleware и часть страниц/Route Handlers можно выполнять на CDN-узлах вместо Node.js. Ограничения и конфигурация — в статье [Edge Runtime](./next-edge-runtime.md).
-- **Деплой.** Какая платформа поддерживает ISR, PPR и Edge, режимы вывода `export` / `standalone` — в статье [Деплой Next.js](./deployment.md).
+- **Деплой.** Какая платформа поддерживает ISR, PPR и Edge, режимы вывода `export` / `standalone` — в статье [Деплой Next.js](../build-and-deployment/nextjs-deployment.md).
 - **RSC Payload.** Как сериализуются серверные компоненты — в статье [RSC Payload](./next-rsc-payload.md).
 
 ---
@@ -827,4 +827,4 @@ export default async function Page({ params }: { params: { slug: string } }) {
 - [Методы рендеринга (общие концепции)](../performance/rendering-methods.md)
 - [Кэширование в Next.js](./next-caching.md)
 - [Edge Runtime в Next.js](./next-edge-runtime.md)
-- [Деплой Next.js](./deployment.md)
+- [Деплой Next.js](../build-and-deployment/nextjs-deployment.md)

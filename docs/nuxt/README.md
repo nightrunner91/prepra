@@ -18,6 +18,6 @@
 - **[Обработка ошибок](./nuxt-error-handling.md)** — `error.vue`, `throwError`, `showError`, `vue:error` hook, логирование.
 - **[Nuxt Layers](./nuxt-layers.md)** — переиспользование конфигурации, компонентов, composables и middleware между проектами.
 - **[Модули и экосистема](./nuxt-modules-ecosystem.md)** — официальные модули (`@nuxt/image`, `@nuxt/content`, `@nuxtjs/tailwindcss`), поиск и выбор сторонних, создание собственных через `defineNuxtModule`.
-- **[Деплой Nuxt 3](./deployment.md)** — стратегии сборки и развёртывания через Nitro.
+- **[Деплой Nuxt 3](../build-and-deployment/nuxt-deployment.md)** — стратегии сборки и развёртывания через Nitro.
 
 ## Не будет лишним

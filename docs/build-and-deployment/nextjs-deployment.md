@@ -1,8 +1,8 @@
 ---
 title: "Деплой Next.js: режимы вывода и платформы"
-section: nextjs
+section: build-and-deployment
 description: "Что происходит при `next build`, чем `output: 'export'` отличается от `standalone`, как деплоить на Vercel и в Docker, и как настроить environment variables."
-order: 7
+order: 6
 tags: ["nextjs", "vercel", "docker", "isr", "edge-runtime"]
 questions:
   - "Что происходит на каждом этапе выполнения `next build`?"
@@ -182,7 +182,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
 ## Деплой SSR и ISR
 
-Сами стратегии рендеринга (CSR, SSR, SSG, ISR, RSC, PPR) подробно разобраны в [Методы рендеринга в Next.js](./nextjs-rendering-methods.md). Здесь — только deployment-аспекты.
+Сами стратегии рендеринга (CSR, SSR, SSG, ISR, RSC, PPR) подробно разобраны в [Методы рендеринга в Next.js](../nextjs/nextjs-rendering-methods.md). Здесь — только deployment-аспекты.
 
 ### Что важно при деплое
 
