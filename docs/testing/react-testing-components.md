@@ -1,8 +1,8 @@
 ---
 title: "Тестирование React-компонентов с React Testing Library"
-section: react
+section: testing
 description: "Как тестировать React-компоненты через поведение пользователя: рендеринг, поиск элементов, события, асинхронность, провайдеры и типичные ошибки."
-order: 13
+order: 4
 tags: ["react-testing-library", "user-event", "jest-dom", "msw", "vitest"]
 questions:
   - "Как философия React Testing Library (тестирование поведения пользователя) делает тесты устойчивыми к рефакторингу"
@@ -67,7 +67,7 @@ answers:
 
 > 💡 **Enzyme мёртв.** С выходом React 18+ и функциональных компонентов Enzyme потерял актуальность. React Testing Library — официальный стандарт с 2021 года.
 
-> 📘 Для Vue используется [Vue Test Utils](../vue/testing-components.md) — библиотека с похожей философией, но со своими особенностями доступа к инстансу компонента.
+> 📘 Для Vue используется [Vue Test Utils](./vue-testing-components.md) — библиотека с похожей философией, но со своими особенностями доступа к инстансу компонента.
 
 ### Почему RTL лучше
 

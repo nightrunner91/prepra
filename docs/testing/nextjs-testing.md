@@ -1,8 +1,8 @@
 ﻿---
 title: "Тестирование в Next.js"
-section: nextjs
+section: testing
 description: "Разбираем подходы к тестированию приложений на Next.js: от настройки Vitest и мокирования Next.js API до Server Components, Actions, Route Handlers и Middleware."
-order: 9
+order: 5
 tags: ["nextjs", "vitest", "server-components", "server-actions", "route-handlers", "msw"]
 questions:
   - "Почему в Next.js тестировать нужно бизнес-логику, а не внутренний механизм фреймворка"

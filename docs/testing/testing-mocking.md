@@ -2,7 +2,7 @@
 title: "Мокирование и изоляция тестов"
 section: testing
 description: "Как изолировать тесты с помощью моков: vi.fn, vi.spyOn, vi.mock, MSW, таймеры, localStorage и фабрики данных. Разбор практик и антипаттернов."
-order: 8
+order: 3
 tags: ["mocking", "vitest", "msw", "spy", "stub", "test-isolation"]
 questions:
   - "Почему внешние зависимости мокируют, а внутренние модули — обычно нет?"

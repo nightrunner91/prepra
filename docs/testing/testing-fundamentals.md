@@ -2,7 +2,7 @@
 title: "Основы тестирования: пирамида, принципы, стратегии"
 section: testing
 description: "Как выстроить эффективную стратегию тестирования: пирамида и Testing Trophy, уровни тестов, принципы FIRST, TDD, code coverage и практические советы."
-order: 7
+order: 1
 tags: ["testing-pyramid", "unit-tests", "integration-tests", "e2e-tests", "tdd", "code-coverage", "page-object-model", "data-testid", "mocking"]
 questions:
   - "Как пирамида Кона и Testing Trophy объясняют, почему для React/Next.js интеграционные тесты важнее unit-тестов"

@@ -2,7 +2,7 @@
 title: "Unit-тестирование с Vitest"
 section: testing
 description: "Как писать unit-тесты на Vitest: базовый API, моки, снапшоты, coverage и настройка под React, Next.js, Vue и Nuxt."
-order: 16
+order: 2
 tags: ["vitest", "unit-testing", "jest", "mocking", "snapshot-testing", "coverage"]
 questions:
   - "Чем Vitest отличается от Jest и в каких проектах его предпочесть"

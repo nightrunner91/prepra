@@ -17,7 +17,6 @@
 - **[Next.js Server API](./next-server-api.md)** — серверные возможности фреймворка.
 - **[Оптимизация Next.js](./next-optimization.md)** — бандл, изображения, метрики, анализ.
 - **[Деплой Next.js](./deployment.md)** — `output: 'export'`, SSR/SSG/ISR, Edge Runtime, Vercel, Docker.
-- **[Тестирование Next.js](./testing.md)** — Server Components, Server Actions, Route Handlers.
 
 ## Не будет лишним
 

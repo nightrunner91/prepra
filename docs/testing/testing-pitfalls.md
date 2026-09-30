@@ -2,7 +2,7 @@
 title: "Подводные камни и антипаттерны в тестировании"
 section: testing
 description: "Тесты могут быть хуже, чем их отсутствие. Хрупкие, медленные и ложно успокаивающие тесты отнимают время и снижают доверие к CI."
-order: 12
+order: 9
 tags: ["testing", "antipatterns", "flaky-tests", "mocking", "e2e", "test-coverage"]
 questions:
   - "Как flaky-тесты влияют на доверие к CI и какие подходы к их устранению предпочтительнее повышения retries"

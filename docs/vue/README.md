@@ -18,7 +18,6 @@
 - **[Suspense и async setup](./vue-suspense.md)** — `<Suspense>`, async `setup()`, fallback, вложенные границы.
 - **[Обработка ошибок](./vue-error-handling.md)** — `app.config.errorHandler`, `onErrorCaptured`, error boundary pattern.
 - **[Transition и TransitionGroup](./vue-transitions.md)** — анимация появления/исчезновения и списков.
-- **[Тестирование компонентов](./testing-components.md)** — Vue Test Utils, composables, события, Pinia.
 
 ## Не будет лишним
 

@@ -14,6 +14,10 @@
 
 После базы переходи к глубоким темам:
 
+- **[Тестирование React-компонентов](./react-testing-components.md)** — React Testing Library, хуки, события, провайдеры.
+- **[Тестирование в Next.js](./nextjs-testing.md)** — Server Components, Server Actions, Route Handlers.
+- **[Тестирование Vue-компонентов](./vue-testing-components.md)** — Vue Test Utils, composables, события, Pinia.
+- **[Тестирование в Nuxt 3](./nuxt-testing.md)** — тесты компонентов, composables и серверных роутов.
 - **[Продвинутая стратегия тестирования](./testing-strategy-deep-dive.md)** — модели, risk-based testing, метрики, архитектура тестов.
 - **[Подводные камни и антипаттерны](./testing-pitfalls.md)** — flaky-тесты, shared state, моки, false confidence.
 - **[E2E с Playwright](./testing-e2e-playwright.md)** — локаторы, действия, ожидания, моки, POM, CI и оптимизация прогонов.

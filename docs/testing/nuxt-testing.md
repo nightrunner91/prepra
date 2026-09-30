@@ -1,8 +1,8 @@
 ﻿---
 title: "Тестирование в Nuxt 3"
-section: nuxt
+section: testing
 description: "Как тестировать Nuxt 3-приложения: настройка Vitest, тестирование компонентов, composables, server routes, middleware, мокирование API и антипаттерны."
-order: 10
+order: 7
 tags: ["nuxt", "vitest", "mountSuspended", "registerEndpoint", "mockNuxtImport", "composables"]
 questions:
   - "Почему тестирование Nuxt 3 требует специального окружения и чем `environment: 'nuxt'` отличается от обычного Vue Test Utils"

@@ -1,8 +1,8 @@
 ﻿---
 title: "Тестирование Vue-компонентов с Vue Test Utils"
-section: vue
+section: testing
 description: "Как тестировать Vue-компоненты с Vue Test Utils и Vitest: настройка окружения, пропсы, emits, слоты, v-model, Pinia, Vue Router и лучшие практики."
-order: 17
+order: 6
 tags: ["vue-test-utils", "vitest", "component-testing", "pinia", "vue-router", "composables"]
 questions:
   - "Чем философия Vue Test Utils отличается от React Testing Library и почему проверка поведения пользователя надёжнее обращения к wrapper.vm"
