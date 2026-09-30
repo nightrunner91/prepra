@@ -7,18 +7,18 @@
 Если ты только начинаешь знакомиться с тестами — иди по порядку:
 
 1. **[Основы тестирования](./testing-fundamentals.md)** — пирамида, Testing Trophy, FIRST, AAA, TDD, code coverage.
-2. **[Vitest](./testing-vitest.md)** — настройка и возможности тестового раннера.
-3. **[Мокирование](./testing-mocking.md)** — `vi.fn`, `vi.spyOn`, `vi.mock`, MSW.
+2. **[Стратегия тестирования](./testing-strategy-deep-dive.md)** — модели, risk-based testing, метрики, архитектура тестов.
+3. **[Vitest](./testing-vitest.md)** — настройка и возможности тестового раннера.
+4. **[Мокирование](./testing-mocking.md)** — `vi.fn`, `vi.spyOn`, `vi.mock`, MSW.
 
 ## Углубись в детали
 
 После базы переходи к глубоким темам:
 
-- **[Тестирование React-компонентов](./react-testing-components.md)** — React Testing Library, хуки, события, провайдеры.
-- **[Тестирование в Next.js](./nextjs-testing.md)** — Server Components, Server Actions, Route Handlers.
-- **[Тестирование Vue-компонентов](./vue-testing-components.md)** — Vue Test Utils, composables, события, Pinia.
-- **[Тестирование в Nuxt 3](./nuxt-testing.md)** — тесты компонентов, composables и серверных роутов.
-- **[Продвинутая стратегия тестирования](./testing-strategy-deep-dive.md)** — модели, risk-based testing, метрики, архитектура тестов.
+- **[Тестирование React](./react-testing-components.md)** — React Testing Library, хуки, события, провайдеры.
+- **[Тестирование Next.js](./nextjs-testing.md)** — Server Components, Server Actions, Route Handlers.
+- **[Тестирование Vue](./vue-testing-components.md)** — Vue Test Utils, composables, события, Pinia.
+- **[Тестирование Nuxt](./nuxt-testing.md)** — тесты компонентов, composables и серверных роутов.
 - **[Подводные камни и антипаттерны](./testing-pitfalls.md)** — flaky-тесты, shared state, моки, false confidence.
 - **[E2E с Playwright](./testing-e2e-playwright.md)** — локаторы, действия, ожидания, моки, POM, CI и оптимизация прогонов.
 - **[Визуальное тестирование](./testing-visual-regression.md)** — Chromatic, Percy, скриншоты.

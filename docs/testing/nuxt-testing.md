@@ -1,7 +1,7 @@
 ﻿---
-title: "Тестирование в Nuxt 3"
+title: "Тестирование Nuxt"
 section: testing
-description: "Как тестировать Nuxt 3-приложения: настройка Vitest, тестирование компонентов, composables, server routes, middleware, мокирование API и антипаттерны."
+description: "Как тестировать Nuxt-приложения: настройка Vitest, тестирование компонентов, composables, server routes, middleware, мокирование API и антипаттерны."
 order: 7
 tags: ["nuxt", "vitest", "mountSuspended", "registerEndpoint", "mockNuxtImport", "composables"]
 questions:
@@ -18,7 +18,7 @@ answers:
   - "Тестирование самого фреймворка вместо бизнес-логики, избыточное мокирование всего подряд (мокировать нужно только необходимое), игнорирование асинхронности SSR через обычный `mount`, тестирование server routes реальными HTTP-запросами к localhost и хардкод тестовых данных — вместо этого использовать фабрики и `mountSuspended`."
 ---
 
-# Тестирование в Nuxt 3
+# Тестирование Nuxt
 
 Тестирование Nuxt-приложений отличается от обычных Vue-компонентов из-за auto-imports, server routes, SSR и Nitro-рантайма. Без правильной инфраструктуры тесты ломаются при попытках вызвать `useFetch` или `useRuntimeConfig` вне Nuxt-контекста. В статье разберём настройку Vitest, тестирование компонентов, composables, server API, middleware и плагинов, а также наиболее частые ошибки.
 
