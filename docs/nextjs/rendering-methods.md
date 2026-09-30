@@ -32,7 +32,7 @@ answers:
 
 Next.js поддерживает несколько стратегий рендеринга, и выбор между ними определяет баланс производительности, актуальности данных и SEO. Каждый метод решает конкретный сценарий: статические блоги, персонализированные дашборды, e-commerce с частыми обновлениями цен.
 
-Общие концепции методов рендеринга без привязки к фреймворку разобраны в статье [Методы рендеринга](../performance/rendering-methods.md) раздела «Производительность». Здесь — реализация в App Router: Route Segment Config, `revalidatePath` / `revalidateTag`, RSC, Streaming, Static Export и PPR. Кэширование в деталях — в статье [Кэширование](./next-caching.md), Edge Runtime — в статье [Edge Runtime](./next-edge-runtime.md).
+Общие концепции методов рендеринга без привязки к фреймворку разобраны в статье [Методы рендеринга](../performance/rendering-methods.md) раздела «Производительность». Здесь — реализация в App Router: Route Segment Config, `revalidatePath` / `revalidateTag`, RSC, Streaming, Static Export и PPR. Кэширование в деталях — в статье [Кэширование](./caching.md), Edge Runtime — в статье [Edge Runtime](./edge-runtime.md).
 
 ## Содержание
 
@@ -718,10 +718,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
 Стратегии рендеринга тесно связаны с кэшированием и runtime:
 
-- **Кэширование.** Четыре уровня кэша Next.js, `unstable_cache`, поведение `Cache-Control` для ISR-страниц — в статье [Кэширование](./next-caching.md).
-- **Edge Runtime.** Middleware и часть страниц/Route Handlers можно выполнять на CDN-узлах вместо Node.js. Ограничения и конфигурация — в статье [Edge Runtime](./next-edge-runtime.md).
+- **Кэширование.** Четыре уровня кэша Next.js, `unstable_cache`, поведение `Cache-Control` для ISR-страниц — в статье [Кэширование](./caching.md).
+- **Edge Runtime.** Middleware и часть страниц/Route Handlers можно выполнять на CDN-узлах вместо Node.js. Ограничения и конфигурация — в статье [Edge Runtime](./edge-runtime.md).
 - **Деплой.** Какая платформа поддерживает ISR, PPR и Edge, режимы вывода `export` / `standalone` — в статье [Деплой Next.js](../build-and-deployment/nextjs-deployment.md).
-- **RSC Payload.** Как сериализуются серверные компоненты — в статье [RSC Payload](./next-rsc-payload.md).
+- **RSC Payload.** Как сериализуются серверные компоненты — в статье [RSC Payload](./rsc-payload.md).
 
 ---
 
@@ -825,6 +825,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
 - [Next.js Data Fetching and Caching](https://nextjs.org/docs/app/building-your-application/data-fetching/fetching)
 - [React Server Components](https://react.dev/reference/rsc/server-components)
 - [Методы рендеринга (общие концепции)](../performance/rendering-methods.md)
-- [Кэширование в Next.js](./next-caching.md)
-- [Edge Runtime в Next.js](./next-edge-runtime.md)
+- [Кэширование в Next.js](./caching.md)
+- [Edge Runtime в Next.js](./edge-runtime.md)
 - [Деплой Next.js](../build-and-deployment/nextjs-deployment.md)

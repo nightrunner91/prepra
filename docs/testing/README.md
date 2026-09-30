@@ -6,10 +6,10 @@
 
 Если ты только начинаешь знакомиться с тестами — иди по порядку:
 
-1. **[Основы тестирования](./testing-fundamentals.md)** — пирамида, Testing Trophy, FIRST, AAA, TDD, code coverage.
-2. **[Стратегия тестирования](./testing-strategy-deep-dive.md)** — модели, risk-based testing, метрики, архитектура тестов.
-3. **[Vitest](./testing-vitest.md)** — настройка и возможности тестового раннера.
-4. **[Мокирование](./testing-mocking.md)** — `vi.fn`, `vi.spyOn`, `vi.mock`, MSW.
+1. **[Основы тестирования](./fundamentals.md)** — пирамида, Testing Trophy, FIRST, AAA, TDD, code coverage.
+2. **[Стратегия тестирования](./strategy-deep-dive.md)** — модели, risk-based testing, метрики, архитектура тестов.
+3. **[Vitest](./vitest.md)** — настройка и возможности тестового раннера.
+4. **[Мокирование](./mocking.md)** — `vi.fn`, `vi.spyOn`, `vi.mock`, MSW.
 
 ## Углубись в детали
 
@@ -19,9 +19,9 @@
 - **[Тестирование Next.js](./nextjs-testing.md)** — Server Components, Server Actions, Route Handlers.
 - **[Тестирование Vue](./vue-testing-components.md)** — Vue Test Utils, composables, события, Pinia.
 - **[Тестирование Nuxt](./nuxt-testing.md)** — тесты компонентов, composables и серверных роутов.
-- **[Подводные камни и антипаттерны](./testing-pitfalls.md)** — flaky-тесты, shared state, моки, false confidence.
-- **[E2E с Playwright](./testing-e2e-playwright.md)** — локаторы, действия, ожидания, моки, POM, CI и оптимизация прогонов.
-- **[Визуальное тестирование](./testing-visual-regression.md)** — Chromatic, Percy, скриншоты.
+- **[Подводные камни и антипаттерны](./pitfalls.md)** — flaky-тесты, shared state, моки, false confidence.
+- **[E2E с Playwright](./e2e-playwright.md)** — локаторы, действия, ожидания, моки, POM, CI и оптимизация прогонов.
+- **[Визуальное тестирование](./visual-regression.md)** — Chromatic, Percy, скриншоты.
 - **[GitLab CI/CD для тестов](./gitlab-ci-cd.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
 
 ## Не будет лишним

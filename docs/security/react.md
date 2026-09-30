@@ -224,7 +224,7 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}) {
 
 ## Заключение
 
-React предоставляет хорошую базовую защиту от XSS через автоматическое экранирование JSX, но у него есть мощные инструменты — `dangerouslySetInnerHTML` и refs — которые требуют осознанного подхода. Санитизация через DOMPurify, валидация URL и аккуратное хранение токенов закрывают основные векторы. Для более глубокого понимания XSS смотрите статью [XSS: анатомия атаки](./security-xss-deep-dive.md), а про безопасность Vue — [Безопасность Vue](./security-vue.md).
+React предоставляет хорошую базовую защиту от XSS через автоматическое экранирование JSX, но у него есть мощные инструменты — `dangerouslySetInnerHTML` и refs — которые требуют осознанного подхода. Санитизация через DOMPurify, валидация URL и аккуратное хранение токенов закрывают основные векторы. Для более глубокого понимания XSS смотрите статью [XSS: анатомия атаки](./xss-deep-dive.md), а про безопасность Vue — [Безопасность Vue](./vue.md).
 
 ## Полезные ссылки
 
@@ -232,5 +232,5 @@ React предоставляет хорошую базовую защиту от
 - [React — dangerouslySetInnerHTML](https://react.dev/reference/react-dom/components/common#dangerously-set-inner-html)
 - [DOMPurify](https://github.com/cure53/DOMPurify)
 - [MDN — noopener](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/noopener)
-- [XSS: анатомия атаки](./security-xss-deep-dive.md)
-- [Безопасность фронтенда: обзор](./security.md)
+- [XSS: анатомия атаки](./xss-deep-dive.md)
+- [Безопасность фронтенда: обзор](./overview.md)

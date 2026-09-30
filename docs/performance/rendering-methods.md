@@ -36,7 +36,7 @@ answers:
 
 Метод рендеринга определяет, **где** и **когда** HTML-страница попадает в браузер: строится на клиенте из JavaScript, генерируется на сервере при каждом запросе или создаётся один раз при сборке проекта. От этого выбора зависят четыре ключевых параметра: SEO, скорость первой загрузки ([FCP](#fcp), [LCP](#lcp)), актуальность данных и нагрузка на сервер.
 
-Концепции из этой статьи универсальны и одинаково применимы к Next.js, Nuxt и другим full-stack фреймворкам. Фреймворк-специфичная реализация разобрана отдельно: [Методы рендеринга в Next.js](../nextjs/nextjs-rendering-methods.md) и [Режимы рендеринга в Nuxt 3](../nuxt/nuxt-rendering-modes.md).
+Концепции из этой статьи универсальны и одинаково применимы к Next.js, Nuxt и другим full-stack фреймворкам. Фреймворк-специфичная реализация разобрана отдельно: [Методы рендеринга в Next.js](../nextjs/rendering-methods.md) и [Режимы рендеринга в Nuxt 3](../nuxt/rendering-modes.md).
 
 ## Содержание
 
@@ -366,7 +366,7 @@ Cache-Control: private, no-store
 
 **Edge Functions** подходят для middleware-задач: аутентификация, геолокация, редиректы, A/B-тесты, персонализация. **Не подходят** для тяжёлых вычислений, работы с файловой системой и больших зависимостей.
 
-Serverless — универсальный выбор для рендеринга страниц и API, где не критична задержка холодного старта. Конкретные реализации различаются по фреймворкам и платформам (подробнее — [Edge Runtime в Next.js](../nextjs/next-edge-runtime.md)).
+Serverless — универсальный выбор для рендеринга страниц и API, где не критична задержка холодного старта. Конкретные реализации различаются по фреймворкам и платформам (подробнее — [Edge Runtime в Next.js](../nextjs/edge-runtime.md)).
 
 ---
 
@@ -417,8 +417,8 @@ Serverless — универсальный выбор для рендеринга
 
 Общие концепции из этой статьи в каждом фреймворке получают свою реализацию и терминологию:
 
-- **Next.js** — App Router, RSC, Static Export, PPR, `revalidatePath` / `revalidateTag`, Route Segment Config. Разбор: [Методы рендеринга в Next.js](../nextjs/nextjs-rendering-methods.md).
-- **Nuxt 3** — `ssr`, `nuxi generate`, `routeRules` (`prerender`, `isr`, `swr`, `ssr: false`), Nitro, гидратация Vue. Разбор: [Режимы рендеринга в Nuxt 3](../nuxt/nuxt-rendering-modes.md).
+- **Next.js** — App Router, RSC, Static Export, PPR, `revalidatePath` / `revalidateTag`, Route Segment Config. Разбор: [Методы рендеринга в Next.js](../nextjs/rendering-methods.md).
+- **Nuxt 3** — `ssr`, `nuxi generate`, `routeRules` (`prerender`, `isr`, `swr`, `ssr: false`), Nitro, гидратация Vue. Разбор: [Режимы рендеринга в Nuxt 3](../nuxt/rendering-modes.md).
 
 ---
 
@@ -439,7 +439,7 @@ Serverless — универсальный выбор для рендеринга
 
 Метод рендеринга — одно из ключевых архитектурных решений веб-приложения. SSG даёт максимальную производительность для контента, не требующего актуальности. ISR добавляет периодическое обновление без полной пересборки. SSR гарантирует свежие данные при каждом запросе. SWR кэширует ответы с допуском к устареванию. Streaming улучшает TTFB на тяжёлых страницах. CDN и Edge добавляют ещё один слой: кэширование и логика ближе к пользователю.
 
-Эти концепции одинаково работают в Next.js и Nuxt — различается только реализация, поэтому дальше стоит изучить фреймворк-специфичные статьи: [Next.js](../nextjs/nextjs-rendering-methods.md) и [Nuxt 3](../nuxt/nuxt-rendering-modes.md).
+Эти концепции одинаково работают в Next.js и Nuxt — различается только реализация, поэтому дальше стоит изучить фреймворк-специфичные статьи: [Next.js](../nextjs/rendering-methods.md) и [Nuxt 3](../nuxt/rendering-modes.md).
 
 ## Сноски
 
@@ -457,5 +457,5 @@ Serverless — универсальный выбор для рендеринга
 - [MDN: HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching)
 - [MDN: Cache-Control](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
 - [React: Rendering on the Web](https://www.patterns.dev/posts/rendering-on-the-web/)
-- [Методы рендеринга в Next.js](../nextjs/nextjs-rendering-methods.md)
-- [Режимы рендеринга в Nuxt 3](../nuxt/nuxt-rendering-modes.md)
+- [Методы рендеринга в Next.js](../nextjs/rendering-methods.md)
+- [Режимы рендеринга в Nuxt 3](../nuxt/rendering-modes.md)

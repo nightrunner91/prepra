@@ -425,7 +425,7 @@ NEXT_PUBLIC_API_URL=https://api.example.com
 NEXT_PUBLIC_STRIPE_SECRET_KEY=sk_live_abc123
 ```
 
-Секретные ключи должны оставаться на сервере. Подробнее о безопасности env-переменных — в разделе [Управление секретами](../security/security-secrets-management.md).
+Секретные ключи должны оставаться на сервере. Подробнее о безопасности env-переменных — в разделе [Управление секретами](../security/secrets-management.md).
 
 ### `.env` не должен попадать в git
 

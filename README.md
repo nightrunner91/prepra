@@ -167,7 +167,7 @@ prepra/
 1. Создай markdown-файл в нужном разделе `/docs`, например:
 
    ```text
-   docs/react/react-server-components.md
+   docs/react/server-components.md
    ```
 
 2. Добавь обязательный frontmatter в начало файла:

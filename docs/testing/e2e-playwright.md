@@ -895,7 +895,7 @@ test("homepage looks correct", async ({ page }) => {
 });
 ```
 
-> 📚 Подробнее о визуальной регрессии, Chromatic/Percy, Storybook и настройках скриншотов — в статье **[Визуальное тестирование](./testing-visual-regression.md)**.
+> 📚 Подробнее о визуальной регрессии, Chromatic/Percy, Storybook и настройках скриншотов — в статье **[Визуальное тестирование](./visual-regression.md)**.
 
 ---
 

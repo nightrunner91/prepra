@@ -261,7 +261,7 @@ Vue использует текстовые интерполяции `{{ }}`, к
 
 Защита Vue заканчивается там, где разработчик обходит её вручную: `v-html`, динамические URL в `:href`/`:src`, `innerHTML` в хуках жизненного цикла, render-функции и JSX.
 
-**Подробные разборы:** [Безопасность React](./security-react.md), [Безопасность Vue](./security-vue.md).
+**Подробные разборы:** [Безопасность React](./react.md), [Безопасность Vue](./vue.md).
 
 ---
 
@@ -272,7 +272,7 @@ Server-Side Rendering меняет картину XSS: вредоносный к
 - В Next.js App Router Server Components рендерятся на сервере, и JSX-экранирование работает и там. Но `dangerouslySetInnerHTML` в Server Component несёт такой же риск, как на клиенте, а Pages Router с `getServerSideProps` сериализует данные в HTML — риск stored XSS.
 - В Nuxt `v-html` работает и в SSR-контексте, поэтому опасен вдвойне: вредоносный код попадает в исходный HTML, который индексируется и выполняется мгновенно.
 
-**Подробные разборы:** [Безопасность Next.js](./security-nextjs.md), [Безопасность Nuxt](./security-nuxt.md).
+**Подробные разборы:** [Безопасность Next.js](./nextjs.md), [Безопасность Nuxt](./nuxt.md).
 
 ---
 
@@ -368,7 +368,7 @@ XSS — не одна уязвимость, а целый класс атак с
 - [React — Rendering values as text](https://react.dev/reference/react-dom/components/common#rendering-values-as-text)
 - [Vue — Security](https://vuejs.org/guide/best-practices/security.html)
 - [Nuxt Security](https://nuxt-security.vercel.app/)
-- [Безопасность React](./security-react.md)
-- [Безопасность Next.js](./security-nextjs.md)
-- [Безопасность Vue](./security-vue.md)
-- [Безопасность Nuxt](./security-nuxt.md)
+- [Безопасность React](./react.md)
+- [Безопасность Next.js](./nextjs.md)
+- [Безопасность Vue](./vue.md)
+- [Безопасность Nuxt](./nuxt.md)

@@ -475,7 +475,7 @@ function App() {
 - Нет необходимости в middleware и DevTools.
 - Хотите избежать дополнительных зависимостей.
 
-Для сложных случаев используйте [Zustand](./zustand.md) или Redux Toolkit.
+Для сложных случаев используйте [Zustand](../state-management/zustand.md) или Redux Toolkit.
 
 ---
 
@@ -521,7 +521,7 @@ function Header({ variant }) {
 
 В новых проектах на React 19 предпочитайте `use(context)` вместо `useContext(context)`.
 
-(Подробнее: [React `use()` — Полное руководство](./react_use.md))
+(Подробнее: [React `use()` — Полное руководство](./use.md))
 
 ---
 

@@ -57,13 +57,13 @@ OWASP Top 10 включает несколько уязвимостей, кот�
 
 | Угроза | Вектор | Основная защита | Разбор |
 |---|---|---|---|
-| **XSS** | Инъекция кода через ввод пользователя | Экранирование, санитизация, CSP | [XSS: анатомия атаки](./security-xss-deep-dive.md) |
-| **CSRF** | Браузер жертвы как оружие | SameSite, CSRF-токены, Origin | [CSRF: механика атаки](./security-csrf-deep-dive.md) |
-| **Утечка секретов** | `NEXT_PUBLIC_`, runtimeConfig, git | Серверный прокси, vaults, hooks | [Управление секретами](./security-secrets-management.md) |
-| **Слабая аутентификация** | Кросс-сайтовые утечки токенов | HttpOnly cookies, OAuth/PKCE, RBAC | [Аутентификация и авторизация](./security-authn-authz.md) |
-| **Отсутствие заголовков** | Clickjacking, downgrade, утечка URL | Security-заголовки, CSP | [HTTP-заголовки безопасности](./security-http-headers.md) |
-| **Supply chain** | Вредоносные пакеты, typosquatting | Lock-файлы, npm audit, SBOM | [Зависимости и supply chain](./security-dependency-supply-chain.md) |
-| **Процессы и аудит** | Compliance, incident response | Secure SDLC, access reviews | [SOC2 и CASA](./security-soc2-casa-workflows.md) |
+| **XSS** | Инъекция кода через ввод пользователя | Экранирование, санитизация, CSP | [XSS: анатомия атаки](./xss-deep-dive.md) |
+| **CSRF** | Браузер жертвы как оружие | SameSite, CSRF-токены, Origin | [CSRF: механика атаки](./csrf-deep-dive.md) |
+| **Утечка секретов** | `NEXT_PUBLIC_`, runtimeConfig, git | Серверный прокси, vaults, hooks | [Управление секретами](./secrets-management.md) |
+| **Слабая аутентификация** | Кросс-сайтовые утечки токенов | HttpOnly cookies, OAuth/PKCE, RBAC | [Аутентификация и авторизация](./authn-authz.md) |
+| **Отсутствие заголовков** | Clickjacking, downgrade, утечка URL | Security-заголовки, CSP | [HTTP-заголовки безопасности](./http-headers.md) |
+| **Supply chain** | Вредоносные пакеты, typosquatting | Lock-файлы, npm audit, SBOM | [Зависимости и supply chain](./dependency-supply-chain.md) |
+| **Процессы и аудит** | Compliance, incident response | Secure SDLC, access reviews | [SOC2 и CASA](./soc2-casa-workflows.md) |
 
 ---
 
@@ -78,7 +78,7 @@ XSS (Cross-Site Scripting) — это внедрение вредоносног�
 
 React и Vue автоматически экранируют значения в JSX/интерполяциях, но защита заканчивается там, где разработчик обходит её вручную: `dangerouslySetInnerHTML` и `v-html`, `javascript:` URL в атрибутах, прямой доступ к DOM через refs, несанитизированные third-party библиотеки.
 
-**Глубокий разбор:** [XSS: анатомия атаки и методы защиты](./security-xss-deep-dive.md).
+**Глубокий разбор:** [XSS: анатомия атаки и методы защиты](./xss-deep-dive.md).
 
 ---
 
@@ -93,7 +93,7 @@ CSRF (Cross-Site Request Forgery) — атака, при которой злоу
 
 CSRF-защита нужна даже в эпоху JSON API: злоумышленник может отправить JSON-запрос через `fetch` с `credentials: "include"`.
 
-**Глубокий разбор:** [CSRF: механика атаки и линии защиты](./security-csrf-deep-dive.md).
+**Глубокий разбор:** [CSRF: механика атаки и линии защиты](./csrf-deep-dive.md).
 
 ---
 
@@ -108,7 +108,7 @@ Content Security Policy (CSP) — HTTP-заголовок, который гов
 - `Content-Security-Policy-Report-Only` позволяет тестировать политику без блокировки;
 - `frame-ancestors 'none'` защищает от clickjacking.
 
-**Глубокий разбор:** [CSP: директивы и практика](./security-csp-deep-dive.md).
+**Глубокий разбор:** [CSP: директивы и практика](./csp-deep-dive.md).
 
 ---
 
@@ -118,13 +118,13 @@ Content Security Policy (CSP) — HTTP-заголовок, который гов
 
 Фундаментальное правило веба: **всё, что отправляется в браузер, может быть прочитано**. Переменные с префиксом `NEXT_PUBLIC_` (и аналогами `VITE_`, `NUXT_PUBLIC_`) встраиваются в клиентский бандл на этапе сборки. Секретные ключи должны использоваться только в серверном коде через серверный прокси, а в production — через хранилища секретов (Vault, AWS Secrets Manager, Doppler) с ротацией и аудитом доступа. Защита `.env` от git — через `.gitignore` и pre-commit hooks (`gitleaks`).
 
-**Глубокий разбор:** [Управление секретами во фронтенде](./security-secrets-management.md).
+**Глубокий разбор:** [Управление секретами во фронтенде](./secrets-management.md).
 
 ### Аутентификация и авторизация
 
 Аутентификация отвечает на вопрос «кто ты?», авторизация — «что тебе можно?». Для SPA важно понимать компромиссы между сессиями и JWT, пару access + refresh token, OAuth 2.0 и OIDC с PKCE, и почему хранение токенов в `localStorage` опаснее HttpOnly cookies. Контроль доступа строится на RBAC (роли) и ABAC (атрибуты). Клиентская проверка авторизации — лишь адаптация UI, серверная валидация обязательна на каждом уровне.
 
-**Глубокий разбор:** [Аутентификация и авторизация во фронтенде](./security-authn-authz.md).
+**Глубокий разбор:** [Аутентификация и авторизация во фронтенде](./authn-authz.md).
 
 ---
 
@@ -134,19 +134,19 @@ Content Security Policy (CSP) — HTTP-заголовок, который гов
 
 Security-заголовки закрывают целые классы атак без изменений в бизнес-логике: HSTS блокирует downgrade на HTTP, `X-Frame-Options` — clickjacking, `X-Content-Type-Options: nosniff` — MIME-sniffing, `Referrer-Policy` — утечку URL, COOP/COEP — cross-origin атаки, `Permissions-Policy` — ненужные браузерные API.
 
-**Глубокий разбор:** [HTTP-заголовки безопасности](./security-http-headers.md).
+**Глубокий разбор:** [HTTP-заголовки безопасности](./http-headers.md).
 
 ### Supply chain
 
 Современный проект имеет сотни транзитивных зависимостей, каждая из которых — чужой код, выполняемый в вашем приложении. Инциденты `event-stream`, `ua-parser-js`, `colors` и `xz utils` показали, что угроза реальна. Защита: коммитить lock-файлы, запускать `npm audit` в CI, использовать Snyk/Socket, составлять SBOM и проверять provenance пакетов.
 
-**Глубокий разбор:** [Безопасность зависимостей и supply chain](./security-dependency-supply-chain.md).
+**Глубокий разбор:** [Безопасность зависимостей и supply chain](./dependency-supply-chain.md).
 
 ### Compliance и аудит
 
 Для SOC2 и CASA фронтендеру важно понимать, какие controls касаются его кода, как формализуются изменения в production, из каких фаз состоит incident response и как подготовиться к penetration test.
 
-**Глубокий разбор:** [SOC2 и CASA для фронтенд-разработчика](./security-soc2-casa-workflows.md).
+**Глубокий разбор:** [SOC2 и CASA для фронтенд-разработчика](./soc2-casa-workflows.md).
 
 ---
 
@@ -253,11 +253,11 @@ function ExternalLink({ href, children }) {
 - [MDN — Web Security](https://developer.mozilla.org/en-US/docs/Web/Security)
 - [Content Security Policy Reference](https://content-security-policy.com/)
 - [Next.js Security Headers](https://nextjs.org/docs/app/api-reference/next-config-js/headers)
-- [XSS: анатомия атаки](./security-xss-deep-dive.md)
-- [CSRF: как браузер становится оружием](./security-csrf-deep-dive.md)
-- [CSP: Content Security Policy](./security-csp-deep-dive.md)
-- [HTTP-заголовки безопасности](./security-http-headers.md)
-- [Аутентификация и авторизация](./security-authn-authz.md)
-- [Управление секретами](./security-secrets-management.md)
-- [Безопасность зависимостей и supply chain](./security-dependency-supply-chain.md)
-- [Подготовка к SOC2 и CASA](./security-soc2-casa-workflows.md)
+- [XSS: анатомия атаки](./xss-deep-dive.md)
+- [CSRF: как браузер становится оружием](./csrf-deep-dive.md)
+- [CSP: Content Security Policy](./csp-deep-dive.md)
+- [HTTP-заголовки безопасности](./http-headers.md)
+- [Аутентификация и авторизация](./authn-authz.md)
+- [Управление секретами](./secrets-management.md)
+- [Безопасность зависимостей и supply chain](./dependency-supply-chain.md)
+- [Подготовка к SOC2 и CASA](./soc2-casa-workflows.md)

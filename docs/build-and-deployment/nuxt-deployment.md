@@ -183,7 +183,7 @@ export default defineNuxtConfig({
 
 ## SSG и Prerender
 
-> Базовые режимы рендеринга (SSR, SSG, CSR, ISR) подробнее разобраны в [Режимы рендеринга](../nuxt/nuxt-rendering-modes.md). Здесь — deployment-аспекты.
+> Базовые режимы рендеринга (SSR, SSG, CSR, ISR) подробнее разобраны в [Режимы рендеринга](../nuxt/rendering-modes.md). Здесь — deployment-аспекты.
 
 ### Глобальная генерация
 
@@ -254,7 +254,7 @@ export default defineNuxtConfig({
 
 ## ISR через `routeRules`
 
-> Подробнее про ISR и другие режимы см. [Режимы рендеринга](../nuxt/nuxt-rendering-modes.md). Здесь — настройка под деплой.
+> Подробнее про ISR и другие режимы см. [Режимы рендеринга](../nuxt/rendering-modes.md). Здесь — настройка под деплой.
 
 Nuxt 3 поддерживает ISR через `routeRules` в `nuxt.config.ts`.
 

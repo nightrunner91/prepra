@@ -6,7 +6,7 @@
 
 Если хочешь закрыть пробелы в фундаменте — иди по порядку:
 
-1. **[Основы HTML и CSS](./html-css-fundamentals.md)** — семантическая разметка, селекторы, box model, flexbox, grid, позиционирование, адаптивная вёрстка. Самая база для начинающих.
+1. **[Основы HTML и CSS](./fundamentals.md)** — семантическая разметка, селекторы, box model, flexbox, grid, позиционирование, адаптивная вёрстка. Самая база для начинающих.
 2. **[Каскад и специфичность](./css-cascade-specificity.md)** — cascade, origin, `@layer`, specificity, inheritance, `!important`.
 3. **[Flexbox](./css-flexbox.md)** — оси, `flex-basis`, grow/shrink, alignment.
 4. **[Grid](./css-grid.md)** — explicit/implicit, `fr`, `minmax`, `auto-fit`/`auto-fill`, subgrid.

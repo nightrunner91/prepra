@@ -366,7 +366,7 @@ const data = await fetch('https://api.example.com/data', {
 | **Full Route Cache** | Сервер (диск) | HTML + RSC | Permanent | `dynamic`, `revalidate` |
 | **Router Cache** | Клиент (браузер) | RSC payload | Session | `router.refresh()` |
 
-Подробный разбор каждого уровня кэша, их взаимодействие и полные примеры — в отдельной статье: **[Кэширование данных в Next.js: полное руководство](./next_caching.md)**.
+Подробный разбор каждого уровня кэша, их взаимодействие и полные примеры — в отдельной статье: **[Кэширование данных в Next.js: полное руководство](./caching.md)**.
 
 ## Параллельная загрузка данных
 

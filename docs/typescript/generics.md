@@ -811,7 +811,7 @@ const emit = defineEmits<{
 
 ---
 
-> **Смежные темы:** Встроенные utility-типы (`Partial`, `Pick`, `Omit`, `Record` и др.) подробно разобраны в статье [TypeScript Utility Types](./typescript-utility-types.md). Условные типы и `infer` — в статье [TypeScript `infer`](./typescript-infer.md).
+> **Смежные темы:** Встроенные utility-типы (`Partial`, `Pick`, `Omit`, `Record` и др.) подробно разобраны в статье [TypeScript Utility Types](./utility-types.md). Условные типы и `infer` — в статье [TypeScript `infer`](./infer.md).
 
 ---
 

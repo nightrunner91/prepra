@@ -44,7 +44,7 @@ answers:
 
 ## От пирамиды к реальности
 
-Ты уже знаешь [пирамиду тестирования](./testing-fundamentals.md) и [Testing Trophy](./testing-fundamentals.md#testing-trophy--альтернативная-модель). Но на практике одной модели мало.
+Ты уже знаешь [пирамиду тестирования](./fundamentals.md) и [Testing Trophy](./fundamentals.md#testing-trophy--альтернативная-модель). Но на практике одной модели мало.
 
 | Модель | Когда применима | Опасность |
 |---|---|---|

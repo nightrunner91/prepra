@@ -182,7 +182,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
 ## Деплой SSR и ISR
 
-Сами стратегии рендеринга (CSR, SSR, SSG, ISR, RSC, PPR) подробно разобраны в [Методы рендеринга в Next.js](../nextjs/nextjs-rendering-methods.md). Здесь — только deployment-аспекты.
+Сами стратегии рендеринга (CSR, SSR, SSG, ISR, RSC, PPR) подробно разобраны в [Методы рендеринга в Next.js](../nextjs/rendering-methods.md). Здесь — только deployment-аспекты.
 
 ### Что важно при деплое
 

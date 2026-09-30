@@ -504,5 +504,5 @@ Next.js размывает границу между фронтендом и б�
 - [Auth.js (NextAuth.js)](https://authjs.dev/)
 - [Vercel — Security Best Practices](https://vercel.com/docs/security)
 - [CVE-2025-55182 advisory](https://github.com/facebook/react/security/advisories)
-- [Безопасность фронтенда: обзор](./security.md)
-- [Управление секретами во фронтенде](./security-secrets-management.md)
+- [Безопасность фронтенда: обзор](./overview.md)
+- [Управление секретами во фронтенде](./secrets-management.md)
