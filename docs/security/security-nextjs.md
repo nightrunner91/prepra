@@ -12,6 +12,14 @@ questions:
   - "Чем Route Handlers отличаются от middleware и когда выносить логику в API endpoints"
   - "Как защитить приложение от Open Redirect и почему Pages Router создаёт риск stored XSS"
   - "Чем App Router отличается от Pages Router с точки зрения модели безопасности"
+answers:
+  - "Next.js — full-stack фреймворк, где в одном проекте живут Server Components, Client Components, Server Actions, Route Handlers и middleware, поэтому фронтендер должен думать о серверной части: валидации, авторизации, секретах и заголовках. Новые риски — атакующая поверхность Server Actions как HTTP-endpoint, доступного любому клиенту, и утечка данных через RSC Payload."
+  - "Всё, что Server Component передаёт в Client Component, сериализуется в RSC Payload и попадает в клиентский JS: если `findMany` возвращает все поля, `email`, `phone`, `passwordHash` будут видны в DevTools, даже если рендерится только `name`. Предотвращение — `select` нужных полей на сервере и передача клиенту только необходимых данных."
+  - "В каждом Server Action обязательны валидация входа через Zod `safeParse`, проверка авторизации (`auth()` + Unauthorized), проверка владения ресурсом (Forbidden) и rate limiting — клиенту доверять нельзя. CVE-2025-55182 (RCE в React 19.0.0–19.2.2) показал, что Server Actions — серверный код, который нужно обновлять и мониторить так же, как любой сервер."
+  - "Middleware выполняется на Edge Runtime до рендеринга: редиректит неавторизованных пользователей (`/dashboard` → `/login`), устанавливает security-заголовки и генерирует nonce через `randomBytes(16)`, вставляя его в CSP и передавая в компоненты через заголовок `x-nonce`. Оно не заменяет проверку авторизации в Server Actions и ограничено API Edge Runtime."
+  - "Route Handlers (`route.ts`) — полноценные API endpoints App Router с доступом к Node.js: валидируют query через Zod и возвращают 401/400. Middleware — лёгкий слой до рендеринга для редиректов и заголовков, а обработку данных и бизнес-логику выносят в Route Handlers."
+  - "Open Redirect закрывается проверкой, что `callbackUrl` начинается с `/` — иначе `redirect('/')`, или белым списком разрешённых URL. В Pages Router `getServerSideProps`/`getStaticProps` сериализуют данные в HTML: необработанный пользовательский ввод создаёт риск stored XSS."
+  - "В App Router все компоненты серверные по умолчанию, есть Server Actions, Route Handlers и передача данных через RSC Payload. В Pages Router серверные данные сериализуются в HTML через `getServerSideProps`/`getStaticProps`, что создаёт риск stored XSS при вставке пользовательского ввода без экранирования."
 ---
 
 # Безопасность Next.js
