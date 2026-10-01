@@ -2,7 +2,7 @@
 title: "TypeGuard в TypeScript"
 section: typescript
 description: "TypeGuard в TypeScript связывает runtime-проверки с compile-time анализом. Разбираем type predicates, assertion functions и валидацию внешних данных."
-order: 8
+order: 4
 tags: ["type-guards", "typescript", "narrowing", "control-flow", "assertion-functions", "discriminated-unions"]
 questions:
   - "Что такое control flow analysis и как он работает"

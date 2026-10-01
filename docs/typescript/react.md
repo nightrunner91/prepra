@@ -1,9 +1,9 @@
 ﻿---
-title: "TypeScript в React и Vue"
+title: "TypeScript в React"
 section: typescript
-description: "TypeScript в React и Vue: типизация пропсов, событий, хуков, generic-компонентов, forwardRef и discriminated unions, а также сравнение подходов."
-order: 7
-tags: ["typescript", "react", "vue", "props", "hooks", "forwardref"]
+description: "TypeScript в React: типизация пропсов, событий, хуков, generic-компонентов, forwardRef и discriminated unions."
+order: 8
+tags: ["typescript", "react", "props", "hooks", "forwardref"]
 questions:
   - "Как типизировать пропсы компонента через `interface` и `type`"
   - "Как дефолтные значения в деструктуризации сужают тип"
@@ -24,11 +24,11 @@ answers:
   - "`forwardRef<HTMLInputElement, InputProps>` — первый дженерик — тип ref (DOM-элемент), второй — тип пропсов. С React 19 ref передаётся как обычный пропс (`ref?: React.Ref<HTMLInputElement>`), поэтому forwardRef больше не обязателен, хотя в legacy-коде и библиотеках ещё встречается."
 ---
 
-# TypeScript в React и Vue
+# TypeScript в React
 
 TypeScript и React — одна из самых распространённых связок в современной frontend-разработке.
 
-В этой статье мы разберём все ключевые аспекты TypeScript в React, проводя параллели с Vue. От базовой типизации пропсов до продвинутых паттернов с discriminated unions, forwardRef и generic-компонентами.
+В этой статье мы разберём все ключевые аспекты TypeScript в React. Параллели с Vue даны как краткие сноски, чтобы не терять контекст при переключении между экосистемами; полный разбор TypeScript во Vue — в отдельной статье [«TypeScript во Vue»](./vue.md).
 
 ---
 
