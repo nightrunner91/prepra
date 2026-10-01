@@ -1,37 +1,40 @@
-﻿---
-title: "Positioning, stacking context, `z-index` и paint order"
+---
+title: "Positioning, stacking context и formatting contexts"
 section: html-css
-description: "Позиционирование — это один из самых частых источников путаницы в CSS. Разработчики знают, что `position: absolute` выводит элемент из потока, но теряются, когда речь заходит о containing block, st..."
-order: 7
-tags: ["positioning", "stacking-context", "z-index", "sticky", "containing-block"]
+description: "Позиционирование, stacking context и formatting contexts объясняют, как браузер размещает элементы и рисует их слоями. Containing block, BFC, margin collapse и порядок отрисовки — фундамент предсказуемой вёрстки."
+order: 4
+tags: ["positioning", "stacking-context", "z-index", "bfc", "containing-block", "margin-collapse"]
 questions:
   - "Как определяется containing block для `position: absolute` и `position: fixed` и почему `transform` на предке ломает `fixed`"
   - "Что такое stacking context, какие свойства его создают и почему дочерний `z-index` не может перекрыть элемент вне контекста родителя"
   - "В каком порядке браузер рисует элементы внутри stacking context: фон, отрицательный z-index, поток, float, inline, позиционированные"
   - "Почему `position: sticky` может не работать и какие условия нужны для его корректной работы"
   - "Как `z-index` работает в flex/grid-контейнерах без `position` и чем это отличается от обычного потока"
-  - "Что делает `isolation: isolate` и почему это чистый способ создать stacking context без побочных эффектов"
+  - "Что такое formatting context и какие виды (BFC, IFC, FFC, GFC) существуют в CSS"
+  - "Какие условия создают новый BFC, почему `display: flow-root` предпочтительнее `overflow: hidden` и при каких условиях происходит margin collapse"
 answers:
   - "Для `absolute` containing block — ближайший предок с `position` не `static` (или с `transform`/`filter`/`perspective`/`contain: paint/layout`), иначе `<html>`; для `fixed` по умолчанию viewport, но любой предок с `transform` становится containing block'ом, и элемент позиционируется относительно него — это ломает модалки, вложенные в анимированные контейнеры."
   - "Stacking context — изолированная группа слоёв, где элементы рисуются от дальних к ближним; его создают `z-index` у позиционированного элемента, `opacity < 1`, `transform`, `filter`, `isolation: isolate`, `mix-blend-mode`, `will-change`, `contain` и flex/grid-контейнер с `z-index` у детей. Дочерний элемент «заперт» в контексте родителя: `child-a` с `z-index: 9999` не перекроет `.parent-b`, чей контекст выше."
   - "От дальнего к ближнему: фон и border контекста → отрицательный `z-index` → элементы нормального потока → float → inline → позиционированные с `z-index: auto`/без него → положительный `z-index`; поэтому `position: relative` без `z-index` иногда перекрывает float, а иногда нет."
   - "Sticky требует минимум одного порога (`top`/`right`/`bottom`/`left`) и прокручиваемого предка выше в DOM; он не сработает, если у предков `overflow: hidden`/`scroll` без прокрутки или родительский контейнер слишком низкий — нет области для «прилипания»."
   - "Flex/grid-контейнер, у которого дети имеют `z-index` отличный от `auto`, сам становится stacking context'ом, и его дети могут получать `z-index` без `position` — в обычном потоке у `static`-элемента `z-index` не работает."
-  - "`isolation: isolate` создаёт новый stacking context, не добавляя трансформаций и не меняя прозрачность (в отличие от `opacity`/`transform`) — dropdown-меню рисуется поверх соседей, но не выходит за пределы своего компонента."
+  - "Formatting context — область документа, где блоки раскладываются по единому набору правил и влияют друг на друга: BFC (блочный, вертикальная раскладка и схлопывание margin'ов), IFC (inline, строки и базовая линия), FFC (flex, оси) и GFC (grid, ячейки сетки)."
+  - "Новый BFC создают `float`, `position: absolute/fixed`, `display: inline-block`/`table-cell`/`flow-root`, `overflow` не `visible` и flex/grid-контейнер; `flow-root` делает это без побочных эффектов, тогда как `overflow: hidden` может обрезать контент и тени или создать скроллбар. Внутри BFC вертикальные margin'ы соседних блоков объединяются, margin'ы родителя и крайнего потомка не «выпадают» наружу, а float не обтекается содержимым блока с BFC; схлопываются margin'ы только блочных элементов в одном BFC, а в FFC/GFC margin'ы не схлопываются и `z-index` работает даже без `position`."
 ---
 
-# Positioning, stacking context, `z-index` и paint order
+# Positioning, stacking context и formatting contexts
 
-Позиционирование — это один из самых частых источников путаницы в CSS. Разработчики знают, что `position: absolute` выводит элемент из потока, но теряются, когда речь заходит о containing block, stacking context’ах и порядке отрисовки. Эта статья связывает позиционирование, наложение и порядок рисования в единую картину.
+Позиционирование — один из самых частых источников путаницы в CSS. Разработчики знают, что `position: absolute` выводит элемент из потока, но теряются, когда речь заходит о containing block, stacking context’ах и порядке отрисовки. Вторая половина картины — formatting contexts: области, в которых блоки раскладываются по единым правилам. Понимание этих механизмов объясняет большинство «магических» поведений вёрстки: почему margin «выпадает» из родителя, почему `transform` ломает `fixed` и почему `z-index: 9999` не всегда перекрывает соседа.
 
 ## Содержание
 
 1. [Глубокий разбор](#глубокий-разбор)
-2. [Практические примеры](#практические-примеры)
-3. [Типичные ошибки и антипаттерны](#типичные-ошибки-и-антипаттерны)
-4. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
-5. [Заключение](#заключение)
-6. [Полезные ссылки](#полезные-ссылки)
+2. [Formatting contexts](#formatting-contexts)
+3. [Практические примеры](#практические-примеры)
+4. [Типичные ошибки и антипаттерны](#типичные-ошибки-и-антипаттерны)
+5. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+6. [Заключение](#заключение)
+7. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -167,6 +170,121 @@ Stacking context создаётся:
 
 Это объясняет, почему иногда `position: relative` без `z-index` перекрывает float, а иногда нет: порядок рисования зависит от комбинации факторов.
 
+## Formatting contexts
+
+### Что такое formatting context
+
+**Formatting context** — это область документа, внутри которой блоки раскладываются по единому набору правил. Все элементы внутри одного контекста влияют друг на друга: например, вертикальные margin’ы блоков в нормальном потоке схлопываются, а inline-элементы распределяются по строкам.
+
+Существует четыре основных типа:
+
+- **BFC** — Block Formatting Context.
+- **IFC** — Inline Formatting Context.
+- **FFC** — Flex Formatting Context.
+- **GFC** — Grid Formatting Context.
+
+### Block Formatting Context (BFC)
+
+**BFC** (блочный контекст форматирования) — это область, в которой блочные элементы располагаются вертикально друг под другом, а margin’ы между ними схлопываются.
+
+Элемент создаёт новый BFC, если у него:
+
+- `float` не `none`;
+- `position` равно `absolute` или `fixed`;
+- `display: inline-block`, `table-cell`, `table-caption`, `flow-root`;
+- `overflow` не `visible`;
+- `display: flex` или `grid` у самого элемента (для его детей создаётся FFC/GFC, но сам flex/grid-контейнер тоже изолирован).
+
+Самый современный и чистый способ создать BFC — `display: flow-root`:
+
+```css
+.bfc {
+  display: flow-root;
+}
+```
+
+`flow-root` создаёт BFC без побочных эффектов вроде скролла или изменения inline-поведения.
+
+Что даёт BFC:
+
+- **Изоляция float.** Элементы внутри BFC не выходят за его границы, и сам BFC не обтекает float-соседей, если он блочный.
+- **Предотвращение схлопывания margin’ов** между родителем и первым/последним потомком.
+- **Остановка обтекания** float-элементов соседними блоками.
+
+### Inline Formatting Context (IFC)
+
+**IFC** (строчный контекст форматирования) возникает внутри блочного контейнера, когда в нём находятся inline-элементы или текст. Элементы располагаются в строках, переносятся по `white-space` и `word-break`, и выравниваются по базовой линии.
+
+Важные особенности IFC:
+
+- Высота строки определяется `line-height`, а не суммой высот inline-элементов.
+- `vertical-align` влияет на положение inline-элемента относительно строки.
+- Блочные элементы внутри IFC прерывают его и создают анонимные блочные боксы.
+
+Проблемы с IFC часто возникают, когда inline-элементы с разными `font-size` или `vertical-align` создают «лишнее» пространство под строкой. Это одна из причин, почему изображения внутри ссылок иногда имеют небольшой отступ снизу.
+
+### Flex и Grid Formatting Contexts (FFC, GFC)
+
+**FFC** (flex-контекст форматирования) создаётся элементом с `display: flex` или `display: inline-flex`. Все прямые дети становятся flex-элементами и раскладываются по главной и поперечной осям.
+
+**GFC** (grid-контекст форматирования) создаётся элементом с `display: grid` или `display: inline-grid`. Дети располагаются в ячейках сетки.
+
+Общие особенности FFC и GFC:
+
+- Flex/grid-элементы не обтекают float, `margin` не схлопывается.
+- `float` и `clear` у flex-элементов не работают.
+- `z-index` работает у flex/grid-элементов даже без `position`.
+- Размеры flex-элементов определяются не только `width`/`height`, но и `flex-basis`/`flex-grow`/`flex-shrink`; в grid — треками сетки.
+
+### Containing block
+
+**Containing block** (содержащий блок) — это прямоугольная область, относительно которой вычисляются размеры и позиция элемента. Для элементов в нормальном потоке containing block — это content-box ближайшего блочного предка. Но есть исключения:
+
+- Для элемента с `position: fixed` containing block — viewport.
+- Для элемента с `position: absolute` containing block — ближайший позиционированный предок (не `static`).
+- Для элемента с `position: absolute`, у которого предок имеет `transform`, `filter`, `perspective` или `contain: paint/layout`, containing block может стать этот предок, даже если у него `position: static`.
+
+```css
+.modal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: 400px;
+  height: 200px;
+}
+```
+
+Здесь `inset: 0` растягивает элемент до границ viewport, а `margin: auto` центрирует его по размерам `width`/`height`. containing block — viewport.
+
+### Margin collapse
+
+**Margin collapse** (схлопывание margin’ов) — одно из самых неочевидных поведений BFC. Вертикальные margin’ы соседних блочных элементов в одном BFC объединяются, и остаётся только больший из них.
+
+Схлопываются:
+
+- соседние блочные элементы;
+- margin родителя и первого/последнего потомка, если между ними нет padding, border или BFC;
+- пустые блочные элементы, если у них нет padding, border, height и min-height.
+
+Не схлопываются:
+
+- горизонтальные margin’ы;
+- margin’ы элементов в разных BFC;
+- margin’ы flex/grid-элементов;
+- margin’ы элементов с `position: absolute`/`fixed`;
+- margin’ы, у которых хотя бы один равен `auto`.
+
+```css
+/* Без схлопывания благодаря padding */
+.card {
+  padding-top: 1px;
+}
+
+.card h2 {
+  margin-top: 24px;
+}
+```
+
 ## Практические примеры
 
 ### Пример 1: центрирование через `position: absolute`
@@ -286,6 +404,61 @@ thead th {
 
 Несмотря на `position: fixed`, элемент `.fixed` будет позиционироваться относительно `.transformed`, а не viewport. Это одна из самых неприятных ловушек при работе с модальными окнами и поповерами.
 
+### Пример 6: BFC предотвращает обтекание float
+
+```html
+<div class="media">
+  <img class="avatar" src="avatar.png" alt="">
+  <div class="content">
+    <h3>Title</h3>
+    <p>Description</p>
+  </div>
+</div>
+```
+
+```css
+.avatar {
+  float: left;
+  width: 64px;
+  height: 64px;
+  margin-right: 16px;
+}
+
+.content {
+  display: flow-root; /* создаёт BFC */
+}
+```
+
+`.content` образует BFC и перестаёт обтекать float-аватарку. Текст внутри не залезет под изображение.
+
+### Пример 7: схлопывание margin’ов и его предотвращение
+
+```html
+<article>
+  <h2>Heading</h2>
+  <p>Paragraph</p>
+</article>
+```
+
+```css
+article {
+  background: #f3f4f6;
+}
+
+h2 {
+  margin-top: 32px;
+}
+```
+
+Без padding или border у `article` margin-top `h2` «выпадет» за пределы article, и визуально отступ появится сверху article, а не между article и h2. Решения:
+
+```css
+article {
+  background: #f3f4f6;
+  padding-top: 1px; /* или border-top, или display: flow-root */
+}
+```
+
 ## Типичные ошибки и антипаттерны
 
 - **Большие значения `z-index` как решение всех проблем.** Если элемент не перекрывает соседа, чаще всего дело в stacking context’е, а не в недостаточном `z-index`.
@@ -293,27 +466,30 @@ thead th {
 - **Использование `z-index` без позиционирования.** У `position: static` `z-index` не работает.
 - **Попытки вынести `fixed`-элемент за пределы трансформированного предка.** Любой предок с `transform`/`filter`/`perspective`/`contain` превращается в containing block для `fixed`.
 - **Sticky, который не работает из-за `overflow`.** Если все предки имеют `overflow: hidden` без прокрутки, sticky может не «прилипнуть».
-- **Путаница визуального и DOM-порядка.** `z-index` меняет только визуальное наложение; таб-фокус и скринридеры по-прежнему следуют DOM.
 - **Непонимание paint order.** Даже без `z-index` браузер рисует элементы в строгом порядке: фон, отрицательный `z-index`, поток, float, inline, позиционированные элементы, положительный `z-index`.
+- **Использование `overflow: hidden` для создания BFC.** Работает, но может обрезать контент и тени. `display: flow-root` — лучший выбор.
+- **Непонимание, почему margin «выпадает» из родителя.** Выпадение margin — нормальное поведение BFC, а не баг. Лечится padding, border или `display: flow-root`.
+- **Попытка схлопнуть margin’ы в flex/grid.** В flex- и grid-контекстах margin’ы не схлопываются — это ожидаемо.
 
 ## Ключевые тезисы для интервью
 
 - `position` бывает `static`, `relative`, `absolute`, `fixed`, `sticky`. Containing block для `absolute` — ближайший не-static предок или предок с `transform`/`filter`/`perspective`/`contain`; для `fixed` — обычно viewport, но `transform` у предка ломает это поведение.
-- `position: sticky` требует порога (`top`/`bottom`/`left`/`right`) и прокручиваемого предка; не работает, если предок имеет `overflow: hidden` или `overflow: scroll`.
-- Stacking context — изолированная группа слоёв; `z-index` работает только внутри одного контекста. Дочерний элемент не может перекрыть элемент за пределами stacking context'а своего родителя, даже с огромным `z-index`.
-- Stacking context создают: `z-index` у позиционированного элемента, `opacity < 1`, `transform`, `filter`, `isolation: isolate`, flex/grid-контейнер с `z-index` у детей, `contain: paint`, `will-change` с позиционированием.
+- `position: sticky` требует порога (`top`/`bottom`/`left`/`right`) и прокручиваемого предка; не работает, если предок имеет `overflow: hidden` без прокрутки.
+- Stacking context — изолированная группа слоёв; `z-index` работает только внутри одного контекста. Дочерний элемент не может перекрыть элемент за пределами stacking context'а своего родителя, даже с огромным `z-index`. Контекст создают `z-index` у позиционированного, `opacity < 1`, `transform`, `filter`, `isolation: isolate`, flex/grid-контейнер с `z-index` у детей, `contain: paint`, `will-change`.
 - Порядок отрисовки внутри stacking context: фон контекста → отрицательный `z-index` → поток → float → inline → позиционированные → положительный `z-index`.
-- `isolation: isolate` создаёт stacking context без побочных эффектов — чистый способ изолировать наложение, в отличие от `opacity` или `transform`.
+- `isolation: isolate` создаёт stacking context без побочных эффектов — чистый способ изолировать наложение.
+- Formatting context — область с едиными правилами раскладки: BFC (блочный), IFC (inline), FFC (flex), GFC (grid). BFC создаётся через `display: flow-root`, `overflow` не `visible`, `float`, `position: absolute/fixed` или flex/grid-контейнер; `flow-root` — современный способ без побочных эффектов.
+- Margin collapse работает только в BFC для соседних блоков и между родителем и крайними потомками; в flex/grid-контекстах margin'ы не схлопываются, а `z-index` работает без `position`.
 
 ## Заключение
 
-Позиционирование в CSS определяется двумя ортогональными механизмами: containing block задаёт систему координат, а stacking context — порядок наложения. Ошибки с `z-index` почти всегда объясняются не недостаточным значением, а неожиданным stacking context'ом у предка. `transform`/`filter` у родителя ломают `position: fixed`, превращая его в `absolute`. `isolation: isolate` — чистый способ создать stacking context без побочных эффектов. Понимание порядка отрисовки внутри контекста помогает предсказывать, почему один элемент перекрывает другой.
+Позиционирование в CSS определяется двумя ортогональными механизмами: containing block задаёт систему координат, а stacking context — порядок наложения. Ошибки с `z-index` почти всегда объясняются не недостаточным значением, а неожиданным stacking context'ом у предка. `transform`/`filter` у родителя ломают `position: fixed`, превращая его в `absolute`. Formatting contexts — основа предсказуемого поведения: BFC изолирует блоки, устраняет обтекание float и предотвращает выпадение margin'ов, а `display: flow-root` — современный способ его создать без побочных эффектов. Понимание порядка отрисовки и margin collapse помогает предсказывать, почему один элемент перекрывает другой и откуда берутся «неожиданные» отступы.
 
 ## Полезные ссылки
 
 - [Positioning](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Positioning)
 - [The stacking context](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_context)
 - [z-index](https://developer.mozilla.org/en-US/docs/Web/CSS/z-index)
-- [Stacking without z-index](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_without_z-index)
-- [Stacking with floated blocks](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_positioned_layout/Understanding_z-index/Stacking_and_float)
-- [CSS Positioned Layout Module Level 3](https://www.w3.org/TR/css-position-3/)
+- [Block formatting context](https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context)
+- [Containing block](https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block)
+- [Mastering margin collapsing](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model/Mastering_margin_collapsing)

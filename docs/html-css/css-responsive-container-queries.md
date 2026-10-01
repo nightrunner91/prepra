@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Media queries, container queries, viewport units и `prefers-*`"
 section: html-css
 description: "Адаптивность изначально строилась вокруг viewport: ширина экрана определяла, как выглядит интерфейс. Но в компонентной эре этого недостаточно: один и тот же компонент может жить и в узком сайдбаре,..."
-order: 8
+order: 5
 tags: ["media-queries", "container-queries", "viewport-units", "container-type", "prefers-color-scheme"]
 questions:
   - "Чем container queries отличаются от media queries и когда какой подход предпочтительнее"

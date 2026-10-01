@@ -1,41 +1,44 @@
-﻿---
-title: "Парсинг HTML и критический путь рендеринга"
+---
+title: "Парсинг HTML, критический путь рендеринга и производительность CSS"
 section: html-css
-description: "Эта статья разбирает, как браузер превращает скачанные байты в пиксели на экране. Понимание pipeline нужно не для того, чтобы заучивать термины, а чтобы объяснять, почему одни изменения тормозят ст..."
-order: 12
-tags: ["dom", "cssom", "critical-rendering-path", "reflow", "compositor"]
+description: "Как браузер превращает байты в пиксели: парсинг HTML, DOM/CSSOM, Render Tree, Layout, Paint, Composite. И как писать анимации через transform/opacity, чтобы не тормозить страницу: will-change, contain, content-visibility, prefers-reduced-motion."
+order: 8
+tags: ["rendering-pipeline", "critical-rendering-path", "cssom", "compositor", "animations", "will-change"]
 questions:
   - "Каковы этапы превращения HTML в пиксели: парсинг, DOM, CSSOM, Render Tree, layout, paint, composite"
   - "Что такое preload scanner и как он ускоряет загрузку ресурсов, пока основной парсер заблокирован"
   - "Почему браузер должен получить весь CSS перед построением Render Tree и как это влияет на критический путь"
   - "Как `defer` и `async` влияют на порядок выполнения скриптов и парсинг DOM"
-  - "Чем отличаются layout, paint и composite по стоимости и какие свойства вызывают каждую фазу"
+  - "Чем отличаются layout, paint и composite по стоимости и почему `transform`/`opacity` анимируются плавно, а `width`/`top` вызывают jank"
   - "Что такое forced synchronous layout и почему чтение геометрии после изменения стилей вызывает jank"
-  - "Как оптимизировать критический путь рендеринга: inline-критический CSS, `defer`/`async`, предзагрузка шрифтов"
+  - "Чем `transition` отличается от `animation` с `@keyframes` и когда что использовать"
+  - "Что произойдёт, если злоупотребить `will-change`, и как `contain: layout paint` и `content-visibility: auto` помогают ограничить перерисовку"
 answers:
   - "HTML токенизируется и строится в DOM, CSS — в CSSOM, из них формируется Render Tree (DOM + CSSOM минус невидимые узлы), затем layout вычисляет геометрию, paint растеризует пиксели, composite собирает слои на GPU; парсинг/layout/paint идут на main thread, а сборка слоёв и анимации `transform`/`opacity` — на compositor thread."
   - "Основной HTML-парсер синхронный: встретив `<script>` без `defer`/`async`, он выполняет его и не продолжает строить DOM; параллельный лёгкий preload scanner бежит вперёд по сырому HTML, находит `<img>`, `<link rel=\"stylesheet\">`, скрипты и запрашивает их заранее, не теряя время на сетевые задержки — при этом он не строит DOM и не выполняет JS."
   - "CSSOM не может быть частичным — одно правило в конце файла может переопределить всё в начале, поэтому `<link rel=\"stylesheet\">` блокирует построение Render Tree; блокирующий CSS и синхронные скрипты — главные ресурсы критического пути, их уменьшение или inline ускоряет First Contentful Paint."
   - "Скрипт без атрибутов блокирует парсинг DOM, пока не выполнится; `async` скачивается параллельно и выполняется сразу по загрузке без сохранения порядка, а `defer` тоже скачивается параллельно, но выполняется после полного парсинга DOM в порядке объявления — для скриптов, не нужных до рендера, предпочтителен `defer`."
-  - "Layout (reflow) — самая дорогая фаза: пересчёт геометрии всего зависимого дерева при изменении `width`/`height`/`top`/`font-size`/`display`; paint (repaint) дешевле — растрирование при изменении `color`/`box-shadow`/`border-radius`; composite дешевле всего — сборка готовых слоёв на GPU при изменении `transform`/`opacity`, без layout и paint."
+  - "Layout (reflow) — самая дорогая фаза: пересчёт геометрии всего зависимого дерева при изменении `width`/`height`/`top`/`font-size`/`display`; paint (repaint) дешевле — растрирование при изменении `color`/`box-shadow`/`border-radius`; composite дешевле всего — сборка готовых слоёв на GPU при изменении `transform`/`opacity`, без layout и paint. Поэтому `transform` и `opacity` остаются плавными даже под нагрузкой JS, а `width` и `top` каждый кадр пересчитывают layout всего зависимого дерева на main thread."
   - "Браузер откладывает пересчёт до конца кадра, но если скрипт читает `offsetWidth`/`getBoundingClientRect()`/`scrollTop` после записи стилей, он вынужден синхронно выполнить layout — в цикле запись+чтение даёт layout на каждой итерации (layout thrashing); решение — сначала прочитать все значения, потом писать."
-  - "Критический CSS для первого экрана встраивают inline (`<style>`), а основной CSS загружают асинхронно через `preload` + `rel=\"stylesheet\"`; скрипты — `defer`/`async`; шрифтам задают `font-display: swap`/`optional`, чтобы текст не блокировался до загрузки (`block` держит его до 3 секунд)."
+  - "`transition` интерполирует значение между двумя состояниями только при изменении computed value (если свойство не изменилось — анимации не будет), а `animation` с `@keyframes` описывает многошаговые циклы, управляемые независимо от состояния элемента — для циклических сценариев и fill-mode."
+  - "Каждый `will-change` создаёт отдельный compositor layer, расходующий память, поэтому включают его по триггеру и убирают после анимации (`will-change: auto`); `contain: layout paint` изолирует элемент, и перерисовка внутри него не затрагивает соседей. `content-visibility: auto` пропускает layout и paint для элементов вне viewport, ускоряя первичный рендер длинных списков, а `contain-intrinsic-size` задаёт примерный размер плейсхолдера, чтобы скроллбар не прыгал при подгрузке контента."
 ---
 
-# Парсинг HTML и критический путь рендеринга
+# Парсинг HTML, критический путь рендеринга и производительность CSS
 
-Эта статья разбирает, как браузер превращает скачанные байты в пиксели на экране. Понимание pipeline нужно не для того, чтобы заучивать термины, а чтобы объяснять, почему одни изменения тормозят страницу, а другие — почти бесплатны, и как оптимизировать первую отрисовку.
+Эта статья разбирает, как браузер превращает скачанные байты в пиксели на экране. Понимание pipeline нужно не для того, чтобы заучивать термины, а чтобы объяснять, почему одни изменения тормозят страницу, а другие — почти бесплатны, как оптимизировать первую отрисовку и почему анимации через `transform`/`opacity` плавные, а через `width`/`top` — нет.
 
 > Вся описанная ниже работа происходит внутри **Renderer Process** браузера. Парсинг HTML, построение DOM/CSSOM, layout и paint выполняются на **Main Thread**, а финальная сборка и анимация слоёв — на **Compositor Thread** с участием GPU. Подробнее об архитектуре процессов и потоков — в статье [Браузерная архитектура: процессы, потоки, сеть](../performance/browser-architecture.md).
 
 ## Содержание
 
 1. [Глубокий разбор](#глубокий-разбор)
-2. [Практические примеры](#практические-примеры)
-3. [Типичные ошибки и антипаттерны](#типичные-ошибки-и-антипаттерны)
-4. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
-5. [Заключение](#заключение)
-6. [Полезные ссылки](#полезные-ссылки)
+2. [Анимации и производительность CSS](#анимации-и-производительность-css)
+3. [Практические примеры](#практические-примеры)
+4. [Типичные ошибки и антипаттерны](#типичные-ошибки-и-антипаттерны)
+5. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+6. [Заключение](#заключение)
+7. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -148,6 +151,199 @@ boxes.forEach((box, i) => {
 });
 ```
 
+## Анимации и производительность CSS
+
+### Transitions
+
+**Transition** (переход) плавно меняет значение CSS-свойства между двумя состояниями при изменении условий. Срабатывает, когда браузер может интерполировать начальное и конечное значение.
+
+```css
+.button {
+  background: #3b82f6;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background: #2563eb;
+  transform: scale(1.02);
+}
+```
+
+Ключевые подсвойства:
+
+- `transition-property` — какие свойства анимируются.
+- `transition-duration` — длительность.
+- `transition-timing-function` — кривая ускорения.
+- `transition-delay` — задержка перед стартом.
+
+Transition запускается только на изменении вычисленного значения. Если свойство не изменилось (например, элемент уже имел нужный класс при загрузке), анимации не будет.
+
+### Animations и `@keyframes`
+
+**CSS animations** позволяют описывать многошаговые анимации через `@keyframes` и управлять ими независимо от состояния элемента.
+
+```css
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.badge {
+  animation: pulse 2s ease-in-out infinite;
+}
+```
+
+Ключевые свойства:
+
+- `animation-name` — имя keyframes.
+- `animation-duration` — длительность цикла.
+- `animation-timing-function` — кривая.
+- `animation-delay` — задержка.
+- `animation-iteration-count` — количество повторов (`1`, `2`, `infinite`).
+- `animation-direction` — направление (`normal`, `reverse`, `alternate`).
+- `animation-fill-mode` — как применяются стили до/после анимации (`forwards`, `backwards`, `both`).
+- `animation-play-state` — `running` или `paused`.
+
+`animation-fill-mode: forwards` полезна, когда финальное состояние анимации должно остаться после завершения. `both` применяет стили и до старта, и после финиша.
+
+### Как браузер рисует анимацию
+
+Браузер проходит несколько этапов при каждом кадре:
+
+1. **Style** — пересчёт стилей, если что-то изменилось.
+2. **Layout** — расчёт геометрии: размеров и положения элементов.
+3. **Paint** — отрисовка пикселей: текста, фона, теней, рамок.
+4. **Composite** — сборка слоёв в финальную картинку.
+
+Анимации разных свойств затрагивают разные этапы:
+
+| Свойство | Этапы | Производительность |
+|----------|-------|-------------------|
+| `transform`, `opacity` | Composite | Лучшая |
+| `color`, `background-color`, `box-shadow` | Paint | Средняя |
+| `width`, `height`, `top`, `left`, `margin` | Layout + Paint + Composite | Худшая |
+| `filter` (кроме `opacity` внутри) | Paint/Composite | Зависит от фильтра |
+
+Чем больше этапов задействовано, тем дороже анимация. Layout — самый дорогой, потому что вынуждает пересчитывать геометрию всего дерева, которое зависит от изменившегося элемента.
+
+### Composite-only свойства
+
+**Compositor-only properties** — свойства, которые могут быть обработаны compositor thread без участия main thread. К ним относятся прежде всего:
+
+- `transform` (translate, scale, rotate)
+- `opacity`
+
+Compositor thread отвечает за сборку финального кадра из заранее подготовленных слоёв. Анимации на этом потоке не блокируются JavaScript, layout и paint, поэтому они плавные даже под нагрузкой.
+
+```css
+/* Хорошо: анимация только compositor */
+.card {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  opacity: 0.9;
+}
+```
+
+По возможности анимации перемещения стоит делать через `transform: translateX(...)`, а не `left`/`margin-left`. Изменение `left` вынуждает браузер делать layout на каждом кадре.
+
+### `will-change`
+
+**`will-change`** — подсказка браузеру, что элемент скоро будет анимироваться, и стоит подготовить отдельный слой или другие ресурсы.
+
+```css
+.slider-thumb {
+  will-change: transform;
+}
+```
+
+Важные нюансы:
+
+- `will-change` создаёт отдельный compositor layer, что расходует память. Слишком много слоёв может привести к out-of-memory на слабых устройствах.
+- Не стоит вешать `will-change` на все элементы заранее. Лучше добавлять перед анимацией и убирать после.
+- Значение `will-change: auto` снимает оптимизацию.
+- Некоторые свойства вроде `will-change: width` заставляют браузер держать элемент на main thread, поэтому пользы мало.
+
+Рекомендуемый паттерн — включать `will-change` по триггеру, а не держать постоянно:
+
+```css
+.card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  will-change: transform;
+  transform: scale(1.02);
+}
+```
+
+### CSS containment: `contain`
+
+**Containment** (изоляция) ограничивает область влияния элемента, позволяя браузеру оптимизировать рендеринг. Свойство `contain` принимает значения:
+
+- `layout` — внутреннее расположение элементов не влияет наружу, и наоборот.
+- `paint` — дети не могут выходить за границы элемента; браузер может рисовать их в отдельный слой.
+- `size` — размеры элемента не зависят от детей.
+- `style` — счётчики и quote-свойства изолированы.
+- `content` — комбинация `layout paint style`.
+- `strict` — комбинация `layout paint size style`.
+
+```css
+.widget {
+  contain: layout paint;
+}
+```
+
+Для анимаций `contain: paint` особенно полезен: он гарантирует, что перерисовка ограничится элементом и не затронет соседей.
+
+### `content-visibility` для долгих списков
+
+**`content-visibility: auto`** позволяет пропускать layout и paint для элементов, находящихся вне viewport. Это сильно ускоряет первоначальный рендеринг больших списков и страниц.
+
+```css
+.card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 200px;
+}
+```
+
+`contain-intrinsic-size` задаёт примерный размер элемента, чтобы скроллбар не прыгал при подгрузке контента.
+
+### `prefers-reduced-motion`
+
+Пользователи могут отключать анимации в системе. Через медиа-запрос `prefers-reduced-motion` можно адаптировать интерфейс:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+Но глобальный сброс ломает анимации, которые несут смысл: загрузка, открытие модалки, переключение состояний. Лучше отключать конкретные анимации:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  .carousel-slide {
+    transition: none;
+    animation: none;
+  }
+}
+```
+
 ## Практические примеры
 
 ### Пример 1: скрипт блокирует отрисовку
@@ -213,26 +409,86 @@ boxes.forEach((box, i) => {
 
 `transform` и `opacity` анимируются на этапе composite, не трогая layout и paint. Это самый производительный вид анимации.
 
+### Пример 4: перемещение через `transform`
+
+```html
+<div class="box"></div>
+```
+
+```css
+.box {
+  width: 100px;
+  height: 100px;
+  background: #3b82f6;
+  transition: transform 0.3s ease;
+}
+
+.box:hover {
+  transform: translateX(100px);
+}
+```
+
+Перемещение через `transform` работает на compositor thread и не вызывает layout. В отличие от `left: 100px`, здесь не пересчитывается геометрия соседей.
+
+### Пример 5: правильное использование `will-change`
+
+```css
+.modal {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.modal.is-open {
+  will-change: transform, opacity;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.modal.is-open.is-settled {
+  will-change: auto;
+}
+```
+
+После завершения анимации класс `is-settled` убирает `will-change`, освобождая ресурсы compositor layer.
+
+### Пример 6: `content-visibility` для ленты
+
+```css
+.feed-item {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 300px;
+}
+```
+
+Элементы ленты, находящиеся вне viewport, не участвуют в layout и paint до появления на экране.
+
 ## Типичные ошибки и антипаттерны
 
 - **Скрипты в `<head>` без `defer`/`async`/`type="module"`.** Блокируют парсинг DOM и откладывают первую отрисовку. Исключение — скрипты, которые действительно нужны до рендера.
 - **Чтение `offsetWidth` в цикле после записи стилей.** Вынуждает браузер делать layout на каждой итерации. Сначала читай, потом пиши.
-- **Анимация `width`/`height`/`top`/`left`.** Вместо этого используй `transform`, если позволяет дизайн.
-- **`will-change` на всё подряд.** Создаёт лишние слои и жрёт память. Добавляй только перед анимацией и убирай после.
+- **Анимация `width`/`height`/`top`/`left`/`margin` вместо `transform`.** Эти свойства вызывают layout на каждом кадре и часто приводят к dropped frames.
+- **Постоянное `will-change` на всех элементах.** Создаёт лишние compositor-слои, жрёт память и может замедлить рендеринг на слабых устройствах.
 - **Гигантские CSS-файлы на критическом пути.** Браузер не начнёт рендер, пока не получит весь CSS. Разделяй критический и некритический CSS.
 - **Игнорирование `font-display`.** `swap` показывает fallback-шрифт сразу, `block` блокирует текст до 3 секунд. Для контента первого экрана чаще выбирают `swap` или `optional`.
+- **Игнорирование `prefers-reduced-motion`.** Для многих пользователей анимации вызывают головокружение; системная настройка должна уважаться. Отключать конкретные анимации, а не все разом.
+- **Анимация `box-shadow` на больших площадях.** `box-shadow` рисуется на каждом кадре и часто дорог в paint.
+- **Использование `@keyframes` там, где достаточно `transition`.** Animation удобна для циклических или многошаговых сценариев; для простых состояний проще и понятнее transition.
+- **Отсутствие `contain-intrinsic-size` с `content-visibility: auto`.** Без него скроллбар может менять размеры при подгрузке элементов.
 
 ## Ключевые тезисы для интервью
 
 - Парсер HTML синхронный, но preload scanner асинхронно находит ресурсы впереди, пока основной парсер заблокирован скриптом — это ускоряет загрузку CSS, шрифтов и других скриптов.
-- CSSOM строится только после получения всего CSS, поэтому `<link rel="stylesheet">` блокирует Render Tree; Render Tree = DOM + CSSOM минус невидимые узлы — он нужен для layout, paint и composite.
-- Критический путь рендеринга — это минимум ресурсов, блокирующих первую отрисовку. Оптимизируют через `defer`/`async` для скриптов, inline-критический CSS, предзагрузку шрифтов и уменьшение количества скриптов.
-- Layout — самая дорогая фаза (пересчёт геометрии), paint — дешевле (заполнение пикселей), composite — дешевле всего (сборка слоёв). `transform` и `opacity` анимируются на composite, поэтому плавные.
-- Чтение геометрии (`offsetWidth`, `getBoundingClientRect()`) после изменения стилей вызывает forced synchronous layout — браузер вынужден синхронно пересчитать layout, что является главным источником jank в JS-анимациях.
+- CSSOM строится только после получения всего CSS, поэтому `<link rel="stylesheet">` блокирует Render Tree; Render Tree = DOM + CSSOM минус невидимые узлы. Критический путь рендеринга оптимизируют через `defer`/`async` для скриптов, inline-критический CSS и предзагрузку шрифтов.
+- Layout — самая дорогая фаза (пересчёт геометрии), paint — дешевле (заполнение пикселей), composite — дешевле всего (сборка слоёв на GPU). `transform` и `opacity` анимируются на compositor thread, поэтому плавные, а `width`/`top` каждый кадр пересчитывают layout на main thread.
+- Чтение геометрии (`offsetWidth`, `getBoundingClientRect()`) после изменения стилей вызывает forced synchronous layout — главный источник jank в JS-анимациях; лечится разделением чтения и записи.
+- `transition` интерполирует между двумя состояниями; `animation` с `@keyframes` — для многошаговых и циклических сценариев.
+- `will-change` подсказывает браузеру подготовить отдельный слой, но каждый слой расходует память; `contain: layout paint` изолирует область перерисовки, а `content-visibility: auto` пропускает рендеринг вне viewport — все три применяют точечно.
+- `prefers-reduced-motion: reduce` нужно уважать: отключать конкретные анимации (transition, animation), а не все эффекты подряд.
 
 ## Заключение
 
-Парсинг HTML — синхронный процесс, ускоренный preload scanner'ом. CSS и синхронные скрипты блокируют первую отрисовку: CSSOM требует полного получения CSS, а скрипты без `defer`/`async` — выполнения до продолжения парсинга. Понимание трёх фаз (layout, paint, composite) позволяет писать анимации через `transform`/`opacity`, избегая дорогого layout. Forced synchronous layout — главная причина jank при DOM-манипуляциях: разделяй чтение и запись геометрии.
+Парсинг HTML — синхронный процесс, ускоренный preload scanner'ом. CSS и синхронные скрипты блокируют первую отрисовку: CSSOM требует полного получения CSS, а скрипты без `defer`/`async` — выполнения до продолжения парсинга. Понимание трёх фаз (layout, paint, composite) позволяет писать анимации через `transform`/`opacity`, избегая дорогого layout. `will-change`, `contain` и `content-visibility` помогают браузеру оптимизировать перерисовку, но каждый слой стоит памяти, поэтому их используют точечно. Forced synchronous layout — главная причина jank при DOM-манипуляциях: разделяй чтение и запись геометрии. И уважайте `prefers-reduced-motion` — анимации должны помогать, а не создавать дискомфорт.
 
 Чтобы понять, где физически выполняется весь этот пайплайн — какие процессы и потоки браузера за него отвечают — смотри статью [Браузерная архитектура: процессы, потоки, сеть](../performance/browser-architecture.md).
 
@@ -243,3 +499,11 @@ boxes.forEach((box, i) => {
 - [Critical Rendering Path](https://developer.chrome.com/docs/devtools/performance/critical-rendering-path/) (Chrome DevTools)
 - [Rendering Performance](https://web.dev/articles/rendering-performance)
 - [Avoid forced synchronous layout](https://web.dev/articles/avoid-large-complex-layouts-and-layout-thrashing)
+- [Using CSS transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_transitions/Using_CSS_transitions)
+- [Using CSS animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations)
+- [will-change](https://developer.mozilla.org/en-US/docs/Web/CSS/will-change)
+- [contain](https://developer.mozilla.org/en-US/docs/Web/CSS/contain)
+- [content-visibility](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility)
+- [CSS Triggers](https://csstriggers.com/)
+- [High performance animations](https://web.dev/articles/animations-overview)
+- [prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion)

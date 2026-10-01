@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Семантический HTML, landmarks и доступность"
 section: html-css
 description: "Семантика — это не про то, чтобы заменить `div` на `section` ради красивого слова. Это про контракт между разметкой и вспомогательными технологиями: скринридерами, поисковиками, клавиатурной навига..."
-order: 13
+order: 6
 tags: ["semantics", "accessibility", "aria", "landmarks", "focus-management"]
 questions:
   - "Что такое семантический HTML и почему нативные элементы (`<button>`, `<a href>`) лучше `div` с ARIA-ролями"

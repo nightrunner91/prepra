@@ -1,32 +1,24 @@
 # HTML и CSS
 
-Раздел углубляет понимание браузерного фундамента: как HTML и CSS работают под капотом, как строится страница, как устроены раскладки и современные механизмы стилизации.
+Раздел закрывает браузерный фундамент, который реально проверяют на собеседованиях: как HTML и CSS работают под капотом, как строится страница, как устроены раскладки и подходы к стилизации в современном вебе.
 
 ## Начни с базы
 
-Если хочешь закрыть пробелы в фундаменте — иди по порядку:
-
-1. **[Основы HTML и CSS](./fundamentals.md)** — семантическая разметка, селекторы, box model, flexbox, grid, позиционирование, адаптивная вёрстка. Самая база для начинающих.
-2. **[Каскад и специфичность](./css-cascade-specificity.md)** — cascade, origin, `@layer`, specificity, inheritance, `!important`.
-3. **[Flexbox](./css-flexbox.md)** — оси, `flex-basis`, grow/shrink, alignment.
-4. **[Grid](./css-grid.md)** — explicit/implicit, `fr`, `minmax`, `auto-fit`/`auto-fill`, subgrid.
-5. **[Позиционирование и stacking context](./css-positioning-stacking.md)** — positioning, stacking context, z-index, paint order.
+1. **[Основы HTML и CSS](./fundamentals.md)** — структура документа, семантическая разметка, селекторы, box model, display. Точка входа в раздел.
+2. **[Каскад и специфичность](./css-cascade-specificity.md)** — cascade, origin, `@layer`, specificity, inheritance, `!important`, современные селекторы `:is`/`:where`/`:has`/`:not`, nesting, logical properties.
+3. **[Flexbox и Grid](./css-layout.md)** — оси и распределение пространства в Flexbox, треки и `fr`/`minmax`/`subgrid` в Grid, правила выбора между ними.
+4. **[Positioning, stacking context и formatting contexts](./css-positioning-stacking.md)** — позиционирование, z-index, paint order, BFC/IFC/FFC/GFC, containing block, margin collapse.
 
 ## Углубись в детали
 
-После базы переходи к глубоким и прикладным темам:
-
-- **[Парсинг HTML и критический путь рендеринга](./html-rendering-pipeline.md)** — DOM/CSSOM/Render Tree, Layout/Paint/Composite, preload scanner.
-- **[Formatting контексты и блочная модель](./css-layout-formatting-contexts.md)** — BFC/IFC/FFC/GFC, containing block, margin collapse, box-sizing.
-- **[Семантический HTML и доступность](./html-semantics-accessibility.md)** — landmarks, default ARIA roles, доступность.
-- **[Формы и валидация](./html-forms-validation.md)** — Constraint Validation API, `ElementInternals`, custom elements.
-- **[Web Components](./html-web-components.md)** — custom elements, Shadow DOM, slots, lifecycle callbacks.
 - **[Адаптивность и container queries](./css-responsive-container-queries.md)** — media queries, container queries, viewport units, `prefers-*`.
-- **[Анимации и производительность](./css-animations-performance.md)** — transitions/animations, composite-only свойства, `will-change`, `contain`.
-- **[CSS-переменные и архитектура](./css-variables-architecture.md)** — custom properties, theming, BEM/CUBE/layers, CSS Modules vs CSS-in-JS.
-- **[Современные селекторы и возможности CSS](./css-modern-selectors.md)** — `:is`/`:where`/`:has`/`:not`, nesting, logical properties, color spaces.
-- **[Способы применения CSS в клиентских приложениях](./css-styling-approaches.md)** — разбор подходов применения CSS в современном вебе.
+- **[Семантический HTML и доступность](./html-semantics-accessibility.md)** — landmarks, default ARIA roles, доступность.
+- **[Формы и валидация](./html-forms-validation.md)** — Constraint Validation API, `:user-valid`/`:user-invalid`, событие `formdata`, кратко про `ElementInternals`.
+- **[Парсинг HTML и производительность CSS](./html-rendering-pipeline.md)** — критический путь рендеринга, Layout/Paint/Composite, анимации через `transform`/`opacity`, `will-change`, `contain`, `content-visibility`.
+- **[Способы применения CSS, токены и архитектура](./css-styling-approaches.md)** — CSS Modules, CSS-in-JS, Tailwind, custom properties, дизайн-токены, BEM/CUBE/ITCSS, `@layer`.
 
 ## Не будет лишним
 
-_Нет статей в этой категории — всё перечисленное выше относится к обязательному минимуму раздела._
+- Container queries (внутри статьи про адаптивность) — знать, что это, но вряд ли спросят в деталях.
+- Shadow DOM и `@scope` (внутри статьи про способы применения CSS) — достаточно уровня «что это и зачем».
+- `ElementInternals` (внутри статьи про формы) — нишевый сценарий для библиотек компонентов.
