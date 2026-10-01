@@ -2,7 +2,7 @@
 title: "Коллекции, итераторы, генераторы"
 section: javascript
 description: "Помимо обычных объектов и массивов, в JavaScript есть специализированные коллекции — `Map`, `Set`, `WeakMap`, `WeakSet` — и механизм итераторов, который объединяет массивы, строки, `Map`, `Set` и п..."
-order: 3
+order: 10
 tags: ["map", "set", "weakmap", "symbol-iterator", "generators"]
 questions:
   - "Чем `Map` отличается от обычного объекта"

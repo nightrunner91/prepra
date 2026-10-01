@@ -2,7 +2,7 @@
 title: "Прототипы и классы"
 section: javascript
 description: "JavaScript — язык с **прототипным наследованием**, а не классовым, как Java или C++. Даже синтаксис `class` из ES6 — это «синтаксический сахар» над прототипами. На собеседованиях часто спрашивают и..."
-order: 9
+order: 8
 tags: ["prototype-chain", "object-create", "class", "extends", "instanceof", "private-fields"]
 questions:
   - "Как работает цепочка прототипов"

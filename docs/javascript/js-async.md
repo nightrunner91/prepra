@@ -2,7 +2,7 @@
 title: "Асинхронность: Promise, async/await"
 section: javascript
 description: "JavaScript — однопоточный язык, но большая часть реальных задач требует асинхронности: сетевые запросы, таймеры, работа с файлами, события пользователя. Современный способ работать с асинхронностью..."
-order: 1
+order: 6
 tags: ["асинхронность", "promise", "asyncawait"]
 questions:
   - "В чём разница между `Promise.all` и `Promise.race`"

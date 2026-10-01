@@ -2,7 +2,7 @@
 title: "Область видимости и hoisting"
 section: javascript
 description: "Область видимости (scope) определяет, где переменная доступна, а hoisting — как движок обрабатывает объявления до выполнения кода. Эти механизмы объясняют множество «странных» примеров на собеседов..."
-order: 11
+order: 3
 tags: ["hoisting", "tdz", "lexical-environment", "scope-chain", "var-let-const", "function-declaration"]
 questions:
   - "В чём разница `var`/`let`/`const` на уровне движка"

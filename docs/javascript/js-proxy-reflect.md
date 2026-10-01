@@ -2,7 +2,7 @@
 title: "Proxy и Reflect"
 section: javascript
 description: "`Proxy` позволяет перехватывать и переопределять базовые операции над объектами: чтение свойств, запись, удаление, вызов функций, создание через `new` и другие. `Reflect` — это встроенный объект с ..."
-order: 10
+order: 11
 tags: ["proxy", "reflect", "traps", "receiver", "reactivity", "vue"]
 questions:
   - "Что такое `Proxy` и для чего применяется"

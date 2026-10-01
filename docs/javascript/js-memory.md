@@ -2,7 +2,7 @@
 title: "Память и производительность"
 section: javascript
 description: "JavaScript управляет памятью автоматически: программисту не нужно вручную выделять и освобождать её, как в C или C++. Однако автоматическое управление не освобождает от ответственности. Неправильна..."
-order: 7
+order: 13
 tags: ["garbage-collection", "mark-and-sweep", "memory-leaks", "weakref", "heap", "devtools"]
 questions:
   - "Как JavaScript управляет памятью: стек, куча, сборка мусора"

@@ -2,7 +2,7 @@
 title: "Функциональное программирование"
 section: javascript
 description: "Функциональное программирование (ФП) — это парадигма, в которой вычисления строятся из функций, а не из изменяемого состояния. JavaScript не является чисто функциональным языком, но заимствует у ФП..."
-order: 6
+order: 12
 tags: ["pure-functions", "immutability", "reduce", "currying", "composition", "debounce"]
 questions:
   - "Что такое чистая функция и почему она предсказуема"
