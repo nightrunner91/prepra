@@ -2,7 +2,7 @@
 title: "Хук use(): разворачивание Promise и Context в React 19"
 section: react
 description: "Единственный хук React, который можно вызывать условно. Читает Promise и Context прямо в теле компонента, интегрируется с Suspense и Error Boundaries. Паттерны, ограничения и антипаттерны."
-order: 11
+order: 13
 tags: ["use", "promise", "context", "suspense", "error-boundary", "render-as-you-fetch"]
 questions:
   - "Что делает хук use() и какие два типа аргументов он принимает"

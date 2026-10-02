@@ -2,7 +2,7 @@
 title: "useImperativeHandle: императивный API компонента через ref"
 section: react
 description: "Хук для определения публичного API дочернего компонента, доступного через ref. Связка с forwardRef, зависимости, React 19 с ref как пропом, TypeScript-типизация и аналог defineExpose из Vue."
-order: 12
+order: 14
 tags: ["useimperativehandle", "forwardref", "ref", "defineexpose", "imperative-handle"]
 questions:
   - "Для каких сценариев нужен useImperativeHandle"

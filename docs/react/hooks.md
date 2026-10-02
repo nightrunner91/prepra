@@ -2,7 +2,7 @@
 title: "Хуки React: useState, useEffect, useReducer и пользовательские хуки"
 section: react
 description: "Фундаментальная концепция React для работы с состоянием, побочными эффектами и контекстом в функциональных компонентах. Разбор ключевых встроенных хуков, правил вызова и типичных ошибок."
-order: 6
+order: 2
 tags: ["hooks", "usestate", "useeffect", "usereducer", "usememo", "usecallback"]
 questions:
   - "Чем useRef отличается от useState: когда изменение не вызывает ререндер"

@@ -2,7 +2,7 @@
 title: "Мемоизация в React: useMemo, useCallback и React.memo"
 section: react
 description: "Три механизма оптимизации производительности — useMemo, useCallback и React.memo — избегают повторных вычислений и ререндеров. Типичные ошибки, цепочка мемоизации и React Compiler."
-order: 7
+order: 8
 tags: ["memoization", "usememo", "usecallback", "react-memo", "react-compiler"]
 questions:
   - "Что такое мемоизация и зачем она нужна в React"

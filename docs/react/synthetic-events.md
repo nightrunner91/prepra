@@ -2,7 +2,7 @@
 title: "Синтетические события в React"
 section: react
 description: "Кросс-браузерная обёртка React над нативными DOM-событиями с единым API. Делегирование событий, эволюция от React 16 до 17+, приоритеты в Concurrent Mode и отличия от Vue."
-order: 10
+order: 7
 tags: ["synthetic-event", "event-delegation", "event-pooling", "concurrent-mode", "nativeevent"]
 questions:
   - "Что такое SyntheticEvent и чем отличается от нативного события"

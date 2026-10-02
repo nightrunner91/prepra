@@ -2,7 +2,7 @@
 title: "Порядок рендеринга компонентов и вызова хуков в React"
 section: react
 description: "Порядок рендеринга сверху вниз, вызов хуков по порядку написания, эффекты снизу вверх. Render Phase, Commit Phase, StrictMode и практические следствия для предсказуемого кода."
-order: 8
+order: 5
 tags: ["rendering-order", "hooks-order", "commit-phase", "useeffect", "uselayouteffect"]
 questions:
   - "В каком порядке React рендерит компоненты: сверху вниз или снизу вверх"

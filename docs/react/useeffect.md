@@ -2,7 +2,7 @@
 title: "useEffect: побочные эффекты, зависимости и cleanup"
 section: react
 description: "Хук для побочных эффектов в React: API-запросы, подписки, работа с DOM, таймеры. Механика работы, массив зависимостей, cleanup-функция, сравнение с useLayoutEffect и Vue-аналогами."
-order: 14
+order: 3
 tags: ["useeffect", "uselayouteffect", "side-effects", "cleanup", "exhaustive-deps"]
 questions:
   - "Когда срабатывает useEffect и чем отличается от useLayoutEffect"

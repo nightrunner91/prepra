@@ -2,7 +2,7 @@
 title: "Error Boundary в React"
 section: react
 description: "Механизм перехвата ошибок рендеринга в дереве компонентов, логирования и отображения fallback UI. Нативная реализация через класс, библиотека react-error-boundary и практические паттерны."
-order: 3
+order: 6
 tags: ["error-boundary", "react-error-boundary", "fallback", "getderivedstatefromerror", "componentdidcatch"]
 questions:
   - "Что такое Error Boundary и зачем он нужен"

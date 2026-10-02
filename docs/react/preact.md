@@ -2,7 +2,7 @@
 title: "Preact: лёгкая альтернатива React"
 section: react
 description: "Preact — компактный рантайм с API React. Разбираем отличия, preact/compat, Signals и сценарии, где Preact уместнее React."
-order: 15
+order: 16
 tags: ["preact", "react", "preact-compat", "signals", "bundle-size"]
 questions:
   - "Чем Preact отличается от React по размеру и внутренней архитектуре"

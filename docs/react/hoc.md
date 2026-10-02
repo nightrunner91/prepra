@@ -2,7 +2,7 @@
 title: "HOC: паттерн обёрток, композиция и сравнение с хуками"
 section: react
 description: "Higher-Order Component — классический паттерн React для переиспользования логики. Функция, принимающая компонент и возвращающая новый. Реальные примеры, композиция, подводные камни и сравнение с хуками."
-order: 5
+order: 10
 tags: ["hoc", "higher-order-components", "react-memo", "forwardref", "compose"]
 questions:
   - "Что такое HOC и какую задачу он решает"

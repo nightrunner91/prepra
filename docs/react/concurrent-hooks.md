@@ -2,7 +2,7 @@
 title: "useTransition и useDeferredValue — управление приоритетами в Concurrent Mode"
 section: react
 description: "Хуки useTransition и useDeferredValue из React 18 дают явный контроль над приоритетами рендеринга. Разбор конкурентного режима, уровней приоритета и практических паттернов."
-order: 1
+order: 11
 tags: ["usetransition", "usedeferredvalue", "concurrent-mode", "starttransition", "priority"]
 questions:
   - "Какие уровни приоритета обновлений существуют в Concurrent Mode"

@@ -2,7 +2,7 @@
 title: "useContext — передача данных через дерево компонентов"
 section: react
 description: "Хук для чтения данных из Context без prop drilling. Создание контекста, оптимизация рендеров, связка с useReducer, сравнение с Zustand и Redux, замена на use() в React 19."
-order: 13
+order: 4
 tags: ["usecontext", "createcontext", "context", "prop-drilling", "provider"]
 questions:
   - "Какую проблему решает useContext и что такое prop drilling"

@@ -2,7 +2,7 @@
 title: "defaultProps и propTypes в React"
 section: react
 description: "Классические механизмы React для валидации и задания значений по умолчанию для пропсов. С появлением TypeScript уступили место compile-time проверке, но необходимы для работы с legacy-кодом."
-order: 2
+order: 15
 tags: ["defaultprops", "proptypes", "prop-types", "typescript", "validation"]
 questions:
   - "Как работает propTypes и какие валидаторы доступны"
