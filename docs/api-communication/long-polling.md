@@ -2,7 +2,7 @@
 title: "Long Polling — обновления через обычный HTTP"
 section: api-communication
 description: "Long Polling — техника real-time обновлений через обычный HTTP. Реализация на fetch и в React, обработка ошибок, сравнение с WebSocket и SSE."
-order: 3
+order: 6
 tags: ["long-polling", "real-time", "abortcontroller", "exponential-backoff", "sse", "websocket"]
 questions:
   - "Чем long polling отличается от обычного polling"

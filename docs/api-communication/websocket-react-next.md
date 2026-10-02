@@ -1,43 +1,43 @@
 ---
-title: "WebSocket в React и Next.js"
+title: "WebSocket: двусторонний real-time"
 section: api-communication
-description: "WebSocket в React и Next.js: подключение, переподключения, интеграция с Zustand и TanStack Query, масштабирование через Redis и managed-сервисы."
-order: 6
-tags: ["websocket", "usewebsocket", "socket-io", "sse", "exponential-backoff", "redis"]
+description: "WebSocket — протокол двустороннего real-time: подключение, переподключения с exponential backoff, heartbeat, интеграция с состоянием в React и Vue, серверная часть в Next.js и Nuxt, масштабирование через Redis."
+order: 8
+tags: ["websocket", "usewebsocket", "socket-io", "sse", "exponential-backoff", "redis", "vue", "nuxt"]
 questions:
   - "Чем WebSocket отличается от HTTP и SSE"
-  - "Как установить WebSocket-соединение в React"
+  - "Как установить WebSocket-соединение и управлять его жизненным циклом в компонентах"
   - "Зачем нужен exponential backoff при переподключении"
-  - "Как интегрировать WebSocket с Zustand"
+  - "Как интегрировать WebSocket с глобальным состоянием (Zustand/Pinia)"
   - "Почему WebSocket нельзя использовать в Server Components"
   - "Как масштабировать WebSocket через Redis Pub/Sub"
   - "Чем Socket.IO отличается от нативного WebSocket"
-  - "Какие антипаттерны встречаются при работе с WebSocket в React"
+  - "Какие антипаттерны встречаются при работе с WebSocket в компонентах"
 answers:
   - "WebSocket — полнодуплексный протокол поверх TCP с постоянным соединением, где обе стороны отправляют данные в любой момент, тогда как HTTP — кратковременный запрос-ответ, инициируемый клиентом. SSE передаёт данные только от сервера к клиенту и переподключается автоматически, а WebSocket требует ручного переподключения и поддерживает бинарные данные."
-  - "Соединение создаётся в useEffect через new WebSocket(url), объект хранится в useRef (не в useState, чтобы не вызывать лишние рендеры), обработчики onopen/onmessage/onerror/onclose регистрируются, а в cleanup вызывается ws.close()."
+  - "Соединение создаётся в effect жизненного цикла компонента (useEffect в React, onMounted в Vue) через new WebSocket(url), объект хранится в ref (не в state, чтобы не вызывать лишние рендеры), обработчики onopen/onmessage/onerror/onclose регистрируются, а при размонтировании (cleanup/onUnmounted) вызывается ws.close()."
   - "При обрыве соединения задержка растёт по формуле 1000 * 2^attempt с капом в 30000 мс, чтобы клиент не заваливал сервер переподключениями при непрерывном сбое. Счётчик попыток сбрасывается в 0 при успешном onopen."
-  - "Стор создаётся через create, connect создаёт WebSocket и кладёт его в состояние, а onmessage обновляет messages через set((state) => ({ messages: [...state.messages, message] })). Компонент вызывает connect в useEffect и disconnect в cleanup."
-  - "WebSocket-соединение — клиентская концепция, а Server Components не выполняют клиентский JavaScript, поэтому подключение устанавливается только в useEffect или обработчиках событий. API Routes Next.js также не поддерживают WebSocket из коробки — нужен отдельный WebSocket-сервер."
+  - "В React стор создаётся через create (Zustand), connect создаёт WebSocket и кладёт его в состояние, а onmessage обновляет messages через set; компонент вызывает connect в useEffect и disconnect в cleanup. Во Vue аналогично строится store на Pinia, а переиспользуемую обёртку даёт useWebSocket из VueUse."
+  - "WebSocket-соединение — клиентская концепция, а Server Components не выполняют клиентский JavaScript, поэтому подключение устанавливается только в useEffect или обработчиках событий. API Routes Next.js также не поддерживают WebSocket из коробки — нужен отдельный WebSocket-сервер (в Nuxt его даёт нативный WebSocket в Nitro)."
   - "Каждое соединение — постоянный TCP, поэтому на нескольких серверах применяются sticky sessions, а для рассылки между серверами используется Redis Pub/Sub: при получении сообщения от клиента сервер делает pub.publish, а каждый сервер через sub.subscribe рассылает его своим подключённым клиентам."
   - "Socket.IO — проприетарная библиотека над WebSocket со встроенным переподключением, rooms и namespaces, но требует Socket.IO-сервер и добавляет ~40 KB к клиенту, тогда как нативный WebSocket стандартен и легче, но всё это нужно реализовывать вручную."
-  - "Создание соединения в каждом компоненте вместо одного соединения с управлением комнатами через сообщения, хранение WebSocket в useState вместо useRef, отправка без проверки readyState === WebSocket.OPEN, отсутствие onerror/onclose и аутентификации."
+  - "Создание соединения в каждом компоненте вместо одного соединения с управлением комнатами через сообщения, хранение WebSocket в state/useState вместо ref, отправка без проверки readyState === WebSocket.OPEN, отсутствие onerror/onclose и аутентификации."
 ---
 
-# WebSocket в React и Next.js
+# WebSocket: двусторонний real-time
 
-WebSocket обеспечивает полнодуплексную связь между клиентом и сервером в реальном времени. В React-приложениях он требует аккуратного управления соединением, переподключениями и интеграцией с состоянием. Разберём паттерны использования WebSocket, особенности в Next.js и способы масштабирования.
+WebSocket обеспечивает полнодуплексную связь между клиентом и сервером в реальном времени. Это клиентская технология, не привязанная к конкретному фреймворку: паттерны управления соединением одинаковы в любом SPA. Ниже разберём протокол, переподключения, интеграцию с состоянием и масштабирование, а примеры покажем на React и Vue.
 
 ## Содержание
 
 1. [Что такое WebSocket](#что-такое-websocket)
 2. [WebSocket vs HTTP vs SSE](#websocket-vs-http-vs-sse)
-3. [Базовое использование в React](#базовое-использование-в-react)
+3. [Базовое использование в React и Vue](#базовое-использование-в-react-и-vue)
 4. [Хук useWebSocket](#хук-usewebsocket)
 5. [Обработка переподключений](#обработка-переподключений)
 6. [Интеграция с состоянием](#интеграция-с-состоянием)
 7. [WebSocket и Suspense](#websocket-и-suspense)
-8. [WebSocket в Next.js](#websocket-в-nextjs)
+8. [WebSocket в Next.js и Nuxt](#websocket-в-nextjs-и-nuxt)
 9. [Альтернативы: Socket.IO, Server-Sent Events](#альтернативы-socketio-server-sent-events)
 10. [Масштабирование WebSocket](#масштабирование-websocket)
 11. [Лучшие практики](#лучшие-практики)
@@ -100,9 +100,11 @@ WebSocket:
 
 ---
 
-## Базовое использование в React
+## Базовое использование в React и Vue
 
-### Нативный WebSocket API
+Сам WebSocket API — встроенный в браузер `new WebSocket(url)` — одинаков во всех фреймворках. Различается лишь жизненный цикл: где создать соединение и где закрыть.
+
+### Нативный WebSocket API в React
 
 ```jsx
 function ChatRoom() {
@@ -156,6 +158,64 @@ function ChatRoom() {
   );
 }
 ```
+
+### Нативный WebSocket API в Vue
+
+В Vue `<script setup>` тот же API живёт в `onMounted`/`onUnmounted`, а объект соединения держится в `ref`:
+
+```vue
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from "vue";
+
+const messages = ref([]);
+const input = ref("");
+const ws = ref<WebSocket | null>(null);
+
+function sendMessage() {
+  if (ws.value?.readyState === WebSocket.OPEN) {
+    ws.value.send(JSON.stringify({ text: input.value, timestamp: Date.now() }));
+    input.value = "";
+  }
+}
+
+onMounted(() => {
+  ws.value = new WebSocket("wss://chat.example.com");
+
+  ws.value.onopen = () => {
+    console.log("Connected");
+  };
+
+  ws.value.onmessage = (event) => {
+    const message = JSON.parse(event.data);
+    messages.value.push(message);
+  };
+
+  ws.value.onerror = (error) => {
+    console.error("WebSocket error:", error);
+  };
+
+  ws.value.onclose = () => {
+    console.log("Disconnected");
+  };
+});
+
+onUnmounted(() => {
+  ws.value?.close();
+});
+</script>
+
+<template>
+  <div>
+    <div class="messages">
+      <div v-for="(msg, i) in messages" :key="i">{{ msg.text }}</div>
+    </div>
+    <input v-model="input" />
+    <button @click="sendMessage">Send</button>
+  </div>
+</template>
+```
+
+> В Vue нет готового нативного хука-обёртки, как в React-примере ниже, но есть `useWebSocket` из [VueUse](https://vueuse.org/core/useWebSocket/) — он покрывает переподключения, heartbeat и очередь сообщений «из коробки». Подробнее о жизненном цикле в Vue — в разделе [Vue](/vue/lifecycle.md).
 
 ### Проблемы базового подхода
 
@@ -441,9 +501,69 @@ function ChatRoom({ roomId }) {
 }
 ```
 
+### Pinia + WebSocket (Vue)
+
+Во Vue ту же задачу решает store на Pinia — паттерн идентичен: соединение живёт в сторе, компонент подключается в `onMounted` и отключается в `onUnmounted`.
+
+```ts
+import { defineStore } from "pinia";
+
+export const useChatStore = defineStore("chat", {
+  state: () => ({
+    messages: [] as { text: string; timestamp: number }[],
+    status: "disconnected" as string,
+    ws: null as WebSocket | null,
+  }),
+
+  actions: {
+    connect(url: string) {
+      const ws = new WebSocket(url);
+
+      ws.onopen = () => {
+        this.status = "connected";
+        this.ws = ws;
+      };
+      ws.onclose = () => {
+        this.status = "disconnected";
+        this.ws = null;
+      };
+      ws.onerror = () => {
+        this.status = "error";
+      };
+      ws.onmessage = (event) => {
+        this.messages.push(JSON.parse(event.data));
+      };
+    },
+
+    sendMessage(text: string) {
+      if (this.ws?.readyState === WebSocket.OPEN) {
+        this.ws.send(JSON.stringify({ text, timestamp: Date.now() }));
+      }
+    },
+
+    disconnect() {
+      this.ws?.close();
+      this.ws = null;
+    },
+  },
+});
+```
+
+```vue
+<script setup lang="ts">
+import { onMounted, onUnmounted } from "vue";
+import { useChatStore } from "~/stores/chat";
+
+const chat = useChatStore();
+
+onMounted(() => chat.connect(`wss://chat.example.com/rooms/${roomId}`));
+onUnmounted(() => chat.disconnect());
+</script>
+```
+
 ### TanStack Query + WebSocket
 
-Для интеграции WebSocket с кэшем TanStack Query:
+Для интеграции WebSocket с кэшем TanStack Query (доступен и как `@tanstack/vue-query` — API идентичен, меняется только импорт):
 
 ```jsx
 function useWebSocketQuery(queryKey, url, messageSelector) {
@@ -538,15 +658,51 @@ function App() {
 
 ---
 
-## WebSocket в Next.js
+## WebSocket в Next.js и Nuxt
 
-### Ограничения
+Оба фреймворка рендерят серверный HTML, поэтому правило одно: WebSocket-соединение — клиентская концепция и устанавливается только на клиенте. Различается серверная часть.
 
-Next.js — это фреймворк для серверного рендеринга. WebSocket-соединение — это клиентская концепция. Правила:
+### Next.js: ограничения
 
 - WebSocket-соединение устанавливается **только на клиенте** (в `useEffect` или обработчиках событий)
 - Нельзя использовать WebSocket в Server Components напрямую
 - Next.js API Routes не поддерживают WebSocket «из коробки»
+
+### Nuxt: нативный WebSocket в Nitro
+
+В отличие от Next.js, Nuxt (через Nitro) умеет WebSocket-сервер «из коробки»: включите поддержку в `nuxt.config.ts` и опишите обработчик в файле роута.
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  nitro: {
+    experimental: {
+      websocket: true,
+    },
+  },
+});
+```
+
+```ts
+// server/routes/ws.ts — обработчик на /ws
+export default defineWebSocketHandler({
+  open(peer) {
+    console.log("Connected:", peer.id);
+  },
+  message(peer, message) {
+    // рассылка всем подключённым
+    peer.send("Hello from server!");
+  },
+  close(peer, details) {
+    console.log("Disconnected:", peer.id, details.code, details.reason);
+  },
+  error(peer, error) {
+    console.error("Error:", error);
+  },
+});
+```
+
+На клиенте Nuxt подключение вешается через `useWebSocket` из VueUse — тот же хук, что и в обычном Vue-приложении.
 
 ### Отдельный WebSocket-сервер
 
@@ -635,7 +791,13 @@ function ChatRoom({ roomId }) {
 
 ### WebSocket в Edge Runtime
 
-Edge Runtime (Vercel Edge, Cloudflare Workers) **не поддерживает** WebSocket-серверы. Для edge-окружений используйте:
+Edge Runtime исторически не поддерживал WebSocket-серверы, но ситуация меняется:
+
+- **Vercel Functions WebSockets** (бета) и **Cloudflare Workers** (через Durable Objects или preset `cloudflare_durable`) уже умеют держать WebSocket-соединения.
+- **Nitro** (сервер Nuxt) работает на edge-пресетах Node.js, Deno, Bun и Cloudflare Workers — один `defineWebSocketHandler` без edge-специфичного кода.
+- Для классического **Vercel Edge / Next.js** по-прежнему актуальна раздельная архитектура или managed-сервисы.
+
+Для edge-окружений, где WebSocket недоступен, используйте:
 
 - **Cloudflare Durable Objects** — WebSocket в edge
 - **Vercel Edge + внешний WebSocket-сервер** — раздельная архитектура
@@ -695,6 +857,8 @@ function ChatRoom() {
 | Rooms/Namespaces | Ручная реализация | Встроенные |
 | Размер | Нативный API | ~40 KB (клиент) |
 | Совместимость | Требует WebSocket-сервер | Требует Socket.IO-сервер |
+
+Подробно: комнаты, namespaces, acknowledgements, middleware, переподключения и Redis adapter — в отдельной статье [«Socket.IO: rooms, namespaces и real-time»](./socket-io.md).
 
 ### Server-Sent Events (SSE)
 
@@ -1017,18 +1181,18 @@ ws.onopen = () => {
 
 - WebSocket — протокол полнодуплексной связи поверх TCP, обе стороны могут отправлять данные в любой момент.
 - Соединение устанавливается через HTTP Upgrade handshake, затем переключается на WebSocket-протокол.
-- В React WebSocket создаётся в `useEffect`, объект хранится в `useRef`, а не в `useState`.
-- Cleanup в `useEffect` закрывает соединение при размонтировании компонента.
+- Сам `WebSocket` API одинаков во всех фреймворках: в React соединение создаётся в `useEffect`, в Vue — в `onMounted`, объект хранится в `ref`, а не в state.
+- Cleanup (cleanup в `useEffect` / `onUnmounted`) закрывает соединение при размонтировании компонента.
 - Exponential backoff увеличивает задержку между переподключениями: `1000 * 2^attempt`.
 - Очередь сообщений буферизует данные при разорванном соединении и отправляет при восстановлении.
 - Heartbeat (ping/pong) обнаруживает «мёртвые» соединения.
 - Socket.IO — библиотека над WebSocket с встроенным переподключением, rooms и namespaces.
-- В Next.js WebSocket работает только на клиенте, Server Components не поддерживают WebSocket.
+- В Next.js WebSocket работает только на клиенте, Server Components не поддерживают WebSocket; в Nuxt WebSocket-сервер даёт нативный `defineWebSocketHandler` из Nitro.
 - Масштабирование через sticky sessions и Redis Pub/Sub для рассылки между серверами.
 
 ## Заключение
 
-WebSocket решает задачу real-time двусторонней связи. Для React-приложений ключевое — управление жизненным циклом соединения через `useEffect` и `useRef`, обработка переподключений с exponential backoff и интеграция с глобальным состоянием. В Next.js WebSocket-сервер должен быть отдельным сервисом. Для односторонней передачи данных SSE проще и эффективнее.
+WebSocket решает задачу real-time двусторонней связи и не привязан к фреймворку. Ключевое — управление жизненным циклом соединения (effect + ref), обработка переподключений с exponential backoff и интеграция с глобальным состоянием; паттерны одинаковы в React и Vue. В Next.js WebSocket-сервер должен быть отдельным сервисом, а Nuxt предоставляет его из коробки через Nitro. Для односторонней передачи данных SSE проще и эффективнее.
 
 ## Полезные ссылки
 
