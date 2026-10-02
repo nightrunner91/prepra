@@ -2,7 +2,7 @@
 title: "Экосистема VueUse"
 section: vue
 description: "Обзор библиотеки VueUse: готовые composables для состояния, DOM, сенсоров, сети и браузерных API, а также критерии выбора между готовым решением и собственным composable."
-order: 14
+order: 13
 tags: ["vue", "vue3", "vueuse", "composables", "composition-api", "ecosystem", "script-setup"]
 questions:
   - "Что такое VueUse и какую проблему он решает"
