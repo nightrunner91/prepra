@@ -2,7 +2,7 @@
 title: "Браузерная архитектура: процессы, потоки, сеть"
 section: performance
 description: "Современный браузер — это многопроцессная система с изолированными renderer-процессами, GPU-ускорением и строгой моделью безопасности. Разбираем процессы, потоки, Site Isolation и сетевой путь от ввода URL до первого байта ответа."
-order: 1
+order: 3
 tags: ["browser-process", "renderer-process", "site-isolation", "ttfb", "dns", "tcp", "tls"]
 questions:
   - "Как устроена многопроцессная архитектура браузера и почему Site Isolation увеличивает потребление памяти"

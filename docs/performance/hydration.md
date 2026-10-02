@@ -2,7 +2,7 @@
 title: "Гидратация: SSR, mismatch и Streaming в React"
 section: performance
 description: "Гидратация — процесс подключения React к серверному HTML, делающий страницу интерактивной. Разбираем hydration mismatch, Streaming SSR и Selective Hydration в React 18."
-order: 2
+order: 4
 tags: ["hydration", "ssr", "hydration-mismatch", "streaming-ssr", "selective-hydration"]
 questions:
   - "Как работает гидратация и почему большой JS-бандл задерживает интерактивность страницы"

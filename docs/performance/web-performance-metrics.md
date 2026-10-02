@@ -2,7 +2,7 @@
 title: "Метрики производительности: Core Web Vitals"
 section: performance
 description: "TTFB, FCP, LCP, INP, CLS — метрики, которые измеряют каждый этап загрузки страницы. Разбираем нормальные значения, причины деградации и способы улучшения."
-order: 5
+order: 1
 tags: ["core-web-vitals", "lcp", "inp", "cls", "ttfb", "fcp"]
 questions:
   - "Как TTFB влияет на всю цепочку метрик — FCP, LCP и INP — и почему его оптимизация даёт каскадный эффект"

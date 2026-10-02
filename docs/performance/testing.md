@@ -2,7 +2,7 @@
 title: "Тестирование производительности"
 section: performance
 description: "Как автоматизировать проверки скорости фронтенда и API: Lighthouse CI, Web Vitals, размер бандла, нагрузочные тесты, профилирование и мониторинг пользователей."
-order: 11
+order: 7
 tags: ["performance-testing", "lighthouse", "web-vitals", "bundle-size", "k6", "react-profiler"]
 questions:
   - Как синтетические метрики Lighthouse отличаются от RUM в production и почему оба подхода необходимы?
