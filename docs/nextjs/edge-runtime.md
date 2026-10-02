@@ -2,7 +2,7 @@
 title: "Edge Runtime в Next.js"
 section: nextjs
 description: "Разбираем Edge Runtime в Next.js: на чём основан, чем отличается от Node.js, где применять и какие ограничения влияют на выбор runtime."
-order: 4
+order: 11
 tags: ["edge-runtime", "nextjs", "middleware", "v8-isolates", "serverless"]
 questions:
   - "Чем Edge Runtime отличается от Node.js runtime в Next.js"

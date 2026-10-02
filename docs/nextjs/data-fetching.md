@@ -2,7 +2,7 @@
 title: "Data Fetching в Next.js App Router"
 section: nextjs
 description: "Разбираем загрузку данных в Next.js App Router: серверные компоненты, кэширование, Server Actions, Route Handlers и Suspense."
-order: 3
+order: 5
 tags: ["data-fetching", "nextjs", "app-router", "server-components", "server-actions", "route-handlers"]
 questions:
   - "Чем загрузка данных в Server Components отличается от клиентского useEffect + fetch"

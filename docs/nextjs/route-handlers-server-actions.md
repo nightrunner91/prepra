@@ -2,7 +2,7 @@
 title: "Next.js: Route Handlers и Server Actions"
 section: nextjs
 description: "Разбираем Route Handlers и Server Actions в Next.js App Router: когда какой подход выбрать и как писать безопасный серверный код."
-order: 7
+order: 6
 tags: ["route-handlers", "server-actions", "app-router", "next-response", "revalidation", "bff"]
 questions:
   - "Чем Route Handlers отличаются от Server Actions и когда что использовать"

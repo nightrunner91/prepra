@@ -2,7 +2,7 @@
 title: "Оптимизация производительности в Next.js"
 section: nextjs
 description: "Разбираем встроенные механизмы оптимизации Next.js: next/link, next/image, next/font, next/script, рендеринг, кэширование, code splitting и SEO."
-order: 6
+order: 9
 tags: ["nextjs", "next-link", "next-image", "next-font", "dynamic-imports", "caching"]
 questions:
   - "Как работает prefetching в `next/link` и как его контролировать"

@@ -2,7 +2,7 @@
 title: "Next.js-монолит: прямой доступ к БД"
 section: nextjs
 description: "Разбираем монолитную архитектуру Next.js с прямым доступом к базе через Server Components и Server Actions: плюсы, риски и необходимые навыки."
-order: 5
+order: 13
 tags: ["nextjs", "monolith", "server-components", "server-actions", "prisma", "orm"]
 questions:
   - "В чём разница между традиционной архитектурой Frontend + API и монолитным Next.js с прямым доступом к БД?"

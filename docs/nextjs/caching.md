@@ -2,7 +2,7 @@
 title: "Кэширование в Next.js: уровни и ревалидация"
 section: nextjs
 description: "Четыре уровня кэша Next.js: Request Memoization, Data Cache, Full Route Cache и Router Cache. Управление через cache, revalidate, tags и router.refresh."
-order: 2
+order: 7
 tags: ["caching", "nextjs", "data-cache", "request-memoization", "full-route-cache", "router-cache"]
 questions:
   - "Какие четыре уровня кэша есть в Next.js и где каждый из них находится?"

@@ -2,7 +2,7 @@
 title: "RSC Payload в Next.js"
 section: nextjs
 description: "RSC Payload — сериализованный поток данных, который React Server Components отправляют с сервера. Разбираем формат, кэширование, преимущества и ограничения."
-order: 9
+order: 10
 tags: ["rsc-payload", "react-server-components", "nextjs", "streaming", "hydration", "router-cache"]
 questions:
   - "Чем RSC Payload отличается от HTML и JSON"

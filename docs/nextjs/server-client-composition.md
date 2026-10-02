@@ -2,7 +2,7 @@
 title: "Серверные и клиентские компоненты: правила композиции"
 section: nextjs
 description: "Разбираем правила композиции серверных и клиентских компонентов в Next.js App Router: допустимые импорты, паттерн children и типичные ошибки."
-order: 10
+order: 4
 tags: ["server-components", "client-components", "rsc", "composition", "server-actions"]
 questions:
   - "Почему серверный компонент нельзя импортировать в клиентский"

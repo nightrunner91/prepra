@@ -2,7 +2,7 @@
 title: "Next.js Server API: headers, cookies, cache"
 section: nextjs
 description: "Обзор серверных API Next.js App Router: чтение заголовков и cookies, навигация, инвалидация кэша и клиентские хуки. Разбираем синтаксис и ограничения."
-order: 1
+order: 8
 tags: ["nextjs", "next-headers", "next-navigation", "next-cache", "cookies", "server-components"]
 questions:
   - "Какие API входят в next/headers и для чего они используются"

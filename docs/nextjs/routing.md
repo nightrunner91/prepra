@@ -2,7 +2,7 @@
 title: "Роутинг в Next.js: App Router"
 section: nextjs
 description: "Разбираем App Router в Next.js 13+: файловая структура, динамические сегменты, группы роутов, параллельные и перехватывающие роуты, middleware."
-order: 8
+order: 3
 tags: ["app-router", "nextjs", "routing", "dynamic-routes", "route-groups", "middleware"]
 questions:
   - "Как файловая структура в app превращается в URL-маршруты"
