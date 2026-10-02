@@ -2,7 +2,7 @@
 title: "E2E-тестирование с Playwright"
 section: testing
 description: "Как писать стабильные E2E-тесты с Playwright: локаторы, действия, ожидания, моки, визуальные сравнения, Page Object Model и CI."
-order: 10
+order: 8
 tags: ["playwright", "e2e", "locators", "fixtures", "page-object-model", "assertions"]
 questions:
   - "Как автоожидания в Playwright (ленивые локаторы, retry-assertions) делают тесты стабильнее и почему это важнее явных waitForTimeout"
