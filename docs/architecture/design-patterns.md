@@ -2,7 +2,7 @@
 title: "Паттерны компонентов и файловая структура в React"
 section: architecture
 description: "Паттерны React-компонентов (Compound, Render Props, Custom Hooks, Container/Presentational) и подходы к организации файлов проекта на React и Next.js."
-order: 2
+order: 5
 tags: ["react", "nextjs", "compound-components", "render-props", "custom-hooks", "feature-sliced-design"]
 questions:
   - "Как Compound Components используют Context для разделения состояния и почему это даёт больше гибкости, чем Render Props"

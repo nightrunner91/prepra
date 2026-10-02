@@ -2,7 +2,7 @@
 title: "SOLID в React и Vue"
 section: architecture
 description: "Пять принципов SOLID — Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion — на примерах React и Vue. Мнемоники и когда не применять."
-order: 6
+order: 2
 tags: ["solid", "single-responsibility", "open-closed", "liskov-substitution", "dependency-inversion", "react", "vue"]
 questions:
   - "Как SOLID адаптируется к frontend-разработке через хуки, композицию и слоты вместо классов и интерфейсов"
