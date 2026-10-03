@@ -2,7 +2,7 @@
 title: "Безопасность Vue"
 section: security
 description: "Vue: `v-html`, refs, URL-атрибуты, экранирование интерполяций, хранение токенов и защита от XSS в Composition API."
-order: 2
+order: 9
 tags: ["vue", "security", "v-html", "xss", "dompurify"]
 questions:
   - "Как Vue экранирует текстовые интерполяции и какие инструменты (`v-html`, refs, URL-атрибуты) обходят защиту фреймворка"

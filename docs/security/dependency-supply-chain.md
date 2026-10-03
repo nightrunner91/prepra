@@ -2,7 +2,7 @@
 title: "Безопасность зависимостей и supply chain"
 section: security
 description: "Supply chain-атаки, npm audit, lock-файлы, Snyk, Socket, SBOM, provenance, приватные registry. Защита от вредоносных пакетов и typosquatting."
-order: 8
+order: 12
 tags: ["supply-chain", "npm-audit", "lock-files", "sbom", "provenance", "snyk"]
 questions:
   - "Что такое supply chain attack и какие векторы (компрометация мейнтейнера, typosquatting, транзитивные зависимости) делают его критичным для фронтенда"

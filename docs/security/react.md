@@ -2,7 +2,7 @@
 title: "Безопасность React"
 section: security
 description: "React: экранирование JSX, `dangerouslySetInnerHTML`, URL-атрибуты, refs, хранение токенов и защита от XSS в клиентских компонентах."
-order: 1
+order: 8
 tags: ["react", "security", "xss", "dangerouslysetinnerhtml", "dompurify"]
 questions:
   - "Как React экранирует JSX и какие инструменты (`dangerouslySetInnerHTML`, refs, URL-атрибуты) обходят защиту фреймворка"

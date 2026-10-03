@@ -2,7 +2,7 @@
 title: "Безопасность Nuxt"
 section: security
 description: "Nuxt: SSR и XSS, серверные маршруты Nitro, `nuxt-security`, `runtimeConfig`, CSRF и CSP."
-order: 3
+order: 11
 tags: ["nuxt", "security", "nitro", "nuxt-security", "runtime-config", "csrf", "csp"]
 questions:
   - "Почему `v-html` в SSR особенно опасен и почему санитизация обязательна и на сервере, и на клиенте"

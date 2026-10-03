@@ -2,7 +2,7 @@
 title: "Аутентификация и авторизация во фронтенде"
 section: security
 description: "Аутентификация и авторизация: сессии, JWT, access/refresh tokens, OAuth 2.0, OIDC, PKCE, RBAC/ABAC, хранение токенов и защита в Next.js/Nuxt."
-order: 5
+order: 7
 tags: ["authentication", "authorization", "jwt", "oauth", "oidc", "rbac"]
 questions:
   - "Как аутентификация и авторизация разделяют ответственность и почему клиентская проверка — лишь адаптация UI, а не защита"

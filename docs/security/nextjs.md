@@ -2,7 +2,7 @@
 title: "Безопасность Next.js"
 section: security
 description: "Server Components, Server Actions, middleware, Route Handlers, CSP с nonce, security-заголовки, защита от Open Redirect в Next.js App Router."
-order: 4
+order: 10
 tags: ["nextjs", "security", "server-components", "server-actions", "middleware", "route-handlers"]
 questions:
   - "Как Next.js размывает границу между фронтендом и бэкендом и какие новые риски это создаёт"
