@@ -48,7 +48,6 @@ export default defineConfig({
         'dockerfile',
         'nginx',
         'graphql',
-        'mermaid',
         'sql',
         'markdown',
         'toml',

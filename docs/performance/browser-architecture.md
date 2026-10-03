@@ -52,30 +52,28 @@ answers:
 - **Utility Process** — выполняет вспомогательные задачи: audio service, network service, storage service, notifications и др.
 - **Plugin Process / Network Service Process** — в современных браузерах некоторые подсистемы (например, сетевой стек) могут работать в отдельных процессах.
 
-```mermaid
-flowchart LR
-    subgraph BP["Browser Process"]
-        UI["UI Thread"]
-        NET["Network Thread"]
-        STOR["Storage Thread"]
-    end
-    subgraph RP1["Renderer Process 1 — site-a.com"]
-        MT1["Main Thread"]
-        CT1["Compositor Thread"]
-        WT1["Worker Threads"]
-    end
-    subgraph RP2["Renderer Process 2 — site-b.com"]
-        MT2["Main Thread"]
-        CT2["Compositor Thread"]
-    end
-    subgraph GPU["GPU Process"]
-        GFX["Graphics Thread"]
-    end
-
-    BP <-->|IPC| RP1
-    BP <-->|IPC| RP2
-    RP1 -->|IPC| GPU
-    RP2 -->|IPC| GPU
+```
+┌───────────────────────────────┐
+│        Browser Process        │
+│   UI · Network · Storage      │
+└───────────────┬───────────────┘
+                │ IPC
+        ┌───────┴───────┐
+        ▼               ▼
+┌───────────────┐ ┌───────────────┐
+│Renderer Proc 1│ │Renderer Proc 2│
+│  site-a.com   │ │  site-b.com   │
+│  Main Thread  │ │  Main Thread  │
+│  Compositor   │ │  Compositor   │
+│  Workers      │ │               │
+└───────┬───────┘ └───────┬───────┘
+        │ IPC             │ IPC
+        └────────┬────────┘
+                 ▼
+        ┌─────────────────┐
+        │   GPU Process   │
+        │ Graphics Thread │
+        └─────────────────┘
 ```
 
 ### IPC и Sandbox
@@ -94,19 +92,28 @@ flowchart LR
 - **Raster Thread(s)** — растеризует графические слои в пиксели, часто работает параллельно с compositor thread.
 - **IO Thread** — обрабатывает асинхронные операции ввода-вывода внутри процесса.
 
-```mermaid
-flowchart TD
-    subgraph RP["Renderer Process"]
-        MT["Main Thread\n(JS, DOM, CSSOM, Layout, Paint)"]
-        CT1["Compositor Thread\n(Scroll, Animations, Layers)"]
-        RT["Raster Threads\n(Rasterization)"]
-        CT2["Compositor Thread\n(Compose)"]
-        WT["Worker Threads\n(Web Workers, Service Workers)"]
-
-        MT -->|"display list + layers"| CT1
-        CT1 -->|"raster tasks"| RT
-        RT -->|"bitmap textures"| CT2
-    end
+```
+┌────────────────────────────────────────────────┐
+│                Renderer Process                │
+│                                                │
+│ Main Thread                                    │
+│ (JS, DOM, CSSOM, Layout, Paint)                │
+│     │ display list + layers                    │
+│     ▼                                          │
+│ Compositor Thread                              │
+│ (Scroll, Animations, Layers)                   │
+│     │ raster tasks                             │
+│     ▼                                          │
+│ Raster Threads                                 │
+│ (Rasterization)                                │
+│     │ bitmap textures                          │
+│     ▼                                          │
+│ Compositor Thread                              │
+│ (Compose)                                      │
+│                                                │
+│ Worker Threads                                 │
+│ (Web Workers, Service Workers)                 │
+└────────────────────────────────────────────────┘
 ```
 
 ### Site Isolation
@@ -157,25 +164,35 @@ GPU-акселерация переносит графические вычис�
 
 Когда пользователь вводит URL и нажимает Enter, браузер проходит через несколько сетевых этапов, прежде чем HTML попадёт в renderer-процесс. Этот путь — основа понимания производительности загрузки.
 
-```mermaid
-sequenceDiagram
-    actor User as Пользователь
-    participant B as Browser Process
-    participant D as DNS Resolver
-    participant S as Web Server
-
-    User->>B: 1. Ввод URL
-    B->>B: 2. Парсинг URL
-    B->>D: 3. DNS Query
-    D-->>B: 4. IP address
-    B->>S: 5. TCP SYN
-    S-->>B: 6. SYN-ACK
-    B->>S: 7. ACK
-    B->>S: 8. TLS ClientHello
-    S-->>B: 9. TLS ServerHello + Certificate
-    B->>S: 10. HTTP GET
-    S-->>B: 11. HTTP 200 OK + HTML
-    B->>B: 12. Создание Renderer + передача HTML
+```
+     Пользователь           Browser Process           DNS Resolver         Web Server
+           │                       │                        │                   │
+             1. Ввод URL
+           │───────────────────────►                        │                   │
+                                   │ 2. Парсинг URL
+                                   │──┐
+                                   │◄─┘
+                                     3. DNS Query
+           │                       │────────────────────────►                   │
+                                     4. IP address
+           │                       ◄────────────────────────│                   │
+                                     5. TCP SYN
+           │                       │────────────────────────────────────────────►
+                                     6. SYN-ACK
+           │                       ◄────────────────────────────────────────────│
+                                     7. ACK
+           │                       │────────────────────────────────────────────►
+                                     8. TLS ClientHello
+           │                       │────────────────────────────────────────────►
+                                     9. ServerHello + Certificate
+           │                       ◄────────────────────────────────────────────│
+                                     10. HTTP GET
+           │                       │────────────────────────────────────────────►
+                                     11. HTTP 200 OK + HTML
+           │                       ◄────────────────────────────────────────────│
+                                   │ 12. Создание Renderer + передача HTML
+                                   │──┐
+                                   │◄─┘
 ```
 
 ### Этап 1: Парсинг URL
@@ -200,16 +217,23 @@ sequenceDiagram
 
 **Иерархия DNS:**
 
-```mermaid
-flowchart TD
-    ROOT["Корневые серверы (.)"]
-    TLD["TLD серверы (.com .org .ru)"]
-    AUTH["Авторитативные серверы (example.com)"]
-    IP["Запись A/AAAA → IP-адрес"]
-
-    ROOT --> TLD
-    TLD --> AUTH
-    AUTH --> IP
+```
+┌─────────────────────────────────────┐
+│ Корневые серверы (.)                │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─────────────────────────────────────┐
+│ TLD серверы (.com .org .ru)         │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─────────────────────────────────────┐
+│ Авторитативные серверы              │
+│ (example.com)                       │
+└──────────────────┬──────────────────┘
+                   ▼
+┌─────────────────────────────────────┐
+│ Запись A/AAAA → IP-адрес            │
+└─────────────────────────────────────┘
 ```
 
 **Процесс DNS lookup:**
@@ -234,15 +258,18 @@ flowchart TD
 
 **TCP three-way handshake (трёхстороннее рукопожатие):**
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant S as Server
-
-    C->>S: 1. SYN (seq=x)
-    S-->>C: 2. SYN-ACK (seq=y, ack=x+1)
-    C->>S: 3. ACK (ack=y+1)
-    Note over C,S: Соединение установлено
+```
+       Client              Server
+          │                   │
+            1. SYN (seq=x)
+          │───────────────────►
+            2. SYN-ACK (seq=y, ack=x+1)
+          ◄───────────────────│
+            3. ACK (ack=y+1)
+          │───────────────────►
+          │ Соединение установлено
+          │──┐
+          │◄─┘
 ```
 
 - **SYN** — клиент отправляет начальный sequence number
@@ -313,16 +340,27 @@ HTML → DOM → CSSOM → Render Tree → Layout → Paint → Composite → Sc
 4. **Server Processing** — обработка запроса на сервере
 5. **Network Latency** — задержка сети (RTT)
 
-```mermaid
-flowchart LR
-    DNS["DNS Lookup"]
-    TCP["TCP Handshake"]
-    TLS["TLS Handshake"]
-    SP["Server Processing"]
-    NL["Network Latency"]
-    FB(["First Byte"])
-
-    DNS --> TCP --> TLS --> SP --> NL --> FB
+```
+┌────────────────────────────────────────────────┐
+│                      TTFB                      │
+│                                                │
+│DNS Lookup                                      │
+│     │                                          │
+│     ▼                                          │
+│TCP Handshake                                   │
+│     │                                          │
+│     ▼                                          │
+│TLS Handshake                                   │
+│     │                                          │
+│     ▼                                          │
+│Server Processing                               │
+│     │                                          │
+│     ▼                                          │
+│Network Latency                                 │
+│     │                                          │
+│     ▼                                          │
+│First Byte                                      │
+└────────────────────────────────────────────────┘
 ```
 
 ### Как измерить
