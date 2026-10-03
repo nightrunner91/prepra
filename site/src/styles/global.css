@@ -192,6 +192,7 @@
     -webkit-backface-visibility: hidden;
     position: absolute;
     inset: 0;
+    overscroll-behavior: contain;
   }
 
   .quiz-card-back {
@@ -205,6 +206,13 @@
 
   .quiz-rate-btn:active {
     transform: scale(0.92);
+  }
+
+  @media (max-width: 639px) {
+    .quiz-answer code {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
   }
 }
 

@@ -12,12 +12,15 @@ const { currentSection } = Astro.props;
 
 <div
   id="mobile-drawer"
-  class="fixed inset-y-0 right-0 z-50 w-72 translate-x-full border-l-[3px] border-border bg-canvas transition-transform duration-200 ease-in-out lg:hidden"
+  class="fixed inset-y-0 right-0 z-[100] w-72 translate-x-full border-l-[3px] border-border bg-canvas transition-transform duration-200 ease-in-out lg:hidden"
 >
   <div
-    class="flex items-center justify-between border-b-[3px] border-border px-4 h-14"
+    class="flex items-center justify-between border-b-[3px] border-border px-4 h-[59px]"
   >
-    <span class="font-mono text-lg font-extrabold uppercase tracking-tight text-text">Навигация</span>
+    <span
+      class="font-mono text-lg font-extrabold uppercase tracking-tight text-text"
+      >Навигация</span
+    >
     <button
       id="mobile-drawer-close"
       class="flex items-center justify-center h-9 w-9 border-2 border-border text-text hover:bg-text hover:text-canvas transition-colors"
@@ -29,18 +32,22 @@ const { currentSection } = Astro.props;
   <nav class="overflow-y-auto h-[calc(100vh-3.5rem)] py-4 px-3">
     <div class="space-y-0">
       {
-        sections.map((s) => (
-          <a
-            href={withBase(`/${s.id}`)}
-            class={`block border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide transition-colors ${
-              currentSection === s.id
-                ? "bg-text text-canvas"
-                : "text-text-secondary hover:bg-surface-alt hover:text-text"
-            }`}
-          >
-            {s.label}
-          </a>
-        ))
+        sections.map((s) => {
+          const Icon = s.icon;
+          return (
+            <a
+              href={withBase(`/${s.id}`)}
+              class={`flex items-center gap-2 border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide transition-colors ${
+                currentSection === s.id
+                  ? "bg-text text-canvas"
+                  : "text-text-secondary hover:bg-surface-alt hover:text-text"
+              }`}
+            >
+              <Icon size={16} class="shrink-0" />
+              <span>{s.label}</span>
+            </a>
+          );
+        })
       }
     </div>
   </nav>
@@ -48,7 +55,7 @@ const { currentSection } = Astro.props;
 
 <div
   id="mobile-drawer-overlay"
-  class="fixed inset-0 z-40 bg-black/40 opacity-0 pointer-events-none transition-opacity duration-200 lg:hidden"
+  class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
 >
 </div>
 
@@ -63,6 +70,7 @@ const { currentSection } = Astro.props;
     drawer?.classList.add("translate-x-0");
     overlay?.classList.remove("opacity-0", "pointer-events-none");
     overlay?.classList.add("opacity-100");
+    document.body.style.overflow = "hidden";
   }
 
   function closeDrawer() {
@@ -70,6 +78,7 @@ const { currentSection } = Astro.props;
     drawer?.classList.remove("translate-x-0");
     overlay?.classList.add("opacity-0", "pointer-events-none");
     overlay?.classList.remove("opacity-100");
+    document.body.style.overflow = "";
   }
 
   btn?.addEventListener("click", openDrawer);

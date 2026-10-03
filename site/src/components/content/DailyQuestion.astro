@@ -24,13 +24,13 @@ const { question } = Astro.props;
     >
       {question.sectionLabel}
     </a>
-    <div class="flex items-center gap-3">
+    <div class="flex items-start gap-3">
       <div
-        class="flex h-10 w-10 items-center justify-center border-2 border-border bg-pale-yellow-text text-canvas"
+        class="hidden sm-flex h-10 w-10 min-w-10 items-center justify-center border-2 border-border bg-pale-yellow-text text-canvas"
       >
         <QuestionMark size={20} weight="bold" />
       </div>
-      <div>
+      <div class="pe-10 sm:pe-0">
         <h2 class="font-mono text-xl font-extrabold uppercase tracking-tight">
           Вопрос дня
         </h2>

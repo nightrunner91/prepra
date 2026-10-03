@@ -244,7 +244,7 @@ export function QuizOverlay({ questions, customAnswers, articleId }: QuizOverlay
           aria-modal="true"
         >
 
-          <div className="absolute inset-x-4 w-full top-12 md:inset-x-auto md:left-1/2 md:right-auto md:-translate-x-1/2 md:max-w-2xl bottom-12 md:bottom-20">
+          <div className="absolute left-4 right-4 top-12 bottom-12 md:left-1/2 md:right-auto md:bottom-20 md:w-full md:max-w-2xl md:-translate-x-1/2">
             {phase === 'results' && lastAttempt && (
               <ResultsView
                 questions={questions}
@@ -409,7 +409,7 @@ function QuizView({
         </button>
       </div>
 
-      <div className="mb-8 h-1.5 w-full border border-border bg-surface-alt">
+      <div className="mb-6 h-1.5 w-full border border-border bg-surface-alt sm:mb-8">
         <div
           className="h-full bg-accent transition-all duration-300"
           style={{ width: `${progress}%` }}
@@ -417,54 +417,51 @@ function QuizView({
       </div>
 
       <div
-        className="quiz-card relative w-full cursor-pointer"
-        style={{ minHeight: '400px' }}
+        className="quiz-card relative min-h-[300px] w-full cursor-pointer sm:min-h-[400px]"
         onClick={() => { if (!flipped) onFlip(); }}
       >
-        <div className={`quiz-card-inner relative h-full w-full ${flipped ? 'flipped' : ''}`}
-          style={{ minHeight: '400px' }}
-        >
-          <div className="quiz-card-face flex flex-col justify-center border-[3px] border-border bg-surface p-8 md:p-12"
-            style={{ minHeight: '400px' }}
-          >
-            <div className="mb-6 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-              Вопрос
-            </div>
-            <p className="text-left text-lg font-bold leading-relaxed text-text md:text-xl">
-              {renderInlineCode(question)}?
-            </p>
-            {!flipped && (
-              <div className="mt-10 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-                <Eye size={14} />
-                Нажмите, чтобы увидеть ответ
+        <div className={`quiz-card-inner relative h-full min-h-[300px] w-full sm:min-h-[400px] ${flipped ? 'flipped' : ''}`}>
+          <div className="quiz-card-face flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-12">
+            <div className="my-auto">
+              <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary md:mb-6">
+                Вопрос
               </div>
-            )}
+              <p className="break-words text-left text-lg font-bold leading-relaxed text-text md:text-xl">
+                {renderInlineCode(question)}?
+              </p>
+              {!flipped && (
+                <div className="mt-6 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary md:mt-10">
+                  <Eye size={14} />
+                  Нажмите, чтобы увидеть ответ
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="quiz-card-face quiz-card-back flex flex-col justify-center border-[3px] border-border bg-surface p-8 md:p-12"
-            style={{ minHeight: '400px' }}
-          >
-            <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-accent">
-              Ответ
+          <div className="quiz-card-face quiz-card-back flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-12">
+            <div className="my-auto">
+              <div className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-accent md:mb-4">
+                Ответ
+              </div>
+              <p className="quiz-answer break-words text-left text-base leading-relaxed text-text-secondary md:text-lg">
+                {renderInlineCode(answer)}
+              </p>
             </div>
-            <p className="quiz-answer text-left text-base leading-relaxed text-text-secondary md:text-lg">
-              {renderInlineCode(answer)}
-            </p>
           </div>
         </div>
       </div>
 
       {flipped && (
-        <div className={`mt-8 flex flex-col items-center gap-4 transition-all duration-300 ${savingStatus === currentIndex ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
+        <div className={`mt-6 flex flex-col items-center gap-4 transition-all duration-300 sm:mt-8 ${savingStatus === currentIndex ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
           <div className="font-mono text-sm font-bold uppercase tracking-wider text-white">
             Оцени свой ответ
           </div>
-          <div className="flex gap-3 w-full">
+          <div className="flex w-full gap-3">
             <button
               type="button"
               onClick={() => onAnswer('good')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
               aria-label="Ответил уверенно"
             >
               <ThumbsUp size={24} weight="bold" className="text-pale-green-text" />
@@ -474,7 +471,7 @@ function QuizView({
               type="button"
               onClick={() => onAnswer('unsure')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
               aria-label="Ответил неуверенно"
             >
               <SmileyMeh size={24} weight="bold" className="text-pale-yellow-text" />
@@ -484,7 +481,7 @@ function QuizView({
               type="button"
               onClick={() => onAnswer('failed')}
               disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-6 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none"
+              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
               aria-label="Не смог ответить"
             >
               <ThumbsDown size={24} weight="bold" className="text-pale-red-text" />

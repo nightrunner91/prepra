@@ -1,4 +1,6 @@
 ---
+import { CaretDown } from "@phosphor-icons/react";
+
 interface FAQItem {
   question: string;
   answer: string;
@@ -32,20 +34,11 @@ const { items } = Astro.props;
             id={`faq-btn-${i}`}
           >
             <span>{item.question}</span>
-            <svg
-              class="faq-chevron ml-4 shrink-0 size-5 text-text-tertiary transition-transform duration-200"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="square"
-                stroke-linejoin="miter"
-                d="m19.5 8.25-7.5 7.5-7.5-7.5"
-              />
-            </svg>
+            <CaretDown
+              size={24}
+              weight="bold"
+              className="faq-chevron ml-4 shrink-0 transition-transform duration-200"
+            />
           </button>
           <div
             class="faq-panel grid transition-[grid-template-rows] duration-200 ease-out"
@@ -55,7 +48,7 @@ const { items } = Astro.props;
             aria-labelledby={`faq-btn-${i}`}
           >
             <div class="overflow-hidden">
-              <div class="pb-6 text-sm text-text-secondary leading-relaxed font-medium">
+              <div class="pb-6 text text-text-secondary leading-relaxed">
                 <Fragment set:html={item.answer} />
               </div>
             </div>
@@ -67,7 +60,7 @@ const { items } = Astro.props;
 </section>
 
 <style>
-  .faq-trigger[aria-expanded="true"] .faq-chevron {
+  .faq-trigger[aria-expanded="true"] :global(.faq-chevron) {
     transform: rotate(180deg);
   }
 </style>
