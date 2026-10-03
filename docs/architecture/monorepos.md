@@ -2,7 +2,7 @@
 title: "Монорепозитории: Turborepo, Nx и workspace'ы"
 section: architecture
 description: "Что такое монорепозиторий и когда он нужен, как работают workspace'ы, чем Turborepo и Nx ускоряют сборку, и как настроить CI/CD для затронутых пакетов."
-order: 6
+order: 7
 tags: ["monorepo", "turborepo", "nx", "workspaces", "affected-builds"]
 questions:
   - "Чем монорепозиторий отличается от полирепозитория по структуре и управлению зависимостями?"
