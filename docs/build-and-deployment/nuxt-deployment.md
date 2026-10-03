@@ -1,8 +1,8 @@
 ---
-title: "Деплой Nuxt 3: Nitro, presets и routeRules"
+title: "Деплой Nuxt: Nitro, presets и routeRules"
 section: build-and-deployment
 description: "Как устроен Nitro и почему он ключевой для деплоя Nuxt 3, чем `nuxt build` отличается от `nuxt generate`, как работают `routeRules` и edge-пресеты."
-order: 8
+order: 7
 tags: ["nuxt", "nitro", "ssr", "routerules", "deployment"]
 questions:
   - "Что такое Nitro и за что он отвечает в архитектуре Nuxt 3?"
@@ -24,7 +24,7 @@ answers:
   - "`routeRules: { '/blog/**': { isr: 60 } }` в `nuxt.config.ts`; ISR реализован через Nitro и зависит от preset — на Vercel и Netlify работает из коробки, а на self-hosted требует настройки хранилища."
 ---
 
-# Деплой Nuxt 3: Nitro, presets и routeRules
+# Деплой Nuxt: Nitro, presets и routeRules
 
 Nuxt 3 решает деплой через Nitro — универсальный серверный движок, который знает, как собрать приложение для Node.js, Vercel, Cloudflare Workers, Netlify и других сред. Одним Nitro preset вы меняете целевую платформу без изменения кода. Статья разбирает разницу между `nuxt build` и `nuxt generate`, работу `routeRules`, edge-деплой и управление переменными окружения через `runtimeConfig`.
 

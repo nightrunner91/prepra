@@ -2,7 +2,7 @@
 title: "Webpack, Vite и CI/CD для фронтендера"
 section: build-and-deployment
 description: "Как работают Webpack и Vite, зачем нужен CI/CD, как настроить GitHub Actions, контейнеризировать приложение в Docker и организовать preview deployments."
-order: 2
+order: 1
 tags: ["webpack", "vite", "github-actions", "docker", "tree-shaking"]
 questions:
   - "Чем Vite отличается от Webpack по принципу работы в режиме разработки?"

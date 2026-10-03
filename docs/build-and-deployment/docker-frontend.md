@@ -2,7 +2,7 @@
 title: "Docker для фронтенда"
 section: build-and-deployment
 description: "Docker для фронтенда: multi-stage сборка, nginx для статики и SPA-fallback, переменные окружения, docker-compose, healthcheck и публикация образа в registry."
-order: 3
+order: 4
 tags: ["docker", "dockerfile", "multi-stage", "nginx", "docker-compose", "containerization"]
 questions:
   - "Зачем фронтенд-разработчику Docker"

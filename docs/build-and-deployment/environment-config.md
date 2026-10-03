@@ -2,7 +2,7 @@
 title: "Переменные окружения и конфигурация"
 section: build-and-deployment
 description: "Переменные окружения во фронтенде: build-time и runtime, .env файлы, порядок загрузки, секреты и их хранение, валидация конфигурации через zod и 12-factor."
-order: 4
+order: 2
 tags: ["environment-variables", "dotenv", "12-factor", "secrets", "runtime-config", "zod"]
 questions:
   - "Почему конфигурация должна храниться в переменных окружения"
