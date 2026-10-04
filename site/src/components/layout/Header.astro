@@ -1,7 +1,8 @@
 ---
-import { List } from "@phosphor-icons/react";
+import { List, MagnifyingGlass } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
 import SearchInput from "./SearchInput.astro";
+import { SearchModal } from "./SearchModal.tsx";
 import { ThemeToggle } from "./ThemeToggle.tsx";
 
 interface Props {
@@ -37,6 +38,15 @@ const sections = [
       <ThemeToggle client:load />
 
       <button
+        type="button"
+        data-open-search
+        class="sm:hidden flex items-center justify-center h-9 w-9 border-2 border-border text-text hover:bg-text hover:text-canvas transition-colors"
+        aria-label="Поиск по сайту"
+      >
+        <MagnifyingGlass size={18} weight="bold" />
+      </button>
+
+      <button
         id="mobile-menu-btn"
         class="lg:hidden flex items-center justify-center h-9 w-9 border-2 border-border text-text hover:bg-text hover:text-canvas transition-colors"
         aria-label="Menu"
@@ -46,3 +56,5 @@ const sections = [
     </div>
   </div>
 </header>
+
+<SearchModal client:load />

@@ -3,9 +3,10 @@ interface Props {
   label: string;
   color?: "red" | "blue" | "green" | "yellow" | "neutral";
   size?: "xs" | "sm" | "md";
+  searchTag?: string;
 }
 
-const { label, color = "neutral", size = "sm" } = Astro.props;
+const { label, color = "neutral", size = "sm", searchTag } = Astro.props;
 
 const colorMap = {
   red: "bg-pale-red-bg text-pale-red-text badge-hover-red",
@@ -20,10 +21,23 @@ const sizeMap = {
   sm: "px-2.5 py-1 text-sm",
   md: "px-3 py-1 text-md",
 };
+
+const classes = `inline-block border-2 border-border font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${colorMap[color]} ${sizeMap[size]}`;
 ---
 
-<span
-  class={`inline-block border-2 border-border font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${colorMap[color]} ${sizeMap[size]}`}
->
-  {label}
-</span>
+{
+  searchTag ? (
+    <button
+      type="button"
+      data-search-tag={searchTag}
+      aria-label={`Найти статьи по тегу «${searchTag}»`}
+      class={classes}
+    >
+      {label}
+    </button>
+  ) : (
+    <span class={classes}>
+      {label}
+    </span>
+  )
+}

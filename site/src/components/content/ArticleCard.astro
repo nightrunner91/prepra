@@ -65,7 +65,7 @@ const { title, description, href, tags = [], questionCount = 0 } = Astro.props;
       tags.length > 0 && (
         <div class="flex flex-wrap gap-1.5">
           {tags.slice(0, 3).map((tag) => (
-            <Badge label={tag} size="xs" />
+            <Badge label={tag} size="xs" searchTag={tag} />
           ))}
           {tags.length > 3 && (
             <Badge label={`+${tags.length - 3}`} color="neutral" size="xs" />

@@ -121,7 +121,7 @@ const { headings } = await render(entry);
       data.tags && data.tags.length > 0 && (
         <div class="mb-6 flex flex-wrap gap-2">
           {data.tags.map((tag: string) => (
-            <Badge label={tag} size="xs" />
+            <Badge label={tag} size="xs" searchTag={tag} />
           ))}
         </div>
       )
