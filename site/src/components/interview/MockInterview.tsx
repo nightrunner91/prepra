@@ -1,19 +1,30 @@
+import type { Icon } from '@phosphor-icons/react';
 import {
   ArrowCounterClockwise,
   ArrowRight,
+  Atom,
+  Brain,
+  CaretDown,
   Clock,
+  Cloud,
   Eye,
+  FileJs,
+  FileVue,
+  Globe,
   House,
   Microphone,
   PauseCircle,
+  ShieldCheck,
   SmileyMeh,
+  SquaresFour,
+  TestTube,
   ThumbsDown,
   ThumbsUp,
+  TreeStructure,
 } from '@phosphor-icons/react';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { withBase } from '../../lib/urls';
 import { ALL_SECTION_IDS, PRESETS } from '../../lib/mock-interview/presets';
-import { selectQuestions, questionInStacks } from '../../lib/mock-interview/selection';
+import { questionInStacks, selectQuestions } from '../../lib/mock-interview/selection';
 import {
   appendHistory,
   clearActiveSession,
@@ -31,6 +42,7 @@ import type {
   InterviewSession,
   MockInterviewQuestion,
 } from '../../lib/mock-interview/types';
+import { withBase } from '../../lib/urls';
 
 type Phase = 'start' | 'active' | 'results';
 
@@ -42,6 +54,42 @@ const STACK_OPTIONS: { id: string; label: string }[] = [
   { id: 'nextjs', label: 'Next.js' },
   { id: 'nuxt', label: 'Nuxt' },
 ];
+const PRESET_ICONS: Record<string, Icon> = {
+  'react-stack': Atom,
+  'js-core': FileJs,
+  basics: Globe,
+  vue: FileVue,
+  next: Cloud,
+  senior: TreeStructure,
+  testing: TestTube,
+  ai: Brain,
+  security: ShieldCheck,
+};
+const PRESET_COLORS: Record<string, 'red' | 'blue' | 'green' | 'yellow'> = {
+  'react-stack': 'blue',
+  'js-core': 'yellow',
+  basics: 'yellow',
+  vue: 'green',
+  next: 'blue',
+  senior: 'blue',
+  testing: 'green',
+  ai: 'green',
+  security: 'red',
+};
+const PRESET_BADGE_CLASSES: Record<string, string> = {
+  red: 'bg-pale-red-bg text-pale-red-text',
+  blue: 'bg-pale-blue-bg text-pale-blue-text',
+  green: 'bg-pale-green-bg text-pale-green-text',
+  yellow: 'bg-pale-yellow-bg text-pale-yellow-text',
+};
+
+function questionWord(n: number): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return 'вопрос';
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'вопроса';
+  return 'вопросов';
+}
 const STATUSES: AnswerStatus[] = ['good', 'unsure', 'failed', 'skipped'];
 const RATE_STATUSES: AnswerStatus[] = ['good', 'unsure', 'failed'];
 
@@ -279,7 +327,7 @@ export function MockInterview() {
   }, [lastResult, index, startWithIndex]);
 
   const selectPreset = useCallback((id: string) => {
-    setSelectedPresetId(id);
+    setSelectedPresetId((prev) => (prev === id ? null : id));
     setSelectedSections([]);
   }, []);
 
@@ -298,6 +346,12 @@ export function MockInterview() {
   const selectStack = useCallback((id: string) => {
     setSelectedStack((prev) => (prev === id ? '' : id));
     setSelectedPresetId(null);
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelectedPresetId(null);
+    setSelectedSections([]);
+    setSelectedStack('');
   }, []);
 
   const presetForStart = selectedPresetId
@@ -379,6 +433,7 @@ export function MockInterview() {
           onToggleSection={toggleSection}
           onSelectStack={selectStack}
           onSelectLength={selectLength}
+          onClearSelection={clearSelection}
           onStart={handleStart}
           onResume={resume}
           onReset={resetActive}
@@ -430,6 +485,7 @@ interface StartViewProps {
   onToggleSection: (id: string) => void;
   onSelectStack: (id: string) => void;
   onSelectLength: (l: number) => void;
+  onClearSelection: () => void;
   onStart: () => void;
   onResume: () => void;
   onReset: () => void;
@@ -455,12 +511,15 @@ function StartView({
   onToggleSection,
   onSelectStack,
   onSelectLength,
+  onClearSelection,
   onStart,
   onResume,
   onReset,
 }: StartViewProps) {
+  const [customOpen, setCustomOpen] = useState(false);
   const customDisabled = presetId !== null;
   const presetsDisabled = sections.length > 0;
+  const hasSelection = presetId !== null || sections.length > 0 || stack !== '';
 
   return (
     <>
@@ -513,30 +572,36 @@ function StartView({
       </div>
 
       <div
-        className={`grid gap-3 sm:grid-cols-2 ${presetsDisabled ? 'pointer-events-none opacity-40' : ''}`}
+        className={`grid gap-3 sm:grid-cols-2 lg:grid-cols-3 ${presetsDisabled ? 'pointer-events-none opacity-40' : ''}`}
       >
         {presets.map((p) => {
           const active = presetId === p.id;
+          const PresetIcon = PRESET_ICONS[p.id] ?? SquaresFour;
+          const color = PRESET_COLORS[p.id] ?? 'blue';
           return (
             <button
               key={p.id}
               type="button"
               onClick={() => onSelectPreset(p.id)}
-              className={`text-left border-2 p-4 transition-all ${
-                active
+              className={`flex h-full flex-col text-left border-2 p-6 transition-all ${active
                   ? 'border-accent bg-pale-green-bg'
                   : 'border-border bg-surface card-hover'
-              }`}
+                }`}
             >
-              <div className="flex items-center justify-between gap-2">
-                <span className="font-mono text-sm font-extrabold uppercase tracking-tight text-text">
+              <div className="flex items-start justify-between gap-3">
+                <span className="font-mono text-base font-extrabold uppercase tracking-tight text-text">
                   {p.title}
                 </span>
-                <span className="shrink-0 border border-border px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wider text-text-secondary">
-                  {p.count}
+                <span
+                  className={`shrink-0 border-2 border-border p-1 ${PRESET_BADGE_CLASSES[color]}`}
+                >
+                  <PresetIcon size={20} weight="bold" />
                 </span>
               </div>
-              <p className="mt-1.5 font-mono text-xs font-bold uppercase tracking-wide text-text-secondary">
+              <span className="mt-2 w-fit border border-border px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
+                {p.count} {questionWord(p.count)}
+              </span>
+              <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wide text-text-secondary">
                 {p.description}
               </p>
             </button>
@@ -544,114 +609,126 @@ function StartView({
         })}
       </div>
 
-      <div className="mb-4 mt-10 border-b-[3px] border-border pb-4">
-        <h2 className="font-mono text-lg font-extrabold uppercase tracking-tight text-text">
-          Свой конфиг
-        </h2>
+      <div className="mt-10 border-b-[3px] border-border pb-4">
+        <button
+          type="button"
+          onClick={() => setCustomOpen((v) => !v)}
+          aria-expanded={customOpen}
+          className="flex w-full items-center justify-between gap-2 text-left"
+        >
+          <span className="font-mono text-lg font-extrabold uppercase tracking-tight text-text">
+            Свой конфиг
+          </span>
+          <CaretDown
+            size={18}
+            weight="bold"
+            className={`shrink-0 text-text-secondary transition-transform ${customOpen ? 'rotate-180' : ''}`}
+          />
+        </button>
       </div>
 
-      <div className={customDisabled ? 'pointer-events-none opacity-40' : ''}>
-        <div className="border-2 border-border bg-surface p-4 sm:p-6">
-          <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-            Разделы
-          </div>
-          {loading && (
-            <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
-              Загрузка вопросов…
+      {customOpen && (
+        <div className={`mt-4 ${customDisabled ? 'opacity-60' : ''}`}>
+          {presetId && (
+            <p className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">
+              Выбран готовый сет — измените параметр, чтобы настроить вручную
             </p>
           )}
-          {error && (
-            <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">
-              Не удалось загрузить вопросы — обновите страницу
-            </p>
-          )}
-          {index && (
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              {ALL_SECTION_IDS.map((id) => {
-                const checked = sections.includes(id);
-                return (
-                  <label
-                    key={id}
-                    className={`flex cursor-pointer items-center gap-2 border-2 px-3 py-2 transition-colors ${
-                      checked
-                        ? 'border-accent bg-pale-green-bg'
-                        : 'border-border bg-surface-alt hover:bg-surface'
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => onToggleSection(id)}
-                      className="h-4 w-4 accent-[var(--color-accent)]"
-                    />
-                    <span className="min-w-0 flex-1 font-mono text-xs font-bold uppercase tracking-wide text-text">
-                      {sectionLabels.get(id) ?? id}
-                    </span>
-                    <span className="shrink-0 font-mono text-[11px] font-bold text-text-tertiary">
-                      {sectionPool.get(id) ?? 0}
-                    </span>
-                  </label>
-                );
-              })}
+          <div className="border-2 border-border bg-surface p-4 sm:p-6">
+            <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
+              Разделы
             </div>
-          )}
-        </div>
-
-        <div className="mt-4 border-2 border-border bg-surface p-4 sm:p-6">
-          <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-            Стек
+            {loading && (
+              <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
+                Загрузка вопросов…
+              </p>
+            )}
+            {error && (
+              <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">
+                Не удалось загрузить вопросы — обновите страницу
+              </p>
+            )}
+            {index && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {ALL_SECTION_IDS.map((id) => {
+                  const checked = sections.includes(id);
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => onToggleSection(id)}
+                      aria-pressed={checked}
+                      className={`flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide transition-all ${checked
+                          ? 'border-accent bg-pale-green-bg text-text'
+                          : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+                        }`}
+                    >
+                      <span>{sectionLabels.get(id) ?? id}</span>
+                      <span
+                        className={`shrink-0 text-[11px] ${checked ? 'text-accent' : 'text-text-tertiary'}`}
+                      >
+                        {sectionPool.get(id) ?? 0}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => onSelectStack('')}
-              className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${
-                stack === ''
-                  ? 'border-accent bg-accent text-white'
-                  : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
-              }`}
-            >
-              Любой
-            </button>
-            {STACK_OPTIONS.map((s) => (
+
+          <div className="mt-4 border-2 border-border bg-surface p-4 sm:p-6">
+            <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
+              Стек
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
               <button
-                key={s.id}
                 type="button"
-                onClick={() => onSelectStack(s.id)}
-                className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${
-                  stack === s.id
+                onClick={() => onSelectStack('')}
+                className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${stack === ''
                     ? 'border-accent bg-accent text-white'
                     : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
-                }`}
+                  }`}
               >
-                {s.label}
+                Любой
               </button>
-            ))}
+              {STACK_OPTIONS.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => onSelectStack(s.id)}
+                  className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${stack === s.id
+                      ? 'border-accent bg-accent text-white'
+                      : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+                    }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="mt-4 border-2 border-border bg-surface p-4 sm:p-6">
-          <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-            Длина интервью
-          </div>
-          <div className="mt-3 flex gap-2">
-            {LENGTH_OPTIONS.map((l) => (
-              <button
-                key={l}
-                type="button"
-                onClick={() => onSelectLength(l)}
-                className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${
-                  length === l
-                    ? 'border-accent bg-accent text-white'
-                    : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
-                }`}
-              >
-                {l}
-              </button>
-            ))}
+          <div className="mt-4 border-2 border-border bg-surface p-4 sm:p-6">
+            <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
+              Длина интервью
+            </div>
+            <div className="mt-3 flex gap-2">
+              {LENGTH_OPTIONS.map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => onSelectLength(l)}
+                  className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${length === l
+                      ? 'border-accent bg-accent text-white'
+                      : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+                    }`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {poolCapped && (
         <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">
@@ -664,15 +741,26 @@ function StartView({
         </p>
       )}
 
-      <button
-        type="button"
-        onClick={onStart}
-        disabled={!canStart}
-        className="mt-6 flex w-full items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-40"
-      >
-        <Microphone size={20} weight="bold" />
-        Начать интервью
-      </button>
+      <div className="mt-6 flex items-stretch gap-3">
+        <button
+          type="button"
+          onClick={onStart}
+          disabled={!canStart}
+          className="flex flex-1 items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-40"
+        >
+          <Microphone size={20} weight="bold" />
+          Начать интервью
+        </button>
+        {hasSelection && (
+          <button
+            type="button"
+            onClick={onClearSelection}
+            className="shrink-0 border-[3px] border-border bg-surface px-4 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none hover:bg-text hover:text-canvas"
+          >
+            Сбросить
+          </button>
+        )}
+      </div>
     </>
   );
 }
@@ -929,9 +1017,8 @@ function ResultsView({ entry, questions, onRetake }: ResultsViewProps) {
                   {STATUSES.map((s) => (
                     <td
                       key={s}
-                      className={`px-3 py-2 text-center font-mono text-sm font-bold ${
-                        row.counts[s] > 0 ? 'text-text' : 'text-text-tertiary'
-                      }`}
+                      className={`px-3 py-2 text-center font-mono text-sm font-bold ${row.counts[s] > 0 ? 'text-text' : 'text-text-tertiary'
+                        }`}
                     >
                       {row.counts[s]}
                     </td>

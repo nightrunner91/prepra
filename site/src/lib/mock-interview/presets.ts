@@ -20,6 +20,13 @@ export const ALL_SECTION_IDS = [
 
 export const PRESETS: InterviewPreset[] = [
   {
+    id: 'basics',
+    title: 'Основы веб-разработки',
+    description: 'JavaScript и HTML/CSS',
+    sections: ['javascript', 'html-css'],
+    count: 10,
+  },
+  {
     id: 'react-stack',
     title: 'React-стек',
     description: 'React, TypeScript и хранилища состояния',
@@ -33,13 +40,6 @@ export const PRESETS: InterviewPreset[] = [
     description: 'JavaScript, TypeScript и HTML/CSS',
     sections: ['javascript', 'typescript', 'html-css'],
     count: 30,
-  },
-  {
-    id: 'basics',
-    title: 'Основы веб-разработки',
-    description: 'JavaScript и HTML/CSS',
-    sections: ['javascript', 'html-css'],
-    count: 10,
   },
   {
     id: 'vue',
@@ -84,12 +84,5 @@ export const PRESETS: InterviewPreset[] = [
     description: 'Безопасность и работа с API',
     sections: ['security', 'api-communication'],
     count: 15,
-  },
-  {
-    id: 'full-frontend',
-    title: 'Полный фронтенд',
-    description: 'Все разделы Prepra',
-    sections: [...ALL_SECTION_IDS],
-    count: 50,
   },
 ];
