@@ -1,6 +1,7 @@
 ---
 title: "TypeScript во Vue"
 section: typescript
+stacks: ["vue"]
 description: "TypeScript во Vue 3: defineProps и withDefaults, defineEmits, ref/computed, v-model и defineModel, generic-компоненты, типизация слотов, provide/inject с InjectionKey и vue-tsc."
 order: 9
 tags: ["typescript", "vue", "defineprops", "defineemits", "injectionkey", "template-refs"]

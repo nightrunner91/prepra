@@ -1,6 +1,7 @@
 ﻿---
 title: "Визуальное и регрессионное тестирование"
 section: testing
+stacks: []
 description: "Автоматическая проверка внешнего вида интерфейса: snapshot-тесты, визуальная регрессия, Playwright, Chromatic, Percy и Storybook."
 order: 9
 tags: ["visual-regression", "snapshot-testing", "playwright", "storybook", "chromatic", "percy"]

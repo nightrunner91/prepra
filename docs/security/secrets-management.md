@@ -1,6 +1,7 @@
 ---
 title: "Управление секретами во фронтенде"
 section: security
+stacks: []
 description: "Секреты во фронтенде: `NEXT_PUBLIC_`, `runtimeConfig`, серверный прокси, vaults, ротация, защита `.env` от утечек в git."
 order: 2
 tags: ["secrets", "env-variables", "next-public", "runtime-config", "vault"]

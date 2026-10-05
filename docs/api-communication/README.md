@@ -14,7 +14,7 @@
 - **[Ретраи и exponential backoff](./retries-backoff.md)** — какие ошибки ретраить, jitter, Retry-After, идемпотентность, ретраи в ky/axios/TanStack Query.
 - **[Long Polling](./long-polling.md)** — real-time обновления через обычный HTTP, реализация, обработка ошибок, сравнение с SSE/WebSocket.
 - **[SSE: Server-Sent Events](./sse.md)** — односторонний real-time через HTTP, EventSource, авто-переподключение, реализация в React и Next.js.
-- **[WebSocket: двусторонний real-time](./websocket-react-next.md)** — протокол, переподключения, интеграция с состоянием в React и Vue, сервер в Next.js и Nuxt, масштабирование.
+- **[WebSocket: двусторонний real-time](./websocket.md)** — протокол, переподключения, интеграция с состоянием в React и Vue, сервер в Next.js и Nuxt, масштабирование.
 - **[tRPC и типобезопасные API](./trpc.md)** — end-to-end типизация без codegen, zod-валидация, React Query, SSR.
 
 ## Не будет лишним

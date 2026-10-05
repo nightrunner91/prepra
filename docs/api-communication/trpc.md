@@ -1,6 +1,7 @@
 ---
 title: "tRPC и типобезопасные API"
 section: api-communication
+stacks: []
 description: "tRPC — end-to-end типизация без codegen: процедуры, роутеры, zod-валидация, React Query, SSR. Сравнение с REST, GraphQL и OpenAPI-кодогенерацией."
 order: 9
 tags: ["trpc", "end-to-end-type-safety", "typescript", "zod", "react-query", "server-call"]

@@ -1,6 +1,7 @@
 ﻿---
 title: "Backend for Frontend (BFF)"
 section: architecture
+stacks: []
 description: "Архитектурный паттерн BFF: отдельный backend под каждый клиент. Разбираем зачем нужен, как реализовать на Next.js, и решает ли проблему несоответствия данных."
 order: 8
 tags: ["bff", "backend-for-frontend", "api-gateway", "nextjs", "microservices", "anti-corruption-layer"]

@@ -1,6 +1,7 @@
 ---
 title: "Анализ и оптимизация JavaScript-бандла"
 section: performance
+stacks: []
 description: "Как находить узкие места в бандле, применять tree shaking и code splitting, бороться с дубликатами и настраивать автоматический контроль размера."
 order: 5
 tags: ["bundle-analyzer", "tree-shaking", "code-splitting", "vendor-chunks", "compression"]

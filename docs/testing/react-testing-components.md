@@ -1,6 +1,7 @@
 ---
 title: "Тестирование React"
 section: testing
+stacks: ["react"]
 description: "Как тестировать React-компоненты через поведение пользователя: рендеринг, поиск элементов, события, асинхронность, провайдеры и типичные ошибки."
 order: 4
 tags: ["react-testing-library", "user-event", "jest-dom", "msw", "vitest"]

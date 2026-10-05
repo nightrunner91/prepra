@@ -1,6 +1,7 @@
 ﻿---
 title: "TypeScript в React"
 section: typescript
+stacks: ["react"]
 description: "TypeScript в React: типизация пропсов, событий, хуков, generic-компонентов, forwardRef и discriminated unions."
 order: 8
 tags: ["typescript", "react", "props", "hooks", "forwardref"]

@@ -8,6 +8,7 @@ export type MockInterviewQuestion = {
   articleTitle: string;
   url: string;
   order: number;
+  stacks: string[];
   question: string;
   answer: string | null;
 };
@@ -17,12 +18,14 @@ export type InterviewPreset = {
   title: string;
   description: string;
   sections: string[];
+  stacks?: string[];
   count: number;
 };
 
 export type InterviewConfig = {
   presetId: string | null;
   sections: string[];
+  stacks?: string[];
   count: number;
 };
 

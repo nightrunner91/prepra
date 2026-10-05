@@ -1,6 +1,7 @@
 ---
 title: "Основы тестирования: пирамида, принципы, стратегии"
 section: testing
+stacks: []
 description: "Как выстроить эффективную стратегию тестирования: пирамида и Testing Trophy, уровни тестов, принципы FIRST, TDD, code coverage и практические советы."
 order: 1
 tags: ["testing-pyramid", "unit-tests", "integration-tests", "e2e-tests", "tdd", "code-coverage", "page-object-model", "data-testid", "mocking"]

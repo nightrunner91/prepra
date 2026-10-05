@@ -1,6 +1,7 @@
 ---
 title: "REST — Архитектурный стиль для распределённых систем"
 section: api-communication
+stacks: []
 description: "REST — архитектурный стиль для распределённых систем. Шесть ограничений, ресурсы, HTTP-методы, коды ответов, HATEOAS, сравнение с SOAP, GraphQL и gRPC."
 order: 1
 tags: ["rest", "hateoas", "http-methods", "status-codes", "resources", "idempotency"]

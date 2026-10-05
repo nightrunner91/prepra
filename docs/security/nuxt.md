@@ -1,6 +1,7 @@
 ---
 title: "Безопасность Nuxt"
 section: security
+stacks: ["nuxt"]
 description: "Nuxt: SSR и XSS, серверные маршруты Nitro, `nuxt-security`, `runtimeConfig`, CSRF и CSP."
 order: 11
 tags: ["nuxt", "security", "nitro", "nuxt-security", "runtime-config", "csrf", "csp"]

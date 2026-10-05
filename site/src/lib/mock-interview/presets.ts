@@ -24,6 +24,7 @@ export const PRESETS: InterviewPreset[] = [
     title: 'React-стек',
     description: 'React, TypeScript и хранилища состояния',
     sections: ['react', 'typescript', 'state-management'],
+    stacks: ['react'],
     count: 20,
   },
   {
@@ -45,6 +46,7 @@ export const PRESETS: InterviewPreset[] = [
     title: 'Vue-стек',
     description: 'Vue, Nuxt, TypeScript и хранилища состояния',
     sections: ['vue', 'nuxt', 'typescript', 'state-management'],
+    stacks: ['vue', 'nuxt'],
     count: 20,
   },
   {
@@ -52,6 +54,7 @@ export const PRESETS: InterviewPreset[] = [
     title: 'Next.js full-stack',
     description: 'Next.js, API, деплой и безопасность',
     sections: ['nextjs', 'api-communication', 'build-and-deployment', 'security'],
+    stacks: ['nextjs'],
     count: 20,
   },
   {

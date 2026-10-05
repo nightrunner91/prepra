@@ -1,6 +1,7 @@
 ---
 title: "Платформы деплоя: Vercel, Netlify, Railway, Cloudflare"
 section: build-and-deployment
+stacks: []
 description: "Сравнение Vercel, Netlify, Railway, Render, Fly.io и Cloudflare — когда что выбирать, как соотносятся serverless и контейнеры, и какие архитектуры деплоя подходят для разных задач."
 order: 5
 tags: ["vercel", "netlify", "railway", "cloudflare", "deployment-platforms"]

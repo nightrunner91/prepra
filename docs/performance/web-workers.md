@@ -1,6 +1,7 @@
 ﻿---
 title: "Web Workers: фоновые вычисления без блокировки UI"
 section: performance
+stacks: []
 description: "Web Workers выносят тяжёлые вычисления из основного потока в фоновый, сохраняя отзывчивость UI. Разбираем базовый синтаксис, паттерны с React, Shared Workers, Service Workers и comlink."
 order: 8
 tags: ["web-workers", "shared-worker", "service-worker", "postmessage", "comlink"]

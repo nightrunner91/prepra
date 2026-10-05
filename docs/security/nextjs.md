@@ -1,6 +1,7 @@
 ---
 title: "Безопасность Next.js"
 section: security
+stacks: ["nextjs"]
 description: "Server Components, Server Actions, middleware, Route Handlers, CSP с nonce, security-заголовки, защита от Open Redirect в Next.js App Router."
 order: 10
 tags: ["nextjs", "security", "server-components", "server-actions", "middleware", "route-handlers"]

@@ -1,6 +1,7 @@
 ---
 title: "Server-Sent Events: real-time через HTTP"
 section: api-communication
+stacks: []
 description: "Server-Sent Events (SSE) — односторонний real-time через обычный HTTP: EventSource, авто-переподключение, форматы событий, реализация в React и Next.js, сравнение с WebSocket."
 order: 7
 tags: ["sse", "eventsource", "real-time", "event-stream", "streaming", "websocket"]

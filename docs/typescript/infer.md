@@ -1,6 +1,7 @@
 ﻿---
 title: "TypeScript infer: извлечение типов из шаблонов"
 section: typescript
+stacks: []
 description: "Ключевое слово infer в TypeScript выводит типы внутри условных типов. Разбираем извлечение типов из функций, массивов, Promise и практическое применение."
 order: 6
 tags: ["infer", "typescript", "conditional-types", "utility-types", "return-type", "mapped-types"]

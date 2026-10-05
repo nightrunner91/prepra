@@ -1,6 +1,7 @@
 ---
 title: "HTTP-заголовки безопасности"
 section: security
+stacks: []
 description: "Security-заголовки: HSTS, CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy, COOP/COEP/CORP, Clear-Site-Data. Настройка в Next.js и Nuxt."
 order: 6
 tags: ["http-headers", "hsts", "x-frame-options", "coop", "coep", "permissions-policy"]

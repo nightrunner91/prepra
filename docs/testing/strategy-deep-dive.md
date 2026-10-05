@@ -1,6 +1,7 @@
 ﻿---
 title: "Стратегия тестирования фронтенда"
 section: testing
+stacks: []
 description: "Как выбирать уровни тестов, применять doubles, управлять рисками и выстраивать процесс тестирования SPA и SSR/fullstack (Next.js/Nuxt) приложений без перегрузки CI."
 order: 10
 tags: ["testing-strategy", "react", "e2e", "test-doubles", "risk-based-testing", "msw"]

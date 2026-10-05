@@ -1,6 +1,7 @@
 ---
 title: "Мокирование и изоляция тестов"
 section: testing
+stacks: []
 description: "Как изолировать тесты с помощью моков: vi.fn, vi.spyOn, vi.mock, MSW, таймеры, localStorage и фабрики данных. Разбор практик и антипаттернов."
 order: 3
 tags: ["mocking", "vitest", "msw", "spy", "stub", "test-isolation"]

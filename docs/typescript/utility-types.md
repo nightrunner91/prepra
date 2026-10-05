@@ -1,6 +1,7 @@
 ﻿---
 title: "Utility-типы TypeScript: от Partial до Awaited"
 section: typescript
+stacks: []
 description: "Utility-типы TypeScript трансформируют типы: Partial, Pick, Omit, Record, Exclude, ReturnType и другие. Разбираем реализацию и применение в React и Vue."
 order: 7
 tags: ["utility-types", "mapped-types", "conditional-types", "partial", "record", "pick"]

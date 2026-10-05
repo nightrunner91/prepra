@@ -49,6 +49,7 @@ type MockInterviewQuestion = {
   articleTitle: string;
   url: string;           // withBase(`/${section}/${slug}`)
   order: number;         // порядок статьи в разделе (tie-break)
+  stacks: string[];      // стеки статьи; [] — нейтральная
   question: string;
   answer: string | null; // null, если для вопроса нет ответа
 };
@@ -57,6 +58,15 @@ type MockInterviewQuestion = {
 - Пары строятся по индексу: `questions[i]` ↔ `answers[i]`.
 - `answer: null`, когда `answers` отсутствуют/короче `questions`.
 - **Все** вопросы попадают в индекс, включая безответные — чтобы AI подключился автоматически, когда в `docs/ai/*` появятся ответы.
+
+### 1.1 Стеки
+
+Чтобы вопросы рамки не смешивались между фреймворками, у статьи есть измерение **стек** (`stacks` в frontmatter, массив; `[]` — нейтральная).
+
+- Нейтральные статьи (`stacks: []`) подходят любому стеку.
+- Фреймворк-разделы не размечаются вручную — стек выводится из раздела: `react → ["react"]`, `vue → ["vue"]`, `nextjs → ["nextjs","react"]`, `nuxt → ["nuxt","vue"]` (фреймворки наследуют базу).
+- Смешанные разделы размечаются явно: `state-management`, `api-communication`, `build-and-deployment`, `security`, `testing`, `performance`, `architecture`, `typescript` (в нём есть статьи `react`/`vue`).
+- Индекс берёт `data.stacks`, иначе — инференс по разделу, иначе `[]`.
 
 ### 2. Пресеты `site/src/lib/mock-interview/presets.ts`
 
@@ -68,23 +78,28 @@ type InterviewPreset = {
   title: string;
   description: string;
   sections: string[]; // id разделов
+  stacks?: string[];  // рамка стека; отсутствует — любой
   count: number;
 };
 ```
 
 Стартовый набор:
 
-| id | title | sections | count |
-|----|-------|----------|-------|
-| `react-stack` | React-стек | react, typescript, state-management | 20 |
-| `js-core` | Основы JavaScript | javascript, typescript, html-css | 30 |
-| `security` | Безопасность | security, api-communication | 15 |
-| `full-frontend` | Полный фронтенд | все 15 разделов | 50 |
+| id | title | sections | stacks | count |
+|----|-------|----------|--------|-------|
+| `react-stack` | React-стек | react, typescript, state-management | `["react"]` | 20 |
+| `js-core` | Основы JavaScript | javascript, typescript, html-css | — | 30 |
+| `security` | Безопасность | security, api-communication | — | 15 |
+| `vue` | Vue-стек | vue, nuxt, typescript, state-management | `["vue","nuxt"]` | 20 |
+| `next` | Next.js full-stack | nextjs, api-communication, build-and-deployment, security | `["nextjs"]` | 20 |
+| `full-frontend` | Полный фронтенд | все 15 разделов | — | 50 |
+
+Примечание: `js-core`, `security`, `senior`, `basics`, `testing`, `ai`, `full-frontend` стек не задают — вопросы рамки не смешивают, а осознанно берут весь раздел.
 
 ### 3. Алгоритм выборки `site/src/lib/mock-interview/selection.ts`
 
-- Вход: индекс, выбранные разделы, запрошенное количество.
-- Фильтр пула: `selectedSections.contains(q.section) && q.answer !== null`.
+- Вход: индекс, выбранные разделы, опциональный стек, запрошенное количество.
+- Фильтр пула: `selectedSections.contains(q.section) && q.answer !== null && inStacks(q, stacks)`, где `inStacks` = «стек не задан ИЛИ статья нейтральная ИЛИ `q.stacks` пересекается с `stacks`».
 - Пропорциональное распределение: доля раздела = `round(count * qtySection / qtyTotal)`.
 - Внутри раздела — выборка без повторений (шаффл + срез). Если раздел даёт меньше доли — берём всё, нехватку добором по кругу в разделы с запасом.
 - Если `count` > доступного пула → кап на весь пул, показать заметку «в выбранных разделах N вопросов — выдано N».
@@ -99,7 +114,7 @@ type InterviewPreset = {
   ```ts
   type InterviewSession = {
     version: 1;
-    config: { presetId: string | null; sections: string[]; count: number };
+    config: { presetId: string | null; sections: string[]; stacks?: string[]; count: number };
     questions: MockInterviewQuestion[]; // весь выбранный сет, фиксированный порядок
     answers: Record<number, 'good' | 'unsure' | 'failed' | 'skipped'>;
     currentIndex: number;
@@ -136,7 +151,7 @@ type InterviewPreset = {
 
 - Если есть `active`-сессия — баннер поверх: «Незавершённое интервью: отвечено N из M» + кнопки **Продолжить** / **Начать новое** (сброс).
 - **Пресеты**: карточки (title, description, «N вопросов») — клик выделяет пресет.
-- **Кастомный конфиг**: multiselect разделов (чекбоксы, метка + количество вопросов в разделе из индекса) + выбор длины интервью (пилюли **20 / 30 / 50**).
+- **Кастомный конфиг**: multiselect разделов (чекбоксы, метка + количество вопросов в разделе из индекса) + выбор стека (пилюли **Любой / React / Vue / Next.js / Nuxt**, влияет на счётчики разделов и пул) + выбор длины интервью (пилюли **20 / 30 / 50**).
 - Кнопка «Начать интервью»: валидация (≥1 раздел, длина > 0, пул не пуст) → выборка → создание `active` → фаза `active`.
 - Выбор пресета и кастомный конфиг взаимоисключающие: старт пресета фиксирует его `presetId`, кастом — `presetId: null`.
 
@@ -193,8 +208,8 @@ type InterviewPreset = {
 ## Проверка
 
 - `npm run build` собирается без ошибок TypeScript/схемы контента; `mock-interview-index.json` присутствует в `dist/`.
-- Пресет «React-стек» даёт 20 вопросов только из react/typescript/state-management; «Полный фронтенд» — 50 из 15 разделов.
-- Кастом: 3 раздела × 50 → пропорции по пулам; запрос больше пула → кап + заметка; только AI → блокировка старта.
+- Пресет «React-стек» даёт 20 вопросов только из react/typescript/state-management и не содержит статей `pinia`/`vuex`; «Vue-стек» не содержит `redux`/`zustand`/`tanstack-query`; «Next.js full-stack» не содержит `nuxt-deployment`/`security/vue`/`security/react`; «Полный фронтенд» — 50 из 15 разделов.
+- Кастом: 3 раздела × 50 → пропорции по пулам; запрос больше пула → кап + заметка; только AI → блокировка старта; выбранный стек уменьшает пул и счётчики разделов.
 - Два запуска одного пресета дают разный порядок/состав.
 - Перезагрузка страницы на 49/50 → «Продолжить» восстанавливает интервью без повторного фетча.
 - Пропуск считается в `skipped` и в таблице по разделам.

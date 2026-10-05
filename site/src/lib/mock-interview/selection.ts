@@ -6,6 +6,15 @@ export type SelectionResult = {
   requested: number;
 };
 
+export function questionInStacks(
+  question: MockInterviewQuestion,
+  stacks?: string[],
+): boolean {
+  if (!stacks || stacks.length === 0) return true;
+  if (question.stacks.length === 0) return true;
+  return question.stacks.some((s) => stacks.includes(s));
+}
+
 function shuffle<T>(items: T[]): T[] {
   const arr = [...items];
   for (let i = arr.length - 1; i > 0; i--) {
@@ -18,10 +27,13 @@ function shuffle<T>(items: T[]): T[] {
 export function selectQuestions(
   index: MockInterviewQuestion[],
   sections: string[],
+  stacks: string[] | undefined,
   count: number,
 ): SelectionResult {
   const selected = new Set(sections);
-  const pool = index.filter((q) => q.answer !== null && selected.has(q.section));
+  const pool = index.filter(
+    (q) => q.answer !== null && selected.has(q.section) && questionInStacks(q, stacks),
+  );
 
   if (pool.length === 0) {
     return { questions: [], available: 0, requested: count };

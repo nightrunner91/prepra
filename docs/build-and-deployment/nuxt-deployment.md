@@ -1,6 +1,7 @@
 ---
 title: "Деплой Nuxt: Nitro, presets и routeRules"
 section: build-and-deployment
+stacks: ["nuxt"]
 description: "Как устроен Nitro и почему он ключевой для деплоя Nuxt 3, чем `nuxt build` отличается от `nuxt generate`, как работают `routeRules` и edge-пресеты."
 order: 7
 tags: ["nuxt", "nitro", "ssr", "routerules", "deployment"]

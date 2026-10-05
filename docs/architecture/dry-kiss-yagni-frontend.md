@@ -1,6 +1,7 @@
 ﻿---
 title: "DRY, KISS, YAGNI во Frontend"
 section: architecture
+stacks: []
 description: "Три принципа здорового кода — DRY, KISS, YAGNI — на примерах React и Vue. Как применять и когда сознательно отступать от правил."
 order: 1
 tags: ["dry", "kiss", "yagni", "react", "vue", "clean-code"]

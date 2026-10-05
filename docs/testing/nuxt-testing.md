@@ -1,6 +1,7 @@
 ﻿---
 title: "Тестирование Nuxt"
 section: testing
+stacks: ["nuxt"]
 description: "Как тестировать Nuxt-приложения: настройка Vitest, тестирование компонентов, composables, server routes, middleware, мокирование API и антипаттерны."
 order: 7
 tags: ["nuxt", "vitest", "mountSuspended", "registerEndpoint", "mockNuxtImport", "composables"]

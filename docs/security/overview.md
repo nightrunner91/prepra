@@ -1,6 +1,7 @@
 ---
 title: "Безопасность фронтенда: обзор угроз и защит"
 section: security
+stacks: []
 description: "Обзор безопасности для фронтендера: XSS, CSRF, CSP, секреты, аутентификация, HTTP-заголовки, supply chain и философия defense in depth."
 order: 1
 tags: ["безопасность", "xss", "csrf", "csp", "authentication", "secrets"]

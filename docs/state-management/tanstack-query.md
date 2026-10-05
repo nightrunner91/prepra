@@ -1,6 +1,7 @@
 ---
 title: "TanStack Query: кэш, мутации, серверное состояние"
 section: state-management
+stacks: ["react"]
 description: "TanStack Query управляет серверным состоянием в React: кэш, мутации, staleTime, gcTime и оптимистичные обновления из коробки."
 order: 4
 tags: ["tanstack-query", "react-query", "server-state", "useQuery", "staleTime"]

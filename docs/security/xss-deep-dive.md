@@ -1,6 +1,7 @@
 ---
 title: "XSS: анатомия атаки и методы защиты"
 section: security
+stacks: []
 description: "XSS-атаки во фронтенде: reflected, stored, DOM-based, mXSS. Экранирование, санитизация, `dangerouslySetInnerHTML`, `v-html`, Trusted Types."
 order: 3
 tags: ["xss", "sanitization", "dompurify", "dangerouslysetinnerhtml", "v-html", "trusted-types"]

@@ -1,6 +1,7 @@
 ---
 title: "SOC2 и CASA для фронтенд-разработчика"
 section: security
+stacks: []
 description: "Как фронтендеру участвовать в SOC2 и CASA-аудите: controls, evidence, access reviews, change management, pentest, incident response, Secure SDLC."
 order: 13
 tags: ["soc2", "casa", "compliance", "audit", "secure-sdlc", "incident-response"]

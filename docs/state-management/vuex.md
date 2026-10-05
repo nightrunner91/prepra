@@ -1,6 +1,7 @@
 ---
 title: "Vuex: классический стейт-менеджер Vue"
 section: state-management
+stacks: ["vue"]
 description: "Vuex — официальный стейт-менеджер Vue 2 и Vue 3 до появления Pinia. state, mutations, getters, actions, модули с namespaced и миграция на Pinia."
 order: 6
 tags: ["vuex", "state-management", "vue", "flux", "pinia"]

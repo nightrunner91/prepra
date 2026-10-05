@@ -1,6 +1,7 @@
 ---
 title: "Безопасность React"
 section: security
+stacks: ["react"]
 description: "React: экранирование JSX, `dangerouslySetInnerHTML`, URL-атрибуты, refs, хранение токенов и защита от XSS в клиентских компонентах."
 order: 8
 tags: ["react", "security", "xss", "dangerouslysetinnerhtml", "dompurify"]

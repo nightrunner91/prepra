@@ -1,6 +1,7 @@
 ---
 title: "Паттерны GoF в React и Vue"
 section: architecture
+stacks: []
 description: "Как классические паттерны Gang of Four — фабрика, декоратор, синглтон, наблюдатель — адаптируются под реалии React и Vue: хуки, Context, composables, реактивность."
 order: 4
 tags: ["gof", "design-patterns", "factory", "decorator", "singleton", "observer", "react", "vue"]

@@ -1,6 +1,7 @@
 ---
 title: "Blue-Green, Canary и Feature Flags при деплое"
 section: build-and-deployment
+stacks: []
 description: "Стратегии деплоя без downtime: blue-green для мгновенного переключения, canary для постепенного rollout, feature flags для разделения деплоя и релиза, и как правильно откатываться."
 order: 3
 tags: ["blue-green", "canary-releases", "feature-flags", "zero-downtime", "rollback"]

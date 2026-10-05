@@ -1,6 +1,7 @@
 ---
 title: "WebSocket: двусторонний real-time"
 section: api-communication
+stacks: []
 description: "WebSocket — протокол двустороннего real-time: подключение, переподключения с exponential backoff, heartbeat, интеграция с состоянием в React и Vue, серверная часть в Next.js и Nuxt, масштабирование через Redis."
 order: 8
 tags: ["websocket", "usewebsocket", "socket-io", "sse", "exponential-backoff", "redis", "vue", "nuxt"]

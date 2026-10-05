@@ -1,6 +1,7 @@
 ﻿---
 title: "Enum в TypeScript: польза и риски"
 section: typescript
+stacks: []
 description: "Enum в TypeScript генерирует runtime-объект, что даёт возможности и создаёт риски. Сравниваем numeric, string enums и альтернативы: union types и as const."
 order: 2
 tags: ["enum", "union-types", "as-const", "const-enum", "reverse-mapping", "numeric-enums"]

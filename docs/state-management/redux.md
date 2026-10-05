@@ -1,6 +1,7 @@
 ---
 title: "Redux Toolkit: предсказуемое состояние, слайсы, RTK Query"
 section: state-management
+stacks: ["react"]
 description: "Redux Toolkit — современный способ писать Redux без бойлерплейта. createSlice, createAsyncThunk, RTK Query, Immer и правила иммутабельности."
 order: 2
 tags: ["redux", "redux-toolkit", "rtk", "rtk-query", "state-management", "flux"]

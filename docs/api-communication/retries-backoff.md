@@ -1,6 +1,7 @@
 ---
 title: "Ретраи и exponential backoff"
 section: api-communication
+stacks: []
 description: "Ретраи при сетевых ошибках: exponential backoff с jitter, retry-after, идемпотентность запросов, настройка ретраев в ky, axios и TanStack Query."
 order: 5
 tags: ["retry", "exponential-backoff", "jitter", "idempotency", "timeout", "tanstack-query"]

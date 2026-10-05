@@ -1,6 +1,7 @@
 ﻿---
 title: "Тестирование Next.js"
 section: testing
+stacks: ["nextjs"]
 description: "Разбираем подходы к тестированию приложений на Next.js: от настройки Vitest и мокирования Next.js API до Server Components, Actions, Route Handlers и Middleware."
 order: 5
 tags: ["nextjs", "vitest", "server-components", "server-actions", "route-handlers", "msw"]

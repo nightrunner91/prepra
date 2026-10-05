@@ -23,6 +23,7 @@ const articleSchema = z.object({
   description: z.string().optional(),
   order: z.number(),
   tags: z.array(z.string()).optional(),
+  stacks: z.array(z.string()).optional(),
   relatedArticles: z.array(z.string()).optional(),
   questions: z.array(z.string()).optional(),
   answers: z.array(z.string()).optional(),

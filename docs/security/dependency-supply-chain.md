@@ -1,6 +1,7 @@
 ---
 title: "Безопасность зависимостей и supply chain"
 section: security
+stacks: []
 description: "Supply chain-атаки, npm audit, lock-файлы, Snyk, Socket, SBOM, provenance, приватные registry. Защита от вредоносных пакетов и typosquatting."
 order: 12
 tags: ["supply-chain", "npm-audit", "lock-files", "sbom", "provenance", "snyk"]

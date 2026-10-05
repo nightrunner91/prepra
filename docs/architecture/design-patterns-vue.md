@@ -1,6 +1,7 @@
 ---
 title: "Паттерны компонентов и файловая структура во Vue"
 section: architecture
+stacks: ["vue","nuxt"]
 description: "Паттерны Vue-компонентов (слоты, provide/inject, scoped slots, composables, v-model) и подходы к организации файлов в проектах Vue и Nuxt 3."
 order: 6
 tags: ["vue", "composables", "scoped-slots", "provide-inject", "v-model", "nuxt"]

@@ -1,6 +1,7 @@
 ---
 title: "Sentry: интеграция и мониторинг ошибок"
 section: testing
+stacks: []
 description: "Как интегрировать Sentry в React, Next.js, Vue и Nuxt: от базовой настройки и source maps до performance monitoring, алертов и best practices."
 order: 13
 tags: ["sentry", "error-monitoring", "performance-monitoring", "source-maps", "session-replay"]

@@ -1,6 +1,7 @@
 ---
 title: "Клиентские хранилища: localStorage, cookies, IndexedDB"
 section: state-management
+stacks: []
 description: "Браузерные хранилища: localStorage, sessionStorage, cookies, IndexedDB. Различия, React-интеграция и защита от XSS и CSRF."
 order: 1
 tags: ["localStorage", "sessionStorage", "cookies", "IndexedDB", "web-storage"]

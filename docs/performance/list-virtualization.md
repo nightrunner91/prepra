@@ -1,6 +1,7 @@
 ---
 title: "Виртуализация списков: принципы и библиотеки"
 section: performance
+stacks: ["react","vue"]
 description: "Виртуализация — техника рендеринга только видимых элементов списка, снижающая нагрузку на DOM до ~50 узлов при тысячах записей. Разбираем react-window, react-virtuoso и Vue-решения."
 order: 6
 tags: ["virtualization", "react-window", "react-virtuoso", "vue-virtual-scroller", "tanstack-virtual"]

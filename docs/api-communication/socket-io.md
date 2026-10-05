@@ -1,6 +1,7 @@
 ---
 title: "Socket.IO: rooms, namespaces и real-time"
 section: api-communication
+stacks: []
 description: "Socket.IO — библиотека real-time поверх WebSocket: Engine.IO, транспорты и fallback, rooms, namespaces, acknowledgements, middleware, переподключения и масштабирование через Redis adapter."
 order: 10
 tags: ["socket-io", "engine-io", "websocket", "rooms", "namespaces", "redis-adapter"]

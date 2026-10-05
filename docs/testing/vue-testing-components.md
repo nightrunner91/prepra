@@ -1,6 +1,7 @@
 ﻿---
 title: "Тестирование Vue"
 section: testing
+stacks: ["vue"]
 description: "Как тестировать Vue-компоненты с Vue Test Utils и Vitest: настройка окружения, пропсы, emits, слоты, v-model, Pinia, Vue Router и лучшие практики."
 order: 6
 tags: ["vue-test-utils", "vitest", "component-testing", "pinia", "vue-router", "composables"]

@@ -1,6 +1,7 @@
 ﻿---
 title: "Типизация хуков и async-паттернов в React"
 section: typescript
+stacks: ["react"]
 description: "Типизация кастомных хуков и async-паттернов в React: дженерики, cleanup, AbortController, discriminated unions и типичные ошибки при работе с API."
 order: 10
 tags: ["custom-hooks", "async-patterns", "react", "typescript", "abortcontroller", "discriminated-unions"]

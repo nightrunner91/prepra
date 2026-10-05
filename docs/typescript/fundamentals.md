@@ -1,6 +1,7 @@
 ---
 title: "Основы TypeScript: типы, интерфейсы и конфигурация"
 section: typescript
+stacks: []
 description: "Фундамент TypeScript для начинающих: что такое TS, зачем нужна статическая типизация, базовые типы, интерфейсы, type vs interface, аннотации, tsconfig.json и компиляция."
 order: 1
 tags: ["typescript-basics", "static-typing", "interfaces", "type-annotations", "tsconfig", "compilation"]

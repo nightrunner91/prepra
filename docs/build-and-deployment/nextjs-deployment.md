@@ -1,6 +1,7 @@
 ---
 title: "Деплой Next.js: режимы вывода и платформы"
 section: build-and-deployment
+stacks: ["nextjs"]
 description: "Что происходит при `next build`, чем `output: 'export'` отличается от `standalone`, как деплоить на Vercel и в Docker, и как настроить environment variables."
 order: 6
 tags: ["nextjs", "vercel", "docker", "isr", "edge-runtime"]

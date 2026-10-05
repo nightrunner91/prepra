@@ -1,6 +1,7 @@
 ﻿---
 title: "Методы рендеринга: CSR, SSR, SSG, ISR, SWR и Streaming"
 section: performance
+stacks: []
 description: "Метод рендеринга определяет, где и когда создаётся HTML: в браузере, на сервере при каждом запросе или при сборке. Разбираем CSR, SSR, SSG, ISR, SWR и Streaming, их баланс между SEO, скоростью, актуальностью данных и нагрузкой на сервер, а также роль CDN и HTTP-кэширования."
 order: 2
 tags: ["rendering", "csr", "ssr", "ssg", "isr", "swr", "streaming", "hydration", "cdn", "cache-control"]

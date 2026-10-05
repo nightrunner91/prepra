@@ -1,6 +1,7 @@
 ﻿---
 title: "Типы возврата функций в TypeScript"
 section: typescript
+stacks: []
 description: "Типизация возвращаемого значения — одна из ключевых возможностей TypeScript. Она позволяет зафиксировать контракт функции: что именно получит вызывающий код."
 order: 3
 tags: ["return-types", "void", "never", "unknown", "generics", "promise"]

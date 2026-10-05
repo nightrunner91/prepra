@@ -1,6 +1,7 @@
 ---
 title: "HTTP-клиенты: fetch, axios, ky и ofetch"
 section: api-communication
+stacks: []
 description: "Сравнение HTTP-клиентов для фронтенда: нативный fetch, axios, ky и ofetch. Когда какой выбирать, как централизовать клиент и обрабатывать ошибки."
 order: 2
 tags: ["fetch", "axios", "ky", "ofetch", "interceptors", "abortcontroller"]

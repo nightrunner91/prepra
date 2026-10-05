@@ -1,6 +1,7 @@
 ---
 title: "Отмена HTTP-запросов: AbortController, Race Conditions и cleanup"
 section: api-communication
+stacks: []
 description: "Отмена HTTP-запросов через AbortController в fetch, axios и ky. Предотвращение race conditions, cleanup в useEffect, интеграция с TanStack Query."
 order: 4
 tags: ["abortcontroller", "abortsignal", "race-condition", "useeffect", "tanstack-query", "cleanup"]

@@ -1,6 +1,7 @@
 ﻿---
 title: "Декораторы в TypeScript"
 section: typescript
+stacks: []
 description: "Декораторы добавляют сквозную логику к классам в TypeScript. Разбираем Legacy и Stage 3 спецификации, виды декораторов и применение в фреймворках."
 order: 11
 tags: ["decorators", "typescript", "aop", "metadata", "nestjs", "mobx"]

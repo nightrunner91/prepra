@@ -13,7 +13,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { withBase } from '../../lib/urls';
 import { ALL_SECTION_IDS, PRESETS } from '../../lib/mock-interview/presets';
-import { selectQuestions } from '../../lib/mock-interview/selection';
+import { selectQuestions, questionInStacks } from '../../lib/mock-interview/selection';
 import {
   appendHistory,
   clearActiveSession,
@@ -36,6 +36,12 @@ type Phase = 'start' | 'active' | 'results';
 
 const INDEX_URL = withBase('/mock-interview-index.json');
 const LENGTH_OPTIONS = [20, 30, 50];
+const STACK_OPTIONS: { id: string; label: string }[] = [
+  { id: 'react', label: 'React' },
+  { id: 'vue', label: 'Vue' },
+  { id: 'nextjs', label: 'Next.js' },
+  { id: 'nuxt', label: 'Nuxt' },
+];
 const STATUSES: AnswerStatus[] = ['good', 'unsure', 'failed', 'skipped'];
 const RATE_STATUSES: AnswerStatus[] = ['good', 'unsure', 'failed'];
 
@@ -98,6 +104,7 @@ export function MockInterview() {
   } | null>(null);
   const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [selectedStack, setSelectedStack] = useState<string>('');
   const [length, setLength] = useState(30);
   const [flipped, setFlipped] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -108,7 +115,7 @@ export function MockInterview() {
 
   const startWithIndex = useCallback(
     (data: MockInterviewQuestion[], config: InterviewConfig) => {
-      const result = selectQuestions(data, config.sections, config.count);
+      const result = selectQuestions(data, config.sections, config.stacks, config.count);
       if (result.questions.length === 0) return;
       const next: InterviewSession = {
         version: 1,
@@ -233,13 +240,19 @@ export function MockInterview() {
       : undefined;
     const sections = preset ? preset.sections : selectedSections;
     if (sections.length === 0) return;
+    const stacks = preset
+      ? preset.stacks
+      : selectedStack
+        ? [selectedStack]
+        : undefined;
     const config: InterviewConfig = {
       presetId: selectedPresetId,
       sections,
+      stacks,
       count: preset ? preset.count : length,
     };
     startInterview(config);
-  }, [selectedPresetId, selectedSections, length, startInterview]);
+  }, [selectedPresetId, selectedSections, selectedStack, length, startInterview]);
 
   const resume = useCallback(() => {
     if (!session || session.currentIndex >= session.questions.length) return;
@@ -282,28 +295,41 @@ export function MockInterview() {
     setSelectedPresetId(null);
   }, []);
 
+  const selectStack = useCallback((id: string) => {
+    setSelectedStack((prev) => (prev === id ? '' : id));
+    setSelectedPresetId(null);
+  }, []);
+
   const presetForStart = selectedPresetId
     ? (PRESETS.find((p) => p.id === selectedPresetId) ?? null)
     : null;
   const startSections = presetForStart ? presetForStart.sections : selectedSections;
   const effectiveCount = presetForStart ? presetForStart.count : length;
+  const activeStacks = presetForStart
+    ? presetForStart.stacks
+    : selectedStack
+      ? [selectedStack]
+      : undefined;
 
   const poolSize = useMemo(() => {
     if (!index || startSections.length === 0) return null;
     const set = new Set(startSections);
-    return index.filter((q) => q.answer !== null && set.has(q.section)).length;
+    return index.filter(
+      (q) => q.answer !== null && set.has(q.section) && questionInStacks(q, activeStacks),
+    ).length;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, startSections]);
+  }, [index, startSections, selectedStack, selectedPresetId]);
 
   const sectionPool = useMemo(() => {
     const map = new Map<string, number>();
     if (!index) return map;
+    const stacks = selectedStack ? [selectedStack] : undefined;
     for (const q of index) {
-      if (q.answer === null) continue;
+      if (q.answer === null || !questionInStacks(q, stacks)) continue;
       map.set(q.section, (map.get(q.section) ?? 0) + 1);
     }
     return map;
-  }, [index]);
+  }, [index, selectedStack]);
 
   const sectionLabels = useMemo(() => {
     const map = new Map<string, string>();
@@ -341,6 +367,7 @@ export function MockInterview() {
           presets={PRESETS}
           presetId={selectedPresetId}
           sections={selectedSections}
+          stack={selectedStack}
           length={length}
           sectionPool={sectionPool}
           sectionLabels={sectionLabels}
@@ -350,6 +377,7 @@ export function MockInterview() {
           canStart={canStart}
           onSelectPreset={selectPreset}
           onToggleSection={toggleSection}
+          onSelectStack={selectStack}
           onSelectLength={selectLength}
           onStart={handleStart}
           onResume={resume}
@@ -390,6 +418,7 @@ interface StartViewProps {
   presets: InterviewPreset[];
   presetId: string | null;
   sections: string[];
+  stack: string;
   length: number;
   sectionPool: Map<string, number>;
   sectionLabels: Map<string, string>;
@@ -399,6 +428,7 @@ interface StartViewProps {
   canStart: boolean;
   onSelectPreset: (id: string) => void;
   onToggleSection: (id: string) => void;
+  onSelectStack: (id: string) => void;
   onSelectLength: (l: number) => void;
   onStart: () => void;
   onResume: () => void;
@@ -413,6 +443,7 @@ function StartView({
   presets,
   presetId,
   sections,
+  stack,
   length,
   sectionPool,
   sectionLabels,
@@ -422,6 +453,7 @@ function StartView({
   canStart,
   onSelectPreset,
   onToggleSection,
+  onSelectStack,
   onSelectLength,
   onStart,
   onResume,
@@ -563,6 +595,39 @@ function StartView({
               })}
             </div>
           )}
+        </div>
+
+        <div className="mt-4 border-2 border-border bg-surface p-4 sm:p-6">
+          <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
+            Стек
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => onSelectStack('')}
+              className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${
+                stack === ''
+                  ? 'border-accent bg-accent text-white'
+                  : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+              }`}
+            >
+              Любой
+            </button>
+            {STACK_OPTIONS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => onSelectStack(s.id)}
+                className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${
+                  stack === s.id
+                    ? 'border-accent bg-accent text-white'
+                    : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+                }`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="mt-4 border-2 border-border bg-surface p-4 sm:p-6">

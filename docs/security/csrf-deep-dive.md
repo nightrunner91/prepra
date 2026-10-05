@@ -1,6 +1,7 @@
 ---
 title: "CSRF: механика атаки и линии защиты"
 section: security
+stacks: []
 description: "CSRF-атаки: почему браузер отправляет cookie на evil.com, как SameSite, CSRF-токены и double submit cookie останавливают подделку запросов."
 order: 4
 tags: ["csrf", "samesite", "cookies", "csrf-tokens", "double-submit-cookie"]

@@ -1,6 +1,7 @@
 ﻿---
 title: "Дженерики TypeScript: constraints и паттерны"
 section: typescript
+stacks: []
 description: "Дженерики в TypeScript позволяют писать переиспользуемый код с сохранением типобезопасности. Разбираем синтаксис, constraints и применение в React и Vue."
 order: 5
 tags: ["generics", "typescript", "constraints", "react", "vue", "type-inference"]

@@ -1,6 +1,7 @@
 ﻿---
 title: "MVC, MVP и MVVM в React и Vue"
 section: architecture
+stacks: []
 description: "Три классических паттерна — MVC, MVP и MVVM — и их отражение в архитектуре современных фронтенд-фреймворков. React как компонентный подход, Vue как MVVM."
 order: 3
 tags: ["mvc", "mvp", "mvvm", "react", "vue", "architecture-patterns", "data-binding"]

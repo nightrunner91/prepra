@@ -1,6 +1,7 @@
 ---
 title: "Безопасность Vue"
 section: security
+stacks: ["vue"]
 description: "Vue: `v-html`, refs, URL-атрибуты, экранирование интерполяций, хранение токенов и защита от XSS в Composition API."
 order: 9
 tags: ["vue", "security", "v-html", "xss", "dompurify"]

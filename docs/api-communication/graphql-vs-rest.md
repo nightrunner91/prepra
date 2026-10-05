@@ -1,6 +1,7 @@
 ﻿---
 title: "GraphQL vs REST: когда что выбрать"
 section: api-communication
+stacks: []
 description: "Сравнение REST и GraphQL: принципы, преимущества, недостатки. Схемы, запросы, мутации, подписки. Сценарии использования и компромиссные решения."
 order: 3
 tags: ["graphql", "rest", "over-fetching", "schema", "subscriptions", "bff"]
