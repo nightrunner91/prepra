@@ -8,6 +8,10 @@
 2. **[Паттерны промптинга](./prompting-patterns.md)** — few-shot, CoT, chaining — язык формулирования задач
 3. **[AI в рабочем процессе фронтендера](./dev-workflow.md)** — цикл «спецификация → генерация → проверка», Spec-Driven Development, AGENTS.md, когда агент врёт
 
+## Агентская разработка
+
+4. **[Агентские инструменты разработки](./agentic-coding-tools.md)** — цикл агента, инструменты и права, worktrees, subagents, plan mode, headless в CI
+
 ## Углубись в детали
 
 - **[Streaming UI](./streaming-ui.md)** — UX-паттерны чата со стримингом (без протокольных деталей)
