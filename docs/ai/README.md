@@ -26,4 +26,5 @@
 
 ## Безопасность
 
-- **[Безопасность AI-вывода на фронте](./security.md)** — XSS через вывод модели, DOMPurify, валидация URL
+11. **[Безопасность вывода LLM на фронте](./security.md)** — XSS через вывод модели, DOMPurify, валидация URL
+12. **[Безопасность AI-разработки и supply chain](./ai-code-security.md)** — slopsquatting и фейковые зависимости, supply chain агента, секреты, инъекции, ревью mega-PR

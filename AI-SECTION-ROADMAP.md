@@ -577,7 +577,7 @@ questions:              # 5–10 вопросов, покрывают всю с�
 
 ### Статья 12. `ai-code-security.md`
 
-- **title (черновик):** `Безопасность AI-кода`
+- **title (черновик):** `Безопасность AI-разработки и supply chain`
 - **description (черновик):** Риски кода, сгенерированного AI: slopsquatting и
   фейковые зависимости, supply chain, утечки секретов, инъекции в агента и MCP,
   а также как ревьюить AI-код и защищать пайплайн.
@@ -668,8 +668,8 @@ questions:              # 5–10 вопросов, покрывают всю с�
 - [x] 8. `legacy-refactoring-with-ai.md`
 - [x] 9. `ai-ui-patterns.md` + удалить `streaming-ui.md`
 - [x] 10. `ai-features-production.md` + удалить `features-frontend.md`
-- [ ] 11. `security.md` → `order: 11`
-- [ ] 12. `ai-code-security.md`
+- [x] 11. `security.md` → `order: 11`
+- [x] 12. `ai-code-security.md`
 - [x] README обновлён
 - [ ] (опц.) `/arrange ai`
 
