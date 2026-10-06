@@ -7,7 +7,7 @@
 
 - Статический сайт Astro 5 (`output: 'static'`, `base: '/prepra'`), хостинг — GitHub Pages.
 - Контент — markdown в `docs/`, 15 разделов, 174 статьи, ~2400 вопросов. Схема `site/src/content/config.ts` поддерживает `questions` и `answers` (массивы строк).
-- 153 статьи имеют и вопросы, и ответы. **6 статей без ответов — весь раздел AI** (50 вопросов). Раздел в разработке, в мок-интервью не участвует, но должен подключаться автоматически, когда у статей появятся ответы.
+- Все статьи с `questions` имеют `answers` — раздел AI подключён к мок-интервью (12 статей, 94 вопроса). Вопросы без ответа исключаются при выборке, но остаются в индексе, поэтому новые темы подключаются автоматически, когда появятся ответы.
 - Существующий `QuizOverlay.tsx` — постатейный квиз: флип-карточка, самооценка (`good`/`unsure`/`failed`/`skipped`), попытка сохраняется в `prepra:quiz:{articleId}`. Классы флип-карточки `.quiz-card*` уже есть в `global.css`.
 - На главной (`Hero.astro:26-31`) — кнопка-заглушка «Пройти мок-интервью» с `href="#"`.
 - Бэкенда нет, env-переменных нет. Всё работает на клиенте + build-time данные.
@@ -93,6 +93,7 @@ type InterviewPreset = {
 | `vue-stack` | Vue-стек | vue, typescript, state-management, api-communication | `["vue"]` | `vue` | 50 |
 | `next-fullstack` | Next.js Full-stack | nextjs, api-communication, build-and-deployment, security | `["nextjs"]` | `nextjs` | 50 |
 | `nuxt-fullstack` | Nuxt Full-stack | nuxt, api-communication, build-and-deployment, security | `["nuxt"]` | `nuxt` | 50 |
+| `ai` | AI и LLM | ai, api-communication | — | `ai` | 50 |
 | `testing` | Тестирование | testing | — | — | 30 |
 
 Примечание: `web-basics` и `testing` стек не задают — вопросы рамки не смешивают, а осознанно берут весь раздел.

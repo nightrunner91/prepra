@@ -87,7 +87,8 @@ export const PRESETS: InterviewPreset[] = [
     id: 'ai',
     title: 'AI и LLM',
     description: 'LLM, RAG и AI-фичи во фронтенде',
-    sections: ['ai', 'api-communication'],
-    count: 30,
+    sections: ['ai'],
+    mainSection: 'ai',
+    count: 50,
   },
 ];
