@@ -12,6 +12,7 @@
 
 4. **[Агентские инструменты разработки](./agentic-coding-tools.md)** — цикл агента, инструменты и права, worktrees, subagents, plan mode, headless в CI
 5. **[Контекст-инжиниринг агентов](./context-engineering.md)** — rules/AGENTS.md, skills, hooks, subagents, память и compaction
+6. **[MCP: Model Context Protocol](./mcp.md)** — host/client/server, tools/resources/prompts, stateless-ядро 2026-07-28, tool poisoning, Figma/DevTools/Playwright MCP
 
 ## Углубись в детали
 

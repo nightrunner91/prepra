@@ -663,7 +663,7 @@ questions:              # 5–10 вопросов, покрывают всю с�
 
 - [x] 4. `agentic-coding-tools.md`
 - [x] 5. `context-engineering.md` + подрезка `dev-workflow.md`
-- [ ] 6. `mcp.md`
+- [x] 6. `mcp.md`
 - [ ] 7. `greenfield-with-ai.md`
 - [ ] 8. `legacy-refactoring-with-ai.md`
 - [ ] 9. `ai-ui-patterns.md` + удалить `streaming-ui.md`
