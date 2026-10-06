@@ -19,8 +19,11 @@
 7. **[Старт проекта с AI](./greenfield-with-ai.md)** — Spec-Driven Development и Spec Kit, plan mode, bootstrap репозитория, design-to-code через Figma MCP и v0
 8. **[Рефакторинг легаси через AI](./legacy-refactoring-with-ai.md)** — characterization-тесты, гибрид codemod и AI, изоляция worktree и хуки, инкрементальные миграции
 
+## AI во фронтенде
+
+9. **[AI UI: стриминг и generative UI](./ai-ui-patterns.md)** — стриминг, tool-calling UI, generative UI, human-in-the-loop, состояния многошагового агента
+
 ## Углубись в детали
 
-- **[Streaming UI](./streaming-ui.md)** — UX-паттерны чата со стримингом (без протокольных деталей)
 - **[AI-фичи на фронте: от задачи к реализации](./features-frontend.md)** — продуктовое определение, выбор SDK, архитектура, критерии приёмки
 - **[Безопасность AI-вывода на фронте](./security.md)** — XSS через вывод модели, DOMPurify, валидация URL

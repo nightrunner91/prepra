@@ -666,7 +666,7 @@ questions:              # 5–10 вопросов, покрывают всю с�
 - [x] 6. `mcp.md`
 - [x] 7. `greenfield-with-ai.md`
 - [x] 8. `legacy-refactoring-with-ai.md`
-- [ ] 9. `ai-ui-patterns.md` + удалить `streaming-ui.md`
+- [x] 9. `ai-ui-patterns.md` + удалить `streaming-ui.md`
 - [ ] 10. `ai-features-production.md` + удалить `features-frontend.md`
 - [ ] 11. `security.md` → `order: 11`
 - [ ] 12. `ai-code-security.md`
