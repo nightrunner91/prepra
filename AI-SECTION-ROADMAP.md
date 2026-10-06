@@ -662,7 +662,7 @@ questions:              # 5–10 вопросов, покрывают всю с�
 ## 9. Прогресс-трекер
 
 - [x] 4. `agentic-coding-tools.md`
-- [ ] 5. `context-engineering.md` + подрезка `dev-workflow.md`
+- [x] 5. `context-engineering.md` + подрезка `dev-workflow.md`
 - [ ] 6. `mcp.md`
 - [ ] 7. `greenfield-with-ai.md`
 - [ ] 8. `legacy-refactoring-with-ai.md`

@@ -11,6 +11,7 @@
 ## Агентская разработка
 
 4. **[Агентские инструменты разработки](./agentic-coding-tools.md)** — цикл агента, инструменты и права, worktrees, subagents, plan mode, headless в CI
+5. **[Контекст-инжиниринг агентов](./context-engineering.md)** — rules/AGENTS.md, skills, hooks, subagents, память и compaction
 
 ## Углубись в детали
 
