@@ -17,6 +17,7 @@
 ## Проекты: с нуля и легаси
 
 7. **[Старт проекта с AI](./greenfield-with-ai.md)** — Spec-Driven Development и Spec Kit, plan mode, bootstrap репозитория, design-to-code через Figma MCP и v0
+8. **[Рефакторинг легаси через AI](./legacy-refactoring-with-ai.md)** — characterization-тесты, гибрид codemod и AI, изоляция worktree и хуки, инкрементальные миграции
 
 ## Углубись в детали
 
