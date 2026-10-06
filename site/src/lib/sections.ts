@@ -1,6 +1,7 @@
 import {
   Atom,
   BracketsCurly,
+  Brain,
   Check,
   Code,
   Database,
@@ -11,7 +12,6 @@ import {
   Package,
   PlugsConnected,
   Shield,
-  StarFour,
   TreeStructure,
   Triangle,
 } from "@phosphor-icons/react";
@@ -31,5 +31,5 @@ export const sections = [
   { id: "api-communication", label: "API", icon: PlugsConnected },
   { id: "build-and-deployment", label: "Сборка и деплой", icon: Package },
   { id: "security", label: "Безопасность", icon: Shield },
-  { id: "ai", label: "AI и LLM", icon: StarFour },
+  { id: "ai", label: "AI и LLM", icon: Brain },
 ];
