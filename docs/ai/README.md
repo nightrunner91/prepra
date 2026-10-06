@@ -14,6 +14,10 @@
 5. **[Контекст-инжиниринг агентов](./context-engineering.md)** — rules/AGENTS.md, skills, hooks, subagents, память и compaction
 6. **[MCP: Model Context Protocol](./mcp.md)** — host/client/server, tools/resources/prompts, stateless-ядро 2026-07-28, tool poisoning, Figma/DevTools/Playwright MCP
 
+## Проекты: с нуля и легаси
+
+7. **[Старт проекта с AI](./greenfield-with-ai.md)** — Spec-Driven Development и Spec Kit, plan mode, bootstrap репозитория, design-to-code через Figma MCP и v0
+
 ## Углубись в детали
 
 - **[Streaming UI](./streaming-ui.md)** — UX-паттерны чата со стримингом (без протокольных деталей)
