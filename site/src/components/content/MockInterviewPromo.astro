@@ -1,0 +1,102 @@
+---
+import {
+  ArrowRight,
+  Clock,
+  Microphone,
+  SquaresFour,
+  TreeStructure,
+} from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+
+const features = [
+  {
+    icon: SquaresFour,
+    title: "9 готовых сетов",
+    text: "React, Vue, Next.js, Nuxt, AI, тестирование, производительность, архитектура и основы веба.",
+  },
+  {
+    icon: TreeStructure,
+    title: "Вопросы из разных разделов",
+    text: "Сет собирается из нескольких тем сразу — как на реальном техническом интервью.",
+  },
+  {
+    icon: Clock,
+    title: "20 / 30 / 50 вопросов",
+    text: "Своя длина и свой набор разделов. Незавершённая сессия переживает перезагрузку страницы.",
+  },
+];
+---
+
+<div class="mt-16 lg:mt-20">
+  <div
+    class="animate-fade-in border-[3px] border-border bg-pale-blue-bg p-6 lg:p-8"
+  >
+    <div class="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div>
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-border bg-pale-blue-text text-canvas"
+          >
+            <Microphone size={22} weight="bold" />
+          </div>
+          <div>
+            <h2
+              class="font-mono text-2xl font-extrabold uppercase tracking-tight text-text sm:text-3xl"
+            >
+              Мок-интервью
+            </h2>
+            <p
+              class="font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary"
+            >
+              Проверь себя, как на настоящем собеседовании
+            </p>
+          </div>
+        </div>
+
+        <p
+          class="mt-5 max-w-2xl text-sm font-medium leading-relaxed text-text-secondary"
+        >
+          Готовый тренажёр к техническому интервью: отвечай вслух, оценивай себя
+          после каждого вопроса и получай карту слабых тем с переходом к нужной
+          статье. Без таймера и регистрации — только ты и вопросы.
+        </p>
+
+        <a
+          href={withBase("/interview")}
+          class="group mt-6 inline-flex items-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider !text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+        >
+          <Microphone size={18} weight="bold" />
+          Пройти мок-интервью
+          <span
+            class="inline-block transition-transform group-hover:translate-x-1"
+          >
+            <ArrowRight size={16} weight="bold" />
+          </span>
+        </a>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        {
+          features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <div class="flex items-start gap-3 border-2 border-border bg-surface p-4">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-border bg-pale-blue-text text-canvas">
+                  <Icon size={20} weight="bold" />
+                </div>
+                <div>
+                  <div class="font-mono text-sm font-extrabold uppercase tracking-tight text-text">
+                    {feature.title}
+                  </div>
+                  <p class="mt-0.5 text-sm font-medium leading-relaxed text-text-secondary">
+                    {feature.text}
+                  </p>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</div>

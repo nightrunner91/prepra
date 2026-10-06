@@ -525,7 +525,7 @@ function StartView({
     <>
       <div className="mb-8">
         <h1 className="flex items-center gap-3 font-mono text-3xl font-extrabold uppercase tracking-tight text-text">
-          <Microphone size={28} weight="bold" className="text-accent" />
+          <Microphone size={28} weight="bold" className="text-pale-blue-text" />
           Мок-интервью
         </h1>
         <p className="mt-2 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary">

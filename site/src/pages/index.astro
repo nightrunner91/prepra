@@ -3,12 +3,13 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/content/Hero.astro";
 import SectionsGrid from "../components/content/SectionsGrid.astro";
-import ProgressBlock from "../components/content/ProgressBlock.astro";
 import HowItWorks from "../components/content/HowItWorks.astro";
+import MockInterviewPromo from "../components/content/MockInterviewPromo.astro";
 import DailyQuestion from "../components/content/DailyQuestion.astro";
 import FAQ from "../components/content/FAQ.astro";
 import Footer from "../components/layout/Footer.astro";
 import { sections } from "../lib/sections";
+import { withBase } from "../lib/urls";
 
 const sectionDescriptions: Record<string, string> = {
   javascript: "Основы JavaScript, ES6+, замыкания, прототипы, асинхронность",
@@ -103,6 +104,8 @@ const dailyQuestion =
     ? allQuestions[dayOfYear % allQuestions.length]
     : null;
 
+const interviewUrl = withBase("/interview");
+
 const faqItems = [
   {
     question: "Для кого создана prepra?",
@@ -115,12 +118,7 @@ const faqItems = [
       "<p>Конечно. Но буду честен: если ты только-только начинаешь путь во фронтенде - материал местами будет сложноват. Желателен хотя бы небольшой опыт разработки.</p>",
   },
   {
-    question: "Чем prepra отличается от других ресурсов?",
-    answer:
-      "<p>Prepra - это готовый roadmap подготовки к собеседованию с системой самопроверки и повторения. Каждый раздел идёт в логичном порядке, прогресс сохраняется. Всё полностью бесплатно.</p>",
-  },
-  {
-    question: "Нужно ли регистрироваться?",
+    question: "Нужно ли регистрироваться на prepra?",
     answer:
       "<p>Нет. Но учти, что пройденный прогресс хранится только в памяти браузера (localStorage).</p>",
   },
@@ -132,7 +130,16 @@ const faqItems = [
   {
     question: "Как лучше использовать prepra?",
     answer:
-      "<p>Советую начать с базы - <a href='#'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд. У каждой статьи есть практическая часть для самопроверки - не пропускай её.</p>",
+      "<p>Советую начать с базы - <a href='/prepra/javascript'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд. У каждой статьи есть практическая часть для самопроверки - не пропускай её. Когда будешь готов - пройди первое <a href='${interviewUrl}'>мок-интервью</a>.</p></p>",
+  },
+  {
+    question: "Что такое мок-интервью?",
+    answer: `<p>Это режим самопроверки, в котором вопросы собираются из разных разделов сразу — как на настоящем техническом интервью. Ты отвечаешь вслух, оцениваешь себя после каждого вопроса, а в конце получаешь таблицу по разделам и ссылку на самую слабую тему. Доступно на <a href='${interviewUrl}'>отдельной странице</a> без регистрации.</p>`,
+  },
+  {
+    question: "Когда проходить мок-интервью - сразу или после чтения?",
+    answer:
+      "<p>Работает и так, и так. Новичкам советую сначала пройти 2-3 раздела и набрать базу, а затем закреплять материал мок-интервью. Ближе к собеседованиям проходи его регулярно: каждый сет собирается заново и не повторяет предыдущий.</p>",
   },
   {
     question: "Какие темы покрывают материалы prepra?",
@@ -162,13 +169,9 @@ const faqItems = [
       totalQuestions={totalQuestions}
     />
 
-    <ProgressBlock
-      totalArticles={totalArticles}
-      totalQuestions={totalQuestions}
-      sectionsCount={sections.length}
-    />
-
     <HowItWorks />
+
+    <MockInterviewPromo />
 
     {dailyQuestion && <DailyQuestion question={dailyQuestion} />}
 

@@ -1,6 +1,7 @@
 ---
 import type { Icon } from "@dev.icons/react";
 import { withBase } from "../../lib/urls";
+import ProgressBlock from "./ProgressBlock.astro";
 import SectionCard from "./SectionCard.astro";
 
 interface SectionItem {
@@ -48,4 +49,9 @@ const { sections, totalArticles, totalQuestions } = Astro.props;
       ))
     }
   </div>
+  <ProgressBlock
+    totalArticles={totalArticles}
+    totalQuestions={totalQuestions}
+    sectionsCount={sections.length}
+  />
 </div>
