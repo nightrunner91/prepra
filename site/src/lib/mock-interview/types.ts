@@ -20,6 +20,7 @@ export type InterviewPreset = {
   sections: string[];
   stacks?: string[];
   count: number;
+  mainSection?: string;
 };
 
 export type InterviewConfig = {
@@ -27,6 +28,7 @@ export type InterviewConfig = {
   sections: string[];
   stacks?: string[];
   count: number;
+  mainSection?: string | null;
 };
 
 export type InterviewSession = {

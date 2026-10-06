@@ -25,7 +25,7 @@
 | Где живёт | Отдельная страница `/interview` |
 | Архитектура данных | Build-time JSON-индекс (паттерн `search-index.json.ts`) + ленивый фетч на клиенте |
 | Пресеты | Правила `{ sections, count }`, а не материализованные сеты; вопросы выбираются на клиенте из индекса |
-| Распределение | Пропорционально размеру пула раздела, с капом по доступному и добором из остатка; финальный шаффл — каждое интервью отличается |
+| Распределение | Пропорционально размеру пула раздела, с капом по доступному и добором из остатка; для стек-пресетов основной раздел (`mainSection`) получает **~70%** сета, остальные делят 30%; финальный шаффл — каждое интервью отличается |
 | Вопросы без ответа | Исключаются при выборке (фильтр `answer !== null`); в индексе остаются — AI подключится сам, когда заполнят ответы |
 | Сохранение | Отдельный namespace `prepra:interview:*`. Связки с постатейными квизами нет |
 | Resume | Хранится весь выбранный сет вопросов в localStorage — восстановление без повторного фетча |
@@ -80,27 +80,29 @@ type InterviewPreset = {
   sections: string[]; // id разделов
   stacks?: string[];  // рамка стека; отсутствует — любой
   count: number;
+  mainSection?: string; // доминирующий раздел (~70% сета); отсутствует — чисто пропорционально
 };
 ```
 
 Стартовый набор:
 
-| id | title | sections | stacks | count |
-|----|-------|----------|--------|-------|
-| `web-basics` | Основы веб-разработки | html-css, javascript, typescript | — | 30 |
-| `react-stack` | React-стек | react, typescript, state-management, api-communication | `["react"]` | 50 |
-| `vue-stack` | Vue-стек | vue, typescript, state-management, api-communication | `["vue"]` | 50 |
-| `next-fullstack` | Next.js Full-stack | nextjs, api-communication, build-and-deployment, security | `["nextjs"]` | 50 |
-| `nuxt-fullstack` | Nuxt Full-stack | nuxt, api-communication, build-and-deployment, security | `["nuxt"]` | 50 |
-| `testing` | Тестирование | testing | — | 30 |
+| id | title | sections | stacks | main | count |
+|----|-------|----------|--------|------|-------|
+| `web-basics` | Основы веб-разработки | html-css, javascript, typescript | — | — | 30 |
+| `react-stack` | React-стек | react, typescript, state-management, api-communication | `["react"]` | `react` | 50 |
+| `vue-stack` | Vue-стек | vue, typescript, state-management, api-communication | `["vue"]` | `vue` | 50 |
+| `next-fullstack` | Next.js Full-stack | nextjs, api-communication, build-and-deployment, security | `["nextjs"]` | `nextjs` | 50 |
+| `nuxt-fullstack` | Nuxt Full-stack | nuxt, api-communication, build-and-deployment, security | `["nuxt"]` | `nuxt` | 50 |
+| `testing` | Тестирование | testing | — | — | 30 |
 
 Примечание: `web-basics` и `testing` стек не задают — вопросы рамки не смешивают, а осознанно берут весь раздел.
 
 ### 3. Алгоритм выборки `site/src/lib/mock-interview/selection.ts`
 
-- Вход: индекс, выбранные разделы, опциональный стек, запрошенное количество.
+- Вход: индекс, выбранные разделы, опциональный стек, запрошенное количество, опциональный `mainSection`.
 - Фильтр пула: `selectedSections.contains(q.section) && q.answer !== null && inStacks(q, stacks)`, где `inStacks` = «стек не задан ИЛИ статья нейтральная ИЛИ `q.stacks` пересекается с `stacks`».
 - Пропорциональное распределение: доля раздела = `round(count * qtySection / qtyTotal)`.
+- Если задан `mainSection` — основному разделу выделяется `min(round(count * 0.7), qtyMain)`, остальной объём делится пропорционально между остальными; без `mainSection` — чистая пропорция.
 - Внутри раздела — выборка без повторений (шаффл + срез). Если раздел даёт меньше доли — берём всё, нехватку добором по кругу в разделы с запасом.
 - Если `count` > доступного пула → кап на весь пул, показать заметку «в выбранных разделах N вопросов — выдано N».
 - Если пул пуст (например, выбран только AI) → блокировка старта с пояснением.
@@ -114,7 +116,7 @@ type InterviewPreset = {
   ```ts
   type InterviewSession = {
     version: 1;
-    config: { presetId: string | null; sections: string[]; stacks?: string[]; count: number };
+    config: { presetId: string | null; sections: string[]; stacks?: string[]; count: number; mainSection?: string | null };
     questions: MockInterviewQuestion[]; // весь выбранный сет, фиксированный порядок
     answers: Record<number, 'good' | 'unsure' | 'failed' | 'skipped'>;
     currentIndex: number;
@@ -208,7 +210,7 @@ type InterviewPreset = {
 ## Проверка
 
 - `npm run build` собирается без ошибок TypeScript/схемы контента; `mock-interview-index.json` присутствует в `dist/`.
-- Пресет «React-стек» даёт 20 вопросов только из react/typescript/state-management и не содержит статей `pinia`/`vuex`; «Vue-стек» не содержит `redux`/`zustand`/`tanstack-query`; «Next.js full-stack» не содержит `nuxt-deployment`/`security/vue`/`security/react`; «Полный фронтенд» — 50 из 15 разделов.
+- Пресет «React-стек» даёт 50 вопросов: ~70% из раздела `react` (без статей `pinia`/`vuex`), остальные — из typescript/state-management/api-communication; «Vue-стек» ~70% из `vue` и без `redux`/`zustand`/`tanstack-query`; «Next.js full-stack» ~70% из `nextjs` без `nuxt-deployment`/`security/vue`/`security/react`; «Nuxt full-stack» ~70% из `nuxt`.
 - Кастом: 3 раздела × 50 → пропорции по пулам; запрос больше пула → кап + заметка; только AI → блокировка старта; выбранный стек уменьшает пул и счётчики разделов.
 - Два запуска одного пресета дают разный порядок/состав.
 - Перезагрузка страницы на 49/50 → «Продолжить» восстанавливает интервью без повторного фетча.

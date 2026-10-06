@@ -32,6 +32,7 @@ export const PRESETS: InterviewPreset[] = [
     description: 'React, TypeScript, хранилища и API',
     sections: ['react', 'typescript', 'state-management', 'api-communication'],
     stacks: ['react'],
+    mainSection: 'react',
     count: 50,
   },
   {
@@ -40,6 +41,7 @@ export const PRESETS: InterviewPreset[] = [
     description: 'Vue, TypeScript, хранилища и API',
     sections: ['vue', 'typescript', 'state-management', 'api-communication'],
     stacks: ['vue'],
+    mainSection: 'vue',
     count: 50,
   },
   {
@@ -48,6 +50,7 @@ export const PRESETS: InterviewPreset[] = [
     description: 'Next.js, API, CI/CD и безопасность',
     sections: ['nextjs', 'api-communication', 'build-and-deployment', 'security'],
     stacks: ['nextjs'],
+    mainSection: 'nextjs',
     count: 50,
   },
   {
@@ -56,6 +59,7 @@ export const PRESETS: InterviewPreset[] = [
     description: 'Nuxt, API, CI/CD и безопасность',
     sections: ['nuxt', 'api-communication', 'build-and-deployment', 'security'],
     stacks: ['nuxt'],
+    mainSection: 'nuxt',
     count: 50,
   },
   {

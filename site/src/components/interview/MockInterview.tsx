@@ -162,7 +162,7 @@ export function MockInterview() {
 
   const startWithIndex = useCallback(
     (data: MockInterviewQuestion[], config: InterviewConfig) => {
-      const result = selectQuestions(data, config.sections, config.stacks, config.count);
+      const result = selectQuestions(data, config.sections, config.stacks, config.count, config.mainSection);
       if (result.questions.length === 0) return;
       const next: InterviewSession = {
         version: 1,
@@ -297,6 +297,7 @@ export function MockInterview() {
       sections,
       stacks,
       count: preset ? preset.count : length,
+      mainSection: preset ? (preset.mainSection ?? null) : null,
     };
     startInterview(config);
   }, [selectedPresetId, selectedSections, selectedStack, length, startInterview]);
