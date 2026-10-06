@@ -2,22 +2,21 @@ import type { Icon } from '@phosphor-icons/react';
 import {
   ArrowCounterClockwise,
   ArrowRight,
-  Atom,
   Brain,
   CaretDown,
+  Check,
   Clock,
   Cloud,
   Eye,
-  FileJs,
+  FileJsx,
   FileVue,
   Globe,
   House,
+  Lightning,
   Microphone,
   PauseCircle,
-  ShieldCheck,
   SmileyMeh,
   SquaresFour,
-  TestTube,
   ThumbsDown,
   ThumbsUp,
   TreeStructure,
@@ -55,26 +54,26 @@ const STACK_OPTIONS: { id: string; label: string }[] = [
   { id: 'nuxt', label: 'Nuxt' },
 ];
 const PRESET_ICONS: Record<string, Icon> = {
-  'react-stack': Atom,
-  'js-core': FileJs,
-  basics: Globe,
-  vue: FileVue,
-  next: Cloud,
-  senior: TreeStructure,
-  testing: TestTube,
+  'web-basics': Globe,
+  'react-stack': FileJsx,
+  'vue-stack': FileVue,
+  'next-fullstack': Cloud,
+  'nuxt-fullstack': Cloud,
+  testing: Check,
+  performance: Lightning,
+  architecture: TreeStructure,
   ai: Brain,
-  security: ShieldCheck,
 };
 const PRESET_COLORS: Record<string, 'red' | 'blue' | 'green' | 'yellow'> = {
+  'web-basics': 'yellow',
   'react-stack': 'blue',
-  'js-core': 'yellow',
-  basics: 'yellow',
-  vue: 'green',
-  next: 'blue',
-  senior: 'blue',
+  'vue-stack': 'green',
+  'next-fullstack': 'blue',
+  'nuxt-fullstack': 'green',
   testing: 'green',
-  ai: 'green',
-  security: 'red',
+  performance: 'yellow',
+  architecture: 'blue',
+  ai: 'red',
 };
 const PRESET_BADGE_CLASSES: Record<string, string> = {
   red: 'bg-pale-red-bg text-pale-red-text',
@@ -572,7 +571,7 @@ function StartView({
       </div>
 
       <div
-        className={`grid gap-3 sm:grid-cols-2 lg:grid-cols-3 ${presetsDisabled ? 'pointer-events-none opacity-40' : ''}`}
+        className={`grid gap-5 sm:grid-cols-2 lg:grid-cols-3 ${presetsDisabled ? 'pointer-events-none opacity-40' : ''}`}
       >
         {presets.map((p) => {
           const active = presetId === p.id;
@@ -584,8 +583,8 @@ function StartView({
               type="button"
               onClick={() => onSelectPreset(p.id)}
               className={`flex h-full flex-col text-left border-2 p-6 transition-all ${active
-                  ? 'border-accent bg-pale-green-bg'
-                  : 'border-border bg-surface card-hover'
+                ? 'border-accent bg-pale-green-bg'
+                : 'border-border bg-surface card-hover'
                 }`}
             >
               <div className="flex items-start justify-between gap-3">
@@ -598,10 +597,10 @@ function StartView({
                   <PresetIcon size={20} weight="bold" />
                 </span>
               </div>
-              <span className="mt-2 w-fit border border-border px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
+              <span className="mt-1 w-fit border border-border px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
                 {p.count} {questionWord(p.count)}
               </span>
-              <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wide text-text-secondary">
+              <p className="mt-5 font-mono text-xs font-bold tracking-wide text-text-secondary">
                 {p.description}
               </p>
             </button>
@@ -659,8 +658,8 @@ function StartView({
                       onClick={() => onToggleSection(id)}
                       aria-pressed={checked}
                       className={`flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide transition-all ${checked
-                          ? 'border-accent bg-pale-green-bg text-text'
-                          : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+                        ? 'border-accent bg-pale-green-bg text-text'
+                        : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
                         }`}
                     >
                       <span>{sectionLabels.get(id) ?? id}</span>
@@ -685,8 +684,8 @@ function StartView({
                 type="button"
                 onClick={() => onSelectStack('')}
                 className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${stack === ''
-                    ? 'border-accent bg-accent text-white'
-                    : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+                  ? 'border-accent bg-accent text-white'
+                  : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
                   }`}
               >
                 Любой
@@ -697,8 +696,8 @@ function StartView({
                   type="button"
                   onClick={() => onSelectStack(s.id)}
                   className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${stack === s.id
-                      ? 'border-accent bg-accent text-white'
-                      : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+                    ? 'border-accent bg-accent text-white'
+                    : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
                     }`}
                 >
                   {s.label}
@@ -718,8 +717,8 @@ function StartView({
                   type="button"
                   onClick={() => onSelectLength(l)}
                   className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${length === l
-                      ? 'border-accent bg-accent text-white'
-                      : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
+                    ? 'border-accent bg-accent text-white'
+                    : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
                     }`}
                 >
                   {l}

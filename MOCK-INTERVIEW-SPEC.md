@@ -87,14 +87,14 @@ type InterviewPreset = {
 
 | id | title | sections | stacks | count |
 |----|-------|----------|--------|-------|
-| `react-stack` | React-стек | react, typescript, state-management | `["react"]` | 20 |
-| `js-core` | Основы JavaScript | javascript, typescript, html-css | — | 30 |
-| `security` | Безопасность | security, api-communication | — | 15 |
-| `vue` | Vue-стек | vue, nuxt, typescript, state-management | `["vue","nuxt"]` | 20 |
-| `next` | Next.js full-stack | nextjs, api-communication, build-and-deployment, security | `["nextjs"]` | 20 |
-| `full-frontend` | Полный фронтенд | все 15 разделов | — | 50 |
+| `web-basics` | Основы веб-разработки | html-css, javascript, typescript | — | 30 |
+| `react-stack` | React-стек | react, typescript, state-management, api-communication | `["react"]` | 50 |
+| `vue-stack` | Vue-стек | vue, typescript, state-management, api-communication | `["vue"]` | 50 |
+| `next-fullstack` | Next.js Full-stack | nextjs, api-communication, build-and-deployment, security | `["nextjs"]` | 50 |
+| `nuxt-fullstack` | Nuxt Full-stack | nuxt, api-communication, build-and-deployment, security | `["nuxt"]` | 50 |
+| `testing` | Тестирование | testing | — | 30 |
 
-Примечание: `js-core`, `security`, `senior`, `basics`, `testing`, `ai`, `full-frontend` стек не задают — вопросы рамки не смешивают, а осознанно берут весь раздел.
+Примечание: `web-basics` и `testing` стек не задают — вопросы рамки не смешивают, а осознанно берут весь раздел.
 
 ### 3. Алгоритм выборки `site/src/lib/mock-interview/selection.ts`
 
