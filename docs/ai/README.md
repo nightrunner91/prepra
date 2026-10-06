@@ -22,8 +22,8 @@
 ## AI во фронтенде
 
 9. **[AI UI: стриминг и generative UI](./ai-ui-patterns.md)** — стриминг, tool-calling UI, generative UI, human-in-the-loop, состояния многошагового агента
+10. **[AI-фичи в production](./ai-features-production.md)** — evals и quality-gates, стоимость и латентность, кэш и роутинг, fallback и деградация, наблюдаемость, версионирование
 
-## Углубись в детали
+## Безопасность
 
-- **[AI-фичи на фронте: от задачи к реализации](./features-frontend.md)** — продуктовое определение, выбор SDK, архитектура, критерии приёмки
 - **[Безопасность AI-вывода на фронте](./security.md)** — XSS через вывод модели, DOMPurify, валидация URL
