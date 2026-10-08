@@ -3,6 +3,7 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
 import rehypeMarkdownLinks from './src/lib/rehype-markdown-links.mjs';
+import rehypeWrapTables from './src/lib/rehype-wrap-tables.mjs';
 
 export default defineConfig({
   output: 'static',
@@ -22,7 +23,7 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    rehypePlugins: [rehypeMarkdownLinks],
+    rehypePlugins: [rehypeMarkdownLinks, rehypeWrapTables],
     shikiConfig: {
       themes: {
         light: 'github-light',

@@ -112,7 +112,7 @@ function timeAgo(timestamp: number): string {
 function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString('ru-RU', {
     day: 'numeric',
-    month: 'long',
+    month: 'short',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
@@ -257,7 +257,7 @@ export function QuizOverlay({ questions, customAnswers, articleId, nextArticle, 
         >
 
           <div className="flex min-h-full items-start justify-center px-4 py-12">
-            <div className="w-full max-w-2xl">
+            <div className="w-full min-w-0 max-w-2xl">
               {phase === 'results' && lastAttempt && (
                 <ResultsView
                   questions={questions}
@@ -334,14 +334,14 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
           <h2 className="font-mono text-xl font-extrabold uppercase tracking-tight text-text">
             Тест пройден
           </h2>
-          <p className="mt-1 font-mono text-sm text-text-secondary">
+          <p className="mt-1 font-mono text-xs text-text-secondary">
             {formatDate(attempt.timestamp)} · {timeAgo(attempt.timestamp)}
           </p>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="flex h-9 w-9 items-center justify-center border-2 border-border bg-surface-alt text-text-secondary transition-all hover:bg-text hover:text-canvas"
+          className="flex h-9 !min-w-9 w-9 items-center justify-center border-2 border-border bg-surface-alt text-text-secondary transition-all hover:bg-text hover:text-canvas"
           aria-label="Закрыть"
         >
           <X size={18} weight="bold" />
@@ -384,7 +384,7 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
           </button>
 
           {detailsOpen && (
-            <ul className="mt-3 space-y-2">
+            <ul className="quiz-results mt-3 space-y-2">
               {questions.map((q, i) => {
                 const status = attempt.answers[i] || 'skipped';
                 const meta = STATUS_META[status];
@@ -515,7 +515,7 @@ function QuizView({
               <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary md:mb-6">
                 Вопрос
               </div>
-              <p className="break-words text-left text-lg font-bold leading-relaxed text-text md:text-xl">
+              <p className="quiz-question break-words text-left text-lg font-bold leading-relaxed text-text md:text-xl">
                 {renderInlineCode(question)}?
               </p>
               {!flipped && (
