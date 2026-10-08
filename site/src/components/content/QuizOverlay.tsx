@@ -6,6 +6,7 @@ import {
   ClipboardText,
   Eye,
   PauseCircle,
+  SkipForward,
   SmileyMeh,
   ThumbsDown,
   ThumbsUp,
@@ -280,6 +281,7 @@ export function QuizOverlay({ questions, customAnswers, articleId, nextArticle, 
                   savingStatus={savingStatus}
                   onFlip={() => setFlipped(true)}
                   onAnswer={handleAnswer}
+                  onSkip={() => handleAnswer('skipped')}
                   onClose={handleClose}
                   total={questions.length}
                 />
@@ -465,6 +467,7 @@ interface QuizViewProps {
   savingStatus: number | null;
   onFlip: () => void;
   onAnswer: (status: AnswerStatus) => void;
+  onSkip: () => void;
   onClose: () => void;
   total: number;
 }
@@ -477,6 +480,7 @@ function QuizView({
   savingStatus,
   onFlip,
   onAnswer,
+  onSkip,
   onClose,
   total,
 }: QuizViewProps) {
@@ -540,45 +544,58 @@ function QuizView({
         </div>
       </div>
 
-      {flipped && (
-        <div className={`mt-6 flex flex-col items-center gap-4 transition-all duration-300 sm:mt-8 ${savingStatus === currentIndex ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
-          <div className="font-mono text-sm font-bold uppercase tracking-wider text-white">
-            Оцени свой ответ
+      <div className={`mt-6 flex flex-col gap-3 transition-all duration-300 sm:mt-8 ${savingStatus === currentIndex ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}>
+        {flipped && (
+          <div className="flex flex-col items-center gap-4">
+            <div className="font-mono text-sm font-bold uppercase tracking-wider text-white">
+              Оцени свой ответ
+            </div>
+            <div className="flex w-full gap-3">
+              <button
+                type="button"
+                onClick={() => onAnswer('good')}
+                disabled={savingStatus === currentIndex}
+                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                aria-label="Ответил уверенно"
+              >
+                <ThumbsUp size={24} weight="bold" className="text-pale-green-text" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAnswer('unsure')}
+                disabled={savingStatus === currentIndex}
+                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                aria-label="Ответил неуверенно"
+              >
+                <SmileyMeh size={24} weight="bold" className="text-pale-yellow-text" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">Так себе</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => onAnswer('failed')}
+                disabled={savingStatus === currentIndex}
+                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                aria-label="Не смог ответить"
+              >
+                <ThumbsDown size={24} weight="bold" className="text-pale-red-text" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
+              </button>
+            </div>
           </div>
-          <div className="flex w-full gap-3">
-            <button
-              type="button"
-              onClick={() => onAnswer('good')}
-              disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
-              aria-label="Ответил уверенно"
-            >
-              <ThumbsUp size={24} weight="bold" className="text-pale-green-text" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => onAnswer('unsure')}
-              disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
-              aria-label="Ответил неуверенно"
-            >
-              <SmileyMeh size={24} weight="bold" className="text-pale-yellow-text" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">Так себе</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => onAnswer('failed')}
-              disabled={savingStatus === currentIndex}
-              className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
-              aria-label="Не смог ответить"
-            >
-              <ThumbsDown size={24} weight="bold" className="text-pale-red-text" />
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
-            </button>
-          </div>
-        </div>
-      )}
+        )}
+        {!flipped && (
+          <button
+            type="button"
+            onClick={onSkip}
+            disabled={savingStatus === currentIndex}
+            className="flex items-center justify-center gap-2 border-2 border-border bg-surface-alt px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none hover:bg-text hover:text-canvas"
+          >
+            <SkipForward size={18} weight="fill" />
+            Пропустить
+          </button>
+        )}
+      </div>
     </div>
   );
 }

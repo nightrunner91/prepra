@@ -15,6 +15,7 @@ import {
   Lightning,
   Microphone,
   PauseCircle,
+  SkipForward,
   SmileyMeh,
   SquaresFour,
   ThumbsDown,
@@ -876,15 +877,17 @@ function ActiveView({
             })}
           </div>
         )}
-        <button
-          type="button"
-          onClick={onSkip}
-          disabled={busy}
-          className="flex items-center justify-center gap-2 border-2 border-border bg-surface-alt px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none hover:bg-text hover:text-canvas"
-        >
-          <PauseCircle size={18} weight="fill" />
-          Пропустить
-        </button>
+        {!flipped && (
+          <button
+            type="button"
+            onClick={onSkip}
+            disabled={busy}
+            className="flex items-center justify-center gap-2 border-2 border-border bg-surface-alt px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none hover:bg-text hover:text-canvas"
+          >
+            <SkipForward size={18} weight="fill" />
+            Пропустить
+          </button>
+        )}
       </div>
     </div>
   );
