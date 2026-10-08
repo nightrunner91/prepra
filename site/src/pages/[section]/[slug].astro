@@ -139,6 +139,9 @@ const { headings } = await render(entry);
             questions={data.questions}
             customAnswers={data.answers}
             articleId={withBase(`/${data.section}/${entry.id}`)}
+            nextArticle={next}
+            sectionHref={withBase(`/${data.section}`)}
+            sectionLabel={sectionLabel}
           />
         )
       }

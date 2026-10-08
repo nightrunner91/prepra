@@ -1,5 +1,8 @@
 import {
+  ArrowRight,
   ArrowsClockwise,
+  CaretDown,
+  CheckSquare,
   ClipboardText,
   Eye,
   PauseCircle,
@@ -9,6 +12,7 @@ import {
   X
 } from '@phosphor-icons/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { isArticleRead, markArticleRead } from '../../lib/readState';
 
 type AnswerStatus = 'good' | 'unsure' | 'failed' | 'skipped';
 
@@ -22,10 +26,18 @@ interface QuizData {
   lastAttempt: QuizAttempt;
 }
 
+interface NextArticle {
+  title: string;
+  href: string;
+}
+
 interface QuizOverlayProps {
   questions: string[];
   customAnswers?: string[];
   articleId: string;
+  nextArticle?: NextArticle | null;
+  sectionHref?: string;
+  sectionLabel?: string;
 }
 
 const ANSWER_TEMPLATES = [
@@ -140,7 +152,7 @@ const STATUS_META: Record<AnswerStatus, { label: string; icon: React.ReactNode; 
   },
 };
 
-export function QuizOverlay({ questions, customAnswers, articleId }: QuizOverlayProps) {
+export function QuizOverlay({ questions, customAnswers, articleId, nextArticle, sectionHref, sectionLabel }: QuizOverlayProps) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -244,29 +256,35 @@ export function QuizOverlay({ questions, customAnswers, articleId }: QuizOverlay
           aria-modal="true"
         >
 
-          <div className="absolute left-4 right-4 top-12 bottom-12 md:left-1/2 md:right-auto md:bottom-20 md:w-full md:max-w-2xl md:-translate-x-1/2">
-            {phase === 'results' && lastAttempt && (
-              <ResultsView
-                questions={questions}
-                attempt={lastAttempt}
-                onRetake={startQuiz}
-                onClose={closeOverlay}
-              />
-            )}
+          <div className="flex min-h-full items-start justify-center px-4 py-12">
+            <div className="w-full max-w-2xl">
+              {phase === 'results' && lastAttempt && (
+                <ResultsView
+                  questions={questions}
+                  attempt={lastAttempt}
+                  articleId={articleId}
+                  nextArticle={nextArticle}
+                  sectionHref={sectionHref}
+                  sectionLabel={sectionLabel}
+                  onRetake={startQuiz}
+                  onClose={closeOverlay}
+                />
+              )}
 
-            {phase === 'quiz' && (
-              <QuizView
-                questions={questions}
-                answers={customAnswers}
-                currentIndex={currentIndex}
-                flipped={flipped}
-                savingStatus={savingStatus}
-                onFlip={() => setFlipped(true)}
-                onAnswer={handleAnswer}
-                onClose={handleClose}
-                total={questions.length}
-              />
-            )}
+              {phase === 'quiz' && (
+                <QuizView
+                  questions={questions}
+                  answers={customAnswers}
+                  currentIndex={currentIndex}
+                  flipped={flipped}
+                  savingStatus={savingStatus}
+                  onFlip={() => setFlipped(true)}
+                  onAnswer={handleAnswer}
+                  onClose={handleClose}
+                  total={questions.length}
+                />
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -277,23 +295,44 @@ export function QuizOverlay({ questions, customAnswers, articleId }: QuizOverlay
 interface ResultsViewProps {
   questions: string[];
   attempt: QuizAttempt;
+  articleId: string;
+  nextArticle?: NextArticle | null;
+  sectionHref?: string;
+  sectionLabel?: string;
   onRetake: () => void;
   onClose: () => void;
 }
 
-function ResultsView({ questions, attempt, onRetake, onClose }: ResultsViewProps) {
+function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, sectionLabel, onRetake, onClose }: ResultsViewProps) {
   const counts = { good: 0, unsure: 0, failed: 0, skipped: 0 };
   Object.values(attempt.answers).forEach(s => { counts[s]++; });
 
   const total = questions.length;
-  const answered = total - counts.skipped;
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [isRead, setIsRead] = useState(false);
+
+  useEffect(() => {
+    const sync = () => setIsRead(isArticleRead(articleId));
+    sync();
+    window.addEventListener('read:update', sync);
+    return () => window.removeEventListener('read:update', sync);
+  }, [articleId]);
+
+  const handleFinish = () => {
+    markArticleRead(articleId);
+    if (nextArticle) {
+      window.location.href = nextArticle.href;
+    } else {
+      setIsRead(true);
+    }
+  };
 
   return (
     <div className="w-full border-[3px] border-border bg-surface">
       <div className="flex items-start justify-between border-b-[3px] border-border p-6 md:p-8">
         <div>
           <h2 className="font-mono text-xl font-extrabold uppercase tracking-tight text-text">
-            Результат теста
+            Тест пройден
           </h2>
           <p className="mt-1 font-mono text-sm text-text-secondary">
             {formatDate(attempt.timestamp)} · {timeAgo(attempt.timestamp)}
@@ -309,60 +348,110 @@ function ResultsView({ questions, attempt, onRetake, onClose }: ResultsViewProps
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 p-6 md:grid-cols-4 md:p-8">
-        <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-green-bg p-3">
-          <ThumbsUp size={22} weight="bold" className="text-pale-green-text" />
-          <span className="font-mono text-2xl font-extrabold text-pale-green-text">{counts.good}</span>
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
+      <div>
+        <div className="grid grid-cols-2 gap-3 p-6 md:grid-cols-4 md:p-8">
+          <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-green-bg p-3">
+            <ThumbsUp size={22} weight="bold" className="text-pale-green-text" />
+            <span className="font-mono text-2xl font-extrabold text-pale-green-text">{counts.good}</span>
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-yellow-bg p-3">
+            <SmileyMeh size={22} weight="bold" className="text-pale-yellow-text" />
+            <span className="font-mono text-2xl font-extrabold text-pale-yellow-text">{counts.unsure}</span>
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">Неуверенно</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-red-bg p-3">
+            <ThumbsDown size={22} weight="bold" className="text-pale-red-text" />
+            <span className="font-mono text-2xl font-extrabold text-pale-red-text">{counts.failed}</span>
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 border-2 border-border bg-surface-alt p-3">
+            <PauseCircle size={22} weight="fill" className="text-text-secondary" />
+            <span className="font-mono text-2xl font-extrabold text-text-secondary">{counts.skipped}</span>
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">Пропущено</span>
+          </div>
         </div>
-        <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-yellow-bg p-3">
-          <SmileyMeh size={22} weight="bold" className="text-pale-yellow-text" />
-          <span className="font-mono text-2xl font-extrabold text-pale-yellow-text">{counts.unsure}</span>
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">Неуверенно</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-red-bg p-3">
-          <ThumbsDown size={22} weight="bold" className="text-pale-red-text" />
-          <span className="font-mono text-2xl font-extrabold text-pale-red-text">{counts.failed}</span>
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
-        </div>
-        <div className="flex flex-col items-center gap-1 border-2 border-border bg-surface-alt p-3">
-          <PauseCircle size={22} weight="fill" className="text-text-secondary" />
-          <span className="font-mono text-2xl font-extrabold text-text-secondary">{counts.skipped}</span>
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">Пропущено</span>
+
+        <div className="px-6 pb-6 md:px-8 md:pb-8">
+          <button
+            type="button"
+            onClick={() => setDetailsOpen(v => !v)}
+            className="flex w-full items-center justify-between border-2 border-border bg-surface-alt px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary transition-all hover:bg-text hover:text-canvas"
+            aria-expanded={detailsOpen}
+          >
+            <span>Ответы по вопросам ({total})</span>
+            <CaretDown size={16} weight="bold" className={`transition-transform ${detailsOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {detailsOpen && (
+            <ul className="mt-3 space-y-2">
+              {questions.map((q, i) => {
+                const status = attempt.answers[i] || 'skipped';
+                const meta = STATUS_META[status];
+                return (
+                  <li
+                    key={i}
+                    className={`flex items-start gap-3 border-2 ${meta.border} ${meta.bg} p-3`}
+                  >
+                    <span className={`mt-0.5 flex-shrink-0 ${meta.color}`}>{meta.icon}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm leading-snug text-text">{renderInlineCode(q)}?</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </div>
 
-      <div className="px-6 md:px-8">
-        <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-          Ответы по вопросам
-        </div>
-        <ul className="space-y-2">
-          {questions.map((q, i) => {
-            const status = attempt.answers[i] || 'skipped';
-            const meta = STATUS_META[status];
-            return (
-              <li
-                key={i}
-                className={`flex items-start gap-3 border-2 ${meta.border} ${meta.bg} p-3`}
-              >
-                <span className={`mt-0.5 flex-shrink-0 ${meta.color}`}>{meta.icon}</span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm leading-snug text-text">{renderInlineCode(q)}?</p>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <div className="flex flex-col gap-3 border-t-[3px] border-border p-6 md:p-8">
+        {nextArticle ? (
+          <button
+            type="button"
+            onClick={handleFinish}
+            className="flex w-full items-center justify-between gap-4 border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
+          >
+            <span className="flex min-w-0 flex-col items-start text-left">
+              <span>{isRead ? 'Следующая статья' : 'Отметить изученным'}</span>
+              <span className="w-full truncate text-xs font-normal normal-case tracking-normal text-white/80">
+                {isRead ? nextArticle.title : `и перейти: «${nextArticle.title}»`}
+              </span>
+            </span>
+            <ArrowRight size={20} weight="bold" className="flex-shrink-0" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={handleFinish}
+            disabled={isRead}
+            className={`flex w-full items-center justify-center gap-2 border-[3px] border-border px-6 py-3 font-mono font-bold uppercase tracking-wider transition-all ${isRead
+              ? 'cursor-default border-pale-green-text bg-pale-green-bg-hover text-pale-green-text-hover'
+              : 'bg-accent text-white hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none'
+              }`}
+          >
+            <CheckSquare size={20} weight="bold" />
+            {isRead ? 'Изучено' : 'Отметить изученным'}
+          </button>
+        )}
 
-      <div className="p-6 md:p-8">
         <button
           type="button"
           onClick={onRetake}
-          className="w-full flex items-center justify-center border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
+          className="flex w-full items-center justify-center gap-2 border-[3px] border-border bg-surface px-6 py-3 font-mono font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
         >
+          <ArrowsClockwise size={18} weight="bold" />
           Перепройти
         </button>
+
+        {!nextArticle && sectionHref && sectionLabel && (
+          <a
+            href={sectionHref}
+            className="text-center font-mono text-xs font-bold uppercase tracking-wider text-text-secondary underline-offset-4 transition-colors hover:text-accent hover:underline"
+          >
+            Перейти к разделу «{sectionLabel}»
+          </a>
+        )}
       </div>
     </div>
   );

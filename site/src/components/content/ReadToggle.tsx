@@ -1,34 +1,19 @@
 import { CheckSquare, Square } from '@phosphor-icons/react';
 import React, { useCallback, useEffect, useState } from 'react';
-
-const STORAGE_KEY = 'prepra:read-articles';
-
-function getReadArticles(): string[] {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  } catch {
-    return [];
-  }
-}
+import { isArticleRead, toggleArticleRead } from '../../lib/readState';
 
 export function ReadToggle({ articleId }: { articleId: string }) {
   const [isRead, setIsRead] = useState(false);
 
   useEffect(() => {
-    setIsRead(getReadArticles().includes(articleId));
+    const sync = () => setIsRead(isArticleRead(articleId));
+    sync();
+    window.addEventListener('read:update', sync);
+    return () => window.removeEventListener('read:update', sync);
   }, [articleId]);
 
   const toggle = useCallback(() => {
-    const current = getReadArticles();
-    const idx = current.indexOf(articleId);
-    if (idx === -1) {
-      current.push(articleId);
-    } else {
-      current.splice(idx, 1);
-    }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
-    setIsRead(idx === -1);
-    window.dispatchEvent(new CustomEvent('read:update'));
+    setIsRead(toggleArticleRead(articleId));
   }, [articleId]);
 
   return (
