@@ -10,10 +10,13 @@ const { prev, next, sectionLabel, sectionHref } = Astro.props;
 ---
 
 <nav class="mt-12 border-t-[3px] border-border pt-8">
-  <div class="flex items-center justify-between gap-4">
+  <div class="flex items-start justify-between gap-4">
     {
       prev ? (
-        <a href={prev.href} class="group flex flex-col gap-1 text-left border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all">
+        <a
+          href={prev.href}
+          class="group flex flex-col gap-1 text-left border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all"
+        >
           <span class="font-mono text-xs font-bold uppercase tracking-widest text-text-tertiary group-hover:text-canvas/70">
             Предыдущая
           </span>
@@ -22,7 +25,10 @@ const { prev, next, sectionLabel, sectionHref } = Astro.props;
           </span>
         </a>
       ) : (
-        <a href={sectionHref} class="group flex flex-col gap-1 text-left border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all">
+        <a
+          href={sectionHref}
+          class="group flex flex-col gap-1 text-left border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all"
+        >
           <span class="font-mono text-xs font-bold uppercase tracking-widest text-text-tertiary group-hover:text-canvas/70">
             Раздел
           </span>
@@ -35,7 +41,10 @@ const { prev, next, sectionLabel, sectionHref } = Astro.props;
 
     {
       next && (
-        <a href={next.href} class="group flex flex-col gap-1 text-right border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all">
+        <a
+          href={next.href}
+          class="group flex flex-col gap-1 text-right border-2 border-border p-4 hover:bg-text hover:text-canvas transition-all"
+        >
           <span class="font-mono text-xs font-bold uppercase tracking-widest text-text-tertiary group-hover:text-canvas/70">
             Следующая
           </span>

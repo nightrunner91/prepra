@@ -268,7 +268,9 @@ export function SearchModal() {
           </div>
         )}
 
-        <div className="min-h-[200px] flex-1 overflow-y-auto p-4 sm:p-6">
+        <div
+          className={`flex-1 overflow-y-auto ${results.length > 0 ? "p-4 sm:p-6" : ""}`}
+        >
           {hasSearched && !searching && results.length === 0 ? (
             <p className="px-2 py-14 text-center font-mono text-base font-bold uppercase tracking-wider text-text-tertiary">
               Ничего не найдено

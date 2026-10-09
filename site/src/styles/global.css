@@ -79,11 +79,15 @@
     color: var(--color-text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
     background-color: var(--color-canvas);
     color: var(--color-text);
+    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   ::selection {
@@ -208,11 +212,11 @@
     transform: scale(0.92);
   }
 
-  @media (max-width: 639px) {
-    .quiz-answer code {
-      white-space: normal;
-      overflow-wrap: anywhere;
-    }
+  .quiz-answer code,
+  .quiz-question code,
+  .quiz-results code {
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -243,7 +247,15 @@
   font-size: 0.875em;
   font-weight: 500;
   border: 1px solid var(--color-border);
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.prose .table-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .prose pre code {
@@ -260,7 +272,8 @@
   font-size: 0.875em;
   font-weight: 500;
   border: 1px solid var(--color-border);
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .quiz-answer code::before,
