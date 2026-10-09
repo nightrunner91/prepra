@@ -68,7 +68,25 @@ answers:
 | Выбор модели, роутинг, fallback | — | ✅ |
 | Рендер ответа | ✅ | — |
 
-Сервер — единственная точка контроля. Именно на нём живут все механизмы из этой статьи: evals подключаются к серверной части, стоимость и латентность снимаются здесь, fallback и роутинг выбирают модель здесь же. Фронтенд в этой истории отвечает за интерфейс (см. [AI UI](./ai-ui-patterns.md)), а не за эксплуатацию.
+Сервер — единственная точка контроля. Именно на нём живут все механизмы из этой статьи: evals подключаются к серверной части, стоимость и латентность снимаются здесь, fallback и роутинг выбирают модель здесь же. Фронтенд отвечает за интерфейс (см. [AI UI](./ai-ui-patterns.md)) и — в современном fullstack-стеке — за сам этот серверный слой.
+
+### Что здесь делает фронтендер
+
+Слово «сервер» в схеме выше не означает чужой бэкенд. В подавляющем большинстве AI-фич это серверный слой самого фронтенд-фреймворка: Route Handler в Next.js, API-route в Nitro для Nuxt, edge-функция для SPA. Ключ, сборка промпта, роутинг, бюджеты и evals живут в том же репозитории и той же команде, что и компоненты, — это fullstack-часть фронтенда, а не отдельная зона ответственности. Поэтому все механизмы статьи — работа фронтендера, просто не в браузере.
+
+У каждого механизма есть интерфейсный двойник, которым владеет именно фронтенд:
+
+| Механизм | Что делает фронтенд |
+|----------|---------------------|
+| Латентность и TTFT | Стриминг, skeleton, «Стоп», бюджет на первый токен |
+| Fallback и деградация | Уровни UI: полный → кэш → частичные фичи → read-only → статика |
+| Feature flags и kill switch | Выключить AI-UI мгновенно, без релиза |
+| Routing по сложности | Разная форма и формат ответа у моделей → устойчивый к ним рендер |
+| Prompt caching | Статичный префикс (system prompt, схема) задаёт фронтенд — порядок критичен |
+| Schema enforcement | Типизированный tool-output → типизированный компонент (generative UI) |
+| Наблюдаемость | `gen_ai.*`-атрибуты в трейсах и метаданных запроса |
+
+Отдельная зона ответственности фронтенда — **тестирование самого AI-интерфейса**: стриминг, состояния tool-частей, human-in-the-loop и частичный ответ при ошибке проверяют в Playwright на записанных SSE-фикстурах (см. [AI UI](./ai-ui-patterns.md)), а не unit-тестами с живой моделью. Как гонять evals по качеству модели — ниже.
 
 ---
 
@@ -117,6 +135,97 @@ Judge систематически искажает оценки. Основны
 
 Наконец, рубрика должна быть низкоразрешённой: бинарные или малогранулярные оценки надёжнее, чем «1–5 с шагом 0.1» — LLM плохо воспроизводит мелкие градации.
 
+### Как это запускается на практике
+
+Термины не взаимозаменяемы, и с них стоит начать: **golden set** — это данные (вход + критерии), **eval** — замер выхода против этих данных, **judge** — один из способов оценить выход внутри eval, а **раннер** — скрипт, который всё это исполняет. Evals — не unit-тесты: они ходят в живую модель, стоят денег и времени, поэтому живут отдельным процессом, а не в `vitest run`.
+
+Раскладка в репозитории рядом с серверным кодом:
+
+```
+evals/
+├── golden/describe-short.jsonl     # 200–500 кейсов, диффится в git
+├── judges/brand-tone.ts            # LLM-judge с рубрикой
+├── checks/rule-based.ts            # схема, regex, exact match
+├── calibration/human-labels.jsonl  # человеческие метки для согласия
+└── run.ts                          # раннер
+```
+
+Кейс golden set — строка JSONL: вход, критерии и порог.
+
+```jsonl
+{"id":"desc-001","input":{"name":"Кроссовки","tone":"playful"},"criteria":{"schema":"DescriptionSchema","must_include":["brand"]},"threshold":0.8,"tags":["tone"]}
+```
+
+Раннер прогоняет кейсы через **тот же серверный код, что и прод** (не через копию промпта), считает rule-based и judge и агрегирует pass-rate. Технический сбой — отдельный счётчик `error`, а не `fail` (см. [Quality-gate](#quality-gate-в-ci)).
+
+```ts
+import { readFileSync } from 'node:fs';
+import { describeItem } from '../src/server/ai/describe';
+import { ruleChecks } from './checks/rule-based';
+import { brandToneJudge } from './judges/brand-tone';
+
+async function run(cases, samples = 5) {
+  let pass = 0, fail = 0, error = 0;
+
+  for (const c of cases) {
+    for (let i = 0; i < samples; i++) {
+      try {
+        const out = await describeItem(c.input);
+        const rule = ruleChecks(c, out);
+        const judged = rule.ok ? await brandToneJudge(c, out) : { ok: false };
+        rule.ok && judged.ok ? pass++ : fail++;
+      } catch {
+        error++;
+      }
+    }
+  }
+
+  const denom = pass + fail;
+  return { rate: denom ? pass / denom : 0, pass, fail, error };
+}
+
+const cases = readFileSync('evals/golden/describe-short.jsonl', 'utf8')
+  .trim().split('\n').map((line) => JSON.parse(line));
+
+const { rate, ...counts } = await run(cases);
+console.log({ rate, ...counts });
+if (rate < Number(process.env.EVAL_THRESHOLD ?? 0.85)) process.exit(1);
+```
+
+Judge — это тоже вызов модели, но со **структурированным выводом** и **другой моделью**, чем генератор (лечение self-enhancement bias):
+
+```ts
+import { generateObject } from 'ai';
+import { z } from 'zod';
+
+async function brandToneJudge(testCase, output) {
+  const res = await generateObject({
+    model: 'openai/gpt-5-mini',
+    schema: z.object({ score: z.number().min(0).max(1), reason: z.string() }),
+    prompt: [
+      'Рубрика: ответ соответствует tone из входа и упоминает brand.',
+      'Оценка низкоразрешённая: 0 — не соответствует, 1 — полностью.',
+      'Длина ответа не является признаком качества.',
+      `Input: ${JSON.stringify(testCase.input)}`,
+      `Output: ${output}`,
+    ].join('\n'),
+  });
+  return { ok: res.object.score >= 0.7, reason: res.object.reason };
+}
+```
+
+Калибровку judge ведут не по одной цифре: собирают человеческие метки и считают согласие с поправкой на случайность (Cohen's kappa), а не только exact match — иначе согласие системно завышается на 30–40 п.п.
+
+```ts
+function agreement(judge, human) {
+  const n = judge.length;
+  const raw = judge.filter((s, i) => s === human[i]).length / n;
+  return { raw, kappa: cohensKappa(judge, human) };
+}
+```
+
+Итого три места запуска: **локально** (`npm run eval` на своей машине во время разработки), **в CI** как quality-gate (раздел ниже) и **в рантайме** поверх прод-трейсов (раздел [Online-мониторинг](#online-мониторинг)). Писать раннер с нуля не обязательно: rule-based и judge в CI закрывают **Promptfoo** и **evalite**, а рантайм-оценки поверх трейсов — **Langfuse**, **LangSmith** и **Braintrust**.
+
 ---
 
 ## Quality-gate в CI
@@ -129,6 +238,39 @@ Evals бесполезны, если их запускают руками пер
 - **Разделяйте ERROR и FAIL.** Если вызов judge упал по таймауту или лимиту — это `ERROR`, ретраится и **не считается** провалом оценки: иначе техническая нестабильность искажает pass-rate.
 - **Версионируйте judge.** Промпт judge храните рядом с golden set с версией и хэшем — правка judge может сдвинуть распределение баллов на целый пункт, и старые бейзлайны станут несравнимы.
 
+Технически это отдельный job (он не должен блокировать быстрый unit-прогон), у которого есть `pull_request`-триггер и ночное расписание:
+
+```yaml
+on:
+  pull_request:
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  eval-smoke:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run eval -- --suite smoke --samples 1
+        env:
+          EVAL_THRESHOLD: "0.85"
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+  eval-full:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run eval -- --suite full --samples 5
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+```
+
+`smoke` — это все rule-based проверки плюс маленькая выборка judge ради скорости; `full` — весь golden set с несколькими генерациями на кейс и всеми judge-метриками. Раннер и judge разобраны в разделе [Evals](#evals-новые-unit-тесты).
+
 ---
 
 ## Online-мониторинг
@@ -139,6 +281,8 @@ Evals бесполезны, если их запускают руками пер
 - **Обратная связь пользователя** — thumbs up/down, кнопка regenerate/edit. Это самый дешёвый сигнал качества на реальном трафике.
 - **Runtime evals** — небольшая доля трафика оценивается judge-ем в реальном времени, чтобы поймать дрейф качества до жалоб.
 - **Дрейф при смене модели.** Провайдер может молча обновить версию модели (см. `gen_ai.response.model`), и распределение ответов изменится. Смена модели — это всегда повторный прогон golden set, а не косметическая правка строки.
+
+Технически онлайн-evals вешают на трейсы в платформе наблюдаемости: та же записанная пара «вход → выход» становится строкой датасета, а judge прогоняется фоновым воркером (очередь или cron), чтобы не тормозить ответ пользователю. Здесь пригождаются **Langfuse**, **LangSmith** и **Braintrust** — у них dataset, скореры и трассировка в одном месте. Провалившиеся трейсы одним действием превращаются в кейс golden set и уходят в офлайн-раннер.
 
 ---
 
@@ -327,6 +471,7 @@ AI-фича принимается не «когда работает», а по
 - Schema enforcement + retry по ошибке валидации — дешёвый способ снизить галлюцинации; feature flags и kill switch откатывают фичу без релиза.
 - Наблюдаемость — по **OTel GenAI**: спаны `invoke_agent`/`chat`/`execute_tool`, атрибуты `gen_ai.*`, метрики токенов и латентности; контент пишется только opt-in, спецификация пока Development — пините версии.
 - Версионируйте промпты, judge и модели — иначе деградацию метрики не связать с причиной; начинайте с простейшей фичи, которую можно измерить.
+- Сервер AI-фичи — это серверный слой фронтенд-фреймворка (Route Handler, Nitro), поэтому evals, стоимость и fallback — работа фронтендера; evals гоняют отдельным раннером в CI (smoke на PR, full ночью) и поверх прод-трейсов, а не в обычных unit-тестах. Тестирование самого AI-интерфейса — отдельно, в Playwright на записанных SSE-фикстурах.
 
 ---
 
@@ -357,3 +502,7 @@ AI-фича принимается не «когда работает», а по
 - [Vercel — Prompt caching across providers](https://vercel.com/i/prompt-caching-across-providers) — модели активации, write/read-цены и TTL
 - [Inferbase — LLM Fallback Chains](https://inferbase.ai/blog/llm-fallback-chains) — retryable vs terminal, дедлайны, capability parity
 - [InfoQ — Platform Engineering Playbook for Production LLMs](https://www.infoq.com/articles/platform-engineering-playbook-production-llms/) — schema enforcement, retry и снижение галлюцинаций
+- [Promptfoo — Intro](https://www.promptfoo.dev/docs/intro/) — CLI для evals в CI: rule-based и model-graded проверки, пороги, отчёт
+- [Langfuse — Model-based evaluations](https://langfuse.com/docs/scores/model-based-evals) — LLM-as-a-judge поверх трассировки, онлайн- и офлайн-оценки
+- [evalite](https://github.com/mattpocock/evalite) — раннер evals на Vitest для TypeScript: кейсы, скореры, watch и CI
+- [Playwright — Network](https://playwright.dev/docs/network) — перехват и подмена стрима: записанные SSE-фикстуры для тестов AI-интерфейса
