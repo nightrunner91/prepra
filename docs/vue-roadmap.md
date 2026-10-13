@@ -6,6 +6,10 @@
 Этот файл лежит в корне `docs/`, а не в папке раздела, поэтому он **не попадает**
 в Astro content collections (каждая коллекция грузится из `../docs/<section>`).
 
+> **Обязательное правило:** каждую статью этого плана агент пишет с прогоном
+> skill `article-format` (см. «Порядок работы», п. 4). Статья без `article-format`
+> не считается готовой.
+
 ## Как читать план
 
 - **Приоритет:** `P0` — критично для Senior-уровня, `P1` — важно, `P2` — nice-to-have.
@@ -207,7 +211,10 @@
 1. P0: `custom-directives`, `plugins-and-app-api`, `styling`.
 2. P1: `accessibility`, `i18n`, `data-fetching`, `forms`, `vue35-features`.
 3. P2: `composable-design`, `web-components`.
-4. После каждой статьи: frontmatter (`title`, `section`, `description`, `order`,
+4. **Обязательно: запустить skill `article-format`** при написании каждой статьи
+   (по одной статье за раз) — до финализации frontmatter и «Смотрите также».
+   Без прогона `article-format` статью считать неготовой.
+5. После каждой статьи: frontmatter (`title`, `section`, `description`, `order`,
    `tags`, `stacks: ["vue"]`, `questions`, при необходимости `answers`), блок
    «Смотрите также» с обратными ссылками, запись в `docs/vue/README.md`.
-5. Финально: `npm run build` в `site/` и skill `arrange` по разделу `vue`.
+6. Финально: `npm run build` в `site/` и skill `arrange` по разделу `vue`.

@@ -792,11 +792,6 @@ Vue `<Suspense>` и React `<Suspense>` решают похожие задачи,
 
 ---
 
-## Смотрите также
-
-- [Data fetching в Nuxt 3](../nuxt/data-fetching.md) — `useFetch`/`useAsyncData`, SSR-safe загрузка и отмена запросов.
-- [Гидратация](../performance/hydration.md) — mismatch и клиентские компоненты.
-
 ## Полезные ссылки
 
 - [Vue Docs: Suspense](https://vuejs.org/guide/built-ins/suspense.html) — официальная документация.

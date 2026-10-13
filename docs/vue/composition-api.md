@@ -832,12 +832,6 @@ Composition API и `<script setup>` — это современный спосо
 
 ---
 
-## Смотрите также
-
-- [Pinia: управление состоянием](../state-management/pinia.md) — когда хватает composable, а когда нужен глобальный стор.
-- [TypeScript во Vue](../typescript/vue.md) — типизация `defineProps`, `defineEmits` и `provide`/`inject`.
-- [Паттерны компонентов и структура во Vue](../architecture/design-patterns-vue.md) — compound components, control props, FSD.
-
 ## Полезные ссылки
 
 - [Composition API FAQ](https://vuejs.org/guide/extras/composition-api-faq.html) — официальная документация Vue.

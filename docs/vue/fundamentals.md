@@ -1040,12 +1040,6 @@ Vue 3 предлагает мощный и лаконичный способ с�
 
 ---
 
-## Смотрите также
-
-- [TypeScript во Vue](../typescript/vue.md) — типизация пропсов, событий, слотов и `defineModel`.
-- [Безопасность Vue](../security/vue.md) — `v-html`, экранирование и защита от XSS.
-- [Семантический HTML и доступность](../html-css/html-semantics-accessibility.md) — фундамент доступных компонентов.
-
 ## Полезные ссылки
 
 - [Vue.js Documentation](https://vuejs.org/) — официальная документация Vue 3

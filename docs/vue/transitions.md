@@ -730,11 +730,6 @@ Framer Motion мощнее для сложных gesture-анимаций, share
 
 ---
 
-## Смотрите также
-
-- [Парсинг HTML и критический путь рендеринга](../html-css/html-rendering-pipeline.md) — layout, paint и composite.
-- [Браузерная архитектура](../performance/browser-architecture.md) — потоки, compositor и GPU.
-
 ## Полезные ссылки
 
 - [Vue 3 Docs — Transition](https://vuejs.org/guide/built-ins/transition.html) — официальная документация по `<Transition>`.

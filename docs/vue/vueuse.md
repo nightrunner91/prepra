@@ -586,11 +586,6 @@ VueUse — это один из самых полезных инструмент
 
 ---
 
-## Смотрите также
-
-- [Composables и auto-imports в Nuxt](../nuxt/composables-and-auto-imports.md) — как встроенные composables соотносятся с VueUse.
-- [HTTP-клиенты](../api-communication/http-clients.md) — сравнение с `useFetch` для сложных сценариев.
-
 ## Полезные ссылки
 
 - [VueUse](https://vueuse.org/) — официальная документация и каталог функций.

@@ -750,12 +750,6 @@ Vue 3 предоставляет разработчику мощный набо�
 
 ---
 
-## Смотрите также
-
-- [Виртуализация списков](../performance/list-virtualization.md) — `vue-virtual-scroller` и TanStack Virtual.
-- [Оптимизация бандла](../performance/bundle-optimization.md) — tree shaking, code splitting и бюджет бандла.
-- [Метрики производительности](../performance/web-performance-metrics.md) — Core Web Vitals и инструменты измерения.
-
 ## Полезные ссылки
 
 - [Vue 3: Computed Properties](https://vuejs.org/guide/essentials/computed.html)
