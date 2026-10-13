@@ -1287,12 +1287,6 @@ export const useSettingsStore = defineStore('settings', { ... })
 - Для изолированного тестирования сторов — `setActivePinia(createPinia())` перед каждым тестом.
 - Серверное состояние (данные с API) — зона TanStack Query / VueQuery (кэш, инвалидация, мутации); Pinia — для UI-состояния (модалки, корзина, аутентификация).
 
-## Смотрите также
-
-- [Composition API и `<script setup>`](../vue/composition-api.md) — composables как основа Vue-архитектуры.
-- [Паттерны компонентов и структура во Vue](../architecture/design-patterns-vue.md) — где хранить состояние в проекте.
-- [Тестирование Vue](../testing/vue-testing-components.md) — изоляция сторов в тестах.
-
 ## Заключение
 
 Pinia — современный и эргономичный стейт-менеджер для Vue 3, который убрал главную боль Vuex: двойной бойлерплейт mutations/actions. Прямые мутации через Vue Proxy, автовывод TypeScript-типов и встроенная интеграция с DevTools делают его продуктивным инструментом без лишней настройки.

@@ -452,10 +452,6 @@ await navigateTo('/login', { replace: true });
 
 ---
 
-## Смотрите также
-
-- [Vue Router](../vue/router.md) — как устроен роутер под файловой маршрутизацией Nuxt.
-
 ## Полезные ссылки
 
 - [Nuxt 3 Routing](https://nuxt.com/docs/getting-started/routing) — официальная документация по роутингу

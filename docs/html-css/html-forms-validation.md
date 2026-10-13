@@ -291,6 +291,8 @@ form.addEventListener('submit', async (event) => {
 
 Формы в HTML — целостная система: атрибуты задают правила, Constraint Validation API управляет проверкой, а псевдоклассы `:user-valid`/`:user-invalid` позволяют стилизовать состояния без излишней навязчивости. Событие `formdata` — удобная точка для модификации данных перед отправкой. `ElementInternals` — отдельный нишевый механизм для интеграции custom elements в формы; его достаточно знать на уровне «что это», если вы не пишете библиотеки компонентов. Клиентская валидация улучшает UX, но никогда не заменяет серверную проверку.
 
+Во Vue этот фундамент сочетается с `v-model`, `defineModel`, composables и schema-валидацией — паттерны конкретно для Vue собраны в статье [Формы и валидация во Vue](../vue/forms.md).
+
 ## Полезные ссылки
 
 - [Form validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation)

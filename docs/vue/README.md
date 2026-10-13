@@ -14,6 +14,7 @@
 
 - **[События во Vue](./events.md)** — модификаторы, компонентные события, нативные события, `v-model` под капотом.
 - **[Компоненты, слоты и композиция](./components-slots.md)** — default/named/scoped slots, `render()`/`h()`, `<component :is>`, `keep-alive`, `<teleport>`.
+- **[Формы и валидация](./forms.md)** — `v-model` на нативных элементах, `defineModel`, модификаторы `.lazy`/`.number`/`.trim`, валидация на composables, `vee-validate` + zod, `FormKit` и доступность форм.
 - **[Оптимизация производительности](./performance.md)** — `computed`, `v-memo`, `defineAsyncComponent`, `shallowRef`, lazy hydration, сравнение с React.
 - **[Suspense и async setup](./suspense.md)** — `<Suspense>`, async `setup()`, fallback, вложенные границы.
 - **[Обработка ошибок](./error-handling.md)** — `app.config.errorHandler`, `onErrorCaptured`, error boundary pattern.
