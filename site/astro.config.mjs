@@ -4,11 +4,14 @@ import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
 import rehypeMarkdownLinks from './src/lib/rehype-markdown-links.mjs';
 import rehypeWrapTables from './src/lib/rehype-wrap-tables.mjs';
+import rewriteRelativeLinks from './src/lib/rewrite-relative-links.mjs';
+
+const BASE = '/prepra';
 
 export default defineConfig({
   output: 'static',
   site: 'https://nightrunner91.github.io',
-  base: '/prepra',
+  base: BASE,
   server: {
     port: 8305,
     fs: {
@@ -21,6 +24,7 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
+    rewriteRelativeLinks({ base: BASE }),
   ],
   markdown: {
     rehypePlugins: [rehypeMarkdownLinks, rehypeWrapTables],
