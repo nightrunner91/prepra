@@ -945,6 +945,11 @@ Vue Router — это зрелое и предсказуемое решение 
 
 ---
 
+## Смотрите также
+
+- [Файловая маршрутизация в Nuxt](../nuxt/file-based-routing.md) — routing поверх Vue Router.
+- [Оптимизация бандла](../performance/bundle-optimization.md) — code splitting и ленивые чанки маршрутов.
+
 ## Полезные ссылки
 
 - [Vue Router — официальная документация](https://router.vuejs.org/)

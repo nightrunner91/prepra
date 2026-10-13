@@ -1057,6 +1057,11 @@ export type Order = { user: User }
 
 Vue-паттерны — это словарь, на котором разговаривают senior-разработчики Vue-экосистемы: слоты вместо наследования, composables вместо mixins, `provide`/`inject` вместо глубокого prop drilling, `v-model` как нативный механизм controlled/uncontrolled. Структура файлов — не догма, а компромисс между простотой навигации и масштабируемостью: для маленьких проектов достаточно type-based, для средних — feature-based, для больших — FSD или domain-driven подход. В Nuxt многое уже решено файловой системой и автоимпортами — важно не бороться с конвенцией, а использовать её.
 
+## Смотрите также
+
+- [Компоненты, слоты и композиция](../vue/components-slots.md) — слоты и scoped slots изнутри.
+- [Composition API и `<script setup>`](../vue/composition-api.md) — composables и provide/inject.
+
 ## Полезные ссылки
 
 - [Vue Docs — Slots](https://vuejs.org/guide/components/slots.html)

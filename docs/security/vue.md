@@ -269,6 +269,11 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}) {
 
 Vue предоставляет хорошую базовую защиту от XSS через автоматическое экранирование, но у него есть мощные инструменты — `v-html` и refs — которые требуют осознанного подхода. Санитизация через DOMPurify, валидация URL и аккуратное хранение токенов закрывают основные векторы. Для более глубокого понимания XSS смотрите статью [XSS: анатомия атаки](./xss-deep-dive.md), а про безопасность Nuxt — [Безопасность Nuxt](./nuxt.md).
 
+## Смотрите также
+
+- [Основы Vue 3](../vue/fundamentals.md) — SFC, шаблоны и директивы, включая `v-html`.
+- [XSS: анатомия атаки](./xss-deep-dive.md) — общая теория XSS и Trusted Types.
+
 ## Полезные ссылки
 
 - [Vue.js — Security](https://vuejs.org/guide/best-practices/security.html)

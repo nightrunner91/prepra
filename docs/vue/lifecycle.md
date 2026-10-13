@@ -898,6 +898,11 @@ Lifecycle hooks Vue 3 — это точки входа в чётко опред�
 
 ---
 
+## Смотрите также
+
+- [Жизненный цикл приложения в Nuxt](../nuxt/app-lifecycle.md) — плагины, middleware и runtime hooks.
+- [Гидратация](../performance/hydration.md) — что происходит при монтировании в SSR.
+
 ## Полезные ссылки
 
 - [Lifecycle Hooks](https://vuejs.org/guide/essentials/lifecycle.html) — официальная документация Vue.

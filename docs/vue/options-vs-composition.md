@@ -537,6 +537,11 @@ Options API и Composition API — это не два враждующих ла�
 
 ---
 
+## Смотрите также
+
+- [Паттерны компонентов и структура во Vue](../architecture/design-patterns-vue.md) — практические паттерны Composition API.
+- [TypeScript во Vue](../typescript/vue.md) — почему `<script setup lang="ts">` выигрывает по типам.
+
 ## Полезные ссылки
 
 - [Composition API FAQ](https://vuejs.org/guide/extras/composition-api-faq.html) — официальное сравнение Options API и Composition API.

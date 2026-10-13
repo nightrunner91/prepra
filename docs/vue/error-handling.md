@@ -701,6 +701,11 @@ function handleClick() {
 
 ---
 
+## Смотрите также
+
+- [Sentry](../testing/sentry-guide.md) — мониторинг и логирование ошибок в production.
+- [Безопасность Vue](../security/vue.md) — XSS и границы защиты фреймворка.
+
 ## Полезные ссылки
 
 - [Vue Docs — Error Handling](https://vuejs.org/guide/best-practices/error-handling.html)

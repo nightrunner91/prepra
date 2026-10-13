@@ -800,6 +800,11 @@ vue-tsc --noEmit
 
 Vue 3 даёт встроенную типизацию через макросы: `defineProps` для пропсов, `defineEmits` для событий, `defineSlots` для слотов, `generic` для переиспользуемых компонентов. Ключевые паттерны: `withDefaults` и реактивная деструктуризация для дефолтов, `InjectionKey<T>` для `provide`/`inject`, `InstanceType<typeof Child>` для template refs на компоненты и `vue-tsc` для проверки шаблонов. Параллели с React помогают не запутаться в синтаксисе: пропсы-функции против `defineEmits`, `children` против слотов, `useState` против `ref`. Попробуйте переписать типичный компонент на `defineModel` и `generic` — это быстрее всего закрепляет материал.
 
+## Смотрите также
+
+- [Composition API и `<script setup>`](../vue/composition-api.md) — базовый синтаксис, который типизируется.
+- [Реактивность Vue](../vue/reactivity.md) — `ref`, `reactive` и `computed` под капотом.
+
 ## Полезные ссылки
 
 - [Vue Docs — TypeScript with Composition API](https://vuejs.org/guide/typescript/composition-api.html)

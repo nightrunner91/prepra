@@ -23,3 +23,16 @@
 
 - **[Options API vs Composition API](./options-vs-composition.md)** — история, различия, когда что использовать, миграция.
 - **[Экосистема VueUse](./vueuse.md)** — обзор готовых composables, когда использовать, а когда писать свой.
+
+## Смежные разделы
+
+Темы уровня Senior Vue / UI Engineer вынесены в соседние разделы:
+
+- **[Pinia и Vuex](../state-management/README.md)** — клиентское состояние приложения.
+- **[TypeScript во Vue](../typescript/vue.md)** — типизация пропсов, событий, слотов и composables.
+- **[Тестирование Vue](../testing/vue-testing-components.md)** — Vue Test Utils, composables, Pinia, роутер.
+- **[Безопасность Vue](../security/vue.md)** — `v-html`, экранирование, токены, XSS.
+- **[Паттерны компонентов во Vue](../architecture/design-patterns-vue.md)** — композиция и файловая структура.
+- **[Nuxt](../nuxt/README.md)** — full-stack фреймворк на базе Vue.
+
+> Пресет мок-интервью «Vue-стек» собирает вопросы из разделов Vue, TypeScript, Хранилища и API.

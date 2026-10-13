@@ -1108,6 +1108,11 @@ const fullName = computed(() => {
 
 ---
 
+## Смотрите также
+
+- [Proxy и Reflect в JavaScript](../javascript/js-proxy-reflect.md) — механизм, лежащий в основе реактивности Vue.
+- [Оптимизация производительности](./performance.md) — `computed`, `shallowRef` и `v-memo` на практике.
+
 ## Полезные ссылки
 
 - [Реактивность в Vue 3](https://vuejs.org/guide/essentials/reactivity-fundamentals.html) — официальная документация.

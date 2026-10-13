@@ -216,7 +216,7 @@ onUnmounted(() => {
 </template>
 ```
 
-> В Vue нет готового нативного хука-обёртки, как в React-примере ниже, но есть `useWebSocket` из [VueUse](https://vueuse.org/core/useWebSocket/) — он покрывает переподключения, heartbeat и очередь сообщений «из коробки». Подробнее о жизненном цикле в Vue — в разделе [Vue](/vue/lifecycle.md).
+> В Vue нет готового нативного хука-обёртки, как в React-примере ниже, но есть `useWebSocket` из [VueUse](https://vueuse.org/core/useWebSocket/) — он покрывает переподключения, heartbeat и очередь сообщений «из коробки». Подробнее о жизненном цикле в Vue — в статье [Жизненный цикл компонента во Vue](../vue/lifecycle.md).
 
 ### Проблемы базового подхода
 

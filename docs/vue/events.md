@@ -794,6 +794,10 @@ Vue: `<input v-model="text" />`. Под капотом — prop + событие
 
 ---
 
+## Смотрите также
+
+- [Паттерны компонентов и структура во Vue](../architecture/design-patterns-vue.md) — `v-model`, compound components и state reducer.
+
 ## Полезные ссылки
 
 - [Vue 3 — Event Handling](https://vuejs.org/guide/essentials/event-handling.html)

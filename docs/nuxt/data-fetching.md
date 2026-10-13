@@ -571,6 +571,10 @@ Data fetching — ключевая часть работы с Nuxt 3. Прави
 
 ---
 
+## Смотрите также
+
+- [Suspense и async setup](../vue/suspense.md) — координация состояния загрузки во Vue.
+
 ## Полезные ссылки
 
 - [Nuxt 3 Data Fetching](https://nuxt.com/docs/getting-started/data-fetching) — официальное руководство по загрузке данных

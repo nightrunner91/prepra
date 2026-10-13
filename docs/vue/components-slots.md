@@ -972,6 +972,10 @@ Scoped slot props могут быть реактивными объектами,
 
 ---
 
+## Смотрите также
+
+- [Паттерны компонентов и структура во Vue](../architecture/design-patterns-vue.md) — compound components и scoped slots как render props.
+
 ## Полезные ссылки
 
 - [Vue 3: Slots](https://vuejs.org/guide/components/slots.html)
