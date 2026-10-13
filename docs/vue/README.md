@@ -21,6 +21,7 @@
 - **[Кастомные директивы](./custom-directives.md)** — хуки и `binding`, регистрация локально и глобально, примеры `v-focus`, `v-click-outside`, `v-intersect`, `v-debounce` и сравнение с composables.
 - **[Плагины и app-level API](./plugins-and-app-api.md)** — `install` и `app.use`, глобальные `component`/`directive`/`provide`, `app.config`, `mount`/`unmount`, несколько приложений и сравнение с composables.
 - **[Стилизация во Vue](./styling.md)** — `scoped`-стили и data-атрибуты, `:deep()`/`:slotted()`/`:global()`, `v-bind()` в CSS и `useCssVars`, CSS Modules (`<style module>`), динамические классы, темизация через custom properties, порядок каскада.
+- **[Доступные компоненты во Vue](./accessibility.md)** — focus management и focus trap для модалок на `<Teleport>`, `aria-live` и `<Transition>`, атрибут `inert`, клавиатурные паттерны tabs/dialog/combobox/disclosure, `prefers-reduced-motion` и тестирование доступности.
 
 ## Не будет лишним
 
