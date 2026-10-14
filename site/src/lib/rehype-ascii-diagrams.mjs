@@ -9,22 +9,6 @@ function textOf(node) {
   return out;
 }
 
-function addClass(node, name) {
-  const props = node.properties ?? (node.properties = {});
-  const current = props.className ?? props.class;
-  let list;
-  if (Array.isArray(current)) {
-    list = current.slice();
-  } else if (typeof current === "string" && current.trim()) {
-    list = current.trim().split(/\s+/);
-  } else {
-    list = [];
-  }
-  if (!list.includes(name)) list.push(name);
-  props.className = list;
-  delete props.class;
-}
-
 function visit(node) {
   if (!node.children) return;
 
@@ -34,7 +18,10 @@ function visit(node) {
         (c) => c.type === "element" && c.tagName === "code",
       );
       if (DIAGRAM_GLYPHS.test(textOf(code ?? child))) {
-        addClass(child, "ascii-diagram");
+        child.properties = {
+          ...child.properties,
+          "data-ascii-diagram": "",
+        };
       }
     }
     visit(child);

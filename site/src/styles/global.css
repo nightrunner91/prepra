@@ -273,22 +273,22 @@
   white-space: pre;
 }
 
-.prose pre.ascii-diagram {
+.prose pre[data-ascii-diagram] {
   display: flex;
   overflow-x: auto;
   color: var(--color-text);
   line-height: 1.25;
 }
 
-.prose pre.ascii-diagram > code {
+.prose pre[data-ascii-diagram] > code {
   flex: none;
   margin-inline: auto;
   white-space: pre;
   tab-size: 2;
 }
 
-.prose pre.ascii-diagram > code::before,
-.prose pre.ascii-diagram > code::after {
+.prose pre[data-ascii-diagram] > code::before,
+.prose pre[data-ascii-diagram] > code::after {
   content: none;
 }
 
