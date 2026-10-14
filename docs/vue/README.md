@@ -23,6 +23,8 @@
 - **[Плагины и app-level API](./plugins-and-app-api.md)** — `install` и `app.use`, глобальные `component`/`directive`/`provide`, `app.config`, `mount`/`unmount`, несколько приложений и сравнение с composables.
 - **[Стилизация во Vue](./styling.md)** — `scoped`-стили и data-атрибуты, `:deep()`/`:slotted()`/`:global()`, `v-bind()` в CSS и `useCssVars`, CSS Modules (`<style module>`), динамические классы, темизация через custom properties, порядок каскада.
 - **[Доступные компоненты во Vue](./accessibility.md)** — focus management и focus trap для модалок на `<Teleport>`, `aria-live` и `<Transition>`, атрибут `inert`, клавиатурные паттерны tabs/dialog/combobox/disclosure, `prefers-reduced-motion` и тестирование доступности.
+- **[Веб-компоненты и UI-киты во Vue](./web-components-and-ui-kits.md)** — `defineCustomElement`, Shadow DOM, стили и слоты через границу, `provide`/`inject` ограничения, UI-киты (Element Plus, Vuetify, PrimeVue), дизайн-системы, поставка в другие фреймворки, тестирование и SSR.
+- **[Дизайн-токены, темизация и Figma](./design-tokens-and-figma.md)** — уровни токенов primitive/semantic/component, Style Dictionary pipeline, Figma Variables и Tokens Studio, Figma MCP и Code Connect, runtime theming во Vue, multi-brand, компонентные токены в UI-китах, CI/CD и visual regression.
 
 ## Не будет лишним
 
