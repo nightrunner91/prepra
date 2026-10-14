@@ -24,7 +24,6 @@
 - **[Стилизация во Vue](./styling.md)** — `scoped`-стили и data-атрибуты, `:deep()`/`:slotted()`/`:global()`, `v-bind()` в CSS и `useCssVars`, CSS Modules (`<style module>`), динамические классы, темизация через custom properties, порядок каскада.
 - **[Доступные компоненты во Vue](./accessibility.md)** — focus management и focus trap для модалок на `<Teleport>`, `aria-live` и `<Transition>`, атрибут `inert`, клавиатурные паттерны tabs/dialog/combobox/disclosure, `prefers-reduced-motion` и тестирование доступности.
 - **[Веб-компоненты и UI-киты во Vue](./web-components-and-ui-kits.md)** — `defineCustomElement`, Shadow DOM, стили и слоты через границу, `provide`/`inject` ограничения, UI-киты (Element Plus, Vuetify, PrimeVue), дизайн-системы, поставка в другие фреймворки, тестирование и SSR.
-- **[Дизайн-токены, темизация и Figma](./design-tokens-and-figma.md)** — уровни токенов primitive/semantic/component, Style Dictionary pipeline, Figma Variables и Tokens Studio, Figma MCP и Code Connect, runtime theming во Vue, multi-brand, компонентные токены в UI-китах, CI/CD и visual regression.
 
 ## Не будет лишним
 
@@ -39,6 +38,7 @@
 - **[TypeScript во Vue](../typescript/vue.md)** — типизация пропсов, событий, слотов и composables.
 - **[Тестирование Vue](../testing/vue-testing-components.md)** — Vue Test Utils, composables, Pinia, роутер.
 - **[Безопасность Vue](../security/vue.md)** — `v-html`, экранирование, токены, XSS.
+- **[Дизайн-токены, темизация и Figma](../html-css/design-tokens-and-figma.md)** — дизайн-токены, Figma Variables и MCP, runtime theming на CSS custom properties, multi-brand.
 - **[Паттерны компонентов во Vue](../architecture/design-patterns-vue.md)** — композиция и файловая структура.
 - **[Nuxt](../nuxt/README.md)** — full-stack фреймворк на базе Vue.
 

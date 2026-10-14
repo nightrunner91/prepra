@@ -16,6 +16,7 @@
 - **[Формы и валидация](./html-forms-validation.md)** — Constraint Validation API, `:user-valid`/`:user-invalid`, событие `formdata`, кратко про `ElementInternals`.
 - **[Парсинг HTML и производительность CSS](./html-rendering-pipeline.md)** — критический путь рендеринга, Layout/Paint/Composite, анимации через `transform`/`opacity`, `will-change`, `contain`, `content-visibility`.
 - **[Способы применения CSS, токены и архитектура](./css-styling-approaches.md)** — CSS Modules, CSS-in-JS, Tailwind, custom properties, дизайн-токены, BEM/CUBE/ITCSS, `@layer`.
+- **[Дизайн-токены, темизация и Figma](./design-tokens-and-figma.md)** — уровни токенов primitive/semantic/component, Style Dictionary pipeline, Figma Variables и Tokens Studio, Figma MCP и Code Connect, runtime theming на CSS custom properties, multi-brand, компонентные токены в UI-китах, CI/CD и visual regression.
 
 ## Не будет лишним
 

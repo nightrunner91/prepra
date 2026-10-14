@@ -1,15 +1,15 @@
 ---
 title: "Дизайн-токены, темизация и Figma"
-section: vue
-description: "Дизайн-токены: уровни primitive/semantic/component, Style Dictionary pipeline, Figma как source of truth, Figma MCP и Code Connect, runtime theming во Vue, multi-brand и компонентные токены в UI-китах."
-order: 20
+section: html-css
+description: "Дизайн-токены: уровни primitive/semantic/component, Style Dictionary pipeline, Figma как source of truth, Figma MCP и Code Connect, runtime theming через CSS custom properties, multi-brand и компонентные токены в UI-китах."
+order: 10
 tags: ["design-tokens", "theming", "figma", "style-dictionary", "figma-mcp", "multi-brand"]
 questions:
   - "Как устроена иерархия дизайн-токенов: primitive → semantic → component, и зачем нужен слой aliases"
   - "Какую роль играет Figma как source of truth и чем Figma Variables отличаются от Tokens Studio (Figma Tokens Plugin)"
   - "Как Figma MCP и Code Connect превращают design-to-code из угадывания в переиспользование компонентов"
   - "Что делает Style Dictionary и какие transforms и platforms нужны для генерации CSS, JS и Figma-совместимых артефактов"
-  - "Как устроен runtime theming во Vue через CSS custom properties и когда переключать тему атрибут versus класс"
+  - "Как устроен runtime theming на CSS custom properties и когда переключать тему атрибутом versus классом"
   - "Чем multi-brand отличается от dark mode и какие архитектурные решения это меняет в токенах"
   - "Как организовать CI/CD для токенов: валидация, snapshot-тесты и visual regression"
 answers:
@@ -17,7 +17,7 @@ answers:
   - "Figma Variables (нативные коллекции и modes) — встроенный способ хранить токены и переключать темы/brand прямо в макете; Tokens Studio (бывший Figma Tokens Plugin) — внешний плагин с JSON-экспортом и интеграцией со Style Dictionary. Variables предпочтительнее для новых проектов, Tokens Studio — когда нужна сложная трансформация или миграция legacy."
   - "Code Connect — маппинг Figma-компонентов на реальные компоненты репозитория через аннотации; Figma MCP (`get_design_context`) возвращает структурированное дерево слоёв с подстановкой настоящих импортов и prop-маппингов. Без Code Connect агент угадывает компонент по картинке, с ним — переиспользует существующий `Button`."
   - "Style Dictionary принимает JSON-словарь токенов и генерирует платформо-специфичные артефакты (CSS custom properties, JS/TS-объекты, SCSS-переменные, Android/iOS) через transforms (camelCase, kebab-case, px→rem) и форматы; config описывает `source` (JSON), `platforms` (css, js, figma) и `transforms` цепочку."
-  - "Runtime theming во Vue — переключение набора CSS custom properties на `:root` (или на `[data-theme]`); тема выбирается атрибутом `data-theme=\"dark\"` на `<html>` и переключается через `document.documentElement.setAttribute`, `useCssVars` в SFC или composable `useTheme`; атрибут предпочтительнее класса, так как не влияет на специфичность селекторов."
+  - "Runtime theming — переключение набора CSS custom properties на `:root` (или на `[data-theme]`); тема выбирается атрибутом `data-theme=\"dark\"` на `<html>` и переключается через `document.documentElement.setAttribute`; атрибут предпочтительнее класса, так как не влияет на специфичность селекторов. Во фреймворках это оборачивают в composable/hook/provider, но суть одна."
   - "Multi-brand требует отдельного набора semantic-токенов на каждый бренд (бренд А: `--brand-primary: blue`, бренд Б: `--brand-primary: green`), а dark mode — только переназначение semantic-токенов на те же primitive; architectural-решение: modes в Figma Variables → отдельные JSON-файлы per brand → runtime-переключение через data-атрибут."
   - "CI/CD для токенов: Style Dictionary запускается в build-пайплайне, lint-правила проверяют именование (kebab-case, отсутствие сырых значений в компонентах), snapshot-тесты фиксируют регрессии сгенерированных артефактов, Chromatic/Percy/Loki сравнивают скриншоты компонентов при изменении токенов."
 ---
@@ -26,7 +26,7 @@ answers:
 
 Дизайн-система живёт не в коде и не в Figma — она живёт между ними. Код — это то, что видит пользователь; Figma — то, что видит дизайнер. **Дизайн-токены** — мост между этими двумя мирами: именованные значения, которые хранятся в одном месте и генерируются в CSS, JS, iOS, Android и обратно в Figma.
 
-Для UI Engineer это центральная тема. Понимание того, как токены текут из Figma в Vue-компоненты, как устроена runtime-темизация, чем multi-brand отличается от dark mode и как автоматизировать pipeline через Style Dictionary и Figma MCP, — это то, что отличает Senior от Middle.
+Для UI Engineer это центральная тема. Понимание того, как токены текут из Figma в код, как устроена runtime-темизация через CSS custom properties, чем multi-brand отличается от dark mode и как автоматизировать pipeline через Style Dictionary и Figma MCP, — это то, что отличает Senior от Middle.
 
 ## Содержание
 
@@ -37,7 +37,7 @@ answers:
 5. [Figma MCP и Code Connect](#figma-mcp-и-code-connect)
 6. [Style Dictionary pipeline](#style-dictionary-pipeline)
 7. [W3C Design Token Format](#w3c-design-token-format)
-8. [Runtime theming во Vue](#runtime-theming-во-vue)
+8. [Runtime theming](#runtime-theming)
 9. [Multi-brand и white-label](#multi-brand-и-white-label)
 10. [Компонентные токены в UI-китах](#компонентные-токены-в-ui-китах)
 11. [Токены и CI/CD](#токены-и-cicd)
@@ -409,9 +409,9 @@ Style Dictionary 4+ поддерживает DTCG-формат. Figma Variables 
 
 ---
 
-## Runtime theming во Vue
+## Runtime theming
 
-Сгенерированные CSS custom properties нужно переключать в runtime. Во Vue это делается через data-атрибуты или классы на `<html>`.
+Сгенерированные CSS custom properties нужно переключать в runtime. Приём фреймворк-агностичен: тема — это набор значений на селекторе, а переключение — смена атрибута на `<html>`.
 
 ### Паттерн: data-атрибут
 
@@ -428,18 +428,16 @@ Style Dictionary 4+ поддерживает DTCG-формат. Figma Variables 
 }
 ```
 
-```vue
-<!-- App.vue -->
-<script setup>
-import { ref, watch } from 'vue';
+```js
+// vanilla js
+const saved = localStorage.getItem('theme') ?? 'light';
 
-const theme = ref<'light' | 'dark'>('light');
+function setTheme(next) {
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+}
 
-watch(theme, (newTheme) => {
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-}, { immediate: true });
-</script>
+setTheme(saved);
 ```
 
 Почему атрибут, а не класс:
@@ -448,7 +446,18 @@ watch(theme, (newTheme) => {
 - Легче комбинировать (theme + brand + reduced-motion).
 - Семантически яснее.
 
-### Composable `useTheme`
+### Интеграция с фреймворками
+
+Сам pipeline не зависит от фреймворка — меняется только обёртка вокруг `setAttribute`. Все варианты делают одно: читают сохранённое значение, ставят атрибут на `<html>` и слушают системную тему через `matchMedia('(prefers-color-scheme: dark)')`.
+
+| Фреймворк | Обёртка |
+|---|---|
+| Vue | composable `useTheme` + `watch` |
+| React | контекст (`ThemeProvider`) или `useSyncExternalStore` |
+| Svelte | store + `$effect` |
+| Angular | сервис + `DOCUMENT` / `Renderer2` |
+
+Типовая реализация обёртки (на примере Vue):
 
 ```ts
 // composables/useTheme.ts
@@ -483,33 +492,21 @@ export function useTheme() {
 }
 ```
 
-### `useCssVars` для компонентов
+### Динамические значения из компонентов
 
-Если компонент принимает пропсы и хочет пробросить их в CSS:
+Токен можно переопределить на уровне компонента, прокинув значение в inline custom property — это работает в любом фреймворке:
 
-```vue
-<script setup>
-import { useCssVars } from 'vue';
+```html
+<button class="btn" style="--button-accent: #7c3aed">Click me</button>
+```
 
-const props = defineProps<{ accentColor: string }>();
-
-useCssVars(() => ({
-  'button-accent': props.accentColor,
-}));
-</script>
-
-<template>
-  <button class="btn">Click me</button>
-</template>
-
-<style scoped>
+```css
 .btn {
   background: var(--button-accent);
 }
-</style>
 ```
 
-Это runtime-связь между props и CSS custom properties. Подробнее — в [Стилизация во Vue](./styling.md).
+Фреймворки дают лишь удобный способ привязать пропс к переменной: Vue — `useCssVars` / `v-bind()` в CSS, React — `style={{ '--button-accent': color }}`, Angular — `[style.--button-accent]`.
 
 ---
 
@@ -579,93 +576,52 @@ Collection: Colors
 
 ## Компонентные токены в UI-китах
 
-UI-киты (Element Plus, Vuetify, PrimeVue) используют токены для темизации. Рассмотрим, как это устроено.
+Популярные UI-киты строятся на токенах и отдают их наружу — как CSS custom properties или как JS-объект темы. Принцип одинаков в любом фреймворке.
 
-### Element Plus
+### CSS custom properties
 
-Element Plus использует CSS custom properties:
-
-```css
-:root {
-  --el-color-primary: #409eff;
-  --el-color-success: #67c23a;
-  --el-font-size-base: 14px;
-  --el-border-radius-base: 4px;
-}
-```
-
-Переопределение:
+Одни киты (Element Plus, Ant Design v5, Shoelace) экспонируют переменные с префиксом, которые переопределяются в вашем CSS:
 
 ```css
 :root {
-  --el-color-primary: #3b82f6;
+  --el-color-primary: #3b82f6; /* Element Plus */
+  --ant-color-primary: #3b82f6; /* Ant Design v5 */
 }
 ```
 
-### Vuetify
+### JS-объект темы
 
-Vuetify 3 использует JavaScript-объект для темы:
+Другие (Vuetify, Material UI, Chakra) принимают тему как JS/TS-объект и генерируют переменные в runtime:
 
 ```ts
-import { createVuetify } from 'vuetify';
-
-export default createVuetify({
-  theme: {
-    themes: {
-      light: {
-        colors: {
-          primary: '#409eff',
-          secondary: '#67c23a',
-        },
-      },
-      dark: {
-        colors: {
-          primary: '#3b82f6',
-          secondary: '#22c55e',
-        },
-      },
-    },
+createTheme({
+  palette: {
+    primary: { main: '#3b82f6' },
   },
 });
 ```
 
-Vuetify генерирует CSS custom properties runtime, что даёт гибкость, но добавляет overhead.
+Runtime-генерация даёт гибкость, но добавляет overhead по сравнению со статически сгенерированным CSS.
 
-### PrimeVue (unstyled mode)
+### Unstyled / headless-режим
 
-PrimeVue 4+ поддерживает unstyled-режим, где стили полностью кастомизируются через passthrough-токены:
+Отдельный подход — кит не навязывает стили, а даёт хуки для вашей дизайн-системы (PrimeVue unstyled, Headless UI, Radix):
 
-```vue
-<Button
-  severity="primary"
-  :pt="{
-    root: { class: 'px-4 py-2 rounded bg-blue-600 text-white' }
-  }"
-/>
+```tsx
+<Button class="px-4 py-2 rounded bg-blue-600 text-white" />
 ```
-
-Это подход, при котором UI-кит не навязывает стили, а даёт хуки для вашей дизайн-системы.
 
 ### Компонентные токены в своём UI-ките
 
 Если вы строите свой UI-кит, паттерн:
 
-```vue
-<!-- Button.vue -->
-<script setup>
-const props = defineProps<{
-  variant?: 'primary' | 'secondary';
-  size?: 'sm' | 'md' | 'lg';
-}>();
-</script>
+```html
+<button class="btn btn--primary btn--md">
+  Click me
+</button>
+```
 
-<template>
-  <button :class="['btn', `btn--${variant}`, `btn--${size}`]">
-    <slot />
-  </button>
-</template>
-
-<style scoped>
+```css
 .btn {
   background: var(--button-bg);
   color: var(--button-text);
@@ -694,7 +650,6 @@ const props = defineProps<{
 .btn--lg {
   --button-padding: var(--space-4) var(--space-5);
 }
-</style>
 ```
 
 Компонентные токены (`--button-bg`) ссылаются на семантические (`--color-primary`), которые ссылаются на primitive (`--blue-500`). Это даёт три уровня кастомизации:
@@ -802,7 +757,7 @@ test('Primary button should not change visually', async () => {
 - **Используйте aliases** в semantic и component — это даёт гибкость при смене темы.
 - **Автоматизируйте pipeline** через Style Dictionary и CI — ручная генерация устаревает.
 - **Тестируйте токены** через snapshot-тесты и visual regression.
-- **Документируйте токены** в Storybook или VitePress с живыми примерами.
+- **Документируйте токены** в Storybook или docs-сайте с живыми примерами.
 
 ### Не делайте
 
@@ -811,7 +766,7 @@ test('Primary button should not change visually', async () => {
 - **Не создавайте компонентные токены без необходимости** — если хватает semantic, не плодите сущности.
 - **Не генерируйте токены вручную** — автоматизируйте через Style Dictionary.
 - **Не игнорируйте visual regression** — изменение токена может сломать контраст или spacing.
-- **Не смешивайте runtime theming с CSS Modules** — они не комбинируются предсказуемо.
+- **Не смешивайте runtime theming с изолированными стилями** — scoped/CSS Modules не комбинируются с глобальными custom properties предсказуемо.
 - **Не храните токены только в Figma** — без экспорта в репозиторий нет версионируемости.
 
 ---
@@ -822,7 +777,7 @@ test('Primary button should not change visually', async () => {
 - Figma Variables — нативный механизм для хранения токенов с modes (Light, Dark, Brand A) и aliases; Tokens Studio — внешний плагин с JSON-экспортом для Style Dictionary. Для новых проектов предпочтительнее Variables.
 - Figma MCP через `get_design_context` возвращает структурированное дерево слоёв с подстановкой реальных импортов и prop-маппингов из Code Connect — без Code Connect агент угадывает компонент по картинке, с ним переиспользует существующий.
 - Style Dictionary принимает JSON-токенов и генерирует платформо-специфичные артефакты (CSS custom properties, JS/TS, Swift, Kotlin) через transforms (camelCase, kebab-case, px→rem) и форматы; конфигурация описывает source, platforms и transforms.
-- Runtime theming во Vue — переключение набора CSS custom properties через data-атрибут (`data-theme="dark"`) на `<html>`; атрибут предпочтительнее класса, так как не влияет на специфичность и комбинируется с `data-brand`.
+- Runtime theming — переключение набора CSS custom properties через data-атрибут (`data-theme="dark"`) на `<html>`; атрибут предпочтительнее класса, так как не влияет на специфичность и комбинируется с `data-brand`. Фреймворки лишь оборачивают `setAttribute` в composable/hook/provider.
 - Multi-brand требует отдельного набора semantic-токенов на каждый бренд (отдельные JSON-файлы → отдельные CSS-файлы → runtime-переключение через `data-brand`); dark mode — только переназначение semantic-токенов на те же primitive.
 - CI/CD для токенов: Style Dictionary в build-пайплайне, lint (именование, отсутствие сырых значений в компонентах), snapshot-тесты артефактов, visual regression через Chromatic/Percy/Loki — изменение токена триггерит проверку контраста и spacing.
 
@@ -830,11 +785,11 @@ test('Primary button should not change visually', async () => {
 
 ## Заключение
 
-Дизайн-токены — это мост между Figma и кодом. Они организуются в три уровня (primitive → semantic → component), хранятся в JSON или Figma Variables, генерируются через Style Dictionary в CSS, JS и другие платформы, и поставляются в Vue-приложение как CSS custom properties. Runtime theming переключает наборы токенов через data-атрибуты, multi-brand требует отдельного набора semantic-токенов на каждый бренд.
+Дизайн-токены — это мост между Figma и кодом. Они организуются в три уровня (primitive → semantic → component), хранятся в JSON или Figma Variables, генерируются через Style Dictionary в CSS, JS и другие платформы и поставляются в приложение как CSS custom properties. Runtime theming переключает наборы токенов через data-атрибуты, multi-brand требует отдельного набора semantic-токенов на каждый бренд.
 
 Figma MCP и Code Connect превращают design-to-code из угадывания в переиспользование компонентов, но только при условии, что токены настроены. CI/CD для токенов включает lint, snapshot-тесты и visual regression — это защита от незаметных изменений контраста и spacing.
 
-Для UI Engineer важно понимать не просто «что такое токены», а как они текут из Figma в Vue, как устроена runtime-темизация, чем multi-brand отличается от dark mode, и как автоматизировать pipeline. Это то, что отличает Senior от Middle на собеседовании.
+Для UI Engineer важно понимать не просто «что такое токены», а как они текут из Figma в код, как устроена runtime-темизация на CSS custom properties, чем multi-brand отличается от dark mode, и как автоматизировать pipeline. Это то, что отличает Senior от Middle на собеседовании.
 
 ---
 
