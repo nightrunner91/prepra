@@ -4,6 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
 import rehypeMarkdownLinks from './src/lib/rehype-markdown-links.mjs';
 import rehypeWrapTables from './src/lib/rehype-wrap-tables.mjs';
+import rehypeAsciiDiagrams from './src/lib/rehype-ascii-diagrams.mjs';
 import rewriteRelativeLinks from './src/lib/rewrite-relative-links.mjs';
 
 const BASE = '/prepra';
@@ -27,7 +28,7 @@ export default defineConfig({
     rewriteRelativeLinks({ base: BASE }),
   ],
   markdown: {
-    rehypePlugins: [rehypeMarkdownLinks, rehypeWrapTables],
+    rehypePlugins: [rehypeMarkdownLinks, rehypeWrapTables, rehypeAsciiDiagrams],
     shikiConfig: {
       themes: {
         light: 'github-light',

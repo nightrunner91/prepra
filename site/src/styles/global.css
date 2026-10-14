@@ -1,13 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap');
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('../assets/fonts/JetBrainsMono.woff2') format('woff2');
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: 'JetBrains Mono', 'Space Mono', 'SF Mono', 'Consolas', monospace;
-  --font-serif: 'JetBrains Mono', monospace;
-  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --font-sans: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas,
+    monospace;
+  --font-serif: 'JetBrains Mono', ui-monospace, monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo,
+    'DejaVu Sans Mono', Consolas, monospace;
 
   --color-canvas: #F2F2EC;
   --color-surface: #FFFFFF;
@@ -263,6 +271,25 @@
   padding: 0;
   border: none;
   white-space: pre;
+}
+
+.prose pre.ascii-diagram {
+  display: flex;
+  overflow-x: auto;
+  color: var(--color-text);
+  line-height: 1.25;
+}
+
+.prose pre.ascii-diagram > code {
+  flex: none;
+  margin-inline: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.prose pre.ascii-diagram > code::before,
+.prose pre.ascii-diagram > code::after {
+  content: none;
 }
 
 .quiz-answer code {
