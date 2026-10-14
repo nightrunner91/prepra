@@ -12,6 +12,8 @@ questions:
   - "Как `vee-validate` и zod связывают схему и поля и почему schema-first удобнее ручных проверок"
   - "Что обязательно нужно для доступности формы с точки зрения ARIA и разметки"
   - "Почему клиентская валидация не заменяет серверную"
+  - "Как эволюционировали подходы к созданию контролируемых компонентов: от props + emit через computed к defineModel"
+  - "Какие частые ошибки встречаются при работе с v-model на компонентах и как их избежать"
 answers:
   - "`v-model` — сахар над парой prop + событие: для текстовых полей это `:value` плюс `@input`, для `checkbox` и `radio` — `:checked` плюс `@change`, для `<select>` — `:value` плюс `@change`, поэтому одно и то же поле даёт boolean, скаляр или массив значений."
   - "`defineModel()` (Vue 3.4+) автоматически объявляет prop `modelValue` и событие `update:modelValue` и возвращает ref, запись в который эмитит событие; это заменяет ручную связку `props` + `emit` или computed с get/set, а `defineModel('firstName')` делает то же для именованной модели."
@@ -20,6 +22,8 @@ answers:
   - "`toTypedSchema(z.object(...))` превращает zod-схему в правила vee-validate, `useForm` управляет состоянием и сабмитом, а `defineField('email')` возвращает привязки и мета для поля; одна схема даёт и валидацию, и TypeScript-типы через `z.infer`."
   - "Каждому полю нужен `<label for>` (или обёртка), при ошибке — `aria-invalid=\"true\"` и `aria-describedby` с id текста ошибки, группы radio/checkbox — в `<fieldset>` с `<legend>`, а сообщение выводят в `role=\"alert\"`; цвет не должен быть единственным сигналом."
   - "Клиентскую проверку легко обойти через ручной запрос или отключённый JavaScript, поэтому она решает задачу UX и снижает нагрузку, а сервер обязан повторно валидировать данные, потому что только он является источником истины."
+  - "Эволюция подходов: от ручной связки `props` + `emit` (много бойлерплейта, легко забыть объявить emit) через computed get/set (чище шаблон, но всё ещё нужно объявлять props/emits) к `defineModel()` (одна строка, автоматически объявляет prop и emit, возвращает ref); для новых проектов всегда используйте `defineModel()`."
+  - "Частые ошибки: мутация props напрямую вместо emit, дублирование состояния (отдельный ref рядом с v-model с синхронизацией через watch), забытое объявление emit в defineEmits — все они решаются использованием `defineModel()`, который инкапсулирует правильную логику."
 ---
 
 # Формы и валидация во Vue
@@ -135,7 +139,13 @@ const user = ref(null);
 
 Во Vue `v-model` **контролируем**: значением владеет состояние родителя, а поле только отображает его и сообщает об изменениях событиями. Это отличается от терминологии React, где «неконтролируемое» поле хранит значение в DOM; во Vue такой сценарий (шаблонная ссылка + чтение DOM вручную) нужен редко, потому что источником истины всегда выступает реактивная модель.
 
-Чтобы сделать свой компонент совместимым с `v-model`, исторически требовалось вручную объявить prop и событие:
+### Эволюция подходов
+
+Чтобы сделать свой компонент совместимым с `v-model`, исторически прошло три этапа.
+
+#### Вариант 1: Ручная связка props + emit
+
+Самый базовый способ — вручную объявить prop и событие:
 
 ```vue
 <!-- BaseInput.vue: ручной вариант -->
@@ -152,7 +162,56 @@ const emit = defineEmits(['update:modelValue']);
 </template>
 ```
 
-Начиная с Vue 3.4 для этого есть макрос `defineModel()`, который сам объявляет prop и событие и возвращает ref:
+**Что происходит:**
+1. Родитель передаёт значение в prop `modelValue`
+2. Компонент привязывает его к `:value` input'а
+3. При вводе компонент эмитит `update:modelValue` с новым значением
+4. Родитель получает событие и обновляет своё состояние
+
+**Минусы:**
+- Много бойлерплейта: нужно объявить prop, emit, вручную вызывать emit
+- Неудобно, если компонентов много
+- Легко забыть объявить emit
+
+#### Вариант 2: Computed get/set
+
+Чтобы не писать emit вручную, используют computed с геттером и сеттером:
+
+```vue
+<!-- BaseInput.vue -->
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps(['modelValue']);
+const emit = defineEmits(['update:modelValue']);
+
+const localValue = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value),
+});
+</script>
+
+<template>
+  <input v-model="localValue" />
+</template>
+```
+
+**Как работает:**
+- `get()` возвращает prop
+- `set()` эмитит событие
+- Внутри шаблона используем `v-model` на computed
+
+**Плюсы:**
+- Чище шаблон: `v-model="localValue"` вместо ручного `:value` + `@input`
+- Логика в одном месте
+
+**Минусы:**
+- Всё ещё нужно объявлять props и emits
+- Немного магии: computed выглядит как обычное свойство, но на самом деле вызывает emit
+
+#### Вариант 3: defineModel() (Vue 3.4+)
+
+Современный способ — макрос `defineModel()`, который **автоматически** делает всю рутину:
 
 ```vue
 <!-- BaseInput.vue -->
@@ -165,7 +224,40 @@ const model = defineModel<string>();
 </template>
 ```
 
-Запись в `model` эмитит `update:modelValue`, поэтому компонент работает с `<BaseInput v-model="email" />` без ручной связки. Макрос принимает типы, обязательность и дефолт:
+**Что делает defineModel():**
+1. Автоматически объявляет prop `modelValue`
+2. Автоматически объявляет событие `update:modelValue`
+3. Возвращает **ref**, который:
+   - При чтении возвращает текущее значение prop
+   - При записи эмитит `update:modelValue`
+
+**Полный аналог ручной реализации:**
+```vue
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps(['modelValue']);
+const emit = defineEmits(['update:modelValue']);
+
+const model = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value),
+});
+</script>
+```
+
+### Сравнение подходов
+
+| Подход | Код | Когда использовать |
+|---|---|---|
+| **Ручной props + emit** | Длинный | Только если нужен полный контроль или старый Vue |
+| **Computed get/set** | Средний | Когда нужна кастомная логика в геттере/сеттере |
+| **defineModel()** | Короткий | **Всегда** для новых проектов (Vue 3.4+) |
+| **Именованный defineModel** | Короткий + несколько моделей | Когда нужно несколько `v-model` |
+
+### Параметры defineModel
+
+Макрос принимает типы, обязательность и дефолт:
 
 ```ts
 const model = defineModel<string>();                      // string | undefined
@@ -174,6 +266,55 @@ const withDefault = defineModel<string>({ default: '' });
 ```
 
 Типизация `defineModel` и генерация типов — часть темы [TypeScript во Vue](../typescript/vue.md). Если по какой-то причине вы не используете макрос, эквивалент на computed get/set описан в статье про [события](./events.md).
+
+### Частые ошибки при работе с v-model
+
+#### Мутация props
+
+```vue
+<script setup>
+const props = defineProps(['modelValue']);
+</script>
+
+<template>
+  <!-- ❌ Неправильно: мутируем prop -->
+  <input v-model="props.modelValue" />
+</template>
+```
+
+Props нельзя мутировать. Используй `defineModel()` или emit.
+
+#### Дублирование состояния
+
+```vue
+<script setup>
+const props = defineProps(['modelValue']);
+const local = ref(props.modelValue); // ❌ Дублируем
+
+watch(() => props.modelValue, (v) => local.value = v); // Синхронизируем
+</script>
+
+<template>
+  <input v-model="local" @input="$emit('update:modelValue', local)" />
+</template>
+```
+
+Это антипаттерн. Используй `defineModel()` — он уже делает всё правильно.
+
+#### Забыть объявить emit
+
+```vue
+<script setup>
+const props = defineProps(['modelValue']);
+// ❌ Забыли объявить emit
+</script>
+
+<template>
+  <input :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
+</template>
+```
+
+Без объявления `emit` Vue не знает, что это компонентное событие, и может неправильно обработать его.
 
 ---
 
@@ -536,10 +677,12 @@ watch(() => props.modelValue, (v) => (local.value = v));
 
 - `v-model` — сахар над prop + событие, и привязка зависит от типа поля: текстовые поля используют `:value`/`@input`, checkbox и radio — `:checked`/`@change`, `select` — `:value`/`@change`; поэтому модель бывает boolean, скаляром или массивом.
 - Во Vue `v-model` контролируем по умолчанию: источник истины — реактивная модель, а не DOM; `defineModel()` (3.4+) сам объявляет prop и `update`-событие и возвращает ref, заменяя ручную связку и computed get/set.
+- Эволюция подходов к `v-model`: от ручной связки props + emit (много бойлерплейта) через computed get/set (чище, но всё ещё нужно объявлять props/emits) к `defineModel()` (одна строка, автоматически объявляет prop и emit, возвращает ref).
 - Модификаторы `.lazy`, `.number`, `.trim` покрывают типовые преобразования, а кастомные приходят в `modelModifiers` / `<name>Modifiers` и обрабатываются в `set()`; именованные модели (`v-model:first-name`) позволяют держать несколько `v-model` на компоненте.
 - Валидацию строят вокруг состояния поля (`value`, `error`, `touched`): ошибку показывают после `blur`, а async-проверки дебаунсят и защищают от гонок, чтобы устаревший ответ не перезаписал актуальный.
 - `vee-validate` + zod дают schema-first валидацию: `toTypedSchema` связывает схему с формой, а `z.infer` превращает её в TypeScript-тип, общий для клиента и тестов; `FormKit` — готовый schema-driven слой с a11y и темизацией, но более opinionated.
 - Доступность формы держится на `<label for>`, `aria-invalid`, `aria-describedby` до текста ошибки, `<fieldset>`/`<legend>` для групп и `role="alert"` для сообщений; клиентская валидация — это UX, а безопасность обеспечивает серверная проверка.
+- Частые ошибки при работе с `v-model`: мутация props вместо emit, дублирование состояния (отдельный ref рядом с v-model), забытое объявление emit — все они решаются использованием `defineModel()`.
 
 ---
 
