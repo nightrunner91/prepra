@@ -1,36 +1,34 @@
 ---
 title: "Файловая маршрутизация в Nuxt 3"
 section: nuxt
-description: "Как устроен роутинг в Nuxt 3: файловая маршрутизация в pages/, динамические и вложенные роуты, catch-all, 404, useRoute, useRouter, definePageMeta и программная навигация navigateTo."
+description: "Как устроен роутинг в Nuxt 3: файловая маршрутизация в pages/, динамические и вложенные роуты, catch-all и optional catch-all, Route Groups, приоритет маршрутов, 404, useRoute, useRouter, definePageMeta и программная навигация navigateTo."
 order: 2
-tags: ["nuxt", "nuxt3", "vue", "routing", "vue-router", "useRoute", "useRouter", "pages", "dynamic-routes"]
+tags: ["nuxt", "nuxt3", "vue", "routing", "vue-router", "useRoute", "useRouter", "pages", "dynamic-routes", "route-groups", "optional-catch-all"]
 questions:
-  - "Как Nuxt 3 превращает файлы из pages/ в маршруты"
-  - "Что делает файл index.vue во вложенных папках"
-  - "Как создать динамический роут и получить параметр через useRoute"
-  - "Чем отличается [id] от [...slug]"
-  - "Как сделать страницу 404 в Nuxt 3"
-  - "Для чего нужен definePageMeta"
-  - "Как осуществить программную навигацию в Nuxt 3"
-  - "Как валидировать параметры маршрута"
-  - "В чём разница между useRoute и useRouter"
+  - "Как Nuxt 3 превращает файлы из pages/ в маршруты и что делает index.vue"
+  - "Как создать динамический роут [id] и получить параметр через useRoute"
+  - "Чем отличаются [id], catch-all [...slug] и optional catch-all [[...slug]]"
+  - "Как устроены вложенные маршруты и зачем нужен родительский файл с <NuxtPage />"
+  - "Для чего нужны Route Groups и как имя группы доступно в middleware"
+  - "Как Nuxt выбирает маршрут при конфликте (приоритет маршрутов)"
+  - "Как сделать страницу 404 и валидировать параметры через definePageMeta({ validate })"
+  - "В чём разница между useRoute и useRouter и как работает программная навигация navigateTo"
 answers:
-  - "Nuxt сканирует `pages/` и строит маршруты по именам файлов и папок: `pages/index.vue` → `/`, `pages/about.vue` → `/about`, `pages/users/[id].vue` → `/users/:id`; конфигурация Vue Router генерируется автоматически, вручную её писать не нужно."
-  - "`index.vue` отвечает за корневой URL своей папки: `pages/users/index.vue` → `/users`. При конфликте `users.vue` и `users/index.vue` приоритет получает `index.vue` внутри папки."
+  - "Nuxt сканирует `pages/` и строит маршруты по именам файлов и папок: `pages/index.vue` → `/`, `pages/about.vue` → `/about`, `pages/users/[id].vue` → `/users/:id`; `index.vue` отвечает за корневой URL своей папки (`pages/users/index.vue` → `/users`), а конфигурация Vue Router генерируется автоматически."
   - "Динамический сегмент обозначается квадратными скобками: `pages/users/[id].vue` → `/users/:id`, параметр читается через `useRoute().params.id`; все параметры — строки, число нужно преобразовывать вручную, несколько сегментов задаются вложенными папками `[category]/[postId]`."
-  - "`[id]` — один обязательный сегмент URL, `[...slug]` — catch-all, ловящий любое количество сегментов: для `/docs/vue` `route.params.slug` будет массивом `['docs', 'vue']`, для одиночного сегмента — строкой."
-  - "Через `pages/[...slug].vue`, который ловит любой несуществующий путь и рендерит контент «не найдено»; для более гибкой обработки используется `error.vue` в корне проекта или `throwError`/`showError`."
-  - "`definePageMeta` — макрос для мета-данных страницы из `pages/`: layout, middleware, title, keepalive, validate, key; заданные значения доступны через `route.meta` после перехода на маршрут."
-  - "Через `navigateTo` — он корректно работает на сервере при SSR и на клиенте, поддерживает внешние URL с `{ external: true }` и замену записи истории через `{ replace: true }`; `router.push` на сервере не работает."
-  - "Через `definePageMeta({ validate })`: функция (синхронная или async) получает `route`, при возврате `false` Nuxt показывает 404, а возврат `navigateTo` перенаправляет пользователя вместо ошибки."
-  - "`useRoute()` возвращает текущий маршрут — объект с `path`, `params`, `query`, `name`, `matched` для чтения данных; `useRouter()` возвращает экземпляр Vue Router с методами навигации `push`, `replace`, `back`, `forward`, `go`."
+  - "`[id]` — один обязательный сегмент, `[...slug]` — catch-all на один и более сегментов, а `[[...slug]]` — optional catch-all на ноль и более: он срабатывает и для базового пути, где параметр приходит пустым (falsy) значением."
+  - "Вложенные маршруты требуют родительского файла с `<NuxtPage />` (например, `pages/users.vue`), внутри которого рендерятся `pages/users/index.vue` и `pages/users/[id].vue`; без него они работают как независимые страницы."
+  - "Route Groups — папка в круглых скобках, например `pages/(marketing)/about.vue` → `/about`: имя группы не попадает в URL, но доступно в `route.meta.groups`, поэтому middleware может применять логику ко всей группе."
+  - "Nuxt ранжирует маршруты по специфичности: статические сегменты приоритетнее динамических `[param]`, а те — catch-all; отдельно именованный родительский `foo.vue` приоритетнее вложенного `foo/[slug].vue`."
+  - "Страницу 404 делают через `pages/[...slug].vue` (или `error.vue` / `throwError`), а параметры валидируют через `definePageMeta({ validate })`: при возврате `false` показывается 404, а возврат `navigateTo` перенаправляет пользователя."
+  - "`useRoute()` возвращает текущий маршрут (`path`, `params`, `query`, `name`) для чтения, а `useRouter()` — методы навигации `push`, `replace`, `back`, `forward`, `go`; для переходов предпочтителен `navigateTo`, который SSR-safe и поддерживает внешние URL и `{ replace: true }`."
 ---
 
 # Файловая маршрутизация в Nuxt 3
 
 Nuxt 3 использует **файловую маршрутизацию** (file-based routing): каждый Vue-файл в папке `pages/` автоматически становится страницей приложения. Это избавляет от ручного описания маршрутов в `router/index.ts` — структура URL повторяет структуру папок и файлов.
 
-В этой статье разберём базовые правила роутинга, динамические и вложенные маршруты, catch-all, страницу 404, composables `useRoute` и `useRouter`, `definePageMeta` и программную навигацию `navigateTo`.
+В этой статье разберём базовые правила роутинга, динамические и вложенные маршруты, catch-all и optional catch-all, Route Groups, приоритет маршрутов, страницу 404, composables `useRoute` и `useRouter`, `definePageMeta` и программную навигацию `navigateTo`.
 
 ## Содержание
 
@@ -38,15 +36,17 @@ Nuxt 3 использует **файловую маршрутизацию** (fil
 2. [index.vue и корневые маршруты](#indexvue-и-корневые-маршруты)
 3. [Динамические параметры [id]](#динамические-параметры-id)
 4. [Вложенные маршруты](#вложенные-маршруты)
-5. [Catch-all [...slug] и страница 404](#catch-all-slug-и-страница-404)
-6. [Валидация параметров validate](#валидация-параметров-validate)
-7. [useRoute и useRouter](#useroute-и-userouter)
-8. [definePageMeta](#definepagemeta)
-9. [Программная навигация navigateTo](#программная-навигация-navigateto)
-10. [Лучшие практики и антипаттерны](#лучшие-практики-и-антипаттерны)
-11. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
-12. [Заключение](#заключение)
-13. [Полезные ссылки](#полезные-ссылки)
+5. [Catch-all, optional catch-all и страница 404](#catch-all-optional-catch-all-и-страница-404)
+6. [Route Groups](#route-groups)
+7. [Приоритет маршрутов](#приоритет-маршрутов)
+8. [Валидация параметров validate](#валидация-параметров-validate)
+9. [useRoute и useRouter](#useroute-и-userouter)
+10. [definePageMeta](#definepagemeta)
+11. [Программная навигация navigateTo](#программная-навигация-navigateto)
+12. [Лучшие практики и антипаттерны](#лучшие-практики-и-антипаттерны)
+13. [Ключевые тезисы для интервью](#ключевые-тезисы-для-интервью)
+14. [Заключение](#заключение)
+15. [Полезные ссылки](#полезные-ссылки)
 
 ---
 
@@ -207,11 +207,11 @@ pages/
 
 ---
 
-## Catch-all [...slug] и страница 404
+## Catch-all, optional catch-all и страница 404
 
 ### Catch-all маршруты
 
-Файл с тремя точками `[...slug]` ловит любое количество сегментов URL.
+Файл с тремя точками `[...slug]` ловит одно и более количество сегментов URL.
 
 ```
 pages/
@@ -239,6 +239,40 @@ const slugPath = route.params.slug; // строка или массив
 | `/docs/vue` | `['docs', 'vue']` |
 | `/a/b/c/d` | `['a', 'b', 'c', 'd']` |
 
+### Optional catch-all
+
+Двойные квадратные скобки `[[...slug]]` делают catch-all необязательным: маршрут срабатывает и для базового пути, и для любого числа сегментов. Без совпавших сегментов параметр равен `undefined`.
+
+```
+pages/
+├── index.vue
+└── shop/
+    └── [[...categories]].vue   # /shop, /shop/electronics, /shop/a/b
+```
+
+```vue
+<!-- pages/shop/[[...categories]].vue -->
+<template>
+  <div>
+    <h1 v-if="!categories">Все товары</h1>
+    <h1 v-else>Фильтр: {{ categories.join(' / ') }}</h1>
+  </div>
+</template>
+
+<script setup>
+const route = useRoute();
+const categories = route.params.categories; // пусто | строка | массив
+</script>
+```
+
+| URL | `route.params.categories` |
+|---|---|
+| `/shop` | пусто (falsy) |
+| `/shop/electronics` | `'electronics'` |
+| `/shop/electronics/laptops` | `['electronics', 'laptops']` |
+
+Ключевое отличие: `[...slug]` требует минимум один сегмент, а `[[...slug]]` охватывает и корневой путь. Для базового пути параметр приходит пустым (falsy) значением, поэтому проверяйте его через `if (!categories)`, а не через сравнение с конкретным значением. Одиночный опциональный параметр без catch-all обозначается так же, но без точек — `[[slug]]`.
+
 ### Страница 404
 
 Создайте `pages/[...slug].vue`, который будет отображать страницу «не найдено»:
@@ -258,6 +292,83 @@ const route = useRoute();
 ```
 
 Для более гибкой обработки ошибок используйте `error.vue` в корне проекта или `throwError` / `showError`.
+
+---
+
+## Route Groups
+
+Route Groups (доступны с Nuxt 3.13) позволяют группировать страницы в папки, которые **не попадают в URL**. Папка оборачивается в круглые скобки:
+
+```
+pages/
+├── index.vue              # /
+├── (marketing)/
+│   ├── about.vue          # /about
+│   └── contact.vue        # /contact
+└── (dashboard)/
+    ├── settings.vue       # /settings
+    └── profile.vue        # /profile
+```
+
+Приложение получит маршруты `/`, `/about`, `/contact`, `/settings`, `/profile` — имена `(marketing)` и `(dashboard)` для URL-структуры игнорируются. Это аналог Route Groups из Next.js.
+
+### Зачем нужны
+
+- **Организация кода**: логически близкие страницы лежат рядом, даже если их URL не вложены друг в друга.
+- **Общие правила через middleware**: имя группы доступно в `route.meta.groups`, поэтому middleware может применять логику к целой группе.
+
+```vue
+<!-- pages/(admin)/users.vue -->
+<script setup>
+const route = useRoute();
+
+console.log(route.meta.groups); // ['admin']
+</script>
+```
+
+```ts
+// middleware/admin.ts
+export default defineNuxtRouteMiddleware((to) => {
+  if (to.meta.groups?.includes('admin')) {
+    // проверка доступа ко всей группе (admin)
+  }
+});
+```
+
+Группы можно вкладывать: файл `pages/(app)/(admin)/users.vue` даст `route.meta.groups === ['app', 'admin']`.
+
+---
+
+## Приоритет маршрутов
+
+Когда несколько файлов могут совпасть с одним URL, Nuxt (через Vue Router) ранжирует маршруты по специфичности пути:
+
+1. **Статические сегменты** — наивысший приоритет.
+2. **Динамические сегменты** (`[param]`).
+3. **Catch-all** (`[...slug]`, `[[...slug]]`) — низший приоритет.
+
+```
+pages/
+├── shop/
+│   ├── new.vue            # /shop/new (статический)
+│   ├── [category].vue     # /shop/electronics (динамический)
+│   └── [...slug].vue      # /shop/a/b/c (catch-all)
+```
+
+Запрос `/shop/new` обслужит `new.vue`, потому что статический сегмент приоритетнее динамического `[category].vue`.
+
+### Отдельное правило для вложенных маршрутов
+
+Именованный родительский файл приоритетнее вложенного динамического. Для `/foo/hello` маршрут `pages/foo.vue` выигрывает у `pages/foo/[slug].vue`:
+
+```
+pages/
+├── foo.vue                # /foo  → имеет приоритет для /foo/hello
+└── foo/
+    └── [slug].vue         # /foo/:slug
+```
+
+Чтобы `/foo` и `/foo/hello` обслуживались разными страницами, используйте пару `pages/foo/index.vue` + `pages/foo/[slug].vue`.
 
 ---
 
@@ -417,6 +528,8 @@ await navigateTo('/login', { replace: true });
 - Используйте `navigateTo` для программной навигации, особенно в SSR-контексте.
 - Валидируйте параметры через `definePageMeta({ validate })`.
 - Используйте вложенные маршруты, когда дочерние страницы должны рендериться внутри общего layout-файла.
+- Используйте `[[...slug]]`, когда catch-all должен покрывать и корневой путь, а не только вложенные URL.
+- Группируйте страницы через `(group)/`, чтобы организовать код без раздувания URL-иерархии.
 - Давайте файлам понятные имена, соответствующие URL.
 
 ### ❌ Не делайте
@@ -430,23 +543,19 @@ await navigateTo('/login', { replace: true });
 
 ## Ключевые тезисы для интервью
 
-- **Файловая маршрутизация** строится автоматически из папки `pages/`. Каждый файл — маршрут.
-- `index.vue` в папке отвечает за корневой URL этой папки.
-- Динамические параметры обозначаются `[param]`: `pages/users/[id].vue` → `/users/:id`.
-- **Catch-all** обозначается `[...slug]` и ловит несколько сегментов URL.
-- Для вложенных маршрутов нужен родительский файл с `<NuxtPage />`.
-- `useRoute()` возвращает текущий маршрут с `params`, `query`, `path`.
-- `useRouter()` предоставляет методы навигации Vue Router.
-- `navigateTo` — SSR-safe альтернатива `router.push`, работает на сервере и клиенте.
-- `definePageMeta` задаёт мета-данные страницы: layout, middleware, title, keepalive, validate.
-- `validate` в `definePageMeta` позволяет валидировать параметры и редиректить при необходимости.
-- Страница 404 обычно реализуется через `pages/[...slug].vue` или `error.vue`.
+- **Файловая маршрутизация**: каждый файл/папка в `pages/` задаёт сегмент URL, а `index.vue` отвечает за корень папки; конфигурация Vue Router генерируется автоматически.
+- Динамические `[param]` покрывают один обязательный сегмент, `[...slug]` — один и более, `[[...slug]]` — ноль и более (optional catch-all); все параметры приходят строками.
+- Вложенные маршруты требуют родительского файла с `<NuxtPage />`, иначе дочерние страницы работают независимо.
+- **Route Groups** `(group)/` группируют страницы без влияния на URL, а имя группы доступно в `route.meta.groups`.
+- **Приоритет маршрутов**: статические > динамические `[param]` > catch-all; именованный родитель `foo.vue` приоритетнее вложенного `foo/[slug].vue`.
+- `useRoute` читает текущий маршрут, `useRouter` управляет навигацией, `navigateTo` — SSR-safe переход; `definePageMeta` задаёт мета-данные (layout, middleware, validate).
+- `validate` в `definePageMeta` проверяет параметры (иначе 404 или редирект через `navigateTo`); страницу 404 делают через `[...slug].vue` или `error.vue`.
 
 ---
 
 ## Заключение
 
-Файловая маршрутизация — одно из главных преимуществ Nuxt 3. Она ускоряет разработку, делает структуру проекта предсказуемой и сразу отражает URL-поверхность приложения. Зная правила именования файлов, динамические параметры, вложенные маршруты, `useRoute`, `useRouter`, `definePageMeta` и `navigateTo`, можно уверенно строить навигацию в Nuxt-приложениях любой сложности.
+Файловая маршрутизация — одно из главных преимуществ Nuxt 3. Она ускоряет разработку, делает структуру проекта предсказуемой и сразу отражает URL-поверхность приложения. Зная правила именования файлов, динамические параметры, вложенные маршруты, catch-all и optional catch-all, Route Groups, приоритет маршрутов, `useRoute`, `useRouter`, `definePageMeta` и `navigateTo`, можно уверенно строить навигацию в Nuxt-приложениях любой сложности.
 
 Следующие статьи раздела продолжат погружение: режимы рендеринга, composables Nuxt, жизненный цикл приложения, серверная часть Nitro, data fetching и работа с состоянием.
 
@@ -456,6 +565,7 @@ await navigateTo('/login', { replace: true });
 
 - [Nuxt 3 Routing](https://nuxt.com/docs/getting-started/routing) — официальная документация по роутингу
 - [Vue Router](https://router.vuejs.org/) — документация базового роутера
-- [Nuxt Pages](https://nuxt.com/docs/guide/directory-structure/pages) — структура папки pages
+- [Nuxt Pages](https://nuxt.com/docs/guide/directory-structure/pages) — структура папки pages, динамические и catch-all маршруты, Route Groups
+- [Nuxt 3.13 — Route Groups](https://nuxt.com/blog/v3-13) — релиз, где появились группы маршрутов
 - [definePageMeta](https://nuxt.com/docs/api/utils/define-page-meta) — мета-данные страницы
 - [navigateTo](https://nuxt.com/docs/api/utils/navigate-to) — программная навигация
