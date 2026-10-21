@@ -17,6 +17,7 @@
 - **[Парсинг HTML и производительность CSS](./html-rendering-pipeline.md)** — критический путь рендеринга, Layout/Paint/Composite, анимации через `transform`/`opacity`, `will-change`, `contain`, `content-visibility`.
 - **[Способы применения CSS, токены и архитектура](./css-styling-approaches.md)** — CSS Modules, CSS-in-JS, Tailwind, custom properties, дизайн-токены, BEM/CUBE/ITCSS, `@layer`.
 - **[Дизайн-токены, темизация и Figma](./design-tokens-and-figma.md)** — уровни токенов primitive/semantic/component, Style Dictionary pipeline, Figma Variables и Tokens Studio, Figma MCP и Code Connect, runtime theming на CSS custom properties, multi-brand, компонентные токены в UI-китах, CI/CD и visual regression.
+- **[UI-киты, headless-компоненты и Storybook](./ui-kits-and-component-libraries.md)** — styled vs headless vs shadcn/ui, критерии выбора кита, доступность сложных компонентов, API компонентов (compound, controlled/uncontrolled, `asChild`, cva), `<dialog>` и Popover API, Storybook, иконки, публикация и тестирование библиотеки. Ключевая статья для UI Engineer.
 
 ## Не будет лишним
 
