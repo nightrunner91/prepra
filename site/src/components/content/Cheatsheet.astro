@@ -1,0 +1,226 @@
+---
+import { Printer } from "@phosphor-icons/react";
+import type { CheatsheetGroup } from "../../lib/section-cheatsheet";
+
+interface Props {
+  sectionLabel: string;
+  groups: CheatsheetGroup[];
+}
+
+const { sectionLabel, groups } = Astro.props;
+---
+
+<section class="mt-16 lg:mt-20">
+  <div
+    class="cheatsheet-trigger group cursor-pointer border-[3px] border-border bg-pale-yellow-bg p-6 lg:p-8"
+    role="button"
+    tabindex="0"
+    aria-label={`Распечатать шпаргалку по разделу ${sectionLabel}`}
+    data-print-title={`Шпаргалка — ${sectionLabel}`}
+  >
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div
+          class="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-border bg-pale-yellow-text text-canvas"
+        >
+          <Printer size={22} weight="bold" />
+        </div>
+        <div>
+          <h2
+            class="font-mono text-2xl font-extrabold uppercase tracking-tight text-text sm:text-3xl"
+          >
+            Шпаргалка
+          </h2>
+          <p
+            class="font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary"
+          >
+            Якоря для ответа на собеседовании
+          </p>
+        </div>
+      </div>
+      <span
+        class="inline-flex items-center gap-2 border-2 border-border bg-surface px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-text group-hover:bg-pale-yellow-text group-hover:text-canvas"
+      >
+        <Printer size={16} weight="bold" />
+        Распечатать
+      </span>
+    </div>
+
+    <div class="cheatsheet-body mt-6 gap-6 md:columns-2">
+      {
+        groups.map((group) => (
+          <div class="mb-6 break-inside-avoid border-2 border-border bg-surface p-4">
+            {group.title && (
+              <h3 class="font-mono text-sm font-extrabold uppercase tracking-tight text-pale-yellow-text">
+                {group.title}
+              </h3>
+            )}
+            <ul class="mt-2 space-y-1.5 text-sm leading-snug text-text-secondary">
+              {group.items.map((item) => (
+                <li class="cheatsheet-line">
+                  {item.label && (
+                    <strong class="font-bold text-text">{item.label}:</strong>
+                  )}{" "}
+                  <span set:html={item.html} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="cheatsheet-print" aria-hidden="true">
+    <h1>Шпаргалка · {sectionLabel}</h1>
+    <div class="cheatsheet-print-columns">
+      {
+        groups.map((group) => (
+          <div class="cheatsheet-print-group">
+            {group.title && <h2>{group.title}</h2>}
+            <ul>
+              {group.items.map((item) => (
+                <li>
+                  {item.label && <strong>{item.label}:</strong>}{" "}
+                  <span set:html={item.html} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .cheatsheet-body,
+  .cheatsheet-print {
+    font-variant-ligatures: none;
+  }
+
+  .cheatsheet-body > :last-child {
+    margin-bottom: 0;
+  }
+
+  .cheatsheet-line code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--color-text);
+  }
+
+  .cheatsheet-print {
+    display: none;
+  }
+
+  @media print {
+    html.print-cheatsheet,
+    html.print-cheatsheet body {
+      background: #fff !important;
+      color: #000 !important;
+    }
+
+    html.print-cheatsheet body > :not(.cheatsheet-print) {
+      display: none !important;
+    }
+
+    html.print-cheatsheet .cheatsheet-print {
+      display: block;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 9pt;
+      line-height: 1.35;
+      color: #000;
+    }
+
+    .cheatsheet-print h1 {
+      margin: 0 0 4mm;
+      padding-bottom: 2mm;
+      border-bottom: 2px solid #000;
+      font-family: var(--font-mono), monospace;
+      font-size: 14pt;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .cheatsheet-print-columns {
+      column-count: 2;
+      column-gap: 7mm;
+    }
+
+    .cheatsheet-print-group {
+      margin-bottom: 3.5mm;
+    }
+
+    .cheatsheet-print h2 {
+      margin: 0 0 1.5mm;
+      font-family: var(--font-mono), monospace;
+      font-size: 9pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #555;
+      break-after: avoid;
+    }
+
+    .cheatsheet-print ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .cheatsheet-print li {
+      margin-bottom: 1.2mm;
+      break-inside: avoid;
+    }
+
+    .cheatsheet-print strong {
+      font-weight: 700;
+    }
+
+    .cheatsheet-print code {
+      font-family: var(--font-mono), monospace;
+      font-size: 0.9em;
+      background: none;
+      border: 0;
+      padding: 0;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+  }
+</style>
+
+<script>
+  const PRINT_CLASS = "print-cheatsheet";
+  const trigger = document.querySelector<HTMLElement>(".cheatsheet-trigger");
+  const sheet = document.querySelector<HTMLElement>(".cheatsheet-print");
+
+  // The print copy must be a direct child of <body> so the print stylesheet
+  // can hide every other top-level node.
+  if (sheet) document.body.appendChild(sheet);
+
+  function printCheatsheet() {
+    const originalTitle = document.title;
+    const printTitle = trigger?.dataset.printTitle;
+
+    function cleanup() {
+      document.documentElement.classList.remove(PRINT_CLASS);
+      document.title = originalTitle;
+      window.removeEventListener("afterprint", cleanup);
+    }
+
+    document.documentElement.classList.add(PRINT_CLASS);
+    if (printTitle) document.title = printTitle;
+    window.addEventListener("afterprint", cleanup);
+    window.print();
+  }
+
+  trigger?.addEventListener("click", printCheatsheet);
+  trigger?.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    printCheatsheet();
+  });
+</script>

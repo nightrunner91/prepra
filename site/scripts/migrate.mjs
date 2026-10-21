@@ -142,7 +142,7 @@ function migrate() {
     if (!existsSync(dirPath)) continue;
 
     const files = readdirSync(dirPath)
-      .filter(f => f.endsWith('.md') && f !== 'README.md')
+      .filter(f => f.endsWith('.md') && f !== 'README.md' && f !== 'CHEATSHEET.md')
       .sort();
 
     files.forEach((file, i) => {

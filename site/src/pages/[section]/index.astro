@@ -4,12 +4,14 @@ import PageLayout from "../../layouts/PageLayout.astro";
 import Breadcrumbs from "../../components/layout/Breadcrumbs.astro";
 import Sidebar from "../../components/layout/Sidebar.astro";
 import ArticleGroup from "../../components/content/ArticleGroup.astro";
+import Cheatsheet from "../../components/content/Cheatsheet.astro";
 import { withBase } from "../../lib/urls";
 import {
   normalizeSlug,
   parseSectionDescription,
   parseSectionReadme,
 } from "../../lib/section-readme";
+import { parseSectionCheatsheet } from "../../lib/section-cheatsheet";
 
 export async function getStaticPaths() {
   const sections = [
@@ -112,6 +114,7 @@ export async function getStaticPaths() {
 const { section } = Astro.props;
 const description = parseSectionDescription(section.id, section.label);
 const articles = await getCollection(section.id as any);
+const cheatsheet = parseSectionCheatsheet(section.id);
 const totalQuestions = articles.reduce(
   (sum: number, a: any) => sum + (a.data.questions?.length || 0),
   0,
@@ -227,6 +230,12 @@ if (otherArticles.length > 0) {
         ))
       }
     </div>
+
+    {
+      cheatsheet.length > 0 && (
+        <Cheatsheet sectionLabel={section.label} groups={cheatsheet} />
+      )
+    }
   </div>
 </PageLayout>
 
