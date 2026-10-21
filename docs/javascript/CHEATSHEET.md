@@ -2,68 +2,57 @@
 
 ## Типы и приведение
 
-- **Примитивы:** string, number, bigint, boolean, undefined, null, symbol · всё остальное — object
+- **Примитивы:** string, number, bigint, boolean, undefined, null, symbol · остальное — object
 - **typeof:** `null` → "object", функция → "function", `NaN` → "number"
-- **Сравнение:** `==` (coercion), `===`, `Object.is` (NaN, ±0), `Number.isNaN`
-- **Приведение:** явное (String, Number, Boolean), неявное (`+` → строка, `- * /` → число), ToPrimitive (`Symbol.toPrimitive` → valueOf → toString)
-- **Falsy:** `0`, `0n`, `""`, `null`, `undefined`, `NaN`, `false`
-- **Ловушки:** `0.1 + 0.2`, `[] + {}`, `[] == false`
+- **Сравнение:** `==` (coercion), `===`, `Object.is` (NaN, ±0)
+- **Приведение:** `+` → строка, `- * /` → число, ToPrimitive (valueOf → toString)
+- **Falsy:** `0`, `""`, `null`, `undefined`, `NaN`, `false` · ловушка `0.1 + 0.2`
 
 ## Scope, замыкания, this
 
 - **Переменные:** var (func, ⬆ undefined), let и const ({}, ⬆ TDZ)
-- **Scope:** глобальная, функциональная, блочная, лексическое окружение, scope chain
 - **Hoisting:** function declaration (целиком), expression / arrow (как переменная), class (TDZ)
-- **Замыкание:** функция + `[[Environment]]`, жизнь окружения после выхода
-- **Применение:** приватные данные, фабрики, каррирование, IIFE, модульный паттерн, мемоизация
-- **Ловушки замыканий:** var в цикле, stale closure (React), утечки
-- **this:** обычный вызов (window / undefined в strict), метод (obj.), `new`, call / apply / bind, arrow (лексический)
-- **Потеря this:** callback, setTimeout, деструктуризация метода → bind, стрелка, поле-стрелка в классе
+- **Замыкание:** функция + лексическое окружение, жизнь окружения после выхода
+- **Применение и ловушки:** приватные данные, фабрики, мемоизация · var в цикле, stale closure
+- **this:** вызов (undefined в strict), метод, `new`, call / apply / bind, arrow (лексический)
+- **Потеря this:** callback, деструктуризация метода → bind, стрелка
 
 ## Асинхронность
 
-- **Promise:** pending → fulfilled / rejected, then / catch / finally, цепочки
-- **Комбинаторы:** all (fail-fast), allSettled, race (первый любой), any (первый успешный, AggregateError)
-- **async/await:** последовательно vs параллельно, try/catch, unhandled rejection, AbortController
-- **Event Loop:** call stack, Web API, macrotask (setTimeout, I/O, события), microtask (then, queueMicrotask, MutationObserver), rAF
+- **Promise:** pending → fulfilled / rejected, then / catch / finally
+- **Комбинаторы:** all (fail-fast), allSettled, race, any (первый успешный)
+- **async/await:** последовательно vs параллельно, try/catch, AbortController
+- **Event Loop:** call stack, macrotask (setTimeout, I/O), microtask (then, queueMicrotask)
 - **Порядок:** sync → все микрозадачи → render → одна макрозадача
-- **Node.js:** `process.nextTick` (до микрозадач), setImmediate
-- **Блокировка:** тяжёлый sync-код, бесконечные микрозадачи → Web Workers, разбиение на чанки
 
 ## Объекты, классы, модули
 
-- **Прототипы:** `[[Prototype]]` / `__proto__`, `F.prototype`, цепочка, `Object.create`, get / setPrototypeOf
-- **Классы:** сахар над прототипами, constructor, extends / super, `#private`, static, TDZ, вызов без new → TypeError
-- **instanceof:** проход по цепочке, ограничения (realm, `Symbol.hasInstance`)
+- **Прототипы:** `[[Prototype]]`, `F.prototype`, цепочка, `Object.create`
+- **Классы:** сахар над прототипами, extends / super, `#private`, static
+- **instanceof:** проход по цепочке прототипов
 - **ESM vs CJS:** static / runtime, live bindings / копия, async / sync
-- **Экспорт:** named, default, re-export, `import()` (code splitting)
-- **Нюансы модулей:** циклические зависимости, tree shaking, sideEffects
+- **Модули:** named / default, `import()` (code splitting), tree shaking, циклические зависимости
 
 ## Продвинутые возможности
 
-- **Коллекции:** Map (любые ключи, порядок, size), Set (уникальность), WeakMap / WeakSet (ключи-объекты, GC, без итерации)
-- **Итераторы:** `Symbol.iterator`, `next()` → `{ value, done }`, for...of, spread, деструктуризация
-- **Генераторы:** `function*`, yield, `next(value)`, ленивость, бесконечные последовательности
-- **Proxy:** target + handler, get / set / has / deleteProperty / ownKeys / apply / construct, revocable
-- **Reflect:** дефолтное поведение, receiver, boolean вместо throw
-- **Применение Proxy:** валидация, логирование, дефолты, реактивность (Vue 3)
-- **Ограничения Proxy:** proxy !== target, `#private`, внутренние слоты (Map, Date), производительность
-- **ФП:** чистые функции, side effects, иммутабельность, функции высшего порядка
-- **Массивы:** map, filter, reduce, find, some / every, мутирующие vs toSorted / toReversed / with
-- **Композиция:** каррирование, частичное применение, compose / pipe
-- **Тайминги:** debounce (после паузы), throttle (раз в N мс)
+- **Коллекции:** Map (любые ключи), Set (уникальность), WeakMap / WeakSet (GC, без итерации)
+- **Итераторы:** `Symbol.iterator`, `next()` → `{ value, done }`, for...of, spread
+- **Генераторы:** `function*`, yield, ленивость, бесконечные последовательности
+- **Proxy и Reflect:** target + handler, ловушки get / set, Reflect (дефолтное поведение)
+- **Применение Proxy:** валидация, логирование, реактивность (Vue 3) · ограничения: `#private`
+- **ФП:** чистые функции, иммутабельность, функции высшего порядка
+- **Массивы:** map, filter, reduce, мутирующие vs toSorted / toReversed
+- **Композиция:** каррирование, compose / pipe, debounce / throttle
 
-## Браузер
+## Браузер и память
 
-- **DOM:** querySelector, createElement / append / remove, classList, dataset
-- **События:** addEventListener, capture → target → bubble, делегирование, preventDefault / stopPropagation
+- **DOM и события:** querySelector, capture → target → bubble, делегирование
+- **Память:** стек (примитивы), куча (объекты), достижимость
+- **GC:** Mark-and-Sweep, поколения (young → old)
+- **Утечки:** слушатели, таймеры, замыкания, detached DOM, кэши без лимита
 
-## Память и сложность
+## Сложность
 
-- **Память:** стек (примитивы, фреймы), куча (объекты), достижимость
-- **GC:** Mark-and-Sweep, поколения (young → old), stop-the-world
-- **Утечки:** глобальные, слушатели, таймеры, замыкания, detached DOM, кэши без лимита
-- **Инструменты:** DevTools Memory (heap snapshot, allocation timeline), WeakRef, FinalizationRegistry
-- **Big O:** O(1), O(log n), O(n), O(n log n), O(n²), O(2ⁿ), time vs space
-- **Оптимизация:** хеш-таблица вместо вложенного цикла, два указателя, скользящее окно, мемоизация
-- **Сложность в JS:** push / pop O(1), shift / unshift O(n), includes O(n), Map / Set has O(1), sort O(n log n)
+- **Big O:** O(1), O(log n), O(n), O(n log n), O(n²), time vs space
+- **Оптимизация:** хеш-таблица вместо вложенного цикла, два указателя, мемоизация
+- **Сложность в JS:** shift / unshift O(n), includes O(n), Map / Set has O(1), sort O(n log n)
