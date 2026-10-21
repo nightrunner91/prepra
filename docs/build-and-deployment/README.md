@@ -7,6 +7,7 @@
 1. **[Сборка и CI/CD](./build-tools-ci-cd.md)** — эволюция бандлеров, Webpack vs Vite, GitHub Actions, Docker, preview deployments.
 2. **[Переменные окружения и конфигурация](./environment-config.md)** — build-time и runtime, .env файлы, секреты, валидация через zod.
 3. **[Стратегии деплоя](./deployment-strategies.md)** — blue-green, canary, feature flags, rollback, zero-downtime.
+4. **[Git: ветки, rebase и командный workflow](./git-workflow.md)** — модель объектов, merge/rebase/squash, конфликты, reset/revert/reflog, GitFlow vs trunk-based, Conventional Commits, PR и branch protection, bisect.
 
 ## Углубись в детали
 
