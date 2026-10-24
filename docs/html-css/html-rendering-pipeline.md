@@ -2,7 +2,7 @@
 title: "Парсинг HTML, критический путь рендеринга и производительность CSS"
 section: html-css
 description: "Как браузер превращает байты в пиксели: парсинг HTML, DOM/CSSOM, Render Tree, Layout, Paint, Composite. И как писать анимации через transform/opacity, чтобы не тормозить страницу: will-change, contain, content-visibility, prefers-reduced-motion."
-order: 8
+order: 11
 tags: ["rendering-pipeline", "critical-rendering-path", "cssom", "compositor", "animations", "will-change"]
 questions:
   - "Каковы этапы превращения HTML в пиксели: парсинг, DOM, CSSOM, Render Tree, layout, paint, composite"

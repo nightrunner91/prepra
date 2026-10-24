@@ -2,7 +2,7 @@
 title: "Способы применения CSS, токены и архитектура стилей"
 section: html-css
 description: "На современном фронтенде стили можно писать десятком способов — от архаичного `style={}` до zero-runtime компиляции. Плюс системы токенов, методологии именования и CSS custom properties для темизации. Разбираем trade-offs каждого подхода."
-order: 9
+order: 13
 tags: ["css-modules", "css-in-js", "tailwind", "custom-properties", "design-tokens", "bem"]
 questions:
   - "Чем CSS Modules отличаются от глобального CSS и почему они оптимальны для React/Next.js"

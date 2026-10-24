@@ -2,7 +2,7 @@
 title: "UI-киты, headless-компоненты и Storybook"
 section: html-css
 description: "Как выбирать и строить UI-библиотеки: styled и headless киты, shadcn/ui, API компонентов, доступность, Storybook, иконки, поставка и тестирование дизайн-системы."
-order: 11
+order: 17
 tags: ["ui-kit", "headless-ui", "storybook", "shadcn", "component-api", "design-system"]
 questions:
   - "Чем styled UI-кит отличается от headless-библиотеки и от подхода shadcn/ui"

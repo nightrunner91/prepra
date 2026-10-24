@@ -33,14 +33,17 @@
 - **Viewport units:** vw / vh, `svh` / `lvh` / `dvh` (адресная строка)
 - **prefers-*:** color-scheme, reduced-motion, contrast
 
-## Семантика и формы
+## Семантика, доступность и формы
 
 - **Семантика:** `<button>` / `<a href>` vs `<div onclick>`, скринридер, клавиатура, SEO
 - **Landmarks:** header, nav, main, aside, footer · h1–h6 без пропусков
-- **ARIA:** default roles без дублирования, `role="button"` → tabindex + Enter, `aria-live`
-- **Фокус:** `:focus-visible` вместо `outline: none`, trap и возврат в модалке
-- **Имена:** `<label for>`, placeholder ≠ label, `aria-label`, `alt=""` (декор)
-- **Валидация:** `required`, `pattern`, `checkValidity`, `setCustomValidity` · сервер обязателен
+- **WCAG 2.2:** POUR · A / AA (продукт) / AAA · focus obscured 2.4.11, target size 24×24 2.5.8, drag 2.5.7, redundant entry 3.3.7, auth 3.3.8
+- **Дерево доступности:** role + name + description + state · скрыты `display:none`, `visibility:hidden`, `hidden`, `aria-hidden` · `opacity: 0` остаётся
+- **Имена:** `aria-labelledby` → `aria-label` → `label`/`alt` → содержимое → `title` · placeholder ≠ label · `alt=""` декор
+- **ARIA и скрытие:** default roles без дублирования · `aria-hidden` — из дерева, но не из tab · `inert` — из дерева, tab и событий · `aria-live`
+- **Фокус:** `:focus-visible` вместо `outline: none`, trap и возврат в модалке, `scroll-padding-top`
+- **Валидация:** `required`, `pattern`, `checkValidity`, `setCustomValidity` · сервер обязателен · `aria-invalid` + `aria-describedby`
+- **Аудит:** axe/Lighthouse → клавиатура → zoom 400% → скринридер → формы · автотесты не заменяют ручной проход
 
 ## Рендеринг
 

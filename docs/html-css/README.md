@@ -13,6 +13,7 @@
 
 - **[Адаптивность и container queries](./css-responsive-container-queries.md)** — media queries, container queries, viewport units, `prefers-*`.
 - **[Семантический HTML и доступность](./html-semantics-accessibility.md)** — landmarks, default ARIA roles, доступность.
+- **[Доступность: WCAG 2.2, дерево доступности и аудит](./accessibility-wcag.md)** — POUR и уровни A/AA/AAA, новые критерии WCAG 2.2, accessibility tree и вычисление accessible name, `aria-hidden` против `inert`, фокус, контраст, reflow, target size, ошибки форм и 30-минутный протокол аудита.
 - **[Формы и валидация](./html-forms-validation.md)** — Constraint Validation API, `:user-valid`/`:user-invalid`, событие `formdata`, кратко про `ElementInternals`.
 - **[Парсинг HTML и производительность CSS](./html-rendering-pipeline.md)** — критический путь рендеринга, Layout/Paint/Composite, анимации через `transform`/`opacity`, `will-change`, `contain`, `content-visibility`.
 - **[Способы применения CSS, токены и архитектура](./css-styling-approaches.md)** — CSS Modules, CSS-in-JS, Tailwind, custom properties, дизайн-токены, BEM/CUBE/ITCSS, `@layer`.
@@ -21,6 +22,5 @@
 
 ## Не будет лишним
 
-- Container queries (внутри статьи про адаптивность) — знать, что это, но вряд ли спросят в деталях.
 - Shadow DOM и `@scope` (внутри статьи про способы применения CSS) — достаточно уровня «что это и зачем».
 - `ElementInternals` (внутри статьи про формы) — нишевый сценарий для библиотек компонентов.

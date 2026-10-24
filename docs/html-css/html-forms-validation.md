@@ -2,7 +2,7 @@
 title: "Формы и валидация: Constraint Validation API"
 section: html-css
 description: "Формы — это контракт между пользователем, DOM и сервером: какие данные собирать, как их проверять и как сообщать об ошибках. Разбираем встроенную валидацию HTML, Constraint Validation API, псевдоклассы валидации и событие formdata."
-order: 7
+order: 9
 tags: ["forms", "constraint-validation", "validation", "formdata", "pseudo-classes"]
 questions:
   - "Как встроенная HTML-валидация работает через атрибуты `required`, `pattern`, `min`/`max` и блокирует отправку формы"
@@ -82,6 +82,8 @@ for (const [key, value] of data) {
 ```
 
 Если валидация не проходит, браузер блокирует отправку и показывает всплывающую подсказку с сообщением об ошибке. Это поведение можно переопределить через Constraint Validation API.
+
+Нативная подсказка — лишь один канал сообщения об ошибке. Для собственных сообщений используйте `aria-invalid="true"` и `aria-describedby` на текст ошибки, а саму ошибку выводите видимым текстом рядом с полем. Подробный разбор — в статье [Доступность: WCAG 2.2, дерево доступности и аудит](./accessibility-wcag.md#формы-и-ошибки).
 
 ### Constraint Validation API
 

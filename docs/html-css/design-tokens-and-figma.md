@@ -2,7 +2,7 @@
 title: "Дизайн-токены, темизация и Figma"
 section: html-css
 description: "Дизайн-токены: уровни primitive/semantic/component, Style Dictionary pipeline, Figma как source of truth, Figma MCP и Code Connect, runtime theming через CSS custom properties, multi-brand и компонентные токены в UI-китах."
-order: 10
+order: 16
 tags: ["design-tokens", "theming", "figma", "style-dictionary", "figma-mcp", "multi-brand"]
 questions:
   - "Как устроена иерархия дизайн-токенов: primitive → semantic → component, и зачем нужен слой aliases"
