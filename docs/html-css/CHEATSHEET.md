@@ -60,6 +60,16 @@
 - **Layout thrashing:** запись → чтение `offsetWidth` → forced sync layout · батчинг
 - **Оптимизации:** `will-change`, `contain`, `content-visibility: auto`
 
+## Движение и анимации
+
+- **Токены:** duration/easing/distance · primitive → semantic → component · UI 150–250 мс · exit быстрее enter
+- **Easing:** standard `(0.2,0,0,1)` · enter `(0,0,0,1)` · exit `(0.3,0,1,1)` · `linear()`
+- **Свойства:** composite `transform`/`opacity` · paint `box-shadow`/`filter` · layout `width`/`top` → jank
+- **Появление:** `@starting-style` · `transition-behavior: allow-discrete` для `display`/`overlay` · только через `@supports`
+- **WAAPI:** `animate()`, `finished`, `getAnimations()`, `commitStyles()` · **FLIP:** First → Last → Invert → Play
+- **View Transitions:** `startViewTransition()`, `::view-transition-old/new/group`, имя уникально · **scroll-driven:** `animation-timeline: scroll()/view()`, неполная поддержка
+- **Reduced motion:** убрать движение, оставить fade · не отключать spinner/progress · тесты `animations: 'disabled'`, `reducedMotion: 'reduce'`
+
 ## Стилизация и токены
 
 - **Подходы:** глобальный CSS, CSS Modules (0 runtime), Tailwind (utility-first), CSS-in-JS
@@ -68,3 +78,23 @@
 - **Методологии:** BEM, ITCSS, `@layer` · инкапсуляция: Shadow DOM, `@scope`
 - **Токены:** primitive → semantic → component · темы через `data-theme`
 - **Figma и pipeline:** Variables (modes), Tokens Studio → Style Dictionary → платформы
+
+## Типографика и цвет
+
+- **Шкала:** 16 px · коэффициент 1.125–1.25 · токены 100–900 · line-height безразмерный · measure 45–75ch
+- **Fluid:** `clamp(min, rem + vw, max)` · не для мелкого текста · `text-wrap: balance` / `pretty`
+- **Spacing:** 4/8 px · `gap` вместо margin · logical properties · вертикальный ритм · `tabular-nums`
+- **Цвет:** `oklch(L C H)` · `color-mix(in oklch, …)` · P3 через `color-gamut` · sRGB fallback
+- **Роли:** bg / surface / text / border / accent / focus / danger/success/warning · primitive → semantic → component
+- **Контраст:** 4.5:1 текст · 3:1 крупный и нетекст · APCA — кандидат WCAG 3, не замена WCAG 2.2
+- **Dark mode:** `color-scheme` + `data-theme` + inline-скрипт до paint · отдельная палитра · `light-dark()`
+
+## Изображения, шрифты и медиа
+
+- **srcset:** `w` + `sizes` (CSS-ширина слота) · без `sizes` = `100vw` · `<picture>` для art direction и форматов
+- **Форматы:** AVIF → WebP → JPEG · SVG для иконок · `<img>` обязателен в `<picture>`
+- **CLS:** `width`/`height` или `aspect-ratio` · `object-fit` · резерв под видео/рекламу
+- **LCP:** без `loading="lazy"` · `fetchpriority="high"` · preload с `imagesrcset`/`imagesizes`
+- **Шрифты:** woff2 · variable · `unicode-range` + отдельные подсеты · `font-display: swap`/`optional`
+- **CLS шрифта:** `size-adjust`, `ascent/descent/line-gap-override` · preload с `crossorigin`
+- **Видео/SVG:** постер = LCP · `preload="metadata"` · `muted`+`playsinline` · `viewBox`, `currentColor`, `aria-hidden`

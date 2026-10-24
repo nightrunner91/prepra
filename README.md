@@ -149,7 +149,7 @@ prepra/
 │   ├── deploy.yml           # Продакшен-деплой на GitHub Pages
 │   ├── lighthouse.yml       # Lighthouse CI в pull request
 │   └── pr-preview.yml       # Preview-окружения для PR
-├── docs/                    # Исходные markdown-статьи (179+)
+├── docs/                    # Исходные markdown-статьи (182+)
 │   ├── javascript/
 │   ├── typescript/
 │   ├── react/

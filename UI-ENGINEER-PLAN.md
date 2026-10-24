@@ -21,12 +21,15 @@
 - ✅ **UE-01 — сделано.** Создана `docs/html-css/accessibility-wcag.md`: 10 вопросов и 10 ответов, 5 практических примеров, антипаттерны, тезисы, 30-минутный протокол аудита и code review-чеклист. Добавлены перекрёстные ссылки из `html-semantics-accessibility.md` и `html-forms-validation.md`.
 - ✅ **UE-02 — сделано.** Создана `docs/html-css/aria-patterns-keyboard.md`: 10 вопросов и 10 ответов, 5 практических примеров (tabs на JS и React, нативный dialog, combobox с `aria-activedescendant` и async, menu button, error summary + live region), антипаттерны, тезисы, практическое задание и code review-чеклист. Добавлены перекрёстные ссылки из `accessibility-wcag.md` и `html-semantics-accessibility.md`.
 - ✅ **UE-10 — сделано.** Создана `docs/testing/accessibility-testing.md`: 10 вопросов и 10 ответов, 5 примеров (axe в Playwright с артефактами, клавиатурная форма, Storybook addon-a11y, ручной скрипт NVDA/VoiceOver, CI-workflow), антипаттерны, тезисы и чек-лист. Порядок `testing` перенумерован: accessibility — 10, strategy — 11, pitfalls — 12, gitlab-ci-cd — 13, sentry — 14.
+- ✅ **UE-03 — сделано.** Создана `docs/html-css/motion-and-animations.md` (order 12): 10 вопросов и 10 ответов, 5 практических примеров (motion-токены и reduced motion, dialog с `@starting-style` и `allow-discrete`, FLIP-список, View Transitions для карточки и навигации, GSAP + ScrollTrigger + cleanup), разбор timing/easing, WAAPI, scroll-driven animations, диагностики jank и тестирования. Обновлены `html-css/README.md`, `html-css/CHEATSHEET.md`, перекрёстные ссылки из `html-rendering-pipeline.md` и `vue/transitions.md`.
+- ✅ **UE-04 — сделано.** Создана `docs/html-css/typography-and-color.md` (order 14): 10 вопросов и 10 ответов, 5 примеров (fluid-шкала и measure, палитра в `oklch` + `color-mix`, dark mode без FOUC, таблица с `tabular-nums`, цвето-независимый статусный бейдж), разбор type scale, spacing, P3, контраста WCAG/APCA и доступности состояний.
+- ✅ **UE-05 — сделано.** Создана `docs/html-css/images-and-fonts.md` (order 15): 10 вопросов и 10 ответов, 5 примеров (hero с AVIF/WebP и `fetchpriority`, карточка с `sizes`/`aspect-ratio`, шрифт с `unicode-range` и fallback-метриками, SVG + video, аудит LCP/CLS через PerformanceObserver), разбор форматов, приоритетов, `font-display` и CLS от шрифтов. Фаза 2 (Motion + Visual) закрыта.
 - ✅ **Мок-интервью: пресеты UI Engineer.** Добавлены `ui-engineer-vue` и `ui-engineer-react` (по 50 вопросов, основная секция `html-css`), иконки и цвета в `MockInterview.tsx`, текст промо и корневой README обновлены до 11 пресетов.
 - ✅ **Порядок `html-css` зафиксирован.** Существующие статьи перенумерованы под целевую таблицу (forms — 9, rendering — 11, styling — 13, tokens — 16, ui-kits — 17); слоты 8, 10, 12, 14, 15 оставлены под UE-02, UE-07, UE-03, UE-04, UE-05. Слот 8 занят UE-02.
-- ✅ **README разделов обновлены.** UE-01/UE-02 добавлены в `html-css/README.md`, UE-10 — в `testing/README.md`; корневой README обновлён до 11 пресетов и 179+ статей.
-- ✅ **CHEATSHEET обновлены.** В `html-css/CHEATSHEET.md` добавлен блок про APG-виджеты, состояния, roving tabindex, dialog и live regions; в `testing/CHEATSHEET.md` — блок про axe, уровни тестирования, клавиатуру, CI и ручной аудит.
-- ✅ **Сборка и мок-интервью проверены.** `npm run build` проходит (196 страниц); `aria-patterns-keyboard` и `accessibility-testing` попадают в индекс мок-интервью (по 10/10 пар questions/answers, дублей нет).
-- ⏳ **Следующий шаг:** UE-03 (`motion-and-animations.md`), затем UE-04 (`typography-and-color.md`) и UE-05 (`images-and-fonts.md`). Перед этим — провести первый мок-интервью по a11y-треку (UE-01 + UE-02 + UE-10) и записать слабые места.
+- ✅ **README разделов обновлены.** UE-01/UE-02 добавлены в `html-css/README.md`, UE-10 — в `testing/README.md`; корневой README обновлён до 11 пресетов и 182+ статей.
+- ✅ **CHEATSHEET обновлены.** В `html-css/CHEATSHEET.md` добавлены блоки про APG-виджеты, состояния, roving tabindex, dialog и live regions; про motion-токены, `@starting-style`, FLIP, View Transitions, reduced motion и тесты анимаций; про type scale, fluid type, spacing, `oklch`, контраст и dark mode; про `srcset`/`sizes`, форматы, LCP/CLS и `font-display`. В `testing/CHEATSHEET.md` — блок про axe, уровни тестирования, клавиатуру, CI и ручной аудит. Блоки сжаты до терминов, но раздел вырос — перед релизом стоит проверить печать на A4.
+- ✅ **Сборка и мок-интервью проверены.** `npm run build` проходит (199 страниц); `aria-patterns-keyboard`, `accessibility-testing`, `motion-and-animations`, `typography-and-color` и `images-and-fonts` попадают в индекс мок-интервью (по 10/10 пар questions/answers, дублей нет).
+- ⏳ **Следующий шаг:** фаза 3 — UE-07 (`forms-ux.md`, order 10) и UE-06 (`performance/lcp-inp-deep-dive.md`), затем первый мок-интервью по a11y/motion/visual-треку и запись слабых мест.
 
 ---
 
@@ -144,6 +147,7 @@
 - **Связи:** `vue/transitions`, `html-rendering-pipeline`, UE-01.
 - **Оценка:** 12–16 ч.
 - **Готово, когда:** есть 3 demo (CSS, FLIP/View Transitions, GSAP) и раздел про reduced motion.
+- **Статус:** ✅ Готово (2026-10-24): 10 вопросов/ответов, motion-токены, dialog с `@starting-style` и `allow-discrete`, FLIP, View Transitions, GSAP, диагностика jank и чек-лист code review.
 
 #### UE-04. Типографика, цвет и визуальный ритм
 
@@ -168,6 +172,7 @@
 - **Связи:** `design-tokens-and-figma`, `css-styling-approaches`, UE-01.
 - **Оценка:** 10–14 ч.
 - **Готово, когда:** есть готовый type/color scale и чек-лист контраста.
+- **Статус:** ✅ Готово (2026-10-24): 10 вопросов/ответов, type scale и fluid type, spacing/ритм, `oklch`-палитра, dark mode без FOUC, чек-лист контраста.
 
 #### UE-05. Изображения, шрифты и медиа
 
@@ -191,6 +196,7 @@
 - **Связи:** UE-06, `web-performance-metrics`, `nextjs/optimization`, `nuxt`.
 - **Оценка:** 8–12 ч.
 - **Готово, когда:** есть before/after замер LCP/CLS.
+- **Статус:** ✅ Готово (2026-10-24): 10 вопросов/ответов, `srcset`/`sizes`, AVIF/WebP, `fetchpriority`, `@font-face` с fallback-метриками, аудит LCP/CLS; в статье есть раздел before/after-методики.
 
 #### UE-06. LCP и INP: диагностика и оптимизация
 
@@ -507,6 +513,9 @@
 - [x] Зафиксировать целевой порядок `html-css` и перенумеровать.
 - [x] Создать UE-01 (`accessibility-wcag.md`) по шаблону проекта.
 - [x] Создать UE-02 (`aria-patterns-keyboard.md`).
+- [x] Создать UE-03 (`motion-and-animations.md`).
+- [x] Создать UE-04 (`typography-and-color.md`).
+- [x] Создать UE-05 (`images-and-fonts.md`).
 - [x] Создать UE-10 (`accessibility-testing.md`).
 - [x] Обновить `html-css/README.md`, `testing/README.md` и `CHEATSHEET.md`.
 - [x] Проверить сборку и попадание статей в мок-интервью (по 10/10 пар questions/answers).
