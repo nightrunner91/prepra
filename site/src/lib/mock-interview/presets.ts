@@ -91,4 +91,22 @@ export const PRESETS: InterviewPreset[] = [
     mainSection: 'ai',
     count: 50,
   },
+  {
+    id: 'ui-engineer-vue',
+    title: 'UI Engineer (Vue)',
+    description: 'HTML/CSS, доступность, дизайн-система, тесты и производительность',
+    sections: ['html-css', 'testing', 'performance', 'architecture', 'typescript', 'vue'],
+    stacks: ['vue'],
+    mainSection: 'html-css',
+    count: 50,
+  },
+  {
+    id: 'ui-engineer-react',
+    title: 'UI Engineer (React)',
+    description: 'HTML/CSS, доступность, дизайн-система, тесты и производительность',
+    sections: ['html-css', 'testing', 'performance', 'architecture', 'typescript', 'react'],
+    stacks: ['react'],
+    mainSection: 'html-css',
+    count: 50,
+  },
 ];

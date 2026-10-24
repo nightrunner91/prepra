@@ -14,6 +14,7 @@ import {
   House,
   Lightning,
   Microphone,
+  PaintBrush,
   PauseCircle,
   SkipForward,
   SmileyMeh,
@@ -64,6 +65,8 @@ const PRESET_ICONS: Record<string, Icon> = {
   performance: Lightning,
   architecture: TreeStructure,
   ai: Brain,
+  'ui-engineer-vue': PaintBrush,
+  'ui-engineer-react': PaintBrush,
 };
 const PRESET_COLORS: Record<string, 'red' | 'blue' | 'green' | 'yellow'> = {
   'web-basics': 'yellow',
@@ -75,6 +78,8 @@ const PRESET_COLORS: Record<string, 'red' | 'blue' | 'green' | 'yellow'> = {
   performance: 'yellow',
   architecture: 'blue',
   ai: 'red',
+  'ui-engineer-vue': 'green',
+  'ui-engineer-react': 'blue',
 };
 const PRESET_BADGE_CLASSES: Record<string, string> = {
   red: 'bg-pale-red-bg text-pale-red-text',
