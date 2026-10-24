@@ -44,6 +44,12 @@
 - **Фокус:** `:focus-visible` вместо `outline: none`, trap и возврат в модалке, `scroll-padding-top`
 - **Валидация:** `required`, `pattern`, `checkValidity`, `setCustomValidity` · сервер обязателен · `aria-invalid` + `aria-describedby`
 - **Аудит:** axe/Lighthouse → клавиатура → zoom 400% → скринридер → формы · автотесты не заменяют ручной проход
+- **APG-виджеты:** tabs (`tablist`/`tab`/`tabpanel`), dialog, disclosure/accordion, menu/menubar, combobox/listbox, tooltip, tree/grid
+- **Состояния:** `aria-expanded` disclosure/menu · `aria-selected` tab/option · `aria-checked` · `aria-pressed` · `aria-activedescendant`
+- **Фокус в виджете:** roving tabindex (активный `0`, остальные `-1`) vs `aria-activedescendant` (фокус остаётся в поле)
+- **Dialog:** фокус внутрь → trap → `Esc` → возврат на триггер · `showModal()` + `inert` · безопасное действие первым
+- **Live regions:** `role="status"` (polite) / `role="alert"` (assertive) · регион заранее · `aria-atomic` · не дублировать фокусом
+- **Границы:** `role="menu"` ≠ навигация · tooltip не интерактивен · `role="grid"` для интерактивных таблиц, не для layout
 
 ## Рендеринг
 

@@ -44,6 +44,16 @@
 - **Стабильные скриншоты:** маски динамики, без анимаций, шрифты, baseline в репо
 - **Инструменты:** Storybook (изоляция), Chromatic (ревью), Percy · viewports, темы
 
+## Доступность
+
+- **axe:** линтер, не тест · имена, `alt`, ARIA-связи, часть контраста · ~1/3 проблем · `violations` + `incomplete`
+- **Уровни:** lint → `vitest-axe` (jsdom) → Storybook addon-a11y → `@axe-core/playwright` → visual → ручной аудит
+- **Клавиатура:** `toBeFocused`, `Tab`/`Shift+Tab`, стрелки, `Home`/`End`, `Esc`, возврат фокуса, trap, roving tabindex
+- **Состояния:** default, open, error, loading, disabled, dark, RTL, zoom 200–400%, forced-colors
+- **CI:** `serious`/`critical` блокируют, `minor`/`moderate` предупреждают · e2e-аудит nightly · отчёт артефактом
+- **Ручное:** NVDA + Firefox, VoiceOver + Safari, TalkBack · скрипт «шаг → ожидание → факт → severity»
+- **Границы:** смысл текста, порядок фокуса, объявления AT, reflow и когнитивная нагрузка — только вручную
+
 ## Ловушки и метрики
 
 - **Flaky:** время, гонки, селекторы, shared state, сеть → чинить причину, не retries

@@ -19,11 +19,14 @@
 > Обновлено: 2026-10-24.
 
 - ✅ **UE-01 — сделано.** Создана `docs/html-css/accessibility-wcag.md`: 10 вопросов и 10 ответов, 5 практических примеров, антипаттерны, тезисы, 30-минутный протокол аудита и code review-чеклист. Добавлены перекрёстные ссылки из `html-semantics-accessibility.md` и `html-forms-validation.md`.
-- ✅ **Порядок `html-css` зафиксирован.** Существующие статьи перенумерованы под целевую таблицу (forms — 9, rendering — 11, styling — 13, tokens — 16, ui-kits — 17); слоты 8, 10, 12, 14, 15 оставлены под UE-02, UE-07, UE-03, UE-04, UE-05.
-- ✅ **README раздела обновлён.** UE-01 добавлена в «Углубись в детали»; container queries убраны из «Не будет лишним».
-- ✅ **CHEATSHEET обновлён.** Добавлен компактный a11y-блок: WCAG 2.2, дерево доступности, accessible name, `aria-hidden`/`inert`, аудит.
-- ✅ **Сборка и мок-интервью проверены.** `npm run build` проходит; статья попадает в индекс мок-интервью (10/10 пар questions/answers, дублей нет).
-- ⏳ **Следующий шаг:** UE-02 (`aria-patterns-keyboard.md`), затем UE-10 и первый мок-интервью по a11y-треку.
+- ✅ **UE-02 — сделано.** Создана `docs/html-css/aria-patterns-keyboard.md`: 10 вопросов и 10 ответов, 5 практических примеров (tabs на JS и React, нативный dialog, combobox с `aria-activedescendant` и async, menu button, error summary + live region), антипаттерны, тезисы, практическое задание и code review-чеклист. Добавлены перекрёстные ссылки из `accessibility-wcag.md` и `html-semantics-accessibility.md`.
+- ✅ **UE-10 — сделано.** Создана `docs/testing/accessibility-testing.md`: 10 вопросов и 10 ответов, 5 примеров (axe в Playwright с артефактами, клавиатурная форма, Storybook addon-a11y, ручной скрипт NVDA/VoiceOver, CI-workflow), антипаттерны, тезисы и чек-лист. Порядок `testing` перенумерован: accessibility — 10, strategy — 11, pitfalls — 12, gitlab-ci-cd — 13, sentry — 14.
+- ✅ **Мок-интервью: пресеты UI Engineer.** Добавлены `ui-engineer-vue` и `ui-engineer-react` (по 50 вопросов, основная секция `html-css`), иконки и цвета в `MockInterview.tsx`, текст промо и корневой README обновлены до 11 пресетов.
+- ✅ **Порядок `html-css` зафиксирован.** Существующие статьи перенумерованы под целевую таблицу (forms — 9, rendering — 11, styling — 13, tokens — 16, ui-kits — 17); слоты 8, 10, 12, 14, 15 оставлены под UE-02, UE-07, UE-03, UE-04, UE-05. Слот 8 занят UE-02.
+- ✅ **README разделов обновлены.** UE-01/UE-02 добавлены в `html-css/README.md`, UE-10 — в `testing/README.md`; корневой README обновлён до 11 пресетов и 179+ статей.
+- ✅ **CHEATSHEET обновлены.** В `html-css/CHEATSHEET.md` добавлен блок про APG-виджеты, состояния, roving tabindex, dialog и live regions; в `testing/CHEATSHEET.md` — блок про axe, уровни тестирования, клавиатуру, CI и ручной аудит.
+- ✅ **Сборка и мок-интервью проверены.** `npm run build` проходит (196 страниц); `aria-patterns-keyboard` и `accessibility-testing` попадают в индекс мок-интервью (по 10/10 пар questions/answers, дублей нет).
+- ⏳ **Следующий шаг:** UE-03 (`motion-and-animations.md`), затем UE-04 (`typography-and-color.md`) и UE-05 (`images-and-fonts.md`). Перед этим — провести первый мок-интервью по a11y-треку (UE-01 + UE-02 + UE-10) и записать слабые места.
 
 ---
 
@@ -36,7 +39,7 @@
 | Компонентные паттерны | `design-patterns`, `design-patterns-vue` | Сильно |
 | TypeScript для API компонентов | `generics`, `utility-types`, `react`, `vue` | Сильно, кроме полиморфизма |
 | Тестирование UI | RTL, Vue Test Utils, Playwright, visual regression | Сильно |
-| Доступность | вводная статья + `vue/accessibility` | Слабо |
+| Доступность | вводная статья, WCAG 2.2, ARIA-паттерны, тестирование a11y, `vue/accessibility` | Сильно |
 | Motion | `vue/transitions` + фрагменты в rendering | Слабо |
 | Типографика / цвет / визуальный ритм | только дизайн-токены | Слабо |
 | Изображения / шрифты / медиа | фрагменты | Нет |
@@ -49,10 +52,10 @@
 
 ### Что это значит
 
-- Для Vue UI Engineer проект почти готов: не хватает общих a11y/motion/visual-тем.
+- Для Vue UI Engineer проект почти готов: a11y-трек закрыт, не хватает motion/visual-тем.
 - Для React UI Engineer проект подготовлен хуже: нет React-статей про стилизацию, формы, a11y и анимации.
-- `html-css/README.md` зря относит container queries к «не будет лишним». Для UI Engineer это must-have.
-- `js-closures.md` содержит 9 вопросов и 8 ответов — один вопрос выпадает из мок-интервью. Исправить.
+- `html-css/README.md`: container queries перенесены в «Углубись» — это обязательная тема для UI Engineer.
+- `js-closures.md` исправлен: 9 вопросов / 9 ответов, вопрос больше не выпадает из мок-интервью.
 
 ---
 
@@ -116,6 +119,7 @@
 - **Связи:** UE-01, `ui-kits`, `vue/accessibility`.
 - **Оценка:** 12–16 ч.
 - **Готово, когда:** есть reference-реализация минимум трёх паттернов и чек-лист.
+- **Статус:** ✅ Готово (2026-10-24): 10 вопросов/ответов, tabs (JS + React), dialog, combobox, menu button, error summary + live region, чек-лист code review.
 
 #### UE-03. Анимации и motion-система
 
@@ -244,7 +248,7 @@
 |---|---|---|---|---|
 | UE-08 | `docs/html-css/i18n-and-rtl.md` | Глобальные продукты | logical properties, `dir=auto`, bidi, text expansion, `Intl`, pluralization, pseudo-localization, RTL-иконки, тестирование | 8–12 ч |
 | UE-09 | `docs/architecture/design-system-governance.md` | UI Engineer часто спрашивают «как внедрить и развивать DS» | команда, contribution/RFC, versioning/deprecation, codemods, миграция, adoption-метрики, docs, design QA, SLA, multi-brand | 10–14 ч |
-| UE-10 | `docs/testing/accessibility-testing.md` | Автотесты a11y и ручной аудит — отдельный навык | axe-core, Playwright, Storybook addon-a11y, vitest-axe, keyboard-тесты, screen reader script, CI, false positives | 6–10 ч |
+| UE-10 ✅ | `docs/testing/accessibility-testing.md` | Автотесты a11y и ручной аудит — отдельный навык | axe-core, Playwright, Storybook addon-a11y, vitest-axe, keyboard-тесты, screen reader script, CI, false positives | 6–10 ч |
 | UE-11 | `docs/html-css/modern-css.md` | «Что нового в CSS» — любимый вопрос | `@scope`, `@property`, style/scroll-state queries, `@starting-style`, anchor positioning, `field-sizing`, `interpolate-size`, scroll-driven, view transitions, `oklch`/`color-mix`, `light-dark()`, subgrid | 8–12 ч |
 | UE-12 | `docs/html-css/browser-ui-apis.md` | Мобильные баги и интерактивность | IntersectionObserver, ResizeObserver, `visualViewport`, safe-area, pointer/touch, scroll snap/sticky, scroll anchoring, drag&drop, clipboard, `matchMedia`, rAF/rIC | 8–12 ч |
 | UE-13 | `docs/testing/cross-browser-and-device-testing.md` | «Работает везде» — ответственность UI Engineer | Playwright projects (Chromium/Firefox/WebKit), devices, responsive/visual matrix, BrowserStack, feature detection, `@supports`, progressive enhancement, CI cost | 6–10 ч |
@@ -292,8 +296,8 @@
 
 ### Отдельно
 
-- Пересмотреть `html-css/README.md`: container queries — не «nice-to-have», а обязательная тема.
-- Исправить `docs/javascript/js-closures.md`: 9 вопросов / 8 ответов.
+- ✅ Пересмотреть `html-css/README.md`: container queries — не «nice-to-have», а обязательная тема (перенесены в «Углубись»).
+- ✅ Исправить `docs/javascript/js-closures.md`: 9 вопросов / 9 ответов.
 - Проверить, что у всех новых статей есть `answers`, иначе они не попадут в мок-интервью.
 
 ---
@@ -311,7 +315,7 @@
 | 5 | `css-responsive-container-queries.md` | есть |
 | 6 | `html-semantics-accessibility.md` | есть |
 | 7 | `accessibility-wcag.md` | **UE-01** ✅ |
-| 8 | `aria-patterns-keyboard.md` | **UE-02** |
+| 8 | `aria-patterns-keyboard.md` | **UE-02** ✅ |
 | 9 | `html-forms-validation.md` | есть |
 | 10 | `forms-ux.md` | **UE-07** |
 | 11 | `html-rendering-pipeline.md` | есть |
@@ -410,8 +414,8 @@
 
 | Фаза | Содержание | Результат | Оценка |
 |---|---|---|---|
-| 0. Подготовка | Зафиксировать порядок, обновить README-структуру, исправить `js-closures`, выбрать стек (Vue/React) | Чистый backlog, нет расхождений в метаданных | 0,5–1 день |
-| 1. A11y | UE-01, UE-02, UE-10 | A11y-трек из 3 статей + чек-лист аудита | 3–4 дня |
+| 0. Подготовка ✅ | Зафиксировать порядок, обновить README-структуру, исправить `js-closures`, выбрать стек (Vue/React) | Чистый backlog, нет расхождений в метаданных | 0,5–1 день |
+| 1. A11y ✅ | UE-01, UE-02, UE-10 | A11y-трек из 3 статей + чек-лист аудита | 3–4 дня |
 | 2. Motion + Visual | UE-03, UE-04, UE-05 | 3 статьи, 3 практических demo | 4–6 дней |
 | 3. Performance + Forms | UE-06, UE-07 | Диагностика CWV + форма | 3–4 дня |
 | 4. P1 | UE-08, UE-09, UE-11, UE-12, UE-13, UE-14 | Полный UI-трек | 5–7 дней |
@@ -499,13 +503,13 @@
 
 ## 12. Чеклист запуска
 
-- [ ] Определить стек: Vue / React / оба.
+- [x] Определить стек: Vue / React / оба. Оба: добавлены пресеты `ui-engineer-vue` и `ui-engineer-react`.
 - [x] Зафиксировать целевой порядок `html-css` и перенумеровать.
 - [x] Создать UE-01 (`accessibility-wcag.md`) по шаблону проекта.
-- [ ] Создать UE-02 (`aria-patterns-keyboard.md`).
-- [ ] Создать UE-10 (`accessibility-testing.md`).
-- [x] Обновить `html-css/README.md` и `CHEATSHEET.md`.
-- [x] Проверить сборку и попадание статьи в мок-интервью (10/10 пар questions/answers).
+- [x] Создать UE-02 (`aria-patterns-keyboard.md`).
+- [x] Создать UE-10 (`accessibility-testing.md`).
+- [x] Обновить `html-css/README.md`, `testing/README.md` и `CHEATSHEET.md`.
+- [x] Проверить сборку и попадание статей в мок-интервью (по 10/10 пар questions/answers).
 - [ ] Провести первый мок-интервью по a11y-треку.
 - [ ] Записать слабые места и перейти к UE-03/UE-04/UE-05.
 

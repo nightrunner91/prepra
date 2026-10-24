@@ -20,6 +20,7 @@
 - **[Тестирование Nuxt](./nuxt-testing.md)** — тесты компонентов, composables и серверных роутов.
 - **[E2E с Playwright](./e2e-playwright.md)** — локаторы, действия, ожидания, моки, POM, CI и оптимизация прогонов.
 - **[Визуальное тестирование](./visual-regression.md)** — Chromatic, Percy, скриншоты.
+- **[Тестирование доступности](./accessibility-testing.md)** — axe-core в Playwright и vitest-axe, состояния компонентов, клавиатурные сценарии, Storybook addon-a11y, ручной скрипт NVDA/VoiceOver и CI-стратегия.
 - **[Стратегия тестирования](./strategy-deep-dive.md)** — модели, risk-based testing, метрики, архитектура тестов.
 - **[Подводные камни и антипаттерны](./pitfalls.md)** — flaky-тесты, shared state, моки, false confidence.
 - **[GitLab CI/CD для тестов](./gitlab-ci-cd.md)** — pipeline, cache, artifacts, шардинг, JUnit, Docker.
