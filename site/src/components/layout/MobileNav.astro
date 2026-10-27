@@ -1,7 +1,7 @@
 ---
 import { sections } from "../../lib/sections";
 import { withBase } from "../../lib/urls";
-import { X } from "@phosphor-icons/react";
+import { Barbell, Microphone, X } from "@phosphor-icons/react";
 
 interface Props {
   currentSection?: string;
@@ -30,6 +30,22 @@ const { currentSection } = Astro.props;
     </button>
   </div>
   <nav class="overflow-y-auto h-[calc(100vh-3.5rem)] py-4 px-3">
+    <div class="mb-4 space-y-2">
+      <a
+        href={withBase("/practice")}
+        class="flex items-center gap-2 border-2 border-border bg-pale-yellow-bg px-3 py-3 text-sm font-bold uppercase tracking-wide text-pale-yellow-text transition-colors hover:bg-pale-yellow-bg-hover hover:text-pale-yellow-text-hover"
+      >
+        <Barbell size={16} weight="bold" class="shrink-0" />
+        <span>Практикум</span>
+      </a>
+      <a
+        href={withBase("/interview")}
+        class="flex items-center gap-2 border-2 border-accent bg-pale-green-bg px-3 py-3 text-sm font-bold uppercase tracking-wide text-pale-green-text transition-colors hover:bg-pale-green-bg-hover hover:text-pale-green-text-hover"
+      >
+        <Microphone size={16} weight="bold" class="shrink-0" />
+        <span>Мок-интервью</span>
+      </a>
+    </div>
     <div class="space-y-0">
       {
         sections.map((s) => {

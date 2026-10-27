@@ -5,6 +5,7 @@ import Hero from "../components/content/Hero.astro";
 import SectionsGrid from "../components/content/SectionsGrid.astro";
 import HowItWorks from "../components/content/HowItWorks.astro";
 import MockInterviewPromo from "../components/content/MockInterviewPromo.astro";
+import PracticePromo from "../components/content/PracticePromo.astro";
 import DailyQuestion from "../components/content/DailyQuestion.astro";
 import FAQ from "../components/content/FAQ.astro";
 import Footer from "../components/layout/Footer.astro";
@@ -130,11 +131,20 @@ const faqItems = [
   {
     question: "Как лучше использовать prepra?",
     answer:
-      "<p>Советую начать с базы - <a href='/prepra/javascript'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд. У каждой статьи есть практическая часть для самопроверки - не пропускай её. Когда будешь готов - пройди первое <a href='${interviewUrl}'>мок-интервью</a>.</p></p>",
+      `<p>Советую начать с базы - <a href='/prepra/javascript'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд. У каждой статьи есть практическая часть для самопроверки - не пропускай её. Закрепляй темы в <a href='${withBase("/practice")}'>практикуме</a>, а когда будешь готов - пройди первое <a href='${interviewUrl}'>мок-интервью</a>.</p>`,
   },
   {
     question: "Что такое мок-интервью?",
     answer: `<p>Это режим самопроверки, в котором вопросы собираются из разных разделов сразу — как на настоящем техническом интервью. Ты отвечаешь вслух, оцениваешь себя после каждого вопроса, а в конце получаешь таблицу по разделам и ссылку на самую слабую тему. Доступно на <a href='${interviewUrl}'>отдельной странице</a> без регистрации.</p>`,
+  },
+  {
+    question: "Чем практикум отличается от мок-интервью?",
+    answer: `<p>Практикум — это банк задач с проверкой: «что выведет код», выбор ответа и задачи с автотестами. Мок-интервью — режим устной самопроверки, где ты отвечаешь вслух и сам оцениваешь ответ. Сначала закрепляй базу в <a href='${withBase("/practice")}'>практикуме</a>, затем проверяй себя на <a href='${interviewUrl}'>мок-интервью</a>.</p>`,
+  },
+  {
+    question: "Сколько задач в практикуме и какие темы?",
+    answer:
+      "Больше 150 задач по базовому JavaScript: hoisting и scope, замыкания, this, event loop, Map/Set, Big O, приведение типов, прототипы, промисы и массивы. Есть фильтры по теме, сложности и типу, режим тренировки и сохранение прогресса в браузере.",
   },
   {
     question: "Когда проходить мок-интервью - сразу или после чтения?",
@@ -170,6 +180,8 @@ const faqItems = [
     />
 
     <HowItWorks />
+
+    <PracticePromo />
 
     <MockInterviewPromo />
 
