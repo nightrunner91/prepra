@@ -353,7 +353,7 @@ export function PracticeApp() {
         </div>
       </section>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:items-start">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-start">
         <div className="min-w-0 space-y-3">
           <div className="border-[3px] border-border bg-surface p-3 sm:p-4">
             <div className="flex flex-col gap-2 sm:flex-row">
@@ -520,7 +520,10 @@ export function PracticeApp() {
           </div>
         </div>
 
-        <div ref={detailRef} className="min-w-0 scroll-mt-20 lg:sticky lg:top-20">
+        <div
+          ref={detailRef}
+          className="min-w-0 scroll-mt-20 lg:sticky lg:top-20 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:overscroll-contain lg:pr-1"
+        >
           {training?.finished ? (
             <div className="border-[3px] border-border bg-pale-yellow-bg p-5">
               <div className="flex items-center gap-3">

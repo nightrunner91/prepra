@@ -137,7 +137,7 @@ export function TaskDetail({
           <>
             {task.code && <CodeBlock code={task.code} label="Код" />}
 
-            <div className="space-y-2">
+            <div className="grid gap-2 sm:grid-cols-2">
               {task.options.map((option, index) => {
                 const correct = revealed && index === task.answer;
                 const wrong =
@@ -149,7 +149,7 @@ export function TaskDetail({
                     type="button"
                     onClick={() => handlePick(index)}
                     disabled={revealed}
-                    className={`flex w-full items-start gap-3 border-2 border-border p-3 text-left transition-all ${
+                    className={`flex h-full w-full items-start gap-3 border-2 border-border p-3 text-left transition-all ${
                       correct
                         ? "bg-pale-green-bg"
                         : wrong
