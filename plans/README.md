@@ -54,7 +54,7 @@
 
 | Фаза | Файл | Недели | Объём | Статус |
 |---|---|---|---|---|
-| P0 | [01-p0-repackaging.md](./01-p0-repackaging.md) | 1–2 | 0 статей, миграция + витрина | ☐ |
+| P0 | [01-p0-repackaging.md](./01-p0-repackaging.md) | 1–2 | 0 статей, миграция + витрина | ☑ |
 | P1 | [02-p1-backend-core.md](./02-p1-backend-core.md) | 7 | 23 статьи + 30 SQL-задач | ☐ |
 | P2 | [03-p2-senior-layer.md](./03-p2-senior-layer.md) | 7 | 22 статьи + `/tracks` | ☐ |
 | P3 | [04-p3-infra-ai.md](./04-p3-infra-ai.md) | 9 | 22 статьи | ☐ |

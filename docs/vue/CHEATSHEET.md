@@ -3,59 +3,57 @@
 ## Основы и шаблоны
 
 - **SFC:** `<script setup>`, `<template>`, `<style scoped>`
-- **Директивы:** `:`, `@`, `v-model`, `v-if`, `v-for`, `v-show`, `v-html`, `v-once`
-- **v-if vs v-show:** монтирование vs `display`
-- **v-for:** стабильный `:key`, индекс только для статики
-- **Props / emits:** props down, events up, props иммутабельны
-- **События:** нативные (не SyntheticEvent), `$event`, `.stop` / `.prevent` / `.once`
-- **Fallthrough:** необъявленные атрибуты → корень, `inheritAttrs`
+- **Директивы:** `:`, `@`, `v-model`, `v-if`, `v-for`, `v-show` · `v-if` (монтаж) vs `v-show`
+- **Списки:** `v-for` + стабильный `:key`, индекс только для статики
+- **Props / emits:** props down, events up, иммутабельны · `$event`, `.stop` / `.prevent`
+- **Слоты:** default / named / scoped · `<component :is>`, `<KeepAlive>`, `<Teleport>`
+- **v-model и формы:** `defineModel()`, `.lazy` / `.trim` · vee-validate + zod, blur
+- **Расширения:** кастомные директивы (`mounted`, binding) · плагины: `install(app)`, `app.use`
 
-## Реактивность
+## Реактивность и Composition API
 
-- **ref vs reactive:** `.value`, любые типы vs Proxy объекта · деструктуризация → `toRefs`
-- **computed:** кэш по зависимостям, чистый, writable (get / set)
-- **watch vs watchEffect:** явный источник, old / new vs автотрекинг · `immediate`, `deep`, `flush`
-- **Ограничение:** `readonly`, `shallowRef` / `shallowReactive`, `markRaw`
-- **Под капотом:** get → `track()`, set → `trigger()`, scheduler, батчинг
-- **Vue 2 vs Vue 3:** `Object.defineProperty` vs Proxy (новые ключи, Map, Set)
+- **ref vs reactive:** `.value`, любые типы vs Proxy · деструктуризация → `toRefs`
+- **computed / watch:** кэш vs явный источник · `immediate`, `deep`, `flush`
+- **Ограничения:** `readonly`, `shallowRef` / `shallowReactive`, `markRaw`
+- **Под капотом:** get → `track()`, set → `trigger()` · Vue 2: defineProperty vs Proxy
+- **`<script setup>`:** без `this`, `defineProps` / `defineEmits` / `defineExpose`
+- **Composables:** `use*`, состояние + эффекты · provide / inject, `InjectionKey`
+- **Options vs Composition:** по опциям vs по фичам · VueUse: `useStorage`, `useDebounceFn`
+- **Хуки:** setup → `onMounted` → `onUpdated` → `onUnmounted` · батч → `nextTick`
 
-## Composition API
+## Роутер и состояние
 
-- **`<script setup>`:** без `this`, `defineProps` / `defineEmits` / `defineExpose` / `defineModel`
-- **Composables:** `use*`, состояние + эффекты · vs hooks: нет правил порядка, автотрекинг
-- **provide / inject:** без prop drilling, `InjectionKey`
-- **Options vs Composition:** по опциям vs по фичам, mixins vs composables, TS
-- **VueUse:** tree-shaking, SSR-safe, `useStorage`, `useDebounceFn`
-
-## Жизненный цикл и ошибки
-
-- **Хуки:** setup → `onMounted` → `onUpdated` → `onUnmounted`, `onBefore*`, `onActivated`
-- **Порядок:** `onMounted` детей → родителя, батч обновлений → `nextTick`
-- **vs React:** `useEffect(fn, [])` ≈ `onMounted` + `onUnmounted`, deps → `watch`
-- **Ошибки:** `app.config.errorHandler`, `onErrorCaptured` (`return false`), error boundary
-- **Не ловится:** обработчики событий, `setTimeout`, `.then` → try/catch
-- **Suspense:** async setup, `defineAsyncComponent`, default / fallback, ошибки не ловит
-
-## Компоненты и формы
-
-- **Слоты:** default, named (`#name`), scoped (≈ render props)
-- **Встроенные:** `<component :is>`, `<KeepAlive>` (include / max), `<Teleport>`
-- **v-model:** `modelValue` + `update:modelValue` → `defineModel()`, `.lazy` / `.trim`
-- **Валидация:** ошибка после blur, vee-validate + zod, сервер обязателен
-- **Директивы:** императивный DOM, `mounted` / `unmounted`, binding (value, arg, modifiers)
-- **Плагины:** `install(app)`, `app.use` до mount, `app.provide`, `app.config`
-
-## Роутер
-
-- **Vue Router:** `createRouter`, `<router-view>`, lazy `() => import()`, meta (auth)
-- **History:** web (настройка сервера), hash, memory (SSR)
+- **Vue Router:** `createRouter`, `<router-view>`, lazy `import()`, meta · web / hash / memory
 - **Параметры:** params vs query (строки), `useRoute` vs `useRouter`
-- **Guards:** `beforeEach` → `beforeEnter` → компонентные → `beforeResolve` → `afterEach`
+- **Guards:** `beforeEach` → `beforeEnter` → компонентные → `afterEach`
+- **Pinia:** `defineStore`, state / getters / actions, `storeToRefs`, `$patch`
+- **Vuex:** state / mutations / getters / actions, namespaced → Pinia
 
-## Стили, a11y, производительность
+## Nuxt: основа и рендеринг
 
-- **Стили:** scoped (`data-v-hash`), `:deep()`, `:slotted()`, `v-bind()` в CSS, `<style module>`
-- **Transition:** `enter-from` / `-active` / `-to`, `mode="out-in"` · Group: `:key`, FLIP
-- **a11y:** модалка (фокус, trap, возврат), `inert`, live-регион, `prefers-reduced-motion`
-- **Web Components:** `defineCustomElement`, Shadow DOM · UI-кит vs дизайн-система
-- **Оптимизация:** `v-once`, `v-memo`, `defineAsyncComponent`, виртуализация, `shallowRef`
+- **Nuxt vs Vue SPA:** файловый роутинг, SSR, Nitro, auto-imports, composables
+- **Структура:** `pages/`, `components/`, `composables/`, `middleware/`, `server/`
+- **Конфиг:** `runtimeConfig` (секреты + `public`) vs `app.config`
+- **Маршрутизация:** `[id]`, `[...slug]` (1+), `[[...slug]]` (0+), `definePageMeta`
+- **Навигация:** `useRoute` / `useRouter`, `navigateTo` (SSR-safe)
+- **Режимы:** SSR (default), CSR (`ssr: false`), SSG (`nuxi generate`), ISR, SWR
+- **routeRules:** `prerender`, `isr`, `swr` · ISR vs SWR: TTL vs кэш · mismatch → `<ClientOnly>`
+
+## Nuxt: данные и сервер
+
+- **Двойной запрос:** `$fetch` в setup vs `useFetch` / `useAsyncData` (payload)
+- **Ключи и SSR:** общий `key`, дедупликация · cookies → `useRequestFetch` · `useState` vs `ref`
+- **useHead / useSeoMeta:** title, meta, `og:*` · `titleTemplate`
+- **Плагины:** `defineNuxtPlugin`, `.client` / `.server`, `provide` → `$name`
+- **Middleware:** именованный, `.global.ts`, `abortNavigation` · SSR: server → plugins → route
+- **Hooks:** `app:created`, `page:start` / `page:finish`, `vue:error`
+- **Nitro:** H3, `server/api/` (`/api`) vs `server/routes/`, пресеты деплоя
+- **Layers:** `extends` (папка, npm, git) · проект > `~/layers/` > `extends`
+- **Модули:** build-time, `defineNuxtModule`, `@nuxt/kit` · layers vs модули
+
+## Качество и производительность
+
+- **Ошибки:** `errorHandler`, `onErrorCaptured` · `createError` → `error.vue`, `showError`
+- **Suspense / lazy:** async setup, `defineAsyncComponent` · `v-once`, `v-memo`, `shallowRef`
+- **Стили:** scoped, `:deep()`, `:slotted()`, `v-bind()` · Transition: `enter-from` / `-to`, FLIP
+- **a11y:** фокус, trap, `inert`, live-регион · Web Components: Shadow DOM

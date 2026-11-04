@@ -10,25 +10,10 @@ import { QuizOverlay } from "../../components/content/QuizOverlay";
 import { ReadToggle } from "../../components/content/ReadToggle";
 import Badge from "../../components/ui/Badge.astro";
 import { withBase } from "../../lib/urls";
+import { sections } from "../../lib/sections";
 
 export async function getStaticPaths() {
-  const collections = [
-    "javascript",
-    "typescript",
-    "react",
-    "vue",
-    "nuxt",
-    "nextjs",
-    "testing",
-    "performance",
-    "architecture",
-    "state-management",
-    "api-communication",
-    "build-and-deployment",
-    "html-css",
-    "security",
-    "ai",
-  ];
+  const collections = sections.map((section) => section.id);
 
   const entries: CollectionEntry<string>[] = [];
   for (const col of collections) {
@@ -46,22 +31,9 @@ const { entry } = Astro.props;
 const { data } = entry;
 const { Content } = await render(entry);
 
-const SECTION_LABELS: Record<string, string> = {
-  javascript: "JavaScript",
-  typescript: "TypeScript",
-  react: "React",
-  vue: "Vue",
-  nuxt: "Nuxt",
-  nextjs: "Next.js",
-  testing: "Testing",
-  performance: "Performance",
-  architecture: "Architecture",
-  "state-management": "State Management",
-  "api-communication": "API Communication",
-  "build-and-deployment": "Build & Deployment",
-  "html-css": "HTML & CSS",
-  security: "Security",
-};
+const SECTION_LABELS: Record<string, string> = Object.fromEntries(
+  sections.map((section) => [section.id, section.label]),
+);
 
 const sectionLabel = SECTION_LABELS[data.section] || data.section;
 

@@ -1,9 +1,9 @@
 ---
 title: "Pinia: управление состоянием без Vuex-бойлерплейта"
-section: state-management
+section: vue
 stacks: ["vue"]
 description: "Pinia — официальная библиотека состояния для Vue 3. defineStore, реактивные геттеры, прямые мутации и плагины вместо Vuex mutations/actions/commit."
-order: 5
+order: 20
 tags: ["pinia", "state-management", "defineStore", "vuex", "vue"]
 questions:
   - "Как Pinia устраняет бойлерплейт Vuex и чем структура стора отличается от Vuex-модуля"
@@ -929,7 +929,7 @@ DevTools предоставляет:
 
 ## Pinia vs Zustand
 
-Pinia и [Zustand](./zustand.md) решают одну задачу — управление клиентским состоянием — но для разных фреймворков. Если вы знаете один, второй освоить значительно проще.
+Pinia и [Zustand](../react/zustand.md) решают одну задачу — управление клиентским состоянием — но для разных фреймворков. Если вы знаете один, второй освоить значительно проще.
 
 ### Сравнительная таблица
 

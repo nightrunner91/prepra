@@ -3,23 +3,7 @@ import { withBase } from "../lib/urls";
 import { sections } from "../lib/sections";
 import type { MockInterviewQuestion } from "../lib/mock-interview/types";
 
-const COLLECTIONS = [
-  "javascript",
-  "typescript",
-  "html-css",
-  "react",
-  "vue",
-  "nuxt",
-  "nextjs",
-  "testing",
-  "performance",
-  "architecture",
-  "state-management",
-  "api-communication",
-  "build-and-deployment",
-  "security",
-  "ai",
-] as const;
+const COLLECTIONS = sections.map((section) => section.id);
 
 const SECTION_LABELS: Record<string, string> = Object.fromEntries(
   sections.map((s) => [s.id, s.label]),
@@ -29,7 +13,6 @@ const PURE_STACK_SECTIONS: Record<string, string[]> = {
   react: ['react'],
   nextjs: ['nextjs', 'react'],
   vue: ['vue'],
-  nuxt: ['nuxt', 'vue'],
 };
 
 type ArticleEntry = {

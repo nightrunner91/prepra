@@ -1,6 +1,6 @@
 # Vue
 
-Раздел охватывает Vue 3 с упором на Composition API и `<script setup>`: SFC, реактивность, жизненный цикл компонентов, Vue Router, обработку ошибок, оптимизацию производительности и экосистему.
+Раздел охватывает Vue 3 с упором на Composition API и `<script setup>`: SFC, реактивность, жизненный цикл компонентов, Vue Router, обработку ошибок, оптимизацию производительности и экосистему. Вторая половина раздела — Nuxt 3 как full-stack надстройка над Vue.
 
 ## Начни с базы
 
@@ -25,6 +25,26 @@
 - **[Доступные компоненты во Vue](./accessibility.md)** — focus management и focus trap для модалок на `<Teleport>`, `aria-live` и `<Transition>`, атрибут `inert`, клавиатурные паттерны tabs/dialog/combobox/disclosure, `prefers-reduced-motion` и тестирование доступности.
 - **[Веб-компоненты и UI-киты во Vue](./web-components-and-ui-kits.md)** — `defineCustomElement`, Shadow DOM, стили и слоты через границу, `provide`/`inject` ограничения, UI-киты (Element Plus, Vuetify, PrimeVue), дизайн-системы, поставка в другие фреймворки, тестирование и SSR.
 
+### Управление состоянием
+
+- **[Pinia](./pinia.md)** — официальный стейт-менеджер Vue 3: `defineStore`, геттеры, actions, плагины, `storeToRefs` и миграция с Vuex.
+- **[Vuex](./vuex.md)** — классический стейт-менеджер Vue: state, mutations, getters, actions, модули с namespaced и пошаговая миграция на Pinia.
+
+### Nuxt
+
+1. **[Основы Nuxt 3](./nuxt-fundamentals.md)** — создание проекта, структура папок, конфигурация `nuxt.config.ts`, dev/prod, отличия от Vue SPA.
+2. **[Файловая маршрутизация](./nuxt-file-based-routing.md)** — `pages/`, динамические и вложенные роуты, `routeParam`, 404, `useRoute`/`useRouter`.
+3. **[Режимы рендеринга](./nuxt-rendering-modes.md)** — SSR, SSG, CSR, ISR (`routeRules`, `prerender`, `ssr`), гидратация Vue-приложения.
+4. **[Data fetching](./nuxt-data-fetching.md)** — `useFetch`, `useAsyncData`, `$fetch`, обработка ошибок, отмена запросов, SSR-safe fetching.
+5. **[Состояние и SEO](./nuxt-state-and-seo.md)** — `useState`, Pinia в Nuxt, `useHead`, `useSeoMeta`, meta-теги и Open Graph.
+6. **[Composables и auto-imports](./nuxt-composables-and-auto-imports.md)** — встроенные composables (`useFetch`, `useAsyncData`, `useState`, `useHead`), создание своих, отличие от Vue composables.
+7. **[Серверная часть Nitro](./nuxt-nitro-server.md)** — `server/api/`, `server/routes/`, `server/middleware/`, обработчики, пресеты деплоя, кэширование.
+8. **[Жизненный цикл приложения](./nuxt-app-lifecycle.md)** — плагины, middleware, hooks (`app:created`, `page:start`, `page:finish`), порядок выполнения.
+9. **[Модули и экосистема](./nuxt-modules-ecosystem.md)** — официальные модули (`@nuxt/image`, `@nuxt/content`, `@nuxtjs/tailwindcss`), поиск и выбор сторонних, создание собственных через `defineNuxtModule`.
+10. **[Nuxt Layers](./nuxt-layers.md)** — переиспользование конфигурации, компонентов, composables и middleware между проектами.
+11. **[Обработка ошибок](./nuxt-error-handling.md)** — `error.vue`, `throwError`, `showError`, `vue:error` hook, логирование.
+12. **[Деплой Nuxt 3](../build-and-deployment/nuxt-deployment.md)** — стратегии сборки и развёртывания через Nitro.
+
 ## Не будет лишним
 
 - **[Options API vs Composition API](./options-vs-composition.md)** — история, различия, когда что использовать, миграция.
@@ -34,12 +54,8 @@
 
 Темы уровня Senior Vue / UI Engineer вынесены в соседние разделы:
 
-- **[Pinia и Vuex](../state-management/README.md)** — клиентское состояние приложения.
 - **[TypeScript во Vue](../typescript/vue.md)** — типизация пропсов, событий, слотов и composables.
 - **[Тестирование Vue](../testing/vue-testing-components.md)** — Vue Test Utils, composables, Pinia, роутер.
 - **[Безопасность Vue](../security/vue.md)** — `v-html`, экранирование, токены, XSS.
 - **[Дизайн-токены, темизация и Figma](../html-css/design-tokens-and-figma.md)** — дизайн-токены, Figma Variables и MCP, runtime theming на CSS custom properties, multi-brand.
 - **[Паттерны компонентов во Vue](../architecture/design-patterns-vue.md)** — композиция и файловая структура.
-- **[Nuxt](../nuxt/README.md)** — full-stack фреймворк на базе Vue.
-
-> Пресет мок-интервью «Vue-стек» собирает вопросы из разделов Vue, TypeScript, Хранилища и API.

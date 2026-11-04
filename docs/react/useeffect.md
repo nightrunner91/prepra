@@ -433,7 +433,7 @@ function ProductPage({ productId }) {
 }
 ```
 
-> **Примечание:** В 2026 году для загрузки данных рекомендуется использовать **TanStack Query** (ранее React Query) или хук `use()` из React 19 + `<Suspense>`, а не `useEffect` + `useState`. Подробнее: [TanStack Query](../state-management/tanstack-query.md) и [React `use()`](./use.md).
+> **Примечание:** В 2026 году для загрузки данных рекомендуется использовать **TanStack Query** (ранее React Query) или хук `use()` из React 19 + `<Suspense>`, а не `useEffect` + `useState`. Подробнее: [TanStack Query](./tanstack-query.md) и [React `use()`](./use.md).
 
 ### 4. Интеграция со сторонними библиотеками
 

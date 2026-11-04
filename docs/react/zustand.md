@@ -1,9 +1,9 @@
 ---
 title: "Zustand: стор без бойлерплейта, селекторы, middleware"
-section: state-management
+section: react
 stacks: ["react"]
 description: "Zustand: глобальное состояние без провайдеров и бойлерплейта. Селекторы, persist-middleware, DevTools и интеграция с TanStack Query."
-order: 3
+order: 19
 tags: ["zustand", "state-management", "selectors", "persist", "middleware"]
 questions:
   - "Как паттерн create(set, get) в Zustand устраняет необходимость в провайдерах и чем это отличается от Context или Redux"

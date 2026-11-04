@@ -13,7 +13,7 @@ interface Props {
 
 const {
   title,
-  description = "Учебная платформа для изучения React и JavaScript",
+  description = "Платформа для подготовки к техническому собеседованию: от фронтенда к Product Engineer",
   currentSection,
   showFooter = true,
 } = Astro.props;
@@ -41,7 +41,7 @@ const {
   </head>
   <body class="min-h-screen bg-canvas text-text">
     <div class="flex min-h-screen flex-col">
-      <Header currentSection={currentSection} />
+      <Header />
       <MobileNav currentSection={currentSection} />
 
       <main class="flex-1">

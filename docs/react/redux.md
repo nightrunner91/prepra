@@ -1,9 +1,9 @@
 ---
 title: "Redux Toolkit: предсказуемое состояние, слайсы, RTK Query"
-section: state-management
+section: react
 stacks: ["react"]
 description: "Redux Toolkit — современный способ писать Redux без бойлерплейта. createSlice, createAsyncThunk, RTK Query, Immer и правила иммутабельности."
-order: 2
+order: 20
 tags: ["redux", "redux-toolkit", "rtk", "rtk-query", "state-management", "flux"]
 questions:
   - "Как архитектура Flux в Redux (единый стор, чистые reducers, однонаправленный поток) обеспечивает предсказуемость и работу DevTools"
@@ -1345,6 +1345,6 @@ Redux Toolkit — современное лицо Redux. Он сохранил �
 **Когда рассмотреть альтернативы:**
 - Маленькое или среднее приложение — [Zustand](./zustand.md) даст ту же гибкость с минимумом кода
 - Основная работа с серверными данными — [TanStack Query](./tanstack-query.md) закроет 90% потребностей
-- Vue-проект — [Pinia](./pinia.md) предоставляет аналогичную модель, адаптированную под Vue-реактивность
+- Vue-проект — [Pinia](../vue/pinia.md) предоставляет аналогичную модель, адаптированную под Vue-реактивность
 
 **Рекомендуемый паттерн 2026:** Если начинаете новый React-проект без легаси, связка **Zustand (UI-состояние) + TanStack Query (серверные данные)** покроет большинство сценариев с меньшим кодом. Redux Toolkit остаётся оправданным выбором для крупных приложений, команд с уже наработанными Redux-паттернами и там, где ценится строгая архитектура и tooling.

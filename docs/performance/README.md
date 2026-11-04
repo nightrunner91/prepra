@@ -5,7 +5,7 @@
 ## Начни с базы
 
 1. **[Метрики производительности](./web-performance-metrics.md)** — Core Web Vitals, TTFB, FCP, LCP, CLS, инструменты.
-2. **[Методы рендеринга](./rendering-methods.md)** — CSR, SSR, SSG, ISR, SWR, Streaming, гидратация, CDN, HTTP-кэширование. Общие концепции; реализация во фреймворках — в разделах [Next.js](../nextjs/rendering-methods.md) и [Nuxt](../nuxt/rendering-modes.md).
+2. **[Методы рендеринга](./rendering-methods.md)** — CSR, SSR, SSG, ISR, SWR, Streaming, гидратация, CDN, HTTP-кэширование. Общие концепции; реализация во фреймворках — в разделах [Next.js](../nextjs/rendering-methods.md) и [Nuxt](../vue/nuxt-rendering-modes.md).
 3. **[Браузерная архитектура](./browser-architecture.md)** — процессы, потоки, Site Isolation, сетевой путь, TTFB.
 
 ## Углубись в детали

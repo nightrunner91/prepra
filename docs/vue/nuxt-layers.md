@@ -1,8 +1,8 @@
 ---
 title: "Nuxt Layers: переиспользование конфигурации и кода между проектами"
-section: nuxt
+section: vue
 description: "Как работают Nuxt Layers: переиспользование компонентов, composables, middleware, конфигурации и серверных роутов между проектами. Приоритеты, алиасы, монорепозитории и паттерны."
-order: 10
+order: 31
 tags: ["nuxt", "nuxt3", "layers", "monorepo", "reusability", "config"]
 questions:
   - "Что такое Nuxt Layers и зачем они нужны"

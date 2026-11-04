@@ -4,21 +4,6 @@ import { withBase } from "../../lib/urls";
 import SearchInput from "./SearchInput.astro";
 import { SearchModal } from "./SearchModal.tsx";
 import { ThemeToggle } from "./ThemeToggle.tsx";
-
-interface Props {
-  currentSection?: string;
-}
-
-const { currentSection } = Astro.props;
-
-const sections = [
-  { id: "javascript", label: "JavaScript" },
-  { id: "typescript", label: "TypeScript" },
-  { id: "react", label: "React" },
-  { id: "nextjs", label: "Next.js" },
-  { id: "testing", label: "Тестирование" },
-  { id: "html-css", label: "HTML и CSS" },
-];
 ---
 
 <header class="sticky top-0 z-50 border-b-[3px] border-border bg-canvas">

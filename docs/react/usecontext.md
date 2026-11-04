@@ -475,7 +475,7 @@ function App() {
 - Нет необходимости в middleware и DevTools.
 - Хотите избежать дополнительных зависимостей.
 
-Для сложных случаев используйте [Zustand](../state-management/zustand.md) или Redux Toolkit.
+Для сложных случаев используйте [Zustand](./zustand.md) или Redux Toolkit.
 
 ---
 

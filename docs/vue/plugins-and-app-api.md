@@ -451,7 +451,7 @@ import type { ToastService } from './toast';
 export const TOAST_KEY: InjectionKey<ToastService> = Symbol('toast');
 ```
 
-Теперь `inject(TOAST_KEY)` возвращает `ToastService | undefined`, а TypeScript подсказывает поля сервиса. В Nuxt аналогичная типизация глобальных значений плагинов (`$name`) делается через расширение `NuxtApp`, о чём — в статье [Жизненный цикл приложения в Nuxt 3](../nuxt/app-lifecycle.md).
+Теперь `inject(TOAST_KEY)` возвращает `ToastService | undefined`, а TypeScript подсказывает поля сервиса. В Nuxt аналогичная типизация глобальных значений плагинов (`$name`) делается через расширение `NuxtApp`, о чём — в статье [Жизненный цикл приложения в Nuxt 3](../vue/nuxt-app-lifecycle.md).
 
 ---
 

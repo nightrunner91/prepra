@@ -19,6 +19,12 @@
 - **[HOC](./hoc.md)** — композиция, проблемы, сравнение с хуками.
 - **[Конкурентные хуки](./concurrent-hooks.md)** — `useTransition`, `useDeferredValue`, приоритеты обновлений.
 
+### Состояние и данные
+
+- **[TanStack Query](./tanstack-query.md)** — серверное состояние: кэш, мутации, `staleTime`/`gcTime`, оптимистичные обновления.
+- **[Zustand](./zustand.md)** — лёгкий клиентский стор: селекторы, middleware, `persist`, миграция с Redux.
+- **[Redux Toolkit](./redux.md)** — `createSlice`, Immer, `createAsyncThunk`, RTK Query и миграция с классического Redux.
+
 ## Не будет лишним
 
 - **[React Fiber](./fiber.md)** — внутреннее устройство reconciler для глубокого понимания.

@@ -6,6 +6,7 @@ import rehypeMarkdownLinks from './src/lib/rehype-markdown-links.mjs';
 import rehypeWrapTables from './src/lib/rehype-wrap-tables.mjs';
 import rehypeAsciiDiagrams from './src/lib/rehype-ascii-diagrams.mjs';
 import rewriteRelativeLinks from './src/lib/rewrite-relative-links.mjs';
+import legacyRedirects from './src/lib/legacy-redirects.mjs';
 
 const BASE = '/prepra';
 
@@ -26,6 +27,7 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     rewriteRelativeLinks({ base: BASE }),
+    legacyRedirects({ base: BASE }),
   ],
   markdown: {
     rehypePlugins: [rehypeMarkdownLinks, rehypeWrapTables, rehypeAsciiDiagrams],

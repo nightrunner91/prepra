@@ -1,8 +1,8 @@
 ---
 title: "Обработка ошибок в Nuxt 3"
-section: nuxt
+section: vue
 description: "Обработка ошибок в Nuxt 3: error.vue, throwError, showError, vue:error hook, серверные ошибки, error boundary, SSR-safe обработка и логирование."
-order: 9
+order: 32
 tags: ["nuxt", "nuxt3", "error-handling", "error-page", "throwError", "showError", "ssr"]
 questions:
   - "Как создать кастомную страницу ошибки в Nuxt 3"

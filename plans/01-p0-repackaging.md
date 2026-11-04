@@ -139,8 +139,8 @@ practices, vue`
 |---|---|---|
 | `core` | Язык и браузер | javascript, typescript, html-css |
 | `frontend` | Фронтенд | react, nextjs |
-| `backend` | Бэкенд и данные | backend, databases, api-communication |
-| `infra` | Инфраструктура и качество | architecture, build-and-deployment, testing, performance, security |
+| `backend` | Бэкенд и данные | backend, databases |
+| `infra` | Инфраструктура и качество | architecture, api-communication, build-and-deployment, testing, performance, security |
 | `product` | Продукт и практики | ai, practices |
 | `legacy` | Второй стек | vue |
 
@@ -148,13 +148,14 @@ practices, vue`
 Значения `market` — из README плана §7: react 65.9, typescript 62.2,
 javascript 50.0, nextjs 31.7, vue 17.1, html-css 37.8, backend 34.1,
 databases 25.6, architecture 13.4, build-and-deployment 41.5,
-api-communication 34.1 (раздел удалён — учесть в потребителях),
+api-communication 34.1 (раздел остаётся, группа `infra`),
 ai 29.3, performance 22.0, testing 12.2, practices 43.9 (senior-сигнал,
 label «senior-сигнал»), security — без бейджа.
 
 > ⚠️ `api-communication` остаётся отдельным разделом (в целевой карте он есть,
 > id не меняется) — просто не переименовывается. Проверить, что он не потерян
-> при правке списков.
+> при правке списков. В P0 он входит в группу `infra`: иначе «Бэкенд и данные»
+> перестала бы быть пустой и в сайдбаре было бы 6 групп вместо 5.
 
 **4.2. `site/src/content/config.ts`** — убрать `nuxt` и `state-management` из
 enum/collections. `backend`, `databases`, `practices` добавить **в P1/P2**, не в P0:
@@ -203,17 +204,17 @@ enum/collections. `backend`, `databases`, `practices` добавить **в P1/P
 
 ## Критерии приёмки P0
 
-- [ ] `docs/nuxt/` и `docs/state-management/` отсутствуют
-- [ ] `docs/vue/` содержит 30 статей, `order` 1–32 без дублей
-- [ ] Redirect-заглушки отвечают на все 17 старых URL
-- [ ] `npm run build` зелёный
-- [ ] Проверка битых ссылок из README плана §6 — 0 находок
-- [ ] Сайдбар показывает 5 групп (без «Бэкенд и данные»), Vue внизу
-- [ ] Главная: React выше Vue, бейджи рынка видны
-- [ ] `ALL_SECTION_IDS` совпадает с `sections.ts` и `config.ts`
-- [ ] Пресет `react-fullstack` собирается, `vue-stack`/`nuxt-fullstack` удалены
-- [ ] README проекта не упоминает Nuxt как отдельный раздел
-- [ ] Мок-интервью: незавершённая сессия со старым `section` не падает
+- [x] `docs/nuxt/` и `docs/state-management/` отсутствуют
+- [x] `docs/vue/` содержит 32 статьи, `order` 1–32 без дублей
+- [x] Redirect-заглушки отвечают на все 17 старых URL
+- [x] `npm run build` зелёный
+- [x] Проверка битых ссылок из README плана §6 — 0 находок
+- [x] Сайдбар показывает 5 групп (без «Бэкенд и данные»), Vue внизу
+- [x] Главная: React выше Vue, бейджи рынка видны
+- [x] `ALL_SECTION_IDS` совпадает с `sections.ts` и `config.ts`
+- [x] Пресет `react-fullstack` собирается, `vue-stack`/`nuxt-fullstack` удалены
+- [x] README проекта не упоминает Nuxt как отдельный раздел
+- [x] Мок-интервью: незавершённая сессия со старым `section` не падает
       (проверить `storage.ts` — при неизвестном id раздел просто игнорируется)
 
 ## Риски

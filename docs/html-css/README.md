@@ -23,6 +23,7 @@
 - **[Изображения, шрифты и медиа](./images-and-fonts.md)** — `srcset`/`sizes`, `<picture>` и art direction, AVIF/WebP/JPEG/SVG, `aspect-ratio` и CLS, `loading`/`fetchpriority`/`preload`, `@font-face`, variable fonts, subsetting, `font-display`, fallback-метрики, responsive video, аудит LCP.
 - **[Дизайн-токены, темизация и Figma](./design-tokens-and-figma.md)** — уровни токенов primitive/semantic/component, Style Dictionary pipeline, Figma Variables и Tokens Studio, Figma MCP и Code Connect, runtime theming на CSS custom properties, multi-brand, компонентные токены в UI-китах, CI/CD и visual regression.
 - **[UI-киты, headless-компоненты и Storybook](./ui-kits-and-component-libraries.md)** — styled vs headless vs shadcn/ui, критерии выбора кита, доступность сложных компонентов, API компонентов (compound, controlled/uncontrolled, `asChild`, cva), `<dialog>` и Popover API, Storybook, иконки, публикация и тестирование библиотеки. Ключевая статья для UI Engineer.
+- **[Клиентские хранилища](./client-storage.md)** — `localStorage`, `sessionStorage`, cookies, IndexedDB, ограничения и защита от XSS/CSRF.
 
 ## Не будет лишним
 

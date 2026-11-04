@@ -1,22 +1,7 @@
 import type { InterviewPreset } from './types';
+import { ALL_SECTION_IDS } from '../sections';
 
-export const ALL_SECTION_IDS = [
-  'javascript',
-  'typescript',
-  'html-css',
-  'react',
-  'vue',
-  'nuxt',
-  'nextjs',
-  'testing',
-  'performance',
-  'architecture',
-  'state-management',
-  'api-communication',
-  'build-and-deployment',
-  'security',
-  'ai',
-] as const;
+export { ALL_SECTION_IDS };
 
 export const PRESETS: InterviewPreset[] = [
   {
@@ -29,19 +14,18 @@ export const PRESETS: InterviewPreset[] = [
   {
     id: 'react-stack',
     title: 'React-стек',
-    description: 'React, TypeScript, хранилища и API',
-    sections: ['react', 'typescript', 'state-management', 'api-communication'],
+    description: 'React, TypeScript и API',
+    sections: ['react', 'typescript', 'api-communication'],
     stacks: ['react'],
     mainSection: 'react',
     count: 50,
   },
   {
-    id: 'vue-stack',
-    title: 'Vue-стек',
-    description: 'Vue, TypeScript, хранилища и API',
-    sections: ['vue', 'typescript', 'state-management', 'api-communication'],
-    stacks: ['vue'],
-    mainSection: 'vue',
+    id: 'react-fullstack',
+    title: 'React Full-stack',
+    description: 'React, Next.js, API, CI/CD и безопасность',
+    sections: ['react', 'nextjs', 'api-communication', 'build-and-deployment', 'security'],
+    mainSection: 'react',
     count: 50,
   },
   {
@@ -51,15 +35,6 @@ export const PRESETS: InterviewPreset[] = [
     sections: ['nextjs', 'api-communication', 'build-and-deployment', 'security'],
     stacks: ['nextjs'],
     mainSection: 'nextjs',
-    count: 50,
-  },
-  {
-    id: 'nuxt-fullstack',
-    title: 'Nuxt Full-stack',
-    description: 'Nuxt, API, CI/CD и безопасность',
-    sections: ['nuxt', 'api-communication', 'build-and-deployment', 'security'],
-    stacks: ['nuxt'],
-    mainSection: 'nuxt',
     count: 50,
   },
   {
@@ -78,8 +53,8 @@ export const PRESETS: InterviewPreset[] = [
   },
   {
     id: 'architecture',
-    title: 'Проектирование',
-    description: 'Паттерны, архитектура и деплой',
+    title: 'Архитектура и System Design',
+    description: 'System Design, паттерны, архитектура и деплой',
     sections: ['architecture', 'build-and-deployment'],
     count: 30,
   },

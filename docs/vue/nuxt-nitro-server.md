@@ -1,8 +1,8 @@
 ---
 title: "Серверная часть Nuxt 3: Nitro, API-роуты, middleware, кэширование и деплой"
-section: nuxt
+section: vue
 description: "Как устроена серверная часть Nuxt 3 на базе Nitro: server/api/, server/routes/, server/middleware/, обработчики defineEventHandler, работа с запросом и ответом, кэширование, пресеты деплоя и лучшие практики."
-order: 6
+order: 28
 tags: ["nuxt", "nuxt3", "nitro", "server", "api", "middleware", "ssr", "deployment", "cache"]
 questions:
   - "Что такое Nitro и какова его роль в Nuxt 3"

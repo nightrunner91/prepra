@@ -1,8 +1,8 @@
 ---
 title: "Основы Nuxt 3: структура, конфигурация и отличия от Vue SPA"
-section: nuxt
+section: vue
 description: "Фундамент Nuxt 3 для подготовки к собеседованиям: создание проекта, структура папок, nuxt.config.ts, dev/prod окружения, auto-imports, рендеринг и ключевые отличия от обычного Vue SPA."
-order: 1
+order: 22
 tags: ["nuxt", "nuxt3", "vue", "ssr", "ssg", "csr", "configuration", "project-structure", "auto-imports"]
 questions:
   - "Что такое Nuxt 3 и зачем он нужен поверх Vue 3"

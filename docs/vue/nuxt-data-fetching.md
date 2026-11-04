@@ -1,8 +1,8 @@
 ---
 title: "Data fetching в Nuxt: useFetch, useAsyncData и $fetch"
-section: nuxt
+section: vue
 description: "Пошаговый разбор data fetching в Nuxt: от проблемы двойного запроса до useFetch, useAsyncData, $fetch, ключей, ошибок, отмены запросов, cookies и кэширования."
-order: 7
+order: 25
 tags: ["data-fetching", "useFetch", "useAsyncData", "$fetch", "ssr", "caching"]
 questions:
   - "Чем useFetch отличается от useAsyncData + $fetch и когда что выбирать"
@@ -626,7 +626,7 @@ export default defineCachedEventHandler(
 
 ### Осторожно с приватными данными
 
-Серверный кэш общий для всех пользователей. Если закэшировать ответ, зависящий от пользователя (его корзину, баланс, профиль), чужие данные утекут. Для таких роутов либо не включайте кэш, либо задавайте корректный ключ через `getKey` и добавляйте в ответ `Cache-Control: private`. Подробнее про серверную часть — в статье [Серверная часть Nitro](./nitro-server.md).
+Серверный кэш общий для всех пользователей. Если закэшировать ответ, зависящий от пользователя (его корзину, баланс, профиль), чужие данные утекут. Для таких роутов либо не включайте кэш, либо задавайте корректный ключ через `getKey` и добавляйте в ответ `Cache-Control: private`. Подробнее про серверную часть — в статье [Серверная часть Nitro](./nuxt-nitro-server.md).
 
 > **Запомнить:** на клиенте данные живут по ключу (`useNuxtData`, `getCachedData`, `refreshNuxtData`, `clearNuxtData`), на сервере — в Nitro (`routeRules`, `defineCachedEventHandler`); приватные данные кэшировать общим кэшем нельзя.
 

@@ -21,7 +21,7 @@ function walk(dir, acc = []) {
  * Rewrites docs-relative article links into base-prefixed absolute routes.
  *
  * Authors link between articles the way the files sit in the repo, e.g. from
- * `docs/vue/composition-api.md` to `../state-management/pinia.md`. On the built
+ * `docs/vue/pinia.md` to `../react/zustand.md`. On the built
  * site an article lives at `/{section}/{slug}/`, so those relative paths must be
  * resolved against the section root (`/{section}/`) rather than the page URL.
  * Rehype plugins cannot see the source file in Astro content collections, so the

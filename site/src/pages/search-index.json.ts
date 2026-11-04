@@ -15,23 +15,7 @@ type ArticleEntry = {
   };
 };
 
-const COLLECTIONS = [
-  "javascript",
-  "typescript",
-  "html-css",
-  "react",
-  "vue",
-  "nuxt",
-  "nextjs",
-  "testing",
-  "performance",
-  "architecture",
-  "state-management",
-  "api-communication",
-  "build-and-deployment",
-  "security",
-  "ai",
-] as const;
+const COLLECTIONS = sections.map((section) => section.id);
 
 const SECTION_LABELS: Record<string, string> = Object.fromEntries(
   sections.map((s) => [s.id, s.label]),

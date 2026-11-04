@@ -6,6 +6,7 @@ import Sidebar from "../../components/layout/Sidebar.astro";
 import ArticleGroup from "../../components/content/ArticleGroup.astro";
 import Cheatsheet from "../../components/content/Cheatsheet.astro";
 import { withBase } from "../../lib/urls";
+import { sections as sectionRegistry } from "../../lib/sections";
 import {
   normalizeSlug,
   parseSectionDescription,
@@ -14,96 +15,36 @@ import {
 import { parseSectionCheatsheet } from "../../lib/section-cheatsheet";
 
 export async function getStaticPaths() {
-  const sections = [
-    {
-      id: "javascript",
-      label: "JavaScript",
-      description:
-        "Основы JavaScript, ES6+, замыкания, прототипы, асинхронность и многое другое",
-    },
-    {
-      id: "typescript",
-      label: "TypeScript",
-      description:
-        "Типизация, дженерики, утилитарные типы, декораторы и лучшие практики",
-    },
-    {
-      id: "react",
-      label: "React",
-      description:
-        "JSX, хуки, паттерны, оптимизация производительности, архитектура компонентов",
-    },
-    {
-      id: "nextjs",
-      label: "Next.js",
-      description:
-        "Роутинг, серверные компоненты, кэширование, деплой и оптимизация",
-    },
-    {
-      id: "vue",
-      label: "Vue",
-      description:
-        "SFC, Composition API, реактивность, Vue Router, TypeScript и экосистема",
-    },
-    {
-      id: "nuxt",
-      label: "Nuxt",
-      description: "Файловая маршрутизация, Nitro, composables, роуты и деплой",
-    },
-    {
-      id: "testing",
-      label: "Тестирование",
-      description:
-        "Unit, интеграционное и E2E тестирование, мокирование, визуальное тестирование",
-    },
-    {
-      id: "performance",
-      label: "Производительность",
-      description:
-        "Метрики, виртуализация, hydration, web workers, архитектура браузера",
-    },
-    {
-      id: "architecture",
-      label: "Архитектура",
-      description:
-        "Паттерны проектирования, SOLID, DRY/KISS/YAGNI, BFF, MVC/MVVM",
-    },
-    {
-      id: "state-management",
-      label: "Хранилища",
-      description:
-        "Redux, Zustand, TanStack Query, Pinia, клиентские хранилища данных",
-    },
-    {
-      id: "api-communication",
-      label: "Работа с API",
-      description:
-        "REST, GraphQL, WebSocket, HTTP-клиенты, long polling, коды ответов",
-    },
-    {
-      id: "build-and-deployment",
-      label: "Сборка и деплой",
-      description: "Сборка бандлов, CI/CD, деплой платформ, стратегии деплоя",
-    },
-    {
-      id: "html-css",
-      label: "HTML и CSS",
-      description:
-        "Семантика, CSS-методологии, flexbox, grid, анимации, адаптивность",
-    },
-    {
-      id: "security",
-      label: "Безопасность",
-      description:
-        "XSS, CSRF, CSP, аутентификация, HTTP-заголовки, supply chain",
-    },
-    {
-      id: "ai",
-      label: "AI и LLM",
-      description:
-        "Ментальная модель LLM, паттерны промптинга, агенты, RAG, streaming UI и безопасность",
-    },
-  ];
+  const sectionDescriptions: Record<string, string> = {
+    javascript:
+      "Основы JavaScript, ES6+, замыкания, прототипы, асинхронность и многое другое",
+    typescript:
+      "Типизация, дженерики, утилитарные типы, декораторы и лучшие практики",
+    "html-css":
+      "Семантика, CSS-методологии, flexbox, grid, анимации, доступность и браузерный рендеринг",
+    react:
+      "JSX, хуки, паттерны, состояние, оптимизация производительности и архитектура компонентов",
+    nextjs: "Роутинг, серверные компоненты, кэширование, деплой и оптимизация",
+    architecture:
+      "Паттерны проектирования, SOLID, BFF, System Design и проектирование систем",
+    "api-communication":
+      "REST, GraphQL, WebSocket, HTTP-клиенты, long polling, коды ответов",
+    "build-and-deployment":
+      "Сборка бандлов, CI/CD, контейнеры, деплой-платформы и стратегии выката",
+    testing:
+      "Unit, интеграционное и E2E тестирование, мокирование, визуальное тестирование",
+    performance:
+      "Метрики, виртуализация, hydration, web workers, архитектура браузера",
+    security: "XSS, CSRF, CSP, аутентификация, HTTP-заголовки, supply chain",
+    ai: "Ментальная модель LLM, паттерны промптинга, агенты, RAG, streaming UI и безопасность",
+    vue: "Vue 3, Composition API, реактивность, Pinia, Vue Router, Nuxt 3 и серверный рендеринг",
+  };
+
+  const sections = sectionRegistry.map((s) => ({
+    id: s.id,
+    label: s.label,
+    description: sectionDescriptions[s.id] ?? "",
+  }));
 
   return sections.map((s) => ({
     params: { section: s.id },
