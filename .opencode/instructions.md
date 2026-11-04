@@ -16,3 +16,12 @@ If visual verification is genuinely needed, ask the user for permission first. D
 ## Temporary artifacts location
 
 When browser_* tools or other MCP servers generate artifacts (logs, snapshots, screenshots, downloads), save them under `.tmp/playwright-mcp/` or another appropriate subdirectory of `.tmp/` instead of the project root. Do not leave transient files in the workspace root. Both `.playwright-mcp/` and `.tmp/` are ignored by Git.
+
+## Project plan
+
+The PrePra rework plan lives in `.opencode/plans/prepra/`. Read its `README.md`
+before any structural or content work. Work phase by phase (P0–P4); each phase
+file is self-contained and must be kept up to date as work completes.
+
+Articles in `docs/` are normalized with the `article-editor` skill (structure +
+focus in one protocol). Do not use separate format/focus passes.
