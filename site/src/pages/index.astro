@@ -1,16 +1,14 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Hero from "../components/content/Hero.astro";
-import SectionsGrid from "../components/content/SectionsGrid.astro";
-import HowItWorks from "../components/content/HowItWorks.astro";
-import MockInterviewPromo from "../components/content/MockInterviewPromo.astro";
-import PracticePromo from "../components/content/PracticePromo.astro";
-import DailyQuestion from "../components/content/DailyQuestion.astro";
+import TheoryPanel from "../components/content/TheoryPanel.astro";
+import PracticePanel from "../components/content/PracticePanel.astro";
+import InterviewPanel from "../components/content/InterviewPanel.astro";
 import FAQ from "../components/content/FAQ.astro";
-import Footer from "../components/layout/Footer.astro";
 import { sections } from "../lib/sections";
 import { withBase } from "../lib/urls";
+import { TASKS, TASKS_BY_TOPIC, TOPICS, getCodeTaskCount } from "../lib/practice";
+import { PRESETS } from "../lib/mock-interview/presets";
 
 const sectionDescriptions: Record<string, string> = {
   javascript: "Основы JavaScript, ES6+, замыкания, прототипы, асинхронность",
@@ -108,7 +106,15 @@ const dailyQuestion =
     ? allQuestions[dayOfYear % allQuestions.length]
     : null;
 
-const interviewUrl = withBase("/interview");
+const practiceTopics = TOPICS.map((topic) => ({
+  id: topic.id,
+  label: topic.label,
+  description: topic.description,
+  color: topic.color,
+  total: TASKS_BY_TOPIC[topic.id].length,
+}));
+
+const codeTaskCount = getCodeTaskCount();
 
 const faqItems = [
   {
@@ -124,15 +130,15 @@ const faqItems = [
   {
     question: "Как лучше использовать prepra?",
     answer:
-      `<p>Советую начать с базы - <a href='/prepra/javascript'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд. У каждой статьи есть практическая часть для самопроверки - не пропускай её. Закрепляй темы в <a href='${withBase("/practice")}'>практикуме</a>, а когда будешь готов - пройди первое <a href='${interviewUrl}'>мок-интервью</a>.</p>`,
+      `<p>Советую начать с базы - <a href='${withBase("/javascript")}'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд. У каждой статьи есть практическая часть для самопроверки - не пропускай её. Закрепляй темы во <a href='#practice'>практикуме</a>, а когда будешь готов - пройди первое <a href='#interview'>мок-интервью</a>.</p>`,
   },
   {
     question: "Что такое мок-интервью?",
-    answer: `<p>Это режим самопроверки, в котором вопросы собираются из разных разделов сразу — как на настоящем техническом интервью. Ты отвечаешь вслух, оцениваешь себя после каждого вопроса, а в конце получаешь таблицу по разделам и ссылку на самую слабую тему. Доступно на <a href='${interviewUrl}'>отдельной странице</a> без регистрации.</p>`,
+    answer: `<p>Это режим самопроверки, в котором вопросы собираются из разных разделов сразу — как на настоящем техническом интервью. Ты отвечаешь вслух, оцениваешь себя после каждого вопроса, а в конце получаешь таблицу по разделам и ссылку на самую слабую тему. Открывается во вкладке <a href='#interview'>«Интервью»</a> без регистрации.</p>`,
   },
   {
     question: "Чем практикум отличается от мок-интервью?",
-    answer: `<p>Практикум — это банк задач с проверкой: «что выведет код», выбор ответа и задачи с автотестами. Мок-интервью — режим устной самопроверки, где ты отвечаешь вслух и сам оцениваешь ответ. Сначала закрепляй базу в <a href='${withBase("/practice")}'>практикуме</a>, затем проверяй себя на <a href='${interviewUrl}'>мок-интервью</a>.</p>`,
+    answer: `<p>Практикум — это банк задач с проверкой: «что выведет код», выбор ответа и задачи с автотестами. Мок-интервью — режим устной самопроверки, где ты отвечаешь вслух и сам оцениваешь ответ. Сначала закрепляй базу во <a href='#practice'>вкладке «Практика»</a>, затем проверяй себя на <a href='#interview'>«Интервью»</a>.</p>`,
   },
   {
     question: "Какие темы покрывают материалы prepra?",
@@ -148,45 +154,42 @@ const faqItems = [
 ---
 
 <BaseLayout title="Главная">
-  <Hero />
+  <h1 class="sr-only">
+    Prepra — интерактивная платформа для подготовки к техническим собеседованиям
+  </h1>
 
-  <div class="mx-auto px-6 pb-12 lg:pb-16 lg:px-12 max-w-[1600px]">
-    <SectionsGrid
+  <script is:inline>
+    (() => {
+      const ids = ["theory", "practice", "interview"];
+      const hash = window.location.hash.replace("#", "");
+      const active = ids.indexOf(hash) >= 0 ? hash : "theory";
+      document.documentElement.setAttribute("data-tabs", "on");
+      document.documentElement.setAttribute("data-tab", active);
+    })();
+  </script>
+
+  <div class="mx-auto max-w-[1600px] px-6 pb-12 lg:px-12 lg:pb-16">
+    <TheoryPanel
       sections={sectionStats}
       totalArticles={totalArticles}
       totalQuestions={totalQuestions}
+      dailyQuestion={dailyQuestion}
     />
 
-    <HowItWorks />
+    <PracticePanel
+      taskCount={TASKS.length}
+      topicCount={TOPICS.length}
+      codeTaskCount={codeTaskCount}
+      topics={practiceTopics}
+    />
 
-    <PracticePromo />
+    <InterviewPanel presets={PRESETS} />
 
-    <MockInterviewPromo />
-
-    {dailyQuestion && <DailyQuestion question={dailyQuestion} />}
-
-    <div class="mt-20 lg:mt-24 mb-12">
+    <div class="mt-20 mb-12 lg:mt-24">
       <FAQ items={faqItems} />
     </div>
   </div>
-
-  <Footer slot="footer" />
 </BaseLayout>
-
-<style>
-  .animate-fade-in {
-    opacity: 0;
-    transform: translate(4px, 4px);
-    transition:
-      opacity 300ms ease,
-      transform 300ms ease;
-  }
-
-  .animate-fade-in.is-visible {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-</style>
 
 <script>
   const observer = new IntersectionObserver(
@@ -201,7 +204,20 @@ const faqItems = [
     { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
   );
 
-  document
-    .querySelectorAll(".animate-fade-in")
-    .forEach((el) => observer.observe(el));
+  function observeWithin(root: ParentNode) {
+    root
+      .querySelectorAll<HTMLElement>(".animate-fade-in:not(.is-visible)")
+      .forEach((el) => {
+        observer.unobserve(el);
+        observer.observe(el);
+      });
+  }
+
+  observeWithin(document);
+
+  document.addEventListener("tab:change", (event) => {
+    const detail = (event as CustomEvent<{ panel?: HTMLElement }>).detail;
+    if (!detail?.panel) return;
+    window.requestAnimationFrame(() => observeWithin(detail.panel!));
+  });
 </script>

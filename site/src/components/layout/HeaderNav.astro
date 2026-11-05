@@ -1,0 +1,134 @@
+---
+import { withBase } from "../../lib/urls";
+
+const tabs = [
+  { id: "theory", label: "Теория" },
+  { id: "practice", label: "Практика" },
+  { id: "interview", label: "Интервью" },
+] as const;
+
+type TabId = (typeof tabs)[number]["id"];
+
+const pathname = Astro.url.pathname.replace(/\/+$/, "");
+const activePage: TabId | undefined = pathname.endsWith("/practice")
+  ? "practice"
+  : pathname.endsWith("/interview")
+    ? "interview"
+    : undefined;
+---
+
+<nav
+  data-header-nav
+  aria-label="Разделы платформы"
+  class="hidden items-center gap-5 lg:flex"
+>
+  {
+    tabs.map((tab) => (
+      <a
+        id={`tab-${tab.id}`}
+        href={`${withBase("/")}#${tab.id}`}
+        data-top-tab={tab.id}
+        aria-current={activePage === tab.id ? "page" : undefined}
+        class="border-b-2 border-transparent pb-0.5 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary transition-colors hover:text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-[current=page]:border-accent aria-[current=page]:text-text"
+      >
+        {tab.label}
+      </a>
+    ))
+  }
+</nav>
+
+<style is:global>
+  /* Активный пункт меню красим до запуска JS, чтобы не было вспышки. */
+  html[data-tab="theory"] [data-header-nav] [data-top-tab="theory"],
+  html[data-tab="practice"] [data-header-nav] [data-top-tab="practice"],
+  html[data-tab="interview"] [data-header-nav] [data-top-tab="interview"] {
+    border-color: var(--color-accent);
+    color: var(--color-text);
+  }
+</style>
+
+<script>
+  const TAB_IDS = ["theory", "practice", "interview"] as const;
+  type TabId = (typeof TAB_IDS)[number];
+
+  function isTabId(value: string): value is TabId {
+    return (TAB_IDS as readonly string[]).includes(value);
+  }
+
+  const root = document.documentElement;
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("[data-top-tab]"),
+  );
+  const panels = new Map<TabId, HTMLElement>();
+
+  if (root.getAttribute("data-tabs") === "on") {
+    TAB_IDS.forEach((id) => {
+      const panel = document.getElementById(id);
+      if (panel) panels.set(id, panel);
+    });
+  }
+
+  if (panels.size > 0) {
+    function syncState(id: TabId) {
+      root.setAttribute("data-tab", id);
+
+      links.forEach((link) => {
+        if (link.dataset.topTab === id) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+
+      panels.forEach((panel, panelId) => {
+        panel.hidden = panelId !== id;
+      });
+
+      const panel = panels.get(id);
+      if (panel) {
+        document.dispatchEvent(
+          new CustomEvent("tab:change", { detail: { id, panel } }),
+        );
+      }
+    }
+
+    function activate(
+      id: TabId,
+      options: { hash?: boolean; scroll?: boolean } = {},
+    ) {
+      if (root.getAttribute("data-tab") === id) return;
+      syncState(id);
+
+      if (options.hash !== false) {
+        const url = new URL(window.location.href);
+        url.hash = id;
+        window.history.replaceState(null, "", url);
+      }
+
+      if (options.scroll) {
+        const panel = panels.get(id);
+        const offset = 56;
+        if (panel && panel.getBoundingClientRect().top < offset) {
+          panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }
+
+    links.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const id = link.dataset.topTab;
+        if (!id || !isTabId(id) || !panels.has(id)) return;
+        event.preventDefault();
+        activate(id, { scroll: true });
+      });
+    });
+
+    window.addEventListener("hashchange", () => {
+      const id = window.location.hash.replace("#", "");
+      if (isTabId(id)) activate(id, { hash: false, scroll: true });
+    });
+
+    const initial = root.getAttribute("data-tab") ?? "theory";
+    syncState(isTabId(initial) ? initial : "theory");
+  }
+</script>

@@ -1,13 +1,32 @@
 ---
 import { sections } from "../../lib/sections";
 import { withBase } from "../../lib/urls";
-import { Barbell, Microphone, X } from "@phosphor-icons/react";
+import { topLevelCounts } from "../../lib/top-level-counts";
+import {
+  Barbell,
+  BookOpen,
+  Microphone,
+  X,
+} from "@phosphor-icons/react";
 
 interface Props {
   currentSection?: string;
 }
 
 const { currentSection } = Astro.props;
+
+const tabs = [
+  { id: "theory", label: "Теория", icon: BookOpen },
+  { id: "practice", label: "Практика", icon: Barbell },
+  { id: "interview", label: "Интервью", icon: Microphone },
+] as const;
+
+const pathname = Astro.url.pathname.replace(/\/+$/, "");
+const activeTab = pathname.endsWith("/practice")
+  ? "practice"
+  : pathname.endsWith("/interview")
+    ? "interview"
+    : undefined;
 ---
 
 <div
@@ -31,6 +50,30 @@ const { currentSection } = Astro.props;
   </div>
   <nav class="flex h-[calc(100vh-3.5rem)] flex-col overflow-y-auto py-4 px-3">
     <div class="space-y-0">
+      {
+        tabs.map((tab) => {
+          const Icon = tab.icon;
+          return (
+            <a
+              href={`${withBase("/")}#${tab.id}`}
+              data-top-tab={tab.id}
+              aria-current={activeTab === tab.id ? "page" : undefined}
+              class="flex items-center gap-2 border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide text-text-secondary transition-colors hover:bg-surface-alt hover:text-text aria-[current=page]:bg-text aria-[current=page]:text-canvas"
+            >
+              <Icon size={16} weight="bold" class="shrink-0" />
+              <span>{tab.label}</span>
+              <span
+                aria-hidden="true"
+                class="ml-auto text-[10px] tabular-nums opacity-50"
+              >
+                {topLevelCounts[tab.id]}
+              </span>
+            </a>
+          );
+        })
+      }
+    </div>
+    <div class="mt-4 space-y-0">
       {
         sections.map((s) => {
           const Icon = s.icon;
@@ -100,4 +143,9 @@ const { currentSection } = Astro.props;
   btn?.addEventListener("click", openDrawer);
   closeBtn?.addEventListener("click", closeDrawer);
   overlay?.addEventListener("click", closeDrawer);
+
+  // Любая ссылка в меню закрывает шторку (переход или переключение таба).
+  drawer?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeDrawer);
+  });
 </script>

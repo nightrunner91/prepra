@@ -91,6 +91,16 @@ function questionWord(n: number): string {
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'вопроса';
   return 'вопросов';
 }
+
+function configFromPreset(preset: InterviewPreset): InterviewConfig {
+  return {
+    presetId: preset.id,
+    sections: preset.sections,
+    stacks: preset.stacks,
+    count: preset.count,
+    mainSection: preset.mainSection ?? null,
+  };
+}
 const STATUSES: AnswerStatus[] = ['good', 'unsure', 'failed', 'skipped'];
 const RATE_STATUSES: AnswerStatus[] = ['good', 'unsure', 'failed'];
 
@@ -151,7 +161,17 @@ export function MockInterview() {
     entry: InterviewHistoryEntry;
     questions: MockInterviewQuestion[];
   } | null>(null);
-  const [selectedPresetId, setSelectedPresetId] = useState<string | null>(null);
+  const [selectedPresetId, setSelectedPresetId] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    const id = new URLSearchParams(window.location.search).get("preset");
+    return id && PRESETS.some((preset) => preset.id === id) ? id : null;
+  });
+  /** Прямой переход с главной (?preset=…): запускаем без экрана выбора. */
+  const [autoStartPending, setAutoStartPending] = useState(() => {
+    if (typeof window === "undefined" || session) return false;
+    const id = new URLSearchParams(window.location.search).get("preset");
+    return Boolean(id && PRESETS.some((preset) => preset.id === id));
+  });
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [selectedStack, setSelectedStack] = useState<string>('');
   const [length, setLength] = useState(30);
@@ -161,6 +181,40 @@ export function MockInterview() {
 
   const lockRef = useRef(false);
   const pendingRetakeRef = useRef<InterviewConfig | null>(null);
+  const autoStartRef = useRef<InterviewConfig | null>(null);
+  const deepLinkRef = useRef(false);
+
+  useEffect(() => {
+    if (deepLinkRef.current) return;
+    deepLinkRef.current = true;
+
+    const params = new URLSearchParams(window.location.search);
+    const resumeRequested = params.get("resume") === "1";
+    if (
+      resumeRequested &&
+      session &&
+      session.currentIndex < session.questions.length
+    ) {
+      setPhase("active");
+    }
+
+    // ?preset=… приходит с главной: стартуем сразу, без экрана выбора.
+    const presetId = params.get("preset");
+    const preset = presetId
+      ? PRESETS.find((item) => item.id === presetId)
+      : undefined;
+    if (preset && !session) {
+      autoStartRef.current = configFromPreset(preset);
+    }
+
+    if (params.has("preset") || params.has("custom") || params.has("resume")) {
+      const url = new URL(window.location.href);
+      ["preset", "custom", "resume"].forEach((key) =>
+        url.searchParams.delete(key),
+      );
+      window.history.replaceState({}, "", url);
+    }
+  }, [session]);
 
   const startWithIndex = useCallback(
     (data: MockInterviewQuestion[], config: InterviewConfig) => {
@@ -198,9 +252,20 @@ export function MockInterview() {
         if (retake) {
           pendingRetakeRef.current = null;
           startWithIndex(data, retake);
+          return;
+        }
+        const auto = autoStartRef.current;
+        if (auto) {
+          autoStartRef.current = null;
+          setAutoStartPending(false);
+          startWithIndex(data, auto);
         }
       })
-      .catch(() => setIndexError(true))
+      .catch(() => {
+        autoStartRef.current = null;
+        setAutoStartPending(false);
+        setIndexError(true);
+      })
       .finally(() => setIndexLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, index, indexLoading]);
@@ -414,7 +479,9 @@ export function MockInterview() {
 
   return (
     <div className="w-full">
-      {phase === 'start' && (
+      {phase === 'start' && autoStartPending && <StartingView />}
+
+      {phase === 'start' && !autoStartPending && (
         <StartView
           index={index}
           loading={indexLoading}
@@ -463,6 +530,20 @@ export function MockInterview() {
           onRetake={retake}
         />
       )}
+    </div>
+  );
+}
+
+function StartingView() {
+  return (
+    <div className="flex min-h-[320px] flex-col items-center justify-center gap-4 border-2 border-border bg-surface p-8 text-center">
+      <Microphone size={32} weight="bold" className="text-pale-blue-text" />
+      <p className="font-mono text-sm font-extrabold uppercase tracking-wider text-text">
+        Запускаем интервью…
+      </p>
+      <p className="font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
+        Подбираем вопросы под выбранный сет
+      </p>
     </div>
   );
 }
@@ -518,7 +599,10 @@ function StartView({
   onResume,
   onReset,
 }: StartViewProps) {
-  const [customOpen, setCustomOpen] = useState(false);
+  const [customOpen, setCustomOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return new URLSearchParams(window.location.search).get("custom") === "1";
+  });
   const customDisabled = presetId !== null;
   const presetsDisabled = sections.length > 0;
   const hasSelection = presetId !== null || sections.length > 0 || stack !== '';

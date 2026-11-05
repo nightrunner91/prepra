@@ -1,0 +1,59 @@
+---
+import type { Icon } from "@dev.icons/react";
+import PanelHeader from "./PanelHeader.astro";
+import SectionsGrid from "./SectionsGrid.astro";
+import ProgressBlock from "./ProgressBlock.astro";
+import DailyQuestion from "./DailyQuestion.astro";
+import { plural } from "../../lib/plural";
+
+interface SectionItem {
+  id: string;
+  label: string;
+  icon?: Icon;
+  description: string;
+  color: "red" | "blue" | "green" | "yellow" | "neutral";
+  articleCount: number;
+  questionCount: number;
+}
+
+interface DailyQuestionItem {
+  text: string;
+  sectionId: string;
+  sectionLabel: string;
+  articleSlug: string;
+}
+
+interface Props {
+  sections: SectionItem[];
+  totalArticles: number;
+  totalQuestions: number;
+  dailyQuestion: DailyQuestionItem | null;
+}
+
+const { sections, totalArticles, totalQuestions, dailyQuestion } = Astro.props;
+---
+
+<section
+  id="theory"
+  role="tabpanel"
+  aria-labelledby="tab-theory"
+  tabindex="0"
+  data-tab-panel="theory"
+  class="scroll-mt-20 pt-6 focus:outline-none lg:scroll-mt-36 lg:pt-8"
+>
+  <PanelHeader
+    title="Теория"
+    subtitle={`${sections.length} ${plural(sections.length, "раздел", "раздела", "разделов")} · ${totalArticles} ${plural(totalArticles, "статья", "статьи", "статей")} · ${totalQuestions} ${plural(totalQuestions, "вопрос", "вопроса", "вопросов")}`}
+    description="Статьи идут от основ JavaScript и браузера к React, Next.js, System Design и инфраструктуре. В конце каждой статьи — вопросы для самопроверки."
+  />
+
+  <SectionsGrid sections={sections} />
+
+  <ProgressBlock
+    totalArticles={totalArticles}
+    totalQuestions={totalQuestions}
+    sectionsCount={sections.length}
+  />
+
+  {dailyQuestion && <DailyQuestion question={dailyQuestion} />}
+</section>

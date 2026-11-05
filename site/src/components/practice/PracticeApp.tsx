@@ -74,11 +74,48 @@ export function PracticeApp() {
     progressRef.current = loaded;
     setProgress(loaded);
 
-    const id = new URLSearchParams(window.location.search).get("task");
+    const params = new URLSearchParams(window.location.search);
+
+    const topicParam = params.get("topic");
+    if (topicParam && TOPICS.some((item) => item.id === topicParam)) {
+      setTopic(topicParam as TopicFilter);
+    }
+
+    const statusParam = params.get("status");
+    if (
+      statusParam === "failed" ||
+      statusParam === "solved" ||
+      statusParam === "todo"
+    ) {
+      setStatusFilter(statusParam);
+    }
+
+    const id = params.get("task");
     if (id && TASK_MAP[id]) {
       setSelectedId(id);
       const index = TASKS.findIndex((task) => task.id === id);
       if (index >= PAGE_SIZE) setVisibleCount(index + 1);
+    }
+
+    const mode = params.get("mode");
+    const random = params.get("random") === "1";
+
+    if (mode === "training") {
+      startTraining();
+    } else if (random) {
+      const pool = topicParam
+        ? TASKS.filter((task) => task.topic === topicParam)
+        : TASKS;
+      const source = pool.length > 0 ? pool : TASKS;
+      const task = source[Math.floor(Math.random() * source.length)];
+      if (task) selectTask(task.id);
+    }
+
+    if (mode || random) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("mode");
+      url.searchParams.delete("random");
+      window.history.replaceState({}, "", url);
     }
   }, []);
 

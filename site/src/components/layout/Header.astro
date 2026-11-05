@@ -1,20 +1,23 @@
 ---
 import { List, MagnifyingGlass } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
+import HeaderNav from "./HeaderNav.astro";
 import SearchInput from "./SearchInput.astro";
 import { SearchModal } from "./SearchModal.tsx";
 import { ThemeToggle } from "./ThemeToggle.tsx";
 ---
 
 <header class="sticky top-0 z-50 border-b-[3px] border-border bg-canvas">
-  <div class="mx-auto flex h-14 items-center justify-between px-3">
-    <div class="flex items-center gap-6">
+  <div class="mx-auto flex h-14 items-center justify-between gap-4 px-3">
+    <div class="flex h-full items-center gap-4">
       <a
         href={withBase("/")}
         class="flex font-mono text-lg font-extrabold uppercase tracking-tight text-text transition-colors px-3 pt-0.5 pb-1.5 hover:text-accent"
       >
         <span class="text-text">PRE</span><span class="text-accent">PRA</span>
       </a>
+
+      <HeaderNav />
     </div>
 
     <div class="flex items-center gap-2">

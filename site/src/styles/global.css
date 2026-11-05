@@ -226,6 +226,35 @@
     white-space: normal;
     overflow-wrap: anywhere;
   }
+
+  /* Top-level tabs: panels are hidden only when JS marked the document. */
+  html[data-tabs="on"] [data-tab-panel] {
+    display: none;
+  }
+
+  html[data-tabs="on"][data-tab="theory"] [data-tab-panel="theory"],
+  html[data-tabs="on"][data-tab="practice"] [data-tab-panel="practice"],
+  html[data-tabs="on"][data-tab="interview"] [data-tab-panel="interview"] {
+    display: block;
+    animation: tab-panel-in 160ms ease-out;
+  }
+
+  @keyframes tab-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html[data-tabs="on"] [data-tab-panel] {
+      animation: none !important;
+    }
+  }
 }
 
 .prose {

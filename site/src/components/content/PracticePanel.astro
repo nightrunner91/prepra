@@ -1,0 +1,233 @@
+---
+import { ArrowRight, Barbell, CheckCircle, Code, Shuffle } from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+import { plural } from "../../lib/plural";
+import PanelHeader from "./PanelHeader.astro";
+
+type Tone = "red" | "blue" | "green" | "yellow" | "neutral";
+
+interface TopicItem {
+  id: string;
+  label: string;
+  description: string;
+  color: Tone;
+  total: number;
+}
+
+interface Props {
+  taskCount: number;
+  topicCount: number;
+  codeTaskCount: number;
+  topics: TopicItem[];
+}
+
+const { taskCount, topicCount, codeTaskCount, topics } = Astro.props;
+
+const badgeClass: Record<Tone, string> = {
+  red: "bg-pale-red-bg text-pale-red-text",
+  blue: "bg-pale-blue-bg text-pale-blue-text",
+  green: "bg-pale-green-bg text-pale-green-text",
+  yellow: "bg-pale-yellow-bg text-pale-yellow-text",
+  neutral: "bg-surface-alt text-text",
+};
+
+const features = [
+  {
+    icon: CheckCircle,
+    title: "Разбор каждого ответа",
+    text: "После ответа — объяснение, почему код ведёт себя именно так, и ссылка на статью по теме.",
+  },
+  {
+    icon: Code,
+    title: "Задачи с автотестами",
+    text: "Редактор в браузере и проверка тестами без сервера, регистрации и подписок.",
+  },
+  {
+    icon: Barbell,
+    title: "Тренировка и прогресс",
+    text: "Серия из 10 задач, статистика по темам и сохранение прогресса в браузере.",
+  },
+];
+---
+
+<section
+  id="practice"
+  role="tabpanel"
+  aria-labelledby="tab-practice"
+  tabindex="0"
+  data-tab-panel="practice"
+  class="scroll-mt-20 pt-6 focus:outline-none lg:scroll-mt-36 lg:pt-8"
+>
+  <PanelHeader
+    title="Практикум"
+    subtitle={`${taskCount} ${plural(taskCount, "задача", "задачи", "задач")} · ${topicCount} ${plural(topicCount, "тема", "темы", "тем")} · ${codeTaskCount} с автотестами`}
+    description="Банк задач по базовому JavaScript в формате «что выведет код»: hoisting, замыкания, this, event loop, Map/Set, Big O, приведение типов и промисы."
+  />
+
+  <div
+    data-resume-card="practice"
+    hidden
+    class="mt-6 border-[3px] border-border bg-pale-green-bg p-4 sm:p-5"
+  >
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div>
+        <p
+          class="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-green-text"
+        >
+          Твой прогресс
+        </p>
+        <p
+          class="mt-1 font-mono text-sm font-extrabold uppercase tracking-tight text-text"
+        >
+          <span data-resume-solved>0</span> из {taskCount} решено
+          <span class="text-text-tertiary">·</span>
+          <span data-resume-accuracy>0</span>% точности
+        </p>
+      </div>
+      <a
+        data-resume-link
+        href={withBase("/practice?status=failed")}
+        class="inline-flex w-fit items-center gap-2 border-[3px] border-border bg-accent px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider !text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+      >
+        <span data-resume-label>Продолжить</span>
+        <ArrowRight size={14} weight="bold" />
+      </a>
+    </div>
+  </div>
+
+  <div class="mt-6 flex flex-wrap gap-3">
+    <a
+      href={withBase("/practice?mode=training")}
+      class="inline-flex items-center gap-2 border-[3px] border-border bg-accent px-5 py-3 font-mono text-xs font-bold uppercase tracking-wider !text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+    >
+      <Barbell size={16} weight="bold" />
+      Тренировка на 10 задач
+    </a>
+    <a
+      href={withBase("/practice?random=1")}
+      class="inline-flex items-center gap-2 border-[3px] border-border bg-surface px-5 py-3 font-mono text-xs font-bold uppercase tracking-wider text-text transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+    >
+      <Shuffle size={16} weight="bold" />
+      Случайная задача
+    </a>
+  </div>
+
+  <h3
+    class="mt-10 font-mono text-lg font-extrabold uppercase tracking-tight text-text"
+  >
+    Темы
+  </h3>
+  <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+    {
+      topics.map((topic) => (
+        <a
+          href={withBase(`/practice?topic=${topic.id}`)}
+          class="card-hover group flex h-full flex-col border-[3px] border-border bg-surface p-4"
+        >
+          <div class="flex items-start justify-between gap-2">
+            <h4 class="font-mono text-base font-extrabold uppercase tracking-tight text-text transition-colors group-hover:text-accent">
+              {topic.label}
+            </h4>
+            <span
+              class={`shrink-0 border-2 border-border px-1.5 py-0.5 font-mono text-[10px] font-bold tabular-nums ${badgeClass[topic.color]}`}
+            >
+              {topic.total}
+            </span>
+          </div>
+          <p class="mt-2 text-xs font-medium leading-relaxed text-text-secondary">
+            {topic.description}
+          </p>
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="mt-8 grid gap-3 sm:grid-cols-3">
+    {
+      features.map((feature) => {
+        const Icon = feature.icon;
+        return (
+          <div class="flex items-start gap-3 border-2 border-border bg-surface-alt p-4">
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-border bg-pale-yellow-bg text-pale-yellow-text">
+              <Icon size={20} weight="bold" />
+            </div>
+            <div>
+              <div class="font-mono text-sm font-extrabold uppercase tracking-tight text-text">
+                {feature.title}
+              </div>
+              <p class="mt-1 text-xs font-medium leading-relaxed text-text-secondary">
+                {feature.text}
+              </p>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <a
+    href={withBase("/practice")}
+    class="group mt-6 inline-flex items-center gap-1 font-mono text-sm font-bold uppercase tracking-wider text-accent transition-colors hover:text-accent-hover"
+  >
+    Открыть весь практикум
+    <span class="inline-block transition-transform group-hover:translate-x-1">
+      <ArrowRight size={16} weight="bold" />
+    </span>
+  </a>
+</section>
+
+<script>
+  const card = document.querySelector<HTMLElement>(
+    '[data-resume-card="practice"]',
+  );
+
+  if (card) {
+    try {
+      const raw = localStorage.getItem("prepra:practice:v1");
+      if (raw) {
+        const data = JSON.parse(raw) as {
+          tasks?: Record<string, { status?: string }>;
+        };
+        const tasks = data?.tasks ?? {};
+        let solved = 0;
+        let failed = 0;
+
+        for (const item of Object.values(tasks)) {
+          if (item?.status === "solved") solved++;
+          else if (item?.status === "failed") failed++;
+        }
+
+        if (solved + failed > 0) {
+          card.hidden = false;
+
+          const solvedEl = card.querySelector("[data-resume-solved]");
+          if (solvedEl) solvedEl.textContent = String(solved);
+
+          const accuracyEl = card.querySelector("[data-resume-accuracy]");
+          if (accuracyEl) {
+            accuracyEl.textContent = String(
+              Math.round((solved / (solved + failed)) * 100),
+            );
+          }
+
+          const link = card.querySelector<HTMLAnchorElement>(
+            "[data-resume-link]",
+          );
+          const label = card.querySelector("[data-resume-label]");
+          if (link) {
+            const base = link.href.split("?")[0];
+            link.href = failed > 0 ? `${base}?status=failed` : base;
+          }
+          if (label) {
+            label.textContent =
+              failed > 0 ? `Повторить ошибки (${failed})` : "Продолжить практику";
+          }
+        }
+      }
+    } catch {
+      // localStorage может быть недоступен — карточка просто останется скрытой.
+    }
+  }
+</script>

@@ -1,0 +1,204 @@
+---
+import { ArrowRight, Clock, Microphone, TreeStructure } from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+import { plural } from "../../lib/plural";
+import PanelHeader from "./PanelHeader.astro";
+
+type Tone = "blue" | "green" | "yellow" | "red";
+
+interface PresetItem {
+  id: string;
+  title: string;
+  description: string;
+  count: number;
+}
+
+interface Props {
+  presets: PresetItem[];
+}
+
+const { presets } = Astro.props;
+
+const tones: Tone[] = ["blue", "green", "yellow", "red"];
+
+const badgeClass: Record<Tone, string> = {
+  blue: "bg-pale-blue-bg text-pale-blue-text",
+  green: "bg-pale-green-bg text-pale-green-text",
+  yellow: "bg-pale-yellow-bg text-pale-yellow-text",
+  red: "bg-pale-red-bg text-pale-red-text",
+};
+
+const steps = [
+  {
+    icon: Microphone,
+    title: "Отвечай вслух",
+    text: "Вопросы из разных разделов — как на настоящем техническом интервью.",
+  },
+  {
+    icon: Clock,
+    title: "Оценивай себя",
+    text: "После каждого вопроса — честная самооценка без таймера и подглядываний.",
+  },
+  {
+    icon: TreeStructure,
+    title: "Смотри карту тем",
+    text: "В конце — таблица по разделам и ссылка на самую слабую тему.",
+  },
+];
+---
+
+<section
+  id="interview"
+  role="tabpanel"
+  aria-labelledby="tab-interview"
+  tabindex="0"
+  data-tab-panel="interview"
+  class="scroll-mt-20 pt-6 focus:outline-none lg:scroll-mt-36 lg:pt-8"
+>
+  <PanelHeader
+    title="Мок-интервью"
+    subtitle={`${presets.length} ${plural(presets.length, "сет", "сета", "сетов")} · 20 / 30 / 50 вопросов`}
+    description="Режим самопроверки: отвечаешь вслух, оцениваешь себя после каждого вопроса и получаешь карту слабых тем с переходом к нужной статье."
+  />
+
+  <div
+    data-resume-card="interview"
+    hidden
+    class="mt-6 border-[3px] border-border bg-pale-blue-bg p-4 sm:p-5"
+  >
+    <div
+      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <div>
+        <p
+          class="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-blue-text"
+        >
+          Незавершённое интервью
+        </p>
+        <p
+          class="mt-1 font-mono text-sm font-extrabold uppercase tracking-tight text-text"
+        >
+          Отвечено <span data-resume-progress>0 из 0</span>
+        </p>
+      </div>
+      <a
+        href={withBase("/interview?resume=1")}
+        class="inline-flex w-fit items-center gap-2 border-[3px] border-border bg-accent px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider !text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+      >
+        Продолжить
+        <ArrowRight size={14} weight="bold" />
+      </a>
+    </div>
+  </div>
+
+  <h3
+    class="mt-8 font-mono text-lg font-extrabold uppercase tracking-tight text-text"
+  >
+    Готовые сеты
+  </h3>
+  <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      presets.map((preset, i) => {
+        const tone = tones[i % tones.length];
+        return (
+          <a
+            href={withBase(`/interview?preset=${preset.id}`)}
+            class="card-hover group flex h-full flex-col border-[3px] border-border bg-surface p-5"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <h4 class="font-mono text-base font-extrabold uppercase tracking-tight text-text transition-colors group-hover:text-accent">
+                {preset.title}
+              </h4>
+              <span
+                class={`shrink-0 border-2 border-border px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider ${badgeClass[tone]}`}
+              >
+                {preset.count}
+              </span>
+            </div>
+            <p class="mt-2 text-xs font-medium leading-relaxed text-text-secondary">
+              {preset.description}
+            </p>
+            <span class="mt-auto pt-4 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary transition-colors group-hover:text-accent">
+              Начать интервью
+            </span>
+          </a>
+        );
+      })
+    }
+    <a
+      href={withBase("/interview?custom=1")}
+      class="group flex h-full flex-col border-[3px] border-dashed border-border bg-canvas p-5 transition-colors hover:bg-surface"
+    >
+      <h4
+        class="font-mono text-base font-extrabold uppercase tracking-tight text-text transition-colors group-hover:text-accent"
+      >
+        Свой конфиг
+      </h4>
+      <p class="mt-2 text-xs font-medium leading-relaxed text-text-secondary">
+        Собери интервью сам: разделы, стек и длина на 20, 30 или 50 вопросов.
+      </p>
+      <span
+        class="mt-auto pt-4 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary transition-colors group-hover:text-accent"
+      >
+        Настроить
+      </span>
+    </a>
+  </div>
+
+  <div class="mt-8 grid gap-3 sm:grid-cols-3">
+    {
+      steps.map((step, i) => {
+        const Icon = step.icon;
+        return (
+          <div class="flex items-start gap-3 border-2 border-border bg-surface-alt p-4">
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-border bg-pale-blue-bg text-pale-blue-text">
+              <Icon size={18} weight="bold" />
+            </div>
+            <div>
+              <div class="font-mono text-sm font-extrabold uppercase tracking-tight text-text">
+                <span class="text-text-tertiary">{i + 1}.</span> {step.title}
+              </div>
+              <p class="mt-1 text-xs font-medium leading-relaxed text-text-secondary">
+                {step.text}
+              </p>
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</section>
+
+<script>
+  const card = document.querySelector<HTMLElement>(
+    '[data-resume-card="interview"]',
+  );
+
+  if (card) {
+    try {
+      const raw = localStorage.getItem("prepra:interview:active");
+      if (raw) {
+        const session = JSON.parse(raw) as {
+          questions?: unknown[];
+          answers?: Record<string, string>;
+          currentIndex?: number;
+        };
+        const total = Array.isArray(session.questions)
+          ? session.questions.length
+          : 0;
+        const current =
+          typeof session.currentIndex === "number" ? session.currentIndex : 0;
+
+        if (total > 0 && current < total) {
+          card.hidden = false;
+          const progress = card.querySelector("[data-resume-progress]");
+          if (progress) {
+            progress.textContent = `${current} из ${total}`;
+          }
+        }
+      }
+    } catch {
+      // localStorage может быть недоступен — карточка просто останется скрытой.
+    }
+  }
+</script>

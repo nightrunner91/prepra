@@ -1,7 +1,6 @@
 ---
 import type { Icon } from "@dev.icons/react";
 import { withBase } from "../../lib/urls";
-import ProgressBlock from "./ProgressBlock.astro";
 import SectionCard from "./SectionCard.astro";
 
 interface SectionItem {
@@ -16,23 +15,13 @@ interface SectionItem {
 
 interface Props {
   sections: SectionItem[];
-  totalArticles: number;
-  totalQuestions: number;
 }
 
-const { sections, totalArticles, totalQuestions } = Astro.props;
+const { sections } = Astro.props;
 ---
 
-<div class="pt-16" id="sections">
-  <h2
-    class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-5xl"
-  >
-    Все разделы
-  </h2>
-  <p class="mt-2 text-sm font-bold uppercase tracking-wide text-text-secondary">
-    {totalArticles} статей и {totalQuestions} вопросов для самопроверки.
-  </p>
-  <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+<div id="sections">
+  <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
     {
       sections.map((s, i) => (
         <div class="animate-fade-in" style={`transition-delay: ${i * 40}ms`}>
@@ -49,9 +38,4 @@ const { sections, totalArticles, totalQuestions } = Astro.props;
       ))
     }
   </div>
-  <ProgressBlock
-    totalArticles={totalArticles}
-    totalQuestions={totalQuestions}
-    sectionsCount={sections.length}
-  />
 </div>
