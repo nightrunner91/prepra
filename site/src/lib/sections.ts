@@ -11,6 +11,7 @@ import {
   Package,
   PlugsConnected,
   Shield,
+  Terminal,
   TreeStructure,
   Triangle,
 } from "@phosphor-icons/react";
@@ -56,6 +57,11 @@ export const sections: Section[] = [
     id: "vue",
     label: "Vue",
     icon: Leaf,
+  },
+  {
+    id: "nodejs",
+    label: "Node.js",
+    icon: Terminal,
   },
   {
     id: "architecture",
