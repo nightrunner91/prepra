@@ -393,8 +393,8 @@ export function PracticeApp() {
       <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-start">
         <div className="min-w-0 space-y-3">
           <div className="border-[3px] border-border bg-surface p-3 sm:p-4">
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <label className="relative flex-1">
+            <div className="flex flex-col gap-2">
+              <label className="relative block w-full">
                 <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary">
                   <MagnifyingGlass size={16} weight="bold" />
                 </span>
@@ -408,11 +408,11 @@ export function PracticeApp() {
                 />
               </label>
 
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <select
                   value={topic}
                   onChange={(event) => setTopic(event.target.value as TopicFilter)}
-                  className="h-10 max-w-full border-2 border-border bg-canvas px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text outline-none focus:border-accent"
+                  className="h-10 w-full min-w-0 border-2 border-border bg-canvas px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text outline-none focus:border-accent sm:col-span-2"
                   aria-label="Тема"
                 >
                   <option value="all">Все темы</option>
@@ -428,7 +428,7 @@ export function PracticeApp() {
                   onChange={(event) =>
                     setDifficulty(event.target.value as DifficultyFilter)
                   }
-                  className="h-10 border-2 border-border bg-canvas px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text outline-none focus:border-accent"
+                  className="h-10 w-full min-w-0 border-2 border-border bg-canvas px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text outline-none focus:border-accent"
                   aria-label="Сложность"
                 >
                   <option value="all">Любая сложность</option>
@@ -440,7 +440,7 @@ export function PracticeApp() {
                 <select
                   value={kind}
                   onChange={(event) => setKind(event.target.value as KindFilter)}
-                  className="h-10 border-2 border-border bg-canvas px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text outline-none focus:border-accent"
+                  className="h-10 w-full min-w-0 border-2 border-border bg-canvas px-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text outline-none focus:border-accent"
                   aria-label="Тип задачи"
                 >
                   <option value="all">Все типы</option>
