@@ -16,17 +16,43 @@ interface Props {
 const { currentSection } = Astro.props;
 
 const tabs = [
-  { id: "theory", label: "Теория", icon: BookOpen },
-  { id: "practice", label: "Практика", icon: Barbell },
-  { id: "interview", label: "Интервью", icon: Microphone },
+  {
+    id: "theory",
+    label: "Теория",
+    icon: BookOpen,
+    href: withBase("/theory"),
+  },
+  {
+    id: "practice",
+    label: "Практика",
+    icon: Barbell,
+    href: withBase("/practice"),
+  },
+  {
+    id: "interview",
+    label: "Интервью",
+    icon: Microphone,
+    href: withBase("/interview"),
+  },
 ] as const;
 
 const pathname = Astro.url.pathname.replace(/\/+$/, "");
-const activeTab = pathname.endsWith("/practice")
+
+const isTheoryPage =
+  pathname === withBase("/theory") ||
+  sections.some(
+    (section) =>
+      pathname === withBase(`/${section.id}`) ||
+      pathname.startsWith(withBase(`/${section.id}/`)),
+  );
+
+const activeTab = pathname === withBase("/practice")
   ? "practice"
-  : pathname.endsWith("/interview")
+  : pathname === withBase("/interview")
     ? "interview"
-    : undefined;
+    : isTheoryPage
+      ? "theory"
+      : undefined;
 ---
 
 <div
@@ -55,8 +81,7 @@ const activeTab = pathname.endsWith("/practice")
           const Icon = tab.icon;
           return (
             <a
-              href={`${withBase("/")}#${tab.id}`}
-              data-top-tab={tab.id}
+              href={tab.href}
               aria-current={activeTab === tab.id ? "page" : undefined}
               class="flex items-center gap-2 border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide text-text-secondary transition-colors hover:bg-surface-alt hover:text-text aria-[current=page]:bg-text aria-[current=page]:text-canvas"
             >
@@ -93,22 +118,6 @@ const activeTab = pathname.endsWith("/practice")
         })
       }
     </div>
-    <div class="mt-auto space-y-2 pt-6">
-      <a
-        href={withBase("/practice")}
-        class="flex items-center gap-2 border-2 border-border bg-pale-yellow-bg px-3 py-3 text-sm font-bold uppercase tracking-wide text-pale-yellow-text transition-colors hover:bg-pale-yellow-bg-hover hover:text-pale-yellow-text-hover"
-      >
-        <Barbell size={16} weight="bold" class="shrink-0" />
-        <span>Практикум</span>
-      </a>
-      <a
-        href={withBase("/interview")}
-        class="flex items-center gap-2 border-2 border-accent bg-pale-green-bg px-3 py-3 text-sm font-bold uppercase tracking-wide text-pale-green-text transition-colors hover:bg-pale-green-bg-hover hover:text-pale-green-text-hover"
-      >
-        <Microphone size={16} weight="bold" class="shrink-0" />
-        <span>Мок-интервью</span>
-      </a>
-    </div>
   </nav>
 </div>
 
@@ -144,8 +153,20 @@ const activeTab = pathname.endsWith("/practice")
   closeBtn?.addEventListener("click", closeDrawer);
   overlay?.addEventListener("click", closeDrawer);
 
-  // Любая ссылка в меню закрывает шторку (переход или переключение таба).
+  // Любая ссылка в меню закрывает шторку перед переходом.
   drawer?.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", closeDrawer);
   });
 </script>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    #mobile-drawer {
+      transition: none;
+    }
+
+    #mobile-drawer-overlay {
+      transition-duration: 1ms;
+    }
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+import { plural } from "../../lib/plural";
+
+interface Props {
+  sectionCount: number;
+  articleCount: number;
+  questionCount: number;
+  taskCount: number;
+}
+
+const { sectionCount, articleCount, questionCount, taskCount } = Astro.props;
+
+const stats = [
+  {
+    value: sectionCount,
+    label: plural(sectionCount, "раздел", "раздела", "разделов"),
+  },
+  {
+    value: articleCount,
+    label: plural(articleCount, "статья", "статьи", "статей"),
+  },
+  {
+    value: questionCount,
+    label: plural(questionCount, "вопрос", "вопроса", "вопросов"),
+  },
+  {
+    value: taskCount,
+    label: plural(taskCount, "задача", "задачи", "задач"),
+  },
+];
+---
+
+<div class="border-b-[3px] border-border bg-canvas">
+  <div class="mx-auto max-w-[1600px] px-6 lg:px-12">
+    <div class="grid grid-cols-2 gap-[3px] bg-border lg:grid-cols-4">
+      {
+        stats.map((stat, index) => (
+          <div
+            class={`bg-canvas px-5 py-6 lg:px-7 lg:py-7 ${index === 0 ? "pl-0 lg:pl-0" : ""}`}
+          >
+            <div class="font-mono text-3xl font-extrabold leading-none tabular-nums text-text lg:text-4xl">
+              <span
+                class="stat-value inline-block"
+                data-stat-value={stat.value}
+                style={`min-width: ${String(stat.value).length}ch; --stat-delay: ${index * 50}ms`}
+              >
+                {stat.value}
+              </span>
+            </div>
+            <div class="mt-2.5 font-mono text-sm font-bold uppercase tracking-[0.14em] text-text-secondary">
+              {stat.label}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  const counters = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-stat-value]"),
+  );
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+  function animateCounter(el: HTMLElement) {
+    const target = Number(el.dataset.statValue);
+    if (!Number.isFinite(target) || target <= 0) return;
+
+    const delay = parseFloat(
+      getComputedStyle(el).getPropertyValue("--stat-delay") || "0",
+    );
+    const duration = 750;
+    const start = performance.now() + delay;
+
+    const tick = (now: number) => {
+      const progress = Math.min(Math.max((now - start) / duration, 0), 1);
+      el.textContent = String(Math.round(target * easeOutCubic(progress)));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  }
+
+  if (counters.length) {
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      counters.forEach((el) => {
+        el.textContent = String(el.dataset.statValue);
+      });
+    } else {
+      counters.forEach((el) => {
+        el.textContent = "0";
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            observer.unobserve(entry.target);
+            animateCounter(entry.target as HTMLElement);
+          });
+        },
+        { threshold: 0.35 },
+      );
+
+      counters.forEach((el) => observer.observe(el));
+    }
+  }
+</script>

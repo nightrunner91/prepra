@@ -1,0 +1,123 @@
+---
+import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react";
+import type { SectionStat } from "../../lib/section-overview";
+import { withBase } from "../../lib/urls";
+
+interface Props {
+  sections: SectionStat[];
+}
+
+const { sections } = Astro.props;
+
+const half = Math.ceil(sections.length / 2);
+const columns = [sections.slice(0, half), sections.slice(half)];
+
+const colorClasses: Record<SectionStat["color"], string> = {
+  red: "bg-pale-red-bg text-pale-red-text",
+  blue: "bg-pale-blue-bg text-pale-blue-text",
+  green: "bg-pale-green-bg text-pale-green-text",
+  yellow: "bg-pale-yellow-bg text-pale-yellow-text",
+  neutral: "bg-surface-alt text-text-secondary",
+};
+---
+
+<section id="sections" class="mt-16 scroll-mt-24 lg:mt-20">
+  <div
+    class="flex flex-wrap items-end justify-between gap-4 border-b-[3px] border-border pb-5"
+  >
+    <div>
+      <h2
+        class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl lg:text-5xl"
+      >
+        Что охватывает PrePra
+      </h2>
+      <p
+        class="mt-3 text-base font-medium leading-relaxed text-text-secondary sm:text-lg lg:whitespace-nowrap"
+      >
+        Материал подаётся каскадом по мере углубления во фронтенд.
+      </p>
+    </div>
+    <a
+      href={withBase("/theory")}
+      class="group inline-flex items-center gap-2 border-b-2 border-text pb-1 font-mono text-xs font-bold uppercase tracking-wider text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
+    >
+      Вся теория
+      <ArrowRight
+        size={14}
+        weight="bold"
+        className="transition-transform group-hover:translate-x-1"
+      />
+    </a>
+  </div>
+
+  <div class="grid lg:grid-cols-2 lg:gap-x-12">
+    {
+      columns.map((column, columnIndex) => (
+        <div>
+          {column.map((section, index) => {
+            const Icon = section.icon;
+            const globalIndex = (columnIndex === 0 ? index : half + index) + 1;
+            const number = String(globalIndex).padStart(2, "0");
+
+            return (
+              <a
+                href={withBase(`/${section.id}`)}
+                class="section-row group flex items-center gap-3 border-b-2 border-border py-4 sm:gap-4"
+              >
+                {Icon && (
+                  <span
+                    class={`section-icon flex h-14 w-14 shrink-0 items-center justify-center border-2 border-border ${colorClasses[section.color]}`}
+                  >
+                    <Icon size={24} weight="bold" />
+                  </span>
+                )}
+                <span class="min-w-0 flex-1">
+                  <span class="flex items-baseline justify-between gap-3">
+                    <span class="font-mono text-sm font-extrabold uppercase tracking-tight text-text transition-colors group-hover:text-accent sm:text-base">
+                      {section.label}
+                    </span>
+                  </span>
+                  <span class="line-clamp-2 block text-sm leading-relaxed text-text-secondary sm:text-[15px]">
+                    {section.description}
+                  </span>
+                </span>
+                <ArrowUpRight
+                  size={16}
+                  weight="bold"
+                  className="hidden shrink-0 text-text-tertiary transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent sm:block"
+                />
+              </a>
+            );
+          })}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .section-icon {
+    transition:
+      background-color 120ms var(--ease-out),
+      color 120ms var(--ease-out),
+      transform 90ms var(--ease-out);
+  }
+
+  /* Только для мыши: на тапе инверсия иначе «залипает» после перехода. */
+  @media (hover: hover) and (pointer: fine) {
+    .section-row:hover .section-icon {
+      background-color: var(--color-text);
+      color: var(--color-canvas);
+    }
+  }
+
+  .section-row:active .section-icon {
+    transform: scale(0.94);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .section-row:active .section-icon {
+      transform: none;
+    }
+  }
+</style>

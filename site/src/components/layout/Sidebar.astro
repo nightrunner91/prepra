@@ -1,5 +1,5 @@
 ---
-import { Barbell, Microphone } from "@phosphor-icons/react";
+import { Barbell, BookOpen, Microphone } from "@phosphor-icons/react";
 import { sections } from "../../lib/sections";
 import { withBase } from "../../lib/urls";
 
@@ -14,6 +14,13 @@ const { currentSection } = Astro.props;
   class="fixed top-14 left-0 w-56 h-[calc(100vh-3.5rem)] flex flex-col overflow-y-auto border-r-[3px] border-border py-6 px-3 bg-canvas"
 >
   <nav class="space-y-0">
+    <a
+      href={withBase("/theory")}
+      class="flex items-center gap-2 border-b-2 border-border px-3 py-2.5 text-[13px] font-bold uppercase tracking-wide text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
+    >
+      <BookOpen size={16} class="shrink-0" />
+      <span>Все разделы</span>
+    </a>
     {
       sections.map((s) => {
         const Icon = s.icon;

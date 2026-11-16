@@ -1,6 +1,7 @@
 ---
 import { ArrowRight, QuestionMark } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
+import { plural } from "../../lib/plural";
 
 interface Props {
   question: {
@@ -9,53 +10,62 @@ interface Props {
     sectionLabel: string;
     articleSlug: string;
   };
+  questionCount: number;
 }
 
-const { question } = Astro.props;
+const { question, questionCount } = Astro.props;
 ---
 
-<div class="mt-16 lg:mt-20">
-  <div
-    class="animate-fade-in relative border-[3px] border-border bg-pale-yellow-bg p-6"
-  >
-    <a
-      href={withBase(`/${question.sectionId}`)}
-      class="absolute top-6 right-6 border-2 border-border bg-canvas px-2 py-1 font-mono text-xs font-extrabold uppercase tracking-wider text-accent transition-colors hover:border-accent hover:text-accent-hover"
-    >
-      {question.sectionLabel}
-    </a>
-    <div class="flex items-start gap-3">
+<section class="mt-16 lg:mt-20">
+  <div class="border-[3px] border-border bg-pale-yellow-bg">
+    <div class="grid lg:grid-cols-[300px_minmax(0,1fr)]">
       <div
-        class="hidden sm-flex h-10 w-10 min-w-10 items-center justify-center border-2 border-border bg-pale-yellow-text text-canvas"
+        class="border-b-[3px] border-border p-6 lg:border-b-0 lg:border-r-[3px]"
       >
-        <QuestionMark size={20} weight="bold" />
-      </div>
-      <div class="pe-10 sm:pe-0">
-        <h2 class="font-mono text-xl font-extrabold uppercase tracking-tight">
+        <QuestionMark
+          size={28}
+          weight="bold"
+          className="text-pale-yellow-text"
+          aria-hidden="true"
+        />
+        <h2
+          class="mt-4 font-mono text-2xl font-extrabold uppercase tracking-tight text-text"
+        >
           Вопрос дня
         </h2>
-        <p
-          class="text-xs font-mono font-bold uppercase tracking-wider text-text-tertiary"
-        >
-          Попробуй ответить без подглядывания
+        <p class="mt-2 text-base font-medium leading-relaxed text-text-secondary">
+          В базе{" "}
+          {`${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}.`}{" "}
+          Освежи память перед следующим интервью.
         </p>
+        <a
+          href={withBase(`/${question.sectionId}`)}
+          class="mt-5 inline-block border-2 border-border bg-canvas px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-text transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
+        >
+          {question.sectionLabel}
+        </a>
+      </div>
+
+      <div class="flex flex-col p-6 lg:p-8">
+        <p
+          id="daily-question-text"
+          class="text-lg font-bold leading-relaxed text-text sm:text-xl"
+        >
+          {question.text}
+        </p>
+        <a
+          id="daily-question-link"
+          href={withBase(`/${question.sectionId}/${question.articleSlug}`)}
+          class="group mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-border pt-6 font-mono text-xs font-bold uppercase tracking-wider text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
+        >
+          Читать статью
+          <ArrowRight
+            size={14}
+            weight="bold"
+            className="transition-transform group-hover:translate-x-1"
+          />
+        </a>
       </div>
     </div>
-    <p
-      id="daily-question-text"
-      class="mt-4 text-lg font-bold text-text leading-relaxed"
-    >
-      {question.text}
-    </p>
-    <a
-      id="daily-question-link"
-      href={withBase(`/${question.sectionId}/${question.articleSlug}`)}
-      class="group mt-4 inline-flex items-center gap-1 font-mono text-sm font-bold uppercase tracking-wider text-accent hover:text-accent-hover transition-colors"
-    >
-      Читать статью <span
-        class="inline-block transition-transform group-hover:translate-x-1"
-        ><ArrowRight size={16} weight="bold" /></span
-      >
-    </a>
   </div>
-</div>
+</section>

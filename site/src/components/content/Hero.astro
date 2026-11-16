@@ -1,0 +1,320 @@
+---
+import { ArrowRight, CheckCircle, GitBranch } from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+---
+
+<section class="border-b-[3px] border-border bg-surface">
+  <div
+    class="mx-auto grid max-w-[1600px] items-center gap-10 px-6 py-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16 lg:px-12 lg:py-16"
+  >
+    <div>
+      <h1
+        class="-ms-1 font-mono text-6xl font-extrabold uppercase leading-[0.88] tracking-tight text-text sm:text-7xl lg:text-8xl xl:text-9xl"
+      >
+        <span class="text-text">PRE</span><span class="text-accent">PRA</span>
+      </h1>
+      <p
+        class="mt-3 max-w-[52ch] text-lg font-medium leading-snug text-text-secondary sm:text-xl lg:text-2xl"
+      >
+        План и методология подготовки к собеседованиям
+      </p>
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <a
+          href={withBase("/javascript")}
+          class="group inline-flex items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3.5 font-mono text-base font-bold uppercase tracking-wider !text-white transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:!text-white hover:shadow-[4px_4px_0px_var(--color-border)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0 active:translate-y-0 active:shadow-none"
+        >
+          Начать подготовку
+          <ArrowRight
+            size={16}
+            weight="bold"
+            className="transition-transform group-hover:translate-x-1"
+          />
+        </a>
+        <a
+          href="#product"
+          class="inline-flex items-center justify-center border-[3px] border-border bg-canvas px-6 py-3.5 font-mono text-base font-bold uppercase tracking-wider text-text transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0.5 active:translate-y-0.5"
+        >
+          О продукте
+        </a>
+      </div>
+    </div>
+
+    <div class="hidden lg:block">
+      <div
+        id="hero-code-wrapper"
+        class="ml-auto w-full max-w-[560px] border-[3px] border-border bg-canvas shadow-[6px_6px_0px_var(--color-border)]"
+        aria-hidden="true"
+      >
+        <div
+          class="flex items-center justify-between border-b-[3px] border-border bg-surface px-4 py-2"
+        >
+          <span
+            class="font-mono text-[11px] font-bold uppercase tracking-wider text-text"
+          >
+            track.ts
+          </span>
+          <span
+            class="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary"
+          >
+            typescript
+          </span>
+        </div>
+        <div
+          id="glitch-lines"
+          class="h-[272px] overflow-hidden p-5 font-mono text-sm leading-7 xl:text-base"
+        >
+        </div>
+        <div
+          class="flex items-center justify-between gap-3 border-t-[3px] border-border bg-surface px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-text-secondary"
+        >
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1 text-text">
+              <GitBranch size={12} weight="bold" />
+              main*
+            </span>
+            <span class="flex items-center gap-1">
+              <CheckCircle size={12} weight="bold" className="text-accent" />
+              0
+            </span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span>Ln 7, Col 38</span>
+            <span class="hidden xl:inline">UTF-8</span>
+            <span class="text-text">TS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  :global(.g-kw) {
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+  :global(.g-str) {
+    color: #b45309;
+  }
+  :global(.g-fn) {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+  :global(.g-cmt) {
+    color: var(--color-text-tertiary);
+    font-style: italic;
+  }
+  :global(.g-ln) {
+    color: var(--color-text-tertiary);
+    user-select: none;
+    display: inline-block;
+    width: 2ch;
+    text-align: right;
+    margin-right: 3ch;
+  }
+  :global(.g-ch) {
+    opacity: 0;
+    animation: g-char-in 1ms linear forwards;
+    animation-delay: calc(
+      var(--g-delay, 300ms) + var(--i) * var(--g-step, 14ms)
+    );
+  }
+  @keyframes g-char-in {
+    to {
+      opacity: 1;
+    }
+  }
+  :global(.g-cursor) {
+    display: inline-block;
+    background: var(--color-accent);
+    width: 0.6ch;
+    height: 1.1em;
+    vertical-align: text-bottom;
+    margin-left: 1px;
+    opacity: 0;
+    animation:
+      g-cursor-on 1ms linear forwards,
+      g-cursor-blink 1.2s steps(1, end) infinite;
+    animation-delay:
+      calc(var(--g-delay, 300ms) + var(--g-duration, 2000ms)),
+      calc(var(--g-delay, 300ms) + var(--g-duration, 2000ms));
+  }
+  @keyframes g-cursor-on {
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes g-cursor-blink {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+  #hero-code-wrapper {
+    animation: g-terminal-in 300ms var(--ease-out) both;
+  }
+  @keyframes g-terminal-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  :global(.dark) :global(.g-str) {
+    color: #fbbf24;
+  }
+  /* Повторный заход: код уже набран, ничего не проигрываем. */
+  :global(.is-static .g-ch),
+  :global(.is-static .g-cursor) {
+    animation: none;
+    opacity: 1;
+  }
+  #hero-code-wrapper.is-static {
+    animation: none;
+  }
+  /* Курсор перестаёт мигать, когда набор закончился. */
+  :global(.g-cursor.is-settled) {
+    animation: none;
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #hero-code-wrapper,
+    :global(.g-ch),
+    :global(.g-cursor) {
+      animation: none;
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  type Token = { text: string; type: string };
+  const LINES: Token[][] = [
+    [
+      { text: "const", type: "kw" },
+      { text: " ", type: "" },
+      { text: "prepra", type: "fn" },
+      { text: " = await ", type: "" },
+      { text: "start", type: "fn" },
+      { text: "(", type: "" },
+      { text: "'frontend'", type: "str" },
+      { text: ");", type: "" },
+    ],
+    [],
+    [
+      { text: "await", type: "kw" },
+      { text: " prepra.", type: "" },
+      { text: "theory", type: "fn" },
+      { text: "();", type: "" },
+    ],
+    [
+      { text: "await", type: "kw" },
+      { text: " prepra.", type: "" },
+      { text: "practice", type: "fn" },
+      { text: "();", type: "" },
+    ],
+    [
+      { text: "await", type: "kw" },
+      { text: " prepra.", type: "" },
+      { text: "mockInterview", type: "fn" },
+      { text: "();", type: "" },
+    ],
+    [],
+    [
+      { text: "console", type: "fn" },
+      { text: ".", type: "" },
+      { text: "log", type: "fn" },
+      { text: "(", type: "" },
+      { text: "'к собеседованию готов!'", type: "str" },
+      { text: ");", type: "" },
+    ],
+  ];
+
+  const INTRO_KEY = "prepra:hero-intro";
+  const INTRO_DELAY = 300;
+  const TYPING_DURATION = 2000;
+  const CURSOR_BLINK_CYCLES = 3;
+  const CURSOR_BLINK_PERIOD = 1200;
+
+  const root = document.getElementById("glitch-lines");
+  const codeWrapper = document.getElementById("hero-code-wrapper");
+
+  let introPlayed = false;
+  try {
+    introPlayed = sessionStorage.getItem(INTRO_KEY) === "1";
+  } catch {
+    introPlayed = false;
+  }
+
+  if (root) {
+    // Класс ставим до сборки строк, чтобы не было кадра с пустым блоком.
+    if (introPlayed) {
+      root.classList.add("is-static");
+      codeWrapper?.classList.add("is-static");
+    }
+
+    const allChars: HTMLSpanElement[] = [];
+    let cursor: HTMLSpanElement | null = null;
+
+    LINES.forEach((tokens, lineIndex) => {
+      const row = document.createElement("div");
+      row.className = "glitch-row";
+
+      const num = document.createElement("span");
+      num.className = "g-ln";
+      num.textContent = String(lineIndex + 1);
+      row.appendChild(num);
+
+      const content = document.createElement("span");
+      tokens.forEach((token) => {
+        [...token.text].forEach((ch) => {
+          const s = document.createElement("span");
+          s.textContent = ch;
+          s.className = token.type ? `g-ch g-${token.type}` : "g-ch";
+          s.style.setProperty("--i", String(allChars.length));
+          content.appendChild(s);
+          allChars.push(s);
+        });
+      });
+      row.appendChild(content);
+
+      if (lineIndex === LINES.length - 1) {
+        const cursorEl = document.createElement("span");
+        cursorEl.className = "g-cursor";
+        row.appendChild(cursorEl);
+        cursor = cursorEl;
+      }
+
+      root.appendChild(row);
+    });
+
+    if (!introPlayed) {
+      root.style.setProperty("--g-delay", `${INTRO_DELAY}ms`);
+      root.style.setProperty("--g-duration", `${TYPING_DURATION}ms`);
+      root.style.setProperty(
+        "--g-step",
+        `${TYPING_DURATION / Math.max(allChars.length, 1)}ms`,
+      );
+
+      try {
+        sessionStorage.setItem(INTRO_KEY, "1");
+      } catch {
+        /* приватный режим: просто проиграем интро ещё раз */
+      }
+
+      if (cursor) {
+        window.setTimeout(
+          () => cursor?.classList.add("is-settled"),
+          INTRO_DELAY + TYPING_DURATION + CURSOR_BLINK_CYCLES * CURSOR_BLINK_PERIOD,
+        );
+      }
+    }
+  }
+</script>

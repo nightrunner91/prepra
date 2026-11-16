@@ -29,6 +29,7 @@ const {
     <title>{title} | Prepra</title>
     <script is:inline>
       (function () {
+        document.documentElement.classList.add("js");
         const theme = localStorage.getItem("theme");
         const prefersDark = window.matchMedia(
           "(prefers-color-scheme: dark)",

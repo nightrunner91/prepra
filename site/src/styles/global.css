@@ -17,6 +17,10 @@
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo,
     'DejaVu Sans Mono', Consolas, monospace;
 
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
   --color-canvas: #F2F2EC;
   --color-surface: #FFFFFF;
   --color-surface-alt: #E8E8E0;
@@ -91,6 +95,12 @@
     overflow-x: clip;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
   body {
     background-color: var(--color-canvas);
     color: var(--color-text);
@@ -138,14 +148,20 @@
 
 @layer components {
   .animate-fade-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 300ms ease, transform 300ms ease;
+  }
+
+  /* Прячем элементы только при работающем JS: без него контент остаётся видимым. */
+  .js .animate-fade-in:not(.is-visible) {
     opacity: 0;
     transform: translate(4px, 4px);
-    transition: opacity 300ms ease, transform 300ms ease;
   }
 
   .animate-fade-in.is-visible {
     opacity: 1;
-    transform: translate(0, 0);
+    transform: none;
   }
 
   .card-hover {
@@ -226,34 +242,14 @@
     white-space: normal;
     overflow-wrap: anywhere;
   }
+}
 
-  /* Top-level tabs: panels are hidden only when JS marked the document. */
-  html[data-tabs="on"] [data-tab-panel] {
-    display: none;
-  }
-
-  html[data-tabs="on"][data-tab="theory"] [data-tab-panel="theory"],
-  html[data-tabs="on"][data-tab="practice"] [data-tab-panel="practice"],
-  html[data-tabs="on"][data-tab="interview"] [data-tab-panel="interview"] {
-    display: block;
-    animation: tab-panel-in 160ms ease-out;
-  }
-
-  @keyframes tab-panel-in {
-    from {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html[data-tabs="on"] [data-tab-panel] {
-      animation: none !important;
-    }
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .js .animate-fade-in:not(.is-visible) {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 

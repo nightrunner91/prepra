@@ -1,223 +1,112 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import TheoryPanel from "../components/content/TheoryPanel.astro";
-import PracticePanel from "../components/content/PracticePanel.astro";
-import InterviewPanel from "../components/content/InterviewPanel.astro";
+import Hero from "../components/content/Hero.astro";
+import StatsBand from "../components/content/StatsBand.astro";
+import SectionIndex from "../components/content/SectionIndex.astro";
+import PreparationModes from "../components/content/PreparationModes.astro";
+import HowItWorks from "../components/content/HowItWorks.astro";
+import DailyQuestion from "../components/content/DailyQuestion.astro";
 import FAQ from "../components/content/FAQ.astro";
-import { sections } from "../lib/sections";
 import { withBase } from "../lib/urls";
-import { TASKS, TASKS_BY_TOPIC, TOPICS, getCodeTaskCount } from "../lib/practice";
+import {
+  getDailyQuestion,
+  getSectionStats,
+  getTotals,
+} from "../lib/section-overview";
+import { TASKS } from "../lib/practice";
 import { PRESETS } from "../lib/mock-interview/presets";
 
-const sectionDescriptions: Record<string, string> = {
-  javascript: "Основы JavaScript, ES6+, замыкания, прототипы, асинхронность",
-  typescript: "Типизация, дженерики, утилитарные типы, декораторы",
-  "html-css":
-    "Семантика, CSS-методологии, flexbox, grid, доступность и браузерный рендеринг",
-  react:
-    "JSX, хуки, паттерны, состояние, оптимизация производительности, архитектура компонентов",
-  nextjs: "Роутинг, серверные и клиентские компоненты, кэширование, деплой",
-  architecture:
-    "Паттерны проектирования, SOLID, BFF, System Design и проектирование систем",
-  "api-communication":
-    "REST, GraphQL, WebSocket, HTTP-клиенты, long polling, коды ответов",
-  "build-and-deployment":
-    "Сборка бандлов, CI/CD, контейнеры, деплой и наблюдаемость",
-  testing:
-    "Unit, интеграционное и E2E тестирование, мокирование, визуальное тестирование",
-  performance: "Метрики, виртуализация, hydration, web workers",
-  security: "XSS, CSRF, CSP, аутентификация, HTTP-заголовки",
-  ai: "Ментальная модель, паттерны промптинга, агенты, RAG",
-  vue: "Vue 3, Composition API, реактивность, Pinia и Nuxt",
-  nodejs: "Рантайм, асинхронность, HTTP-API, данные и архитектура Node.js-сервиса",
+const sectionStats = await getSectionStats();
+const { articleCount, questionCount, sectionCount } = getTotals(sectionStats);
+const dailyQuestion = await getDailyQuestion(sectionStats);
+
+const taskCount = TASKS.length;
+const presetCount = PRESETS.length;
+
+const legacyHashRoutes: Record<string, string> = {
+  theory: withBase("/theory"),
+  practice: withBase("/practice"),
+  interview: withBase("/interview"),
 };
-
-const sectionColors: Record<
-  string,
-  "red" | "blue" | "green" | "yellow" | "neutral"
-> = {
-  javascript: "yellow",
-  typescript: "blue",
-  "html-css": "red",
-  react: "blue",
-  nextjs: "neutral",
-  architecture: "neutral",
-  "api-communication": "green",
-  "build-and-deployment": "neutral",
-  testing: "green",
-  performance: "green",
-  security: "red",
-  ai: "green",
-  vue: "green",
-  nodejs: "green",
-};
-
-const sectionStats = await Promise.all(
-  sections.map(async (s) => {
-    const articles = await getCollection(s.id as any);
-    const totalQuestions = articles.reduce(
-      (sum, a) => sum + (a.data.questions?.length || 0),
-      0,
-    );
-    return {
-      ...s,
-      description: sectionDescriptions[s.id] || "",
-      color: sectionColors[s.id] || "neutral",
-      articleCount: articles.length,
-      questionCount: totalQuestions,
-    };
-  }),
-);
-
-const totalArticles = sectionStats.reduce((sum, s) => sum + s.articleCount, 0);
-const totalQuestions = sectionStats.reduce(
-  (sum, s) => sum + s.questionCount,
-  0,
-);
-
-const allQuestions: {
-  text: string;
-  sectionId: string;
-  sectionLabel: string;
-  articleSlug: string;
-}[] = [];
-for (const s of sectionStats) {
-  const articles = await getCollection(s.id as any);
-  for (const a of articles) {
-    for (const q of a.data.questions || []) {
-      allQuestions.push({
-        text: q,
-        sectionId: s.id,
-        sectionLabel: s.label,
-        articleSlug: a.id,
-      });
-    }
-  }
-}
-
-const today = new Date();
-const dayOfYear = Math.floor(
-  (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) /
-    (1000 * 60 * 60 * 24),
-);
-const dailyQuestion =
-  allQuestions.length > 0
-    ? allQuestions[dayOfYear % allQuestions.length]
-    : null;
-
-const practiceTopics = TOPICS.map((topic) => ({
-  id: topic.id,
-  label: topic.label,
-  description: topic.description,
-  color: topic.color,
-  total: TASKS_BY_TOPIC[topic.id].length,
-}));
-
-const codeTaskCount = getCodeTaskCount();
 
 const faqItems = [
   {
     question: "Для кого создана prepra?",
     answer:
-      "<p>Для фронтенд-разработчиков уровня Middle и Senior, которые готовятся к техническим собеседованиям и хотят систематизировать знания. Если ты только начинаешь путь во фронтенде, материал местами будет сложноват — желателен хотя бы небольшой опыт разработки.</p>",
+      "<p>Для фронтенд-разработчиков уровня Middle и Senior, которые готовятся к техническим собеседованиям и хотят систематизировать знания. Если ты только начинаешь путь во фронтенде, материал местами будет сложноват: желателен хотя бы небольшой опыт разработки.</p>",
   },
   {
     question: "Нужно ли регистрироваться и сколько это стоит?",
     answer:
-      "<p>Регистрация не нужна, prepra — opensource проект и полностью бесплатен. Пройденный прогресс при этом хранится только в памяти браузера (localStorage).</p>",
+      "<p>Регистрация не нужна. prepra распространяется как открытый проект и полностью бесплатен. Прогресс хранится только в памяти браузера (localStorage).</p>",
   },
   {
     question: "Как лучше использовать prepra?",
-    answer:
-      `<p>Советую начать с базы - <a href='${withBase("/javascript")}'>Javascript</a> и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал намеренно подаётся каскадом по мере углубления во фронтэнд. У каждой статьи есть практическая часть для самопроверки - не пропускай её. Закрепляй темы во <a href='#practice'>практикуме</a>, а когда будешь готов - пройди первое <a href='#interview'>мок-интервью</a>.</p>`,
+    answer: `<p>Советую начать с базы: <a href='${withBase("/javascript")}'>JavaScript</a>, и проходить темы <strong>последовательно</strong>, не перепрыгивая. Материал подаётся каскадом по мере углубления во фронтенд. У каждой статьи есть практическая часть для самопроверки, не пропускай её. Закрепляй темы в <a href='${withBase("/practice")}'>практикуме</a>, а когда будешь готов, пройди первое <a href='${withBase("/interview")}'>мок-интервью</a>.</p>`,
   },
   {
     question: "Что такое мок-интервью?",
-    answer: `<p>Это режим самопроверки, в котором вопросы собираются из разных разделов сразу — как на настоящем техническом интервью. Ты отвечаешь вслух, оцениваешь себя после каждого вопроса, а в конце получаешь таблицу по разделам и ссылку на самую слабую тему. Открывается во вкладке <a href='#interview'>«Интервью»</a> без регистрации.</p>`,
+    answer: `<p>Это режим самопроверки, в котором вопросы собираются из разных разделов сразу, как на настоящем техническом интервью. Ты отвечаешь вслух, оцениваешь себя после каждого вопроса, а в конце получаешь таблицу по разделам и ссылку на самую слабую тему. Доступно на <a href='${withBase("/interview")}'>отдельной странице</a> без регистрации.</p>`,
   },
   {
     question: "Чем практикум отличается от мок-интервью?",
-    answer: `<p>Практикум — это банк задач с проверкой: «что выведет код», выбор ответа и задачи с автотестами. Мок-интервью — режим устной самопроверки, где ты отвечаешь вслух и сам оцениваешь ответ. Сначала закрепляй базу во <a href='#practice'>вкладке «Практика»</a>, затем проверяй себя на <a href='#interview'>«Интервью»</a>.</p>`,
+    answer: `<p>Практикум: банк задач с проверкой, «что выведет код», выбор ответа и задачи с автотестами. Мок-интервью: режим устной самопроверки, где ты отвечаешь вслух и сам оцениваешь ответ. Сначала закрепляй базу в <a href='${withBase("/practice")}'>практикуме</a>, затем проверяй себя на <a href='${withBase("/interview")}'>мок-интервью</a>.</p>`,
   },
   {
     question: "Какие темы покрывают материалы prepra?",
     answer:
-      "Материалы идут от основ JavaScript и браузера к React, Next.js, System Design и инфраструктуре. Основной упор — React и Next.js; Vue остаётся вторым стеком. Разделы по Node.js, базам данных и инженерным практикам появляются по мере выхода статей.",
+      "Материалы идут от основ JavaScript и браузера к React, Next.js, System Design и инфраструктуре. Основной упор на React и Next.js, Vue остаётся вторым стеком. Разделы по Node.js, базам данных и инженерным практикам появляются по мере выхода статей.",
   },
   {
     question: "Зачем мне prepra, если есть ChatGPT?",
     answer:
-      "<p>ИИ не даёт структуры и может давать устаревшую информацию. На prepra материалы систематизированы, проверены и собраны в одном месте - это готовый план, а не спонтанный диалог.</p>",
+      "<p>ИИ не даёт структуры и может давать устаревшую информацию. На prepra материалы систематизированы, проверены и собраны в одном месте: это готовый план, а не спонтанный диалог.</p>",
   },
 ];
 ---
 
-<BaseLayout title="Главная">
-  <h1 class="sr-only">
-    Prepra — интерактивная платформа для подготовки к техническим собеседованиям
-  </h1>
-
-  <script is:inline>
+<BaseLayout
+  title="Подготовка к фронтенд-собеседованию"
+  description="Теория, задачи и мок-интервью в одном треке: 14 разделов от JavaScript и браузера до React, Next.js и System Design."
+>
+  <script is:inline define:vars={{ legacyHashRoutes }}>
     (() => {
-      const ids = ["theory", "practice", "interview"];
-      const hash = window.location.hash.replace("#", "");
-      const active = ids.indexOf(hash) >= 0 ? hash : "theory";
-      document.documentElement.setAttribute("data-tabs", "on");
-      document.documentElement.setAttribute("data-tab", active);
+      const id = window.location.hash.replace("#", "");
+      const target = legacyHashRoutes[id];
+      if (!target) return;
+      window.location.replace(target + window.location.search);
     })();
   </script>
 
-  <div class="mx-auto max-w-[1600px] px-6 pb-12 lg:px-12 lg:pb-16">
-    <TheoryPanel
-      sections={sectionStats}
-      totalArticles={totalArticles}
-      totalQuestions={totalQuestions}
-      dailyQuestion={dailyQuestion}
+  <Hero />
+
+  <StatsBand
+    sectionCount={sectionCount}
+    articleCount={articleCount}
+    questionCount={questionCount}
+    taskCount={taskCount}
+  />
+
+  <div class="mx-auto max-w-[1600px] px-6 pb-16 lg:px-12 lg:pb-20">
+    <SectionIndex sections={sectionStats} />
+
+    <PreparationModes
+      articleCount={articleCount}
+      taskCount={taskCount}
+      presetCount={presetCount}
     />
 
-    <PracticePanel
-      taskCount={TASKS.length}
-      topicCount={TOPICS.length}
-      codeTaskCount={codeTaskCount}
-      topics={practiceTopics}
-    />
+    <HowItWorks />
 
-    <InterviewPanel presets={PRESETS} />
+    {
+      dailyQuestion && (
+        <DailyQuestion
+          question={dailyQuestion}
+          questionCount={questionCount}
+        />
+      )
+    }
 
-    <div class="mt-20 mb-12 lg:mt-24">
-      <FAQ items={faqItems} />
-    </div>
+    <FAQ items={faqItems} />
   </div>
 </BaseLayout>
-
-<script>
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
-  );
-
-  function observeWithin(root: ParentNode) {
-    root
-      .querySelectorAll<HTMLElement>(".animate-fade-in:not(.is-visible)")
-      .forEach((el) => {
-        observer.unobserve(el);
-        observer.observe(el);
-      });
-  }
-
-  observeWithin(document);
-
-  document.addEventListener("tab:change", (event) => {
-    const detail = (event as CustomEvent<{ panel?: HTMLElement }>).detail;
-    if (!detail?.panel) return;
-    window.requestAnimationFrame(() => observeWithin(detail.panel!));
-  });
-</script>
