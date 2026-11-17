@@ -132,9 +132,7 @@ export function StartView({
           <div className="min-w-0">
             <h1 className="page-title">Мок-интервью</h1>
             <p className="page-lede">
-              Прогон в формате технического собеседования: вопросы из разных
-              разделов, ответы вслух и самопроверка после каждого. В конце —
-              таблица по темам и самая слабая тема.
+              Прогон в формате технического собеседования с самопроверкой.
             </p>
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <span className="chip">{presets.length} сетов</span>
@@ -225,17 +223,15 @@ export function StartView({
                       type="button"
                       onClick={() => onToggleSection(id)}
                       aria-pressed={checked}
-                      className={`flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide transition-colors ${
-                        checked
+                      className={`flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide transition-colors ${checked
                           ? "border-accent bg-pale-green-bg text-text"
                           : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
-                      }`}
+                        }`}
                     >
                       <span>{sectionLabels.get(id) ?? id}</span>
                       <span
-                        className={`shrink-0 text-[11px] ${
-                          checked ? "text-accent" : "text-text-tertiary"
-                        }`}
+                        className={`shrink-0 text-[11px] ${checked ? "text-accent" : "text-text-tertiary"
+                          }`}
                       >
                         {sectionPool.get(id) ?? 0}
                       </span>
@@ -253,11 +249,10 @@ export function StartView({
                 <button
                   type="button"
                   onClick={() => onSelectStack("")}
-                  className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${
-                    stack === ""
+                  className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${stack === ""
                       ? "border-accent bg-accent text-white dark:text-canvas"
                       : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
-                  }`}
+                    }`}
                 >
                   Любой
                 </button>
@@ -266,11 +261,10 @@ export function StartView({
                     key={option.id}
                     type="button"
                     onClick={() => onSelectStack(option.id)}
-                    className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${
-                      stack === option.id
+                    className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${stack === option.id
                         ? "border-accent bg-accent text-white dark:text-canvas"
                         : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
-                    }`}
+                      }`}
                   >
                     {option.label}
                   </button>
@@ -288,11 +282,10 @@ export function StartView({
                     key={option}
                     type="button"
                     onClick={() => onSelectLength(option)}
-                    className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${
-                      length === option
+                    className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${length === option
                         ? "border-accent bg-accent text-white dark:text-canvas"
                         : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
-                    }`}
+                      }`}
                   >
                     {option}
                   </button>
@@ -303,9 +296,8 @@ export function StartView({
 
           {(poolCapped || poolEmpty) && (
             <p
-              className={`border-t-2 border-border p-4 font-mono text-[11px] font-bold uppercase tracking-wider ${
-                poolEmpty ? "text-pale-red-text" : "text-pale-yellow-text"
-              }`}
+              className={`border-t-2 border-border p-4 font-mono text-[11px] font-bold uppercase tracking-wider ${poolEmpty ? "text-pale-red-text" : "text-pale-yellow-text"
+                }`}
             >
               {poolEmpty
                 ? "В выбранных разделах нет вопросов с ответами — выберите другие разделы"
@@ -338,44 +330,44 @@ export function StartView({
 
           {ready &&
             presets.map((preset) => {
-            const PresetIcon = PRESET_ICONS[preset.id] ?? SquaresFour;
-            const color = PRESET_COLORS[preset.id] ?? "blue";
+              const PresetIcon = PRESET_ICONS[preset.id] ?? SquaresFour;
+              const color = PRESET_COLORS[preset.id] ?? "blue";
 
-            return (
-              <button
-                key={preset.id}
-                type="button"
-                disabled={!ready}
-                onClick={() => onStartPreset(preset)}
-                aria-label={`Начать интервью: ${preset.title}, ${preset.count} ${questionWord(preset.count)}`}
-                className="tile card-hover group p-5 disabled:pointer-events-none disabled:opacity-40"
-              >
-                <span className="flex items-start justify-between gap-3">
-                  <span className="font-mono text-base font-extrabold uppercase leading-tight tracking-tight text-text transition-colors group-hover:text-accent">
-                    {preset.title}
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  disabled={!ready}
+                  onClick={() => onStartPreset(preset)}
+                  aria-label={`Начать интервью: ${preset.title}, ${preset.count} ${questionWord(preset.count)}`}
+                  className="tile card-hover group p-5 disabled:pointer-events-none disabled:opacity-40"
+                >
+                  <span className="flex items-start justify-between gap-3">
+                    <span className="font-mono text-base font-extrabold uppercase leading-tight tracking-tight text-text transition-colors group-hover:text-accent">
+                      {preset.title}
+                    </span>
+                    <span
+                      className={`shrink-0 border-2 border-border p-1 ${PRESET_BADGE_CLASSES[color]}`}
+                    >
+                      <PresetIcon size={20} weight="bold" />
+                    </span>
                   </span>
-                  <span
-                    className={`shrink-0 border-2 border-border p-1 ${PRESET_BADGE_CLASSES[color]}`}
-                  >
-                    <PresetIcon size={20} weight="bold" />
+
+                  <span className="mt-2 w-fit border border-border px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+                    {preset.count} {questionWord(preset.count)}
                   </span>
-                </span>
 
-                <span className="mt-2 w-fit border border-border px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
-                  {preset.count} {questionWord(preset.count)}
-                </span>
+                  <span className="mt-4 block text-sm font-medium leading-relaxed text-text-secondary">
+                    {preset.description}
+                  </span>
 
-                <span className="mt-4 block text-sm font-medium leading-relaxed text-text-secondary">
-                  {preset.description}
-                </span>
-
-                <span className="mt-auto flex items-center gap-1.5 pt-4 font-mono text-xs font-bold uppercase tracking-wider text-accent">
-                  Начать
-                  <ArrowRight size={14} weight="bold" />
-                </span>
-              </button>
-            );
-          })}
+                  <span className="mt-auto flex items-center gap-1.5 pt-4 font-mono text-xs font-bold uppercase tracking-wider text-accent">
+                    Начать
+                    <ArrowRight size={14} weight="bold" />
+                  </span>
+                </button>
+              );
+            })}
         </div>
       )}
 
