@@ -10,4 +10,5 @@ For full project documentation, setup instructions, and contribution guidelines,
 cd site
 npm install
 npm run dev
+npm run check:styles   # запрет произвольных размеров шрифта и цветов
 ```

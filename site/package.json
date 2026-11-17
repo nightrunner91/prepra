@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check:styles": "node scripts/check-styles.mjs",
     "postinstall": "node scripts/patch-shiki-singleton.mjs"
   },
   "keywords": [],

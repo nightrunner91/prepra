@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check styles
+        run: npm run check:styles
+
       - name: Build with Astro
         run: |
           rm -rf .astro node_modules/.astro
