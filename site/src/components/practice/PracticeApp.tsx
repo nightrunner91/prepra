@@ -25,17 +25,17 @@ import {
   saveProgress,
   type PracticeProgress,
 } from "../../lib/practice/storage";
-import type { Task, TopicId } from "../../lib/practice/types";
 import { TOPIC_MAP } from "../../lib/practice/topics";
+import type { Task, TopicId } from "../../lib/practice/types";
 import { TaskDetail } from "./TaskDetail";
 import { TaskTile } from "./TaskTile";
-import { Toolbar } from "./Toolbar";
 import type {
   DifficultyFilter,
   KindFilter,
   StatusFilter,
   TopicFilter,
 } from "./Toolbar";
+import { Toolbar } from "./Toolbar";
 import { TopicsProgress } from "./TopicsProgress";
 import { ProgressBar, StatusMark } from "./ui";
 
@@ -356,44 +356,44 @@ export function PracticeApp() {
 
   return (
     <div>
-      <header className="page-head">
-        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
-          <div className="min-w-0">
-            <h1 className="page-title">Практикум</h1>
-            <p className="page-lede">
-              Задачи на базовый JavaScript в формате «что выведет код»:
-              hoisting, замыкания, this, event loop, Map/Set, Big O, приведение
-              типов и промисы. Без регистрации и подписки.
-            </p>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <span className="chip">
-                Решено {stats.solved} / {stats.total}
-              </span>
-              <span className="chip">Точность {stats.accuracy}%</span>
-              <span className="chip">{codeTaskCount} задач с кодом</span>
+      {(!detailTask || training?.finished) && (
+        <header className="page-head">
+          <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+            <div className="min-w-0">
+              <h1 className="page-title">Практикум</h1>
+              <p className="page-lede">
+                Задачи на базовый JavaScript в формате «что выведет код» для всех грейдов.
+              </p>
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="chip">
+                  Решено {stats.solved} / {stats.total}
+                </span>
+                <span className="chip">Точность {stats.accuracy}%</span>
+                <span className="chip">{codeTaskCount} задач с кодом</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={startTraining}
+                className="btn btn-primary btn-md"
+              >
+                <Target size={16} weight="bold" />
+                Тренировка на 10
+              </button>
+              <button
+                type="button"
+                onClick={openRandomTask}
+                className="btn btn-secondary btn-md"
+              >
+                <Shuffle size={16} weight="bold" />
+                Случайная
+              </button>
             </div>
           </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={startTraining}
-              className="btn btn-primary btn-md"
-            >
-              <Target size={16} weight="bold" />
-              Тренировка на 10
-            </button>
-            <button
-              type="button"
-              onClick={openRandomTask}
-              className="btn btn-secondary btn-md"
-            >
-              <Shuffle size={16} weight="bold" />
-              Случайная
-            </button>
-          </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {training?.finished ? (
         <div className="mx-auto max-w-3xl">
