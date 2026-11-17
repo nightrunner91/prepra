@@ -8,19 +8,19 @@ import { ThemeToggle } from "./ThemeToggle.tsx";
 ---
 
 <header class="sticky top-0 z-50 border-b-[3px] border-border bg-canvas">
-  <div class="mx-auto flex h-[var(--header-h)] items-center justify-between gap-4 px-3">
-    <div class="flex h-full items-center gap-4">
-      <a
-        href={withBase("/")}
-        class="flex font-mono text-lg font-extrabold uppercase tracking-tight text-text transition-colors px-3 pt-0.5 pb-1.5 hover:text-accent"
-      >
-        <span class="text-text">PRE</span><span class="text-accent">PRA</span>
-      </a>
+  <div
+    class="mx-auto flex h-[var(--header-h)] items-center justify-between gap-4 px-4 lg:grid lg:grid-cols-[1fr_auto_1fr]"
+  >
+    <a
+      href={withBase("/")}
+      class="justify-self-start font-mono text-2xl font-extrabold uppercase tracking-tight text-text hover:text-accent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+    >
+      <span class="text-text">PRE</span><span class="text-accent">PRA</span>
+    </a>
 
-      <HeaderNav />
-    </div>
+    <HeaderNav />
 
-    <div class="flex items-center gap-2">
+    <div class="flex items-center justify-end gap-2">
       <SearchInput />
 
       <ThemeToggle client:load />

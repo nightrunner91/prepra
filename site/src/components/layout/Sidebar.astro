@@ -10,7 +10,7 @@ const { currentSection } = Astro.props;
 ---
 
 <aside
-  class="fixed bottom-0 left-0 top-[var(--header-offset)] flex w-56 flex-col overflow-y-auto border-r-[3px] border-border bg-canvas px-3 py-6"
+  class="fixed bottom-0 left-0 top-[var(--header-offset)] flex w-64 flex-col overflow-y-auto border-r-[3px] border-border bg-canvas px-3 py-6"
 >
   <nav class="space-y-0">
     {
@@ -20,7 +20,7 @@ const { currentSection } = Astro.props;
           <a
             href={withBase(`/${s.id}`)}
             aria-current={currentSection === s.id ? "page" : undefined}
-            class={`flex items-center gap-2 border-b-2 border-border px-3 py-2.5 text-[13px] font-bold uppercase tracking-wide transition-colors ${
+            class={`flex items-center gap-2 border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide transition-colors ${
               currentSection === s.id
                 ? "bg-text text-canvas"
                 : "text-text-secondary hover:bg-surface-alt hover:text-text"

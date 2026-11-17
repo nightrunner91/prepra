@@ -18,25 +18,26 @@ const isTheoryPage =
       pathname.startsWith(withBase(`/${section.id}/`)),
   );
 
-const activePage = pathname === withBase("/practice")
-  ? "practice"
-  : pathname === withBase("/interview")
-    ? "interview"
-    : isTheoryPage
-      ? "theory"
-      : undefined;
+const activePage =
+  pathname === withBase("/practice")
+    ? "practice"
+    : pathname === withBase("/interview")
+      ? "interview"
+      : isTheoryPage
+        ? "theory"
+        : undefined;
 ---
 
 <nav
   aria-label="Разделы платформы"
-  class="hidden items-center gap-5 lg:flex"
+  class="hidden justify-self-center items-center gap-3 lg:flex"
 >
   {
     tabs.map((tab) => (
       <a
         href={tab.href}
         aria-current={activePage === tab.id ? "page" : undefined}
-        class="border-b-2 border-transparent pb-0.5 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary transition-colors hover:text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-[current=page]:border-accent aria-[current=page]:text-text"
+        class="inline-flex items-center px-4 py-2 font-mono text-base font-extrabold uppercase tracking-wide text-text transition-opacity duration-100 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-[current=page]:bg-text aria-[current=page]:text-canvas aria-[current=page]:hover:opacity-100"
       >
         {tab.label}
       </a>

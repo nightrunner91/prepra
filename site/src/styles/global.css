@@ -193,7 +193,7 @@
   }
 
   .page-title {
-    @apply font-mono text-3xl font-extrabold uppercase leading-tight tracking-tight text-text sm:text-4xl lg:text-5xl;
+    @apply font-mono text-3xl font-extrabold uppercase leading-tight tracking-tight text-text sm:text-4xl lg:text-6xl;
   }
 
   .page-lede {
@@ -322,6 +322,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .animate-fade-in,
   .js .animate-fade-in:not(.is-visible) {
     opacity: 1;
@@ -382,15 +383,15 @@
   line-height: 1.25;
 }
 
-.prose pre[data-ascii-diagram] > code {
+.prose pre[data-ascii-diagram]>code {
   flex: none;
   margin-inline: auto;
   white-space: pre;
   tab-size: 2;
 }
 
-.prose pre[data-ascii-diagram] > code::before,
-.prose pre[data-ascii-diagram] > code::after {
+.prose pre[data-ascii-diagram]>code::before,
+.prose pre[data-ascii-diagram]>code::after {
   content: none;
 }
 
