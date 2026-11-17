@@ -40,7 +40,7 @@ const { question, questionCount } = Astro.props;
         </p>
         <a
           href={withBase(`/${question.sectionId}`)}
-          class="mt-5 inline-block border-2 border-border bg-canvas px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-text transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
+          class="mt-5 inline-block border-2 border-border bg-canvas px-2 py-1 eyebrow text-text transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
         >
           {question.sectionLabel}
         </a>
@@ -56,7 +56,7 @@ const { question, questionCount } = Astro.props;
         <a
           id="daily-question-link"
           href={withBase(`/${question.sectionId}/${question.articleSlug}`)}
-          class="group mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-border pt-6 font-mono text-xs font-bold uppercase tracking-wider text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
+          class="group mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-border pt-6 eyebrow text-text transition-colors hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
         >
           Читать статью
           <ArrowRight

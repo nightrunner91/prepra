@@ -140,7 +140,7 @@ export function ResultsView({
                 {counts[status]}
               </span>
               <span
-                className={`font-mono text-[10px] font-bold uppercase tracking-wider ${meta.color}`}
+                className={`eyebrow ${meta.color}`}
               >
                 {meta.label}
               </span>
@@ -158,7 +158,7 @@ export function ResultsView({
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b-2 border-border font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+              <tr className="border-b-2 border-border eyebrow text-text-tertiary">
                 <th className="px-4 py-2 sm:px-5">Раздел</th>
                 {STATUSES.map((status) => (
                   <th key={status} className="px-3 py-2 text-center">
@@ -202,7 +202,7 @@ export function ResultsView({
 
       {weakest && (
         <div className="panel mt-6 bg-pale-red-bg p-4 sm:p-5">
-          <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-red-text">
+          <div className="eyebrow text-pale-red-text">
             Самая слабая тема
           </div>
           <div className="mt-2 flex items-center gap-2">

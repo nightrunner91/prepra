@@ -28,7 +28,7 @@ export function TopicsProgress({
         <h2 className="font-mono text-lg font-extrabold uppercase tracking-tight text-text">
           Прогресс по темам
         </h2>
-        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+        <span className="eyebrow text-text-tertiary">
           Решено {solved} из {total}
         </span>
       </div>
@@ -45,10 +45,10 @@ export function TopicsProgress({
               className="border-2 border-border bg-canvas p-3 text-left transition-colors hover:bg-surface-alt"
             >
               <span className="flex items-center justify-between gap-2">
-                <span className="font-mono text-[11px] font-bold uppercase tracking-wide text-text">
+                <span className="eyebrow tracking-wide text-text">
                   {topic.label}
                 </span>
-                <span className="shrink-0 font-mono text-[10px] font-bold text-text-tertiary">
+                <span className="shrink-0 font-mono text-xs font-bold text-text-tertiary">
                   {item.solved}/{item.total}
                 </span>
               </span>
@@ -65,7 +65,7 @@ export function TopicsProgress({
       <div className="flex flex-wrap items-center gap-2 border-t-2 border-border p-4 sm:px-5">
         {weakTopics.length > 0 ? (
           <>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+            <span className="eyebrow text-text-tertiary">
               Слабые темы:
             </span>
             {weakTopics.map((topicId) => (
@@ -73,14 +73,14 @@ export function TopicsProgress({
                 key={topicId}
                 type="button"
                 onClick={() => onSelectTopic(topicId)}
-                className="border-2 border-border bg-pale-red-bg px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-pale-red-text transition-colors hover:bg-pale-red-bg-hover"
+                className="border-2 border-border bg-pale-red-bg px-2 py-1 eyebrow text-pale-red-text transition-colors hover:bg-pale-red-bg-hover"
               >
                 {TOPIC_MAP[topicId].label}
               </button>
             ))}
           </>
         ) : (
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+          <span className="eyebrow text-text-tertiary">
             Прогресс хранится в localStorage
           </span>
         )}
@@ -88,7 +88,7 @@ export function TopicsProgress({
         <button
           type="button"
           onClick={onResetAll}
-          className="ml-auto inline-flex items-center gap-1.5 border-2 border-border bg-surface px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary transition-colors hover:bg-pale-red-bg hover:text-pale-red-text"
+          className="ml-auto inline-flex items-center gap-1.5 border-2 border-border bg-surface px-3 py-1.5 eyebrow text-text-secondary transition-colors hover:bg-pale-red-bg hover:text-pale-red-text"
         >
           <Trash size={12} weight="bold" />
           Сбросить прогресс

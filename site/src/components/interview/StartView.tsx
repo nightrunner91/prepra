@@ -174,7 +174,7 @@ export function StartView({
           <h2 className="font-mono text-xl font-extrabold uppercase tracking-tight text-text">
             Готовые сеты
           </h2>
-          <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+          <p className="mt-1 eyebrow text-text-tertiary">
             Выбери сет — интервью стартует сразу
           </p>
         </div>
@@ -210,7 +210,7 @@ export function StartView({
 
           <div className="grid gap-5 p-4 lg:grid-cols-2">
             <fieldset className="min-w-0 lg:col-span-2">
-              <legend className="mb-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+              <legend className="mb-2 eyebrow text-text-tertiary">
                 Разделы
               </legend>
               <div className="flex flex-wrap gap-2">
@@ -230,7 +230,7 @@ export function StartView({
                     >
                       <span>{sectionLabels.get(id) ?? id}</span>
                       <span
-                        className={`shrink-0 text-[11px] ${checked ? "text-accent" : "text-text-tertiary"
+                        className={`shrink-0 text-xs ${checked ? "text-accent" : "text-text-tertiary"
                           }`}
                       >
                         {sectionPool.get(id) ?? 0}
@@ -242,7 +242,7 @@ export function StartView({
             </fieldset>
 
             <fieldset className="min-w-0">
-              <legend className="mb-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+              <legend className="mb-2 eyebrow text-text-tertiary">
                 Стек
               </legend>
               <div className="flex flex-wrap gap-2">
@@ -273,7 +273,7 @@ export function StartView({
             </fieldset>
 
             <fieldset className="min-w-0">
-              <legend className="mb-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+              <legend className="mb-2 eyebrow text-text-tertiary">
                 Длина интервью
               </legend>
               <div className="flex flex-wrap gap-2">
@@ -296,7 +296,7 @@ export function StartView({
 
           {(poolCapped || poolEmpty) && (
             <p
-              className={`border-t-2 border-border p-4 font-mono text-[11px] font-bold uppercase tracking-wider ${poolEmpty ? "text-pale-red-text" : "text-pale-yellow-text"
+              className={`border-t-2 border-border p-4 eyebrow ${poolEmpty ? "text-pale-red-text" : "text-pale-yellow-text"
                 }`}
             >
               {poolEmpty
@@ -353,7 +353,7 @@ export function StartView({
                     </span>
                   </span>
 
-                  <span className="mt-2 w-fit border border-border px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+                  <span className="mt-2 w-fit border border-border px-1.5 py-0.5 eyebrow text-text-tertiary">
                     {preset.count} {questionWord(preset.count)}
                   </span>
 
@@ -361,7 +361,7 @@ export function StartView({
                     {preset.description}
                   </span>
 
-                  <span className="mt-auto flex items-center gap-1.5 pt-4 font-mono text-xs font-bold uppercase tracking-wider text-accent">
+                  <span className="mt-auto flex items-center gap-1.5 pt-4 eyebrow text-accent">
                     Начать
                     <ArrowRight size={14} weight="bold" />
                   </span>
@@ -378,7 +378,7 @@ export function StartView({
           className="fixed inset-x-0 bottom-0 z-40 border-t-[3px] border-border bg-canvas"
         >
           <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-10" style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
-            <div className="min-w-0 font-mono text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+            <div className="min-w-0 eyebrow text-text-secondary">
               {sections.length > 0
                 ? `${sections.length} ${sectionWord(sections.length)}`
                 : "Разделы не выбраны"}

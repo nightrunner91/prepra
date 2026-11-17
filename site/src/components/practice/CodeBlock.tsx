@@ -126,20 +126,20 @@ export function CodeBlock({ code, label = "JavaScript", className = "" }: CodeBl
       className={`overflow-hidden border-2 border-border bg-surface-alt ${className}`}
     >
       <div className="flex items-center justify-between gap-3 border-b-2 border-border px-3 py-1.5">
-        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+        <span className="eyebrow text-text-tertiary">
           {label}
         </span>
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1 font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary transition-colors hover:text-accent"
+          className="inline-flex items-center gap-1 eyebrow text-text-secondary transition-colors hover:text-accent"
           aria-label="Скопировать код"
         >
           {copied ? <Check size={13} weight="bold" /> : <Copy size={13} />}
           {copied ? "Скопировано" : "Копировать"}
         </button>
       </div>
-      <pre className="max-h-[420px] overflow-auto p-3 text-[12.5px] leading-relaxed text-text sm:p-4 sm:text-[13px]">
+      <pre className="max-h-[420px] overflow-auto p-3 text-xs leading-relaxed text-text sm:p-4">
         <code className="font-mono">{highlight(code)}</code>
       </pre>
     </div>

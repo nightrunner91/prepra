@@ -56,12 +56,12 @@ const { articleCount, taskCount } = Astro.props;
           class="flex items-center justify-between border-b-[3px] border-border bg-surface px-4 py-2"
         >
           <span
-            class="font-mono text-[11px] font-bold uppercase tracking-wider text-text"
+            class="eyebrow text-text"
           >
             track.ts
           </span>
           <span
-            class="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary"
+            class="eyebrow text-text-tertiary"
           >
             typescript
           </span>
@@ -72,7 +72,7 @@ const { articleCount, taskCount } = Astro.props;
         >
         </div>
         <div
-          class="flex items-center justify-between gap-3 border-t-[3px] border-border bg-surface px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wider text-text-secondary"
+          class="flex items-center justify-between gap-3 border-t-[3px] border-border bg-surface px-3 py-1.5 eyebrow text-text-secondary"
         >
           <div class="flex items-center gap-3">
             <span class="flex items-center gap-1 text-text">
@@ -101,7 +101,7 @@ const { articleCount, taskCount } = Astro.props;
     font-weight: 700;
   }
   :global(.g-str) {
-    color: #b45309;
+    color: var(--color-syntax-string);
   }
   :global(.g-fn) {
     color: var(--color-text);
@@ -173,9 +173,6 @@ const { articleCount, taskCount } = Astro.props;
       opacity: 1;
       transform: none;
     }
-  }
-  :global(.dark) :global(.g-str) {
-    color: #fbbf24;
   }
   /* Повторный заход: код уже набран, ничего не проигрываем. */
   :global(.is-static .g-ch),

@@ -18,7 +18,7 @@ export function TaskTile({ task, number, status, onOpen }: TaskTileProps) {
       className="tile card-hover group p-4"
     >
       <span className="flex items-start justify-between gap-2">
-        <span className="font-mono text-[10px] font-bold text-text-tertiary">
+        <span className="font-mono text-xs font-bold text-text-tertiary">
           #{String(number).padStart(3, "0")}
         </span>
         <StatusMark status={status} size={16} />
@@ -32,7 +32,7 @@ export function TaskTile({ task, number, status, onOpen }: TaskTileProps) {
         <TopicBadge topic={task.topic} short />
         <DifficultyBadge difficulty={task.difficulty} />
         {task.kind === "code" && (
-          <span className="inline-flex items-center gap-1 border-2 border-border bg-surface-alt px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+          <span className="inline-flex items-center gap-1 border-2 border-border bg-surface-alt px-2 py-0.5 eyebrow text-text-secondary">
             <Code size={11} weight="bold" />
             Код
           </span>

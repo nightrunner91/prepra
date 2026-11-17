@@ -17,7 +17,7 @@ export function InlineText({ text }: { text: string }) {
         index % 2 === 1 ? (
           <code
             key={index}
-            className="border border-border bg-surface-alt px-1 py-0.5 font-mono text-[0.9em] font-semibold"
+            className="border border-border bg-surface-alt px-1 py-0.5 font-mono text-xs font-semibold"
           >
             {part}
           </code>
@@ -36,7 +36,7 @@ export function DifficultyBadge({ difficulty }: { difficulty: Difficulty }) {
 
   return (
     <span
-      className={`inline-flex items-center border-2 border-border px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider ${colorClasses[color]}`}
+      className={`inline-flex items-center border-2 border-border px-2 py-0.5 eyebrow ${colorClasses[color]}`}
     >
       {label}
     </span>
@@ -54,7 +54,7 @@ export function TopicBadge({
 
   return (
     <span
-      className={`inline-flex items-center border-2 border-border px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider ${colorClasses[meta.color]}`}
+      className={`inline-flex items-center border-2 border-border px-2 py-0.5 eyebrow ${colorClasses[meta.color]}`}
     >
       {short ? meta.short : meta.label}
     </span>
@@ -63,7 +63,7 @@ export function TopicBadge({
 
 export function KindBadge({ kind }: { kind: "choice" | "code" }) {
   return (
-    <span className="inline-flex items-center border-2 border-border bg-surface-alt px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+    <span className="inline-flex items-center border-2 border-border bg-surface-alt px-2 py-0.5 eyebrow text-text-secondary">
       {kind === "code" ? "Код" : "Выбор ответа"}
     </span>
   );

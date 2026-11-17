@@ -109,10 +109,10 @@ export function ActiveView({
         >
           <div className="quiz-card-face flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-10">
             <div className="flex items-start justify-between gap-2">
-              <span className="border-2 border-border bg-canvas px-2 py-1 font-mono text-[10px] font-extrabold uppercase tracking-wider text-accent">
+              <span className="border-2 border-border bg-canvas px-2 py-1 eyebrow font-extrabold text-accent">
                 {question.sectionLabel}
               </span>
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+              <span className="eyebrow text-text-tertiary">
                 Вопрос
               </span>
             </div>
@@ -122,7 +122,7 @@ export function ActiveView({
                 {renderInlineCode(question.question)}?
               </p>
               {!flipped && (
-                <div className="mt-6 flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-wider text-text-secondary md:mt-8">
+                <div className="mt-6 flex items-center gap-2 eyebrow text-text-secondary md:mt-8">
                   <Eye size={14} />
                   Нажмите, чтобы увидеть ответ
                 </div>
@@ -132,7 +132,7 @@ export function ActiveView({
 
           <div className="quiz-card-face quiz-card-back flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-10">
             <div className="my-auto py-6">
-              <div className="mb-3 font-mono text-[10px] font-bold uppercase tracking-wider text-accent">
+              <div className="mb-3 eyebrow text-accent">
                 Ответ
               </div>
               <p className="quiz-answer break-words text-left text-base leading-relaxed text-text-secondary md:text-lg">
@@ -160,7 +160,7 @@ export function ActiveView({
                 >
                   {meta.icon}
                   <span
-                    className={`font-mono text-[10px] font-bold uppercase tracking-wider sm:text-xs ${meta.color}`}
+                    className={`eyebrow ${meta.color}`}
                   >
                     {meta.label}
                   </span>

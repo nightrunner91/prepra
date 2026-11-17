@@ -309,10 +309,10 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
     <div className="space-y-4">
       <div className="overflow-hidden border-2 border-border bg-surface">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-border bg-surface-alt px-3 py-2">
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+          <span className="eyebrow text-text-tertiary">
             Решение · {task.entry}()
           </span>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+          <span className="eyebrow text-text-tertiary">
             {task.tests.length} тестов
           </span>
         </div>
@@ -323,7 +323,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
           onKeyDown={handleEditorKeyDown}
           spellCheck={false}
           rows={Math.min(20, Math.max(10, code.split("\n").length + 1))}
-          className="block w-full resize-y border-0 bg-canvas p-3 font-mono text-[13px] leading-relaxed text-text outline-none focus:ring-2 focus:ring-inset focus:ring-accent"
+          className="block w-full resize-y border-0 bg-canvas p-3 font-mono text-xs leading-relaxed text-text outline-none focus:ring-2 focus:ring-inset focus:ring-accent"
           aria-label={`Редактор решения задачи ${task.title}`}
         />
 
@@ -332,7 +332,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
             type="button"
             onClick={handleRun}
             disabled={running}
-            className="inline-flex items-center gap-2 border-2 border-border bg-accent px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex items-center gap-2 border-2 border-border bg-accent px-4 py-2 eyebrow text-white transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:cursor-wait disabled:opacity-70"
           >
             {running ? (
               <Spinner size={15} weight="bold" className="animate-spin" />
@@ -345,7 +345,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 font-mono text-xs font-bold uppercase tracking-wider text-text transition-colors hover:bg-surface-alt"
+            className="inline-flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 eyebrow text-text transition-colors hover:bg-surface-alt"
           >
             <ArrowCounterClockwise size={15} weight="bold" />
             Сбросить
@@ -355,7 +355,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
             <button
               type="button"
               onClick={() => setShowHints((value) => !value)}
-              className="inline-flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 font-mono text-xs font-bold uppercase tracking-wider text-text transition-colors hover:bg-surface-alt"
+              className="inline-flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 eyebrow text-text transition-colors hover:bg-surface-alt"
               aria-expanded={showHints}
             >
               <Lightbulb size={15} weight="bold" />
@@ -366,7 +366,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
           <button
             type="button"
             onClick={handleSolution}
-            className="ml-auto inline-flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
+            className="ml-auto inline-flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 eyebrow text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
             aria-expanded={showSolution}
           >
             {showSolution ? <EyeSlash size={15} /> : <Eye size={15} />}
@@ -377,7 +377,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
 
       {showHints && task.hints && task.hints.length > 0 && (
         <div className="border-2 border-border bg-pale-yellow-bg p-4">
-          <div className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">
+          <div className="eyebrow text-pale-yellow-text">
             Подсказки
           </div>
           <ul className="mt-2 space-y-1.5 text-sm font-medium text-text-secondary">
@@ -402,29 +402,29 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
       )}
 
       <details className="border-2 border-border bg-surface">
-        <summary className="cursor-pointer px-3 py-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
+        <summary className="cursor-pointer px-3 py-2 eyebrow text-text-secondary">
           Тестовые случаи
         </summary>
         <div className="space-y-2 border-t-2 border-border p-3">
           {task.tests.map((test, index) => (
             <div key={index} className="border border-border bg-canvas p-2.5">
-              <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+              <div className="eyebrow text-text-tertiary">
                 {test.label ?? `Тест ${index + 1}`}
               </div>
-              <div className="mt-1.5 grid gap-1 text-[12px] text-text-secondary sm:grid-cols-2">
+              <div className="mt-1.5 grid gap-1 text-xs text-text-secondary sm:grid-cols-2">
                 <div>
-                  <span className="font-mono text-[10px] font-bold uppercase text-text-tertiary">
+                  <span className="eyebrow text-text-tertiary">
                     Вход:
                   </span>
-                  <pre className="mt-0.5 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[11.5px] text-text">
+                  <pre className="mt-0.5 overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs text-text">
                     {formatValue(test.args)}
                   </pre>
                 </div>
                 <div>
-                  <span className="font-mono text-[10px] font-bold uppercase text-text-tertiary">
+                  <span className="eyebrow text-text-tertiary">
                     Ожидается:
                   </span>
-                  <pre className="mt-0.5 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[11.5px] text-text">
+                  <pre className="mt-0.5 overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs text-text">
                     {formatValue(test.expected)}
                   </pre>
                 </div>
@@ -457,13 +457,13 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span
-                  className={`font-mono text-xs font-bold uppercase tracking-wider ${
+                  className={`eyebrow ${
                     result.ok ? "text-pale-green-text" : "text-pale-red-text"
                   }`}
                 >
                   {result.ok ? "✓" : "✕"} {result.label}
                 </span>
-                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+                <span className="eyebrow text-text-tertiary">
                   {result.ms} ms
                 </span>
               </div>
@@ -471,18 +471,18 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
               {!result.ok && (
                 <div className="mt-2 grid gap-2 sm:grid-cols-2">
                   <div>
-                    <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+                    <div className="eyebrow text-text-tertiary">
                       Получено
                     </div>
-                    <pre className="mt-0.5 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[11.5px] text-text">
+                    <pre className="mt-0.5 overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs text-text">
                       {result.actual}
                     </pre>
                   </div>
                   <div>
-                    <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+                    <div className="eyebrow text-text-tertiary">
                       Ожидалось
                     </div>
-                    <pre className="mt-0.5 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[11.5px] text-text">
+                    <pre className="mt-0.5 overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs text-text">
                       {result.expected}
                     </pre>
                   </div>
@@ -499,7 +499,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
           <button
             type="button"
             onClick={() => setCode(task.solution)}
-            className="border-2 border-border bg-surface px-3 py-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
+            className="border-2 border-border bg-surface px-3 py-2 eyebrow text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
           >
             Загрузить решение в редактор
           </button>
@@ -512,7 +512,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
             allPassed ? "bg-pale-green-bg" : "bg-surface-alt"
           }`}
         >
-          <div className="font-mono text-xs font-bold uppercase tracking-wider text-text">
+          <div className="eyebrow text-text">
             {allPassed ? "Разбор" : "Разбор решения"}
           </div>
           <p className="mt-2 whitespace-pre-line text-sm font-medium leading-relaxed text-text-secondary">
@@ -522,7 +522,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
           {task.article && (
             <a
               href={withBase(task.article.href)}
-              className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-bold uppercase tracking-wider text-accent hover:underline"
+              className="mt-3 inline-flex items-center gap-1 eyebrow text-accent hover:underline"
             >
               {task.article.label}
               <ArrowRight size={13} weight="bold" />

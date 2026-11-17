@@ -251,7 +251,7 @@ export function SearchModal() {
                 <button
                   type="button"
                   onClick={() => searchPill(pill)}
-                  className="px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary transition-colors hover:text-text"
+                  className="px-3 py-1.5 eyebrow text-text-secondary transition-colors hover:text-text"
                 >
                   {pill}
                 </button>
@@ -306,7 +306,7 @@ export function SearchModal() {
                       <h3 className="min-w-0 font-mono text-sm font-extrabold uppercase tracking-tight text-text">
                         {result.title}
                       </h3>
-                      <span className="shrink-0 border border-border px-2 py-0.5 font-mono text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
+                      <span className="shrink-0 border border-border px-2 py-0.5 eyebrow text-text-tertiary">
                         {result.sectionLabel}
                       </span>
                     </div>

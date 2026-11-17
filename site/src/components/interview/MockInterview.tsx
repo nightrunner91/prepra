@@ -451,7 +451,7 @@ function StartingView() {
         <p className="font-mono text-sm font-extrabold uppercase tracking-wider text-text">
           Запускаем интервью…
         </p>
-        <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
+        <p className="eyebrow text-text-tertiary">
           Подбираем вопросы под выбранный сет
         </p>
       </div>

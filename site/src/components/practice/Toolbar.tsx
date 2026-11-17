@@ -115,7 +115,7 @@ export function Toolbar({
             type="button"
             onClick={() => onStatus(option.value)}
             aria-pressed={status === option.value}
-            className={`border-2 border-border px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider transition-colors ${
+            className={`border-2 border-border px-2 py-0.5 eyebrow transition-colors ${
               status === option.value
                 ? "bg-text text-canvas"
                 : "bg-canvas text-text-secondary hover:bg-surface-alt hover:text-text"
@@ -126,7 +126,7 @@ export function Toolbar({
         ))}
 
         <span
-          className="ml-auto font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary"
+          className="ml-auto eyebrow text-text-tertiary"
           aria-live="polite"
         >
           Найдено: {found}
@@ -136,7 +136,7 @@ export function Toolbar({
           <button
             type="button"
             onClick={onReset}
-            className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary underline decoration-2 underline-offset-2 transition-colors hover:text-accent"
+            className="eyebrow text-text-secondary underline decoration-2 underline-offset-2 transition-colors hover:text-accent"
           >
             Сбросить
           </button>

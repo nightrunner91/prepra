@@ -104,7 +104,7 @@ export function TaskDetail({
           <DifficultyBadge difficulty={task.difficulty} />
           <KindBadge kind={task.kind} />
           {status && (
-            <span className="inline-flex items-center gap-1 border-2 border-border bg-canvas px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary">
+            <span className="inline-flex items-center gap-1 border-2 border-border bg-canvas px-2 py-0.5 eyebrow text-text-secondary">
               <StatusMark status={status.status} size={13} />
               {status.status === "solved" ? "Решено" : "Была ошибка"}
               {status.attempts > 1 ? ` · ${status.attempts}` : ""}
@@ -119,7 +119,7 @@ export function TaskDetail({
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex shrink-0 items-center gap-1 border-2 border-border bg-canvas px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
+            className="inline-flex shrink-0 items-center gap-1 border-2 border-border bg-canvas px-2 py-1 eyebrow text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
             title="Сбросить прогресс по этой задаче"
           >
             <ArrowCounterClockwise size={13} weight="bold" />
@@ -127,7 +127,7 @@ export function TaskDetail({
           </button>
         </div>
 
-        <p className="mt-3 whitespace-pre-line text-sm font-medium leading-relaxed text-text-secondary sm:text-[15px]">
+        <p className="mt-3 whitespace-pre-line text-sm font-medium leading-relaxed text-text-secondary sm:text-sm">
           <InlineText text={task.prompt} />
         </p>
       </header>
@@ -160,7 +160,7 @@ export function TaskDetail({
                     }`}
                   >
                     <span
-                      className={`flex h-6 w-6 shrink-0 items-center justify-center border-2 border-border font-mono text-[11px] font-bold ${
+                      className={`flex h-6 w-6 shrink-0 items-center justify-center border-2 border-border font-mono text-xs font-bold ${
                         correct
                           ? "bg-pale-green-text text-canvas"
                           : wrong
@@ -184,7 +184,7 @@ export function TaskDetail({
               })}
             </div>
 
-            <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+            <p className="eyebrow text-text-tertiary">
               Можно отвечать клавишами 1–{task.options.length}
             </p>
 
@@ -195,7 +195,7 @@ export function TaskDetail({
                 }`}
               >
                 <div
-                  className={`font-mono text-xs font-bold uppercase tracking-wider ${
+                  className={`eyebrow ${
                     isCorrect ? "text-pale-green-text" : "text-pale-red-text"
                   }`}
                 >
@@ -208,7 +208,7 @@ export function TaskDetail({
                 {task.article && (
                   <a
                     href={withBase(task.article.href)}
-                    className="mt-3 inline-flex items-center gap-1 font-mono text-xs font-bold uppercase tracking-wider text-accent hover:underline"
+                    className="mt-3 inline-flex items-center gap-1 eyebrow text-accent hover:underline"
                   >
                     {task.article.label}
                     <ArrowRight size={13} weight="bold" />
@@ -219,7 +219,7 @@ export function TaskDetail({
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="mt-3 block border-2 border-border bg-surface px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-wider text-text transition-colors hover:bg-surface-alt"
+                    className="mt-3 block border-2 border-border bg-surface px-3 py-1.5 eyebrow text-text transition-colors hover:bg-surface-alt"
                   >
                     Попробовать ещё раз
                   </button>
@@ -257,7 +257,7 @@ export function TaskDetail({
 
         <div className="ml-auto flex items-center gap-2">
           {training && (
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+            <span className="eyebrow text-text-tertiary">
               {training.current} / {training.total}
             </span>
           )}

@@ -355,22 +355,22 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
           <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-green-bg p-3">
             <ThumbsUp size={22} weight="bold" className="text-pale-green-text" />
             <span className="font-mono text-2xl font-extrabold text-pale-green-text">{counts.good}</span>
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
+            <span className="eyebrow text-pale-green-text">Отлично</span>
           </div>
           <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-yellow-bg p-3">
             <SmileyMeh size={22} weight="bold" className="text-pale-yellow-text" />
             <span className="font-mono text-2xl font-extrabold text-pale-yellow-text">{counts.unsure}</span>
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">Неуверенно</span>
+            <span className="eyebrow text-pale-yellow-text">Неуверенно</span>
           </div>
           <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-red-bg p-3">
             <ThumbsDown size={22} weight="bold" className="text-pale-red-text" />
             <span className="font-mono text-2xl font-extrabold text-pale-red-text">{counts.failed}</span>
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
+            <span className="eyebrow text-pale-red-text">Плохо</span>
           </div>
           <div className="flex flex-col items-center gap-1 border-2 border-border bg-surface-alt p-3">
             <PauseCircle size={22} weight="fill" className="text-text-secondary" />
             <span className="font-mono text-2xl font-extrabold text-text-secondary">{counts.skipped}</span>
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">Пропущено</span>
+            <span className="eyebrow text-text-secondary">Пропущено</span>
           </div>
         </div>
 
@@ -378,7 +378,7 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
           <button
             type="button"
             onClick={() => setDetailsOpen(v => !v)}
-            className="flex w-full items-center justify-between border-2 border-border bg-surface-alt px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary transition-all hover:bg-text hover:text-canvas"
+            className="flex w-full items-center justify-between border-2 border-border bg-surface-alt px-4 py-3 eyebrow text-text-secondary transition-all hover:bg-text hover:text-canvas"
             aria-expanded={detailsOpen}
           >
             <span>Ответы по вопросам ({total})</span>
@@ -449,7 +449,7 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
         {!nextArticle && sectionHref && sectionLabel && (
           <a
             href={sectionHref}
-            className="text-center font-mono text-xs font-bold uppercase tracking-wider text-text-secondary underline-offset-4 transition-colors hover:text-accent hover:underline"
+            className="text-center eyebrow text-text-secondary underline-offset-4 transition-colors hover:text-accent hover:underline"
           >
             Перейти к разделу «{sectionLabel}»
           </a>
@@ -516,14 +516,14 @@ function QuizView({
         <div className={`quiz-card-inner relative h-full min-h-[300px] w-full sm:min-h-[400px] ${flipped ? 'flipped' : ''}`}>
           <div className="quiz-card-face flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-12">
             <div className="my-auto">
-              <div className="mb-4 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary md:mb-6">
+              <div className="mb-4 eyebrow text-text-secondary md:mb-6">
                 Вопрос
               </div>
               <p className="quiz-question break-words text-left text-lg font-bold leading-relaxed text-text md:text-xl">
                 {renderInlineCode(question)}?
               </p>
               {!flipped && (
-                <div className="mt-6 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary md:mt-10">
+                <div className="mt-6 flex items-center gap-2 eyebrow text-text-secondary md:mt-10">
                   <Eye size={14} />
                   Нажмите, чтобы увидеть ответ
                 </div>
@@ -533,7 +533,7 @@ function QuizView({
 
           <div className="quiz-card-face quiz-card-back flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-12">
             <div className="my-auto">
-              <div className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-accent md:mb-4">
+              <div className="mb-3 eyebrow text-accent md:mb-4">
                 Ответ
               </div>
               <p className="quiz-answer break-words text-left text-base leading-relaxed text-text-secondary md:text-lg">
@@ -559,7 +559,7 @@ function QuizView({
                 aria-label="Ответил уверенно"
               >
                 <ThumbsUp size={24} weight="bold" className="text-pale-green-text" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-green-text">Отлично</span>
+                <span className="eyebrow text-pale-green-text">Отлично</span>
               </button>
               <button
                 type="button"
@@ -569,7 +569,7 @@ function QuizView({
                 aria-label="Ответил неуверенно"
               >
                 <SmileyMeh size={24} weight="bold" className="text-pale-yellow-text" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">Так себе</span>
+                <span className="eyebrow text-pale-yellow-text">Так себе</span>
               </button>
               <button
                 type="button"
@@ -579,7 +579,7 @@ function QuizView({
                 aria-label="Не смог ответить"
               >
                 <ThumbsDown size={24} weight="bold" className="text-pale-red-text" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">Плохо</span>
+                <span className="eyebrow text-pale-red-text">Плохо</span>
               </button>
             </div>
           </div>

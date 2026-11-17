@@ -406,7 +406,7 @@ export function PracticeApp() {
                 <h2 className="font-mono text-xl font-extrabold uppercase tracking-tight text-text">
                   Тренировка завершена
                 </h2>
-                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+                <p className="eyebrow text-text-tertiary">
                   {trainingSolved} из {trainingTotal} решено
                 </p>
               </div>
@@ -424,7 +424,7 @@ export function PracticeApp() {
 
             {training.ids.filter((id) => !training.results[id]).length > 0 && (
               <div className="mt-4">
-                <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+                <div className="eyebrow text-text-tertiary">
                   Разобрать ошибки
                 </div>
                 <div className="mt-2 flex flex-col gap-1.5">
@@ -440,7 +440,7 @@ export function PracticeApp() {
                             setTraining(null);
                             selectTask(id, "replace");
                           }}
-                          className="flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 text-left font-mono text-[11px] font-bold uppercase tracking-wide text-text transition-colors hover:bg-surface-alt"
+                          className="flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 text-left eyebrow tracking-wide text-text transition-colors hover:bg-surface-alt"
                         >
                           <StatusMark status="failed" size={14} />
                           {task.title}
@@ -481,23 +481,23 @@ export function PracticeApp() {
               <ArrowLeft size={14} weight="bold" />
               Все задачи
             </button>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+            <span className="eyebrow text-text-tertiary">
               Задача {taskNumbers.get(detailTask.id)} из {TASKS.length}
             </span>
           </div>
 
           {training && !training.finished && (
             <div className="panel mb-3 flex flex-wrap items-center gap-3 bg-pale-yellow-bg p-3">
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-pale-yellow-text">
+              <span className="eyebrow text-pale-yellow-text">
                 Тренировка · {training.index + 1} / {training.ids.length}
               </span>
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
+              <span className="eyebrow text-text-tertiary">
                 Решено: {trainingSolved}
               </span>
               <button
                 type="button"
                 onClick={() => setTraining(null)}
-                className="ml-auto font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary underline decoration-2 underline-offset-2 transition-colors hover:text-text"
+                className="ml-auto eyebrow text-text-secondary underline decoration-2 underline-offset-2 transition-colors hover:text-text"
               >
                 Выйти
               </button>
