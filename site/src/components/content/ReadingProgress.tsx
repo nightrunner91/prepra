@@ -4,35 +4,62 @@ export function ReadingProgress() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const article = document.querySelector('article');
-      if (!article) return;
+    const article = document.querySelector('article');
+    if (!article) return;
 
-      const rect = article.getBoundingClientRect();
-      const articleHeight = article.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      const scrollable = articleHeight - viewportHeight;
+    const getHeaderOffset = () =>
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          '--header-offset',
+        ),
+      ) || 0;
 
-      if (scrollable <= 0) {
+    const update = () => {
+      const top = article.getBoundingClientRect().top + window.scrollY;
+      const height = article.offsetHeight;
+
+      // Старт — когда верх статьи поравнялся с низом шапки,
+      // финиш — когда низ статьи поравнялся с низом окна.
+      const start = top - getHeaderOffset();
+      const end = top + height - window.innerHeight;
+      const span = end - start;
+
+      if (span <= 0) {
         setProgress(0);
         return;
       }
 
-      const scrolled = -rect.top;
-      const pct = Math.min(100, Math.max(0, (scrolled / scrollable) * 100));
-      setProgress(pct);
+      const pct = ((window.scrollY - start) / span) * 100;
+      setProgress(Math.min(100, Math.max(0, pct)));
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+
+    const observer = new ResizeObserver(update);
+    observer.observe(article);
+
+    update();
+
+    return () => {
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+      observer.disconnect();
+    };
   }, []);
 
   return (
-    <div className="fixed top-14 left-0 right-0 z-[60] h-[3px] bg-border/20">
+    <div
+      role="progressbar"
+      aria-label="Прогресс чтения"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(progress)}
+      className="fixed left-0 right-0 top-[var(--header-h)] z-[60] h-[3px]"
+    >
       <div
-        className="h-full bg-accent transition-[width] duration-100"
-        style={{ width: `${progress}%` }}
+        className="h-full origin-left bg-accent transition-transform duration-100"
+        style={{ transform: `scaleX(${progress / 100})` }}
       />
     </div>
   );

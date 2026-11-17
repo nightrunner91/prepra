@@ -1,6 +1,14 @@
 ---
 import { ArrowRight, CheckCircle, GitBranch } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
+import { plural } from "../../lib/plural";
+
+interface Props {
+  articleCount: number;
+  taskCount: number;
+}
+
+const { articleCount, taskCount } = Astro.props;
 ---
 
 <section class="border-b-[3px] border-border bg-surface">
@@ -9,14 +17,17 @@ import { withBase } from "../../lib/urls";
   >
     <div>
       <h1
-        class="-ms-1 font-mono text-6xl font-extrabold uppercase leading-[0.88] tracking-tight text-text sm:text-7xl lg:text-8xl xl:text-9xl"
+        class="-ms-1 font-mono text-6xl font-extrabold uppercase tracking-tight text-text sm:text-7xl lg:text-8xl xl:text-9xl"
       >
-        <span class="text-text">PRE</span><span class="text-accent">PRA</span>
+        <span
+          class="block text-xl font-bold tracking-normal sm:text-3xl lg:mt-6 lg:text-6xl leading-relaxed"
+          ><span class="sr-only">— </span>Подготовка к фронтенд собеседованию
+        </span>
       </h1>
       <p
-        class="mt-3 max-w-[52ch] text-lg font-medium leading-snug text-text-secondary sm:text-xl lg:text-2xl"
+        class="mt-5 text-base font-medium leading-relaxed text-text-secondary sm:text-lg"
       >
-        План и методология подготовки к собеседованиям
+        От основ JavaScript до системного дизайна: статьи, карточки и задачи
       </p>
       <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
         <a
@@ -24,11 +35,7 @@ import { withBase } from "../../lib/urls";
           class="group inline-flex items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3.5 font-mono text-base font-bold uppercase tracking-wider !text-white transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:!text-white hover:shadow-[4px_4px_0px_var(--color-border)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0 active:translate-y-0 active:shadow-none"
         >
           Начать подготовку
-          <ArrowRight
-            size={16}
-            weight="bold"
-            className="transition-transform group-hover:translate-x-1"
-          />
+          <ArrowRight size={16} weight="bold" className="" />
         </a>
         <a
           href="#product"
@@ -312,7 +319,9 @@ import { withBase } from "../../lib/urls";
       if (cursor) {
         window.setTimeout(
           () => cursor?.classList.add("is-settled"),
-          INTRO_DELAY + TYPING_DURATION + CURSOR_BLINK_CYCLES * CURSOR_BLINK_PERIOD,
+          INTRO_DELAY +
+            TYPING_DURATION +
+            CURSOR_BLINK_CYCLES * CURSOR_BLINK_PERIOD,
         );
       }
     }

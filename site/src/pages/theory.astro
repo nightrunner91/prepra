@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Breadcrumbs from "../components/layout/Breadcrumbs.astro";
+import SectionShell from "../components/layout/SectionShell.astro";
 import SectionsGrid from "../components/content/SectionsGrid.astro";
 import ProgressBlock from "../components/content/ProgressBlock.astro";
 import { withBase } from "../lib/urls";
@@ -9,45 +9,27 @@ import { getSectionStats, getTotals } from "../lib/section-overview";
 
 const sectionStats = await getSectionStats();
 const { articleCount, questionCount, sectionCount } = getTotals(sectionStats);
+
+const chips = [
+  `${sectionCount} ${plural(sectionCount, "раздел", "раздела", "разделов")}`,
+  `${articleCount} ${plural(articleCount, "статья", "статьи", "статей")}`,
+  `${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}`,
+];
 ---
 
 <BaseLayout
   title="Теория"
   description="Статьи для подготовки к техническому собеседованию: JavaScript, TypeScript, браузер и UI, React, Next.js, Node.js, System Design, тестирование, производительность, безопасность и AI."
 >
-  <div class="mx-auto max-w-[1600px] px-6 pb-12 pt-8 lg:px-12 lg:pb-16 lg:pt-12">
-    <Breadcrumbs
-      items={[{ label: "Главная", href: withBase("/") }, { label: "Теория" }]}
-    />
-
-    <header class="mt-6 mb-10 border-b-[3px] border-border pb-6">
-      <h1
-        class="font-mono text-3xl text-text sm:text-5xl leading-tight tracking-tight font-extrabold uppercase"
-      >
-        Теория
-      </h1>
-      <p
-        class="mt-3 max-w-3xl text-sm font-bold uppercase tracking-wide text-text-secondary"
-      >
-        Статьи идут от основ JavaScript и браузера к React, Next.js, System
-        Design и инфраструктуре. В конце каждой статьи — вопросы для
-        самопроверки.
-      </p>
-      <div
-        class="mt-4 flex flex-wrap items-center gap-3 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary"
-      >
-        <span class="border-2 border-border px-2 py-1 bg-surface"
-          >{sectionCount} {plural(sectionCount, "раздел", "раздела", "разделов")}</span
-        >
-        <span class="border-2 border-border px-2 py-1 bg-surface"
-          >{articleCount} {plural(articleCount, "статья", "статьи", "статей")}</span
-        >
-        <span class="border-2 border-border px-2 py-1 bg-surface"
-          >{questionCount} {plural(questionCount, "вопрос", "вопроса", "вопросов")}</span
-        >
-      </div>
-    </header>
-
+  <SectionShell
+    title="Теория"
+    lede="Статьи идут от основ JavaScript и браузера к React, Next.js, System Design и инфраструктуре. В конце каждой статьи — вопросы для самопроверки."
+    chips={chips}
+    breadcrumbs={[
+      { label: "Главная", href: withBase("/") },
+      { label: "Теория" },
+    ]}
+  >
     <SectionsGrid sections={sectionStats} />
 
     <ProgressBlock
@@ -55,7 +37,7 @@ const { articleCount, questionCount, sectionCount } = getTotals(sectionStats);
       totalQuestions={questionCount}
       sectionsCount={sectionCount}
     />
-  </div>
+  </SectionShell>
 </BaseLayout>
 
 <script>

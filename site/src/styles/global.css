@@ -21,6 +21,10 @@
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
+  /* Единая высота шапки. От неё считают отступы сайдбары и прогресс чтения. */
+  --header-h: 3.75rem;
+  --header-offset: calc(var(--header-h) + 3px);
+
   --color-canvas: #F2F2EC;
   --color-surface: #FFFFFF;
   --color-surface-alt: #E8E8E0;
@@ -175,6 +179,79 @@
 
   .dark .card-hover:hover {
     box-shadow: 4px 4px 0px var(--color-border);
+  }
+
+  /* ── Общий шелл раздела ───────────────────────────────────────
+     Теория, практикум и мок-интервью используют один контейнер,
+     одну шапку и один вертикальный ритм. */
+  .page-shell {
+    @apply mx-auto w-full max-w-[1600px] px-4 pb-12 pt-8 sm:px-6 lg:px-10 lg:pb-16 lg:pt-12;
+  }
+
+  .page-head {
+    @apply mb-10 mt-6 border-b-[3px] border-border pb-6;
+  }
+
+  .page-title {
+    @apply font-mono text-3xl font-extrabold uppercase leading-tight tracking-tight text-text sm:text-4xl lg:text-5xl;
+  }
+
+  .page-lede {
+    @apply mt-3 max-w-3xl text-sm font-bold uppercase tracking-wide text-text-secondary;
+  }
+
+  /* Статы в шапке раздела. */
+  .chip {
+    @apply inline-flex items-center gap-1.5 border-2 border-border bg-surface px-2 py-1 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary;
+  }
+
+  /* Плитка: секции теории, пресеты интервью, карточки задач. */
+  .tile {
+    @apply flex h-full w-full flex-col border-[3px] border-border bg-surface p-6 text-left transition-all;
+  }
+
+  /* Рамка-контейнер для произвольного блока. */
+  .panel {
+    @apply border-[3px] border-border bg-surface;
+  }
+
+  /* ── Кнопки ─────────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-border font-mono font-bold uppercase tracking-wider transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-white dark:text-canvas hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-border)];
+  }
+
+  .btn-secondary {
+    @apply bg-surface text-text hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-surface-alt hover:shadow-[4px_4px_0px_var(--color-border)];
+  }
+
+  .btn-ghost {
+    @apply bg-surface-alt text-text-secondary hover:bg-text hover:text-canvas;
+  }
+
+  /* Квадратная иконочная кнопка. Общая для шапки, темы и закрытия шторки. */
+  .icon-btn {
+    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center border-2 border-border bg-surface text-text-secondary transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:translate-y-px;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-[10px];
+  }
+
+  .btn-md {
+    @apply px-4 py-2 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-5 py-3 text-sm;
+  }
+
+  /* Поле ввода и селект. */
+  .field {
+    @apply h-10 w-full min-w-0 border-2 border-border bg-canvas px-3 font-mono text-xs font-medium text-text outline-none placeholder:text-text-tertiary focus:border-accent;
   }
 
   .badge-hover-red:hover {

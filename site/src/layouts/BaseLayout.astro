@@ -3,12 +3,15 @@ import "../styles/global.css";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import MobileNav from "../components/layout/MobileNav.astro";
+import { withBase } from "../lib/urls";
 
 interface Props {
   title: string;
   description?: string;
   currentSection?: string;
   showFooter?: boolean;
+  image?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
@@ -16,7 +19,21 @@ const {
   description = "Платформа для подготовки к техническому собеседованию: от фронтенда к Product Engineer",
   currentSection,
   showFooter = true,
+  image = "/preview.jpg",
+  jsonLd,
 } = Astro.props;
+
+const site = Astro.site ?? new URL("https://nightrunner91.github.io");
+const fullTitle = `${title} | Prepra`;
+const canonicalUrl = new URL(Astro.url.pathname, site);
+if (!canonicalUrl.pathname.endsWith("/")) canonicalUrl.pathname += "/";
+const canonical = canonicalUrl.href;
+const imageUrl = new URL(withBase(image), site).href;
+const jsonLdBlocks = jsonLd
+  ? Array.isArray(jsonLd)
+    ? jsonLd
+    : [jsonLd]
+  : [];
 ---
 
 <!doctype html>
@@ -25,8 +42,30 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Prepra</title>
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <title>{fullTitle}</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Prepra" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta
+      property="og:image:alt"
+      content="Prepra — подготовка к собеседованию фронтенд-разработчика"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    {jsonLdBlocks.map((block) => (
+      <script type="application/ld+json" is:inline set:html={JSON.stringify(block)} />
+    ))}
+
     <script is:inline>
       (function () {
         document.documentElement.classList.add("js");
@@ -45,7 +84,7 @@ const {
       <Header />
       <MobileNav currentSection={currentSection} />
 
-      <main class="flex-1">
+      <main id="main" tabindex="-1" class="flex-1 outline-none">
         <slot />
       </main>
 

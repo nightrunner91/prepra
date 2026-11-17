@@ -60,7 +60,7 @@ const activeTab = pathname === withBase("/practice")
   class="fixed inset-y-0 right-0 z-[100] w-72 translate-x-full border-l-[3px] border-border bg-canvas transition-transform duration-200 ease-in-out lg:hidden"
 >
   <div
-    class="flex items-center justify-between border-b-[3px] border-border px-4 h-[59px]"
+    class="flex h-[var(--header-offset)] items-center justify-between border-b-[3px] border-border px-4"
   >
     <span
       class="font-mono text-lg font-extrabold uppercase tracking-tight text-text"
@@ -74,7 +74,7 @@ const activeTab = pathname === withBase("/practice")
       <X size={18} weight="bold" />
     </button>
   </div>
-  <nav class="flex h-[calc(100vh-3.5rem)] flex-col overflow-y-auto py-4 px-3">
+  <nav class="flex h-[calc(100vh-var(--header-offset))] flex-col overflow-y-auto py-4 px-3">
     <div class="space-y-0">
       {
         tabs.map((tab) => {

@@ -1,0 +1,53 @@
+---
+import Breadcrumbs from "./Breadcrumbs.astro";
+
+interface Props {
+  title: string;
+  lede?: string;
+  chips?: string[];
+  breadcrumbs?: { label: string; href?: string }[];
+  class?: string;
+}
+
+const {
+  title,
+  lede,
+  chips = [],
+  breadcrumbs,
+  class: className = "",
+} = Astro.props;
+
+const hasActions = Astro.slots.has("actions");
+---
+
+<div class:list={["page-shell", className]}>
+  {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+
+  <header class="page-head">
+    <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+      <div class="min-w-0">
+        <h1 class="page-title">{title}</h1>
+        {lede && <p class="page-lede">{lede}</p>}
+        {
+          chips.length > 0 && (
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+              {chips.map((chip) => (
+                <span class="chip">{chip}</span>
+              ))}
+            </div>
+          )
+        }
+      </div>
+
+      {
+        hasActions && (
+          <div class="flex flex-wrap items-center gap-2">
+            <slot name="actions" />
+          </div>
+        )
+      }
+    </div>
+  </header>
+
+  <slot />
+</div>

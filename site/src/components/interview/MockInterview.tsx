@@ -1,39 +1,14 @@
-import type { Icon } from '@phosphor-icons/react';
-import {
-  ArrowCounterClockwise,
-  ArrowRight,
-  Brain,
-  CaretDown,
-  Check,
-  Clock,
-  Cloud,
-  Eye,
-  FileJsx,
-  Globe,
-  House,
-  Lightning,
-  Microphone,
-  PaintBrush,
-  PauseCircle,
-  SkipForward,
-  SmileyMeh,
-  SquaresFour,
-  ThumbsDown,
-  ThumbsUp,
-  TreeStructure,
-} from '@phosphor-icons/react';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ALL_SECTION_IDS, PRESETS } from '../../lib/mock-interview/presets';
-import { questionInStacks, selectQuestions } from '../../lib/mock-interview/selection';
+import { Microphone } from "@phosphor-icons/react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { PRESETS } from "../../lib/mock-interview/presets";
+import { questionInStacks, selectQuestions } from "../../lib/mock-interview/selection";
 import {
   appendHistory,
   clearActiveSession,
   countAnswers,
-  formatDate,
-  formatDuration,
   loadActiveSession,
   saveActiveSession,
-} from '../../lib/mock-interview/storage';
+} from "../../lib/mock-interview/storage";
 import type {
   AnswerStatus,
   InterviewConfig,
@@ -41,56 +16,15 @@ import type {
   InterviewPreset,
   InterviewSession,
   MockInterviewQuestion,
-} from '../../lib/mock-interview/types';
-import { withBase } from '../../lib/urls';
+} from "../../lib/mock-interview/types";
+import { withBase } from "../../lib/urls";
+import { ActiveView } from "./ActiveView";
+import { ResultsView } from "./ResultsView";
+import { StartView } from "./StartView";
 
-type Phase = 'start' | 'active' | 'results';
+type Phase = "start" | "active" | "results";
 
-const INDEX_URL = withBase('/mock-interview-index.json');
-const LENGTH_OPTIONS = [20, 30, 50];
-const STACK_OPTIONS: { id: string; label: string }[] = [
-  { id: 'react', label: 'React' },
-  { id: 'vue', label: 'Vue' },
-  { id: 'nextjs', label: 'Next.js' },
-];
-const PRESET_ICONS: Record<string, Icon> = {
-  'web-basics': Globe,
-  'react-stack': FileJsx,
-  'react-fullstack': Cloud,
-  'next-fullstack': Cloud,
-  testing: Check,
-  performance: Lightning,
-  architecture: TreeStructure,
-  ai: Brain,
-  'ui-engineer-vue': PaintBrush,
-  'ui-engineer-react': PaintBrush,
-};
-const PRESET_COLORS: Record<string, 'red' | 'blue' | 'green' | 'yellow'> = {
-  'web-basics': 'yellow',
-  'react-stack': 'blue',
-  'react-fullstack': 'blue',
-  'next-fullstack': 'blue',
-  testing: 'green',
-  performance: 'yellow',
-  architecture: 'blue',
-  ai: 'red',
-  'ui-engineer-vue': 'green',
-  'ui-engineer-react': 'blue',
-};
-const PRESET_BADGE_CLASSES: Record<string, string> = {
-  red: 'bg-pale-red-bg text-pale-red-text',
-  blue: 'bg-pale-blue-bg text-pale-blue-text',
-  green: 'bg-pale-green-bg text-pale-green-text',
-  yellow: 'bg-pale-yellow-bg text-pale-yellow-text',
-};
-
-function questionWord(n: number): string {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return 'вопрос';
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'вопроса';
-  return 'вопросов';
-}
+const INDEX_URL = withBase("/mock-interview-index.json");
 
 function configFromPreset(preset: InterviewPreset): InterviewConfig {
   return {
@@ -101,71 +35,24 @@ function configFromPreset(preset: InterviewPreset): InterviewConfig {
     mainSection: preset.mainSection ?? null,
   };
 }
-const STATUSES: AnswerStatus[] = ['good', 'unsure', 'failed', 'skipped'];
-const RATE_STATUSES: AnswerStatus[] = ['good', 'unsure', 'failed'];
-
-const STATUS_META: Record<
-  AnswerStatus,
-  { label: string; icon: React.ReactNode; bg: string; hoverBg: string; color: string }
-> = {
-  good: {
-    label: 'Отлично',
-    icon: <ThumbsUp size={22} weight="bold" />,
-    bg: 'bg-pale-green-bg',
-    hoverBg: 'hover:bg-pale-green-bg-hover',
-    color: 'text-pale-green-text',
-  },
-  unsure: {
-    label: 'Так себе',
-    icon: <SmileyMeh size={22} weight="bold" />,
-    bg: 'bg-pale-yellow-bg',
-    hoverBg: 'hover:bg-pale-yellow-bg-hover',
-    color: 'text-pale-yellow-text',
-  },
-  failed: {
-    label: 'Плохо',
-    icon: <ThumbsDown size={22} weight="bold" />,
-    bg: 'bg-pale-red-bg',
-    hoverBg: 'hover:bg-pale-red-bg-hover',
-    color: 'text-pale-red-text',
-  },
-  skipped: {
-    label: 'Пропущено',
-    icon: <PauseCircle size={22} weight="fill" />,
-    bg: 'bg-surface-alt',
-    hoverBg: 'hover:bg-surface-alt',
-    color: 'text-text-secondary',
-  },
-};
-
-function renderInlineCode(text: string): React.ReactNode[] {
-  return text.split('`').map((part, i) =>
-    i % 2 === 1 ? <code key={i}>{part}</code> : part,
-  );
-}
 
 export function MockInterview() {
-  const [phase, setPhase] = useState<Phase>('start');
+  const [phase, setPhase] = useState<Phase>("start");
   const [index, setIndex] = useState<MockInterviewQuestion[] | null>(null);
   const [indexLoading, setIndexLoading] = useState(false);
   const [indexError, setIndexError] = useState(false);
   const [session, setSession] = useState<InterviewSession | null>(() => {
-    const s = loadActiveSession();
-    if (s && s.currentIndex >= s.questions.length) {
+    const stored = loadActiveSession();
+    if (stored && stored.currentIndex >= stored.questions.length) {
       clearActiveSession();
       return null;
     }
-    return s;
+    return stored;
   });
   const [lastResult, setLastResult] = useState<{
     entry: InterviewHistoryEntry;
     questions: MockInterviewQuestion[];
   } | null>(null);
-  const [selectedPresetId, setSelectedPresetId] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    const id = new URLSearchParams(window.location.search).get("preset");
-    return id && PRESETS.some((preset) => preset.id === id) ? id : null;
-  });
   /** Прямой переход с главной (?preset=…): запускаем без экрана выбора. */
   const [autoStartPending, setAutoStartPending] = useState(() => {
     if (typeof window === "undefined" || session) return false;
@@ -173,7 +60,7 @@ export function MockInterview() {
     return Boolean(id && PRESETS.some((preset) => preset.id === id));
   });
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
-  const [selectedStack, setSelectedStack] = useState<string>('');
+  const [selectedStack, setSelectedStack] = useState<string>("");
   const [length, setLength] = useState(30);
   const [flipped, setFlipped] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -218,8 +105,15 @@ export function MockInterview() {
 
   const startWithIndex = useCallback(
     (data: MockInterviewQuestion[], config: InterviewConfig) => {
-      const result = selectQuestions(data, config.sections, config.stacks, config.count, config.mainSection);
+      const result = selectQuestions(
+        data,
+        config.sections,
+        config.stacks,
+        config.count,
+        config.mainSection,
+      );
       if (result.questions.length === 0) return;
+
       const next: InterviewSession = {
         version: 1,
         config,
@@ -232,13 +126,13 @@ export function MockInterview() {
       setSession(next);
       setLastResult(null);
       setFlipped(false);
-      setPhase('active');
+      setPhase("active");
     },
     [],
   );
 
   useEffect(() => {
-    if (phase !== 'start' || index || indexLoading) return;
+    if (phase !== "start" || index || indexLoading) return;
     setIndexLoading(true);
     setIndexError(false);
     fetch(INDEX_URL)
@@ -271,7 +165,7 @@ export function MockInterview() {
   }, [phase, index, indexLoading]);
 
   useEffect(() => {
-    if (phase !== 'active') return;
+    if (phase !== "active") return;
     setNow(Date.now());
     const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
@@ -280,11 +174,16 @@ export function MockInterview() {
   const finishInterview = useCallback((final: InterviewSession) => {
     const counts = countAnswers(final.answers);
     const perSection: Record<string, Record<AnswerStatus, number>> = {};
-    final.questions.forEach((q, i) => {
-      const status = final.answers[i] ?? 'skipped';
-      const row = perSection[q.section] ?? { good: 0, unsure: 0, failed: 0, skipped: 0 };
+    final.questions.forEach((question, index) => {
+      const status = final.answers[index] ?? "skipped";
+      const row = perSection[question.section] ?? {
+        good: 0,
+        unsure: 0,
+        failed: 0,
+        skipped: 0,
+      };
       row[status]++;
-      perSection[q.section] = row;
+      perSection[question.section] = row;
     });
     const entry: InterviewHistoryEntry = {
       version: 1,
@@ -293,14 +192,17 @@ export function MockInterview() {
       perSection,
       startedAt: final.startedAt,
       completedAt: Date.now(),
-      durationSec: Math.max(0, Math.floor((Date.now() - final.startedAt) / 1000)),
+      durationSec: Math.max(
+        0,
+        Math.floor((Date.now() - final.startedAt) / 1000),
+      ),
     };
     appendHistory(entry);
     clearActiveSession();
     setSession(null);
     setLastResult({ entry, questions: final.questions });
     setFlipped(false);
-    setPhase('results');
+    setPhase("results");
   }, []);
 
   const advanceTo = useCallback(
@@ -338,49 +240,34 @@ export function MockInterview() {
   );
 
   const handleSkip = useCallback(() => {
-    if (session) advanceTo(session, 'skipped');
+    if (session) advanceTo(session, "skipped");
   }, [session, advanceTo]);
-
-  const startInterview = useCallback(
-    (config: InterviewConfig) => {
-      if (index) startWithIndex(index, config);
-    },
-    [index, startWithIndex],
-  );
-
-  const handleStart = useCallback(() => {
-    const preset = selectedPresetId
-      ? PRESETS.find((p) => p.id === selectedPresetId)
-      : undefined;
-    const sections = preset ? preset.sections : selectedSections;
-    if (sections.length === 0) return;
-    const stacks = preset
-      ? preset.stacks
-      : selectedStack
-        ? [selectedStack]
-        : undefined;
-    const config: InterviewConfig = {
-      presetId: selectedPresetId,
-      sections,
-      stacks,
-      count: preset ? preset.count : length,
-      mainSection: preset ? (preset.mainSection ?? null) : null,
-    };
-    startInterview(config);
-  }, [selectedPresetId, selectedSections, selectedStack, length, startInterview]);
 
   const resume = useCallback(() => {
     if (!session || session.currentIndex >= session.questions.length) return;
     setFlipped(false);
-    setPhase('active');
+    setPhase("active");
   }, [session]);
 
+  const exitInterview = useCallback(() => {
+    setFlipped(false);
+    setPhase("start");
+  }, []);
+
   const resetActive = useCallback(() => {
+    if (
+      session &&
+      !window.confirm(
+        "Начать новое интервью? Текущая сессия будет сброшена.",
+      )
+    ) {
+      return;
+    }
     clearActiveSession();
     setSession(null);
-    setPhase('start');
+    setPhase("start");
     setFlipped(false);
-  }, []);
+  }, [session]);
 
   const retake = useCallback(() => {
     if (!lastResult) return;
@@ -389,65 +276,87 @@ export function MockInterview() {
       startWithIndex(index, config);
     } else {
       pendingRetakeRef.current = config;
-      setPhase('start');
+      setPhase("start");
     }
   }, [lastResult, index, startWithIndex]);
 
-  const selectPreset = useCallback((id: string) => {
-    setSelectedPresetId((prev) => (prev === id ? null : id));
-    setSelectedSections([]);
-  }, []);
+  const startPreset = useCallback(
+    (preset: InterviewPreset) => {
+      if (!index) return;
+      if (
+        session &&
+        !window.confirm(
+          "Начать новое интервью? Текущая сессия будет сброшена.",
+        )
+      ) {
+        return;
+      }
+      startWithIndex(index, configFromPreset(preset));
+    },
+    [index, session, startWithIndex],
+  );
+
+  const startCustom = useCallback(() => {
+    if (!index || selectedSections.length === 0) return;
+    if (
+      session &&
+      !window.confirm("Начать новое интервью? Текущая сессия будет сброшена.")
+    ) {
+      return;
+    }
+    startWithIndex(index, {
+      presetId: null,
+      sections: selectedSections,
+      stacks: selectedStack ? [selectedStack] : undefined,
+      count: length,
+      mainSection: null,
+    });
+  }, [index, selectedSections, selectedStack, length, session, startWithIndex]);
 
   const toggleSection = useCallback((id: string) => {
-    setSelectedSections((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    setSelectedSections((previous) =>
+      previous.includes(id)
+        ? previous.filter((item) => item !== id)
+        : [...previous, id],
     );
-    setSelectedPresetId(null);
   }, []);
 
-  const selectLength = useCallback((l: number) => {
-    setLength(l);
-    setSelectedPresetId(null);
+  const selectLength = useCallback((value: number) => {
+    setLength(value);
   }, []);
 
   const selectStack = useCallback((id: string) => {
-    setSelectedStack((prev) => (prev === id ? '' : id));
-    setSelectedPresetId(null);
+    setSelectedStack((previous) => (previous === id ? "" : id));
   }, []);
 
   const clearSelection = useCallback(() => {
-    setSelectedPresetId(null);
     setSelectedSections([]);
-    setSelectedStack('');
+    setSelectedStack("");
   }, []);
 
-  const presetForStart = selectedPresetId
-    ? (PRESETS.find((p) => p.id === selectedPresetId) ?? null)
-    : null;
-  const startSections = presetForStart ? presetForStart.sections : selectedSections;
-  const effectiveCount = presetForStart ? presetForStart.count : length;
-  const activeStacks = presetForStart
-    ? presetForStart.stacks
-    : selectedStack
-      ? [selectedStack]
-      : undefined;
-
   const poolSize = useMemo(() => {
-    if (!index || startSections.length === 0) return null;
-    const set = new Set(startSections);
+    if (!index || selectedSections.length === 0) return null;
+    const set = new Set(selectedSections);
     return index.filter(
-      (q) => q.answer !== null && set.has(q.section) && questionInStacks(q, activeStacks),
+      (question) =>
+        question.answer !== null &&
+        set.has(question.section) &&
+        questionInStacks(
+          question,
+          selectedStack ? [selectedStack] : undefined,
+        ),
     ).length;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, startSections, selectedStack, selectedPresetId]);
+  }, [index, selectedSections, selectedStack]);
 
   const sectionPool = useMemo(() => {
     const map = new Map<string, number>();
     if (!index) return map;
     const stacks = selectedStack ? [selectedStack] : undefined;
-    for (const q of index) {
-      if (q.answer === null || !questionInStacks(q, stacks)) continue;
-      map.set(q.section, (map.get(q.section) ?? 0) + 1);
+    for (const question of index) {
+      if (question.answer === null || !questionInStacks(question, stacks)) {
+        continue;
+      }
+      map.set(question.section, (map.get(question.section) ?? 0) + 1);
     }
     return map;
   }, [index, selectedStack]);
@@ -455,21 +364,21 @@ export function MockInterview() {
   const sectionLabels = useMemo(() => {
     const map = new Map<string, string>();
     if (!index) return map;
-    for (const q of index) {
-      if (!map.has(q.section)) map.set(q.section, q.sectionLabel);
+    for (const question of index) {
+      if (!map.has(question.section)) {
+        map.set(question.section, question.sectionLabel);
+      }
     }
     return map;
   }, [index]);
 
-  const poolCapped = poolSize !== null && poolSize > 0 && poolSize < effectiveCount;
+  const poolCapped =
+    poolSize !== null && poolSize > 0 && poolSize < length;
   const poolEmpty = poolSize !== null && poolSize === 0;
   const canStart =
-    index !== null &&
-    (presetForStart !== null || selectedSections.length > 0) &&
-    poolSize !== null &&
-    poolSize > 0;
+    index !== null && selectedSections.length > 0 && poolSize !== null && poolSize > 0;
 
-  const currentSession = phase === 'active' ? session : null;
+  const currentSession = phase === "active" ? session : null;
   const questions = currentSession?.questions ?? [];
   const currentIndex = currentSession?.currentIndex ?? 0;
   const current = questions[currentIndex];
@@ -479,16 +388,15 @@ export function MockInterview() {
 
   return (
     <div className="w-full">
-      {phase === 'start' && autoStartPending && <StartingView />}
+      {phase === "start" && autoStartPending && <StartingView />}
 
-      {phase === 'start' && !autoStartPending && (
+      {phase === "start" && !autoStartPending && (
         <StartView
           index={index}
           loading={indexLoading}
           error={indexError}
           session={session}
           presets={PRESETS}
-          presetId={selectedPresetId}
           sections={selectedSections}
           stack={selectedStack}
           length={length}
@@ -498,18 +406,18 @@ export function MockInterview() {
           poolEmpty={poolEmpty}
           poolSize={poolSize}
           canStart={canStart}
-          onSelectPreset={selectPreset}
           onToggleSection={toggleSection}
           onSelectStack={selectStack}
           onSelectLength={selectLength}
           onClearSelection={clearSelection}
-          onStart={handleStart}
+          onStartCustom={startCustom}
+          onStartPreset={startPreset}
           onResume={resume}
           onReset={resetActive}
         />
       )}
 
-      {phase === 'active' && current && (
+      {phase === "active" && current && (
         <ActiveView
           question={current}
           currentIndex={currentIndex}
@@ -520,10 +428,11 @@ export function MockInterview() {
           onFlip={() => setFlipped(true)}
           onAnswer={handleAnswer}
           onSkip={handleSkip}
+          onExit={exitInterview}
         />
       )}
 
-      {phase === 'results' && lastResult && (
+      {phase === "results" && lastResult && (
         <ResultsView
           entry={lastResult.entry}
           questions={lastResult.questions}
@@ -536,635 +445,16 @@ export function MockInterview() {
 
 function StartingView() {
   return (
-    <div className="flex min-h-[320px] flex-col items-center justify-center gap-4 border-2 border-border bg-surface p-8 text-center">
-      <Microphone size={32} weight="bold" className="text-pale-blue-text" />
-      <p className="font-mono text-sm font-extrabold uppercase tracking-wider text-text">
-        Запускаем интервью…
-      </p>
-      <p className="font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
-        Подбираем вопросы под выбранный сет
-      </p>
-    </div>
-  );
-}
-
-interface StartViewProps {
-  index: MockInterviewQuestion[] | null;
-  loading: boolean;
-  error: boolean;
-  session: InterviewSession | null;
-  presets: InterviewPreset[];
-  presetId: string | null;
-  sections: string[];
-  stack: string;
-  length: number;
-  sectionPool: Map<string, number>;
-  sectionLabels: Map<string, string>;
-  poolCapped: boolean;
-  poolEmpty: boolean;
-  poolSize: number | null;
-  canStart: boolean;
-  onSelectPreset: (id: string) => void;
-  onToggleSection: (id: string) => void;
-  onSelectStack: (id: string) => void;
-  onSelectLength: (l: number) => void;
-  onClearSelection: () => void;
-  onStart: () => void;
-  onResume: () => void;
-  onReset: () => void;
-}
-
-function StartView({
-  index,
-  loading,
-  error,
-  session,
-  presets,
-  presetId,
-  sections,
-  stack,
-  length,
-  sectionPool,
-  sectionLabels,
-  poolCapped,
-  poolEmpty,
-  poolSize,
-  canStart,
-  onSelectPreset,
-  onToggleSection,
-  onSelectStack,
-  onSelectLength,
-  onClearSelection,
-  onStart,
-  onResume,
-  onReset,
-}: StartViewProps) {
-  const [customOpen, setCustomOpen] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return new URLSearchParams(window.location.search).get("custom") === "1";
-  });
-  const customDisabled = presetId !== null;
-  const presetsDisabled = sections.length > 0;
-  const hasSelection = presetId !== null || sections.length > 0 || stack !== '';
-
-  return (
-    <>
-      <div className="mb-8">
-        <h1 className="flex items-center gap-3 font-mono text-3xl font-extrabold uppercase tracking-tight text-text">
-          <Microphone size={28} weight="bold" className="text-pale-blue-text" />
-          Мок-интервью
-        </h1>
-        <p className="mt-2 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary">
-          Кросс-раздельный квиз для подготовки к собеседованию
+    <div className="mx-auto max-w-3xl">
+      <div className="panel flex min-h-[320px] flex-col items-center justify-center gap-4 p-8 text-center">
+        <Microphone size={32} weight="bold" className="text-pale-blue-text" />
+        <p className="font-mono text-sm font-extrabold uppercase tracking-wider text-text">
+          Запускаем интервью…
         </p>
-      </div>
-
-      {session && (
-        <div className="mb-8 border-2 border-border bg-pale-yellow-bg p-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="font-mono text-sm font-extrabold uppercase tracking-tight text-text">
-                Незавершённое интервью
-              </div>
-              <p className="mt-1 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-                Отвечено {Object.keys(session.answers).length} из{' '}
-                {session.questions.length}
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={onResume}
-                className="border-2 border-border bg-accent px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#000000] dark:hover:shadow-[3px_3px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
-              >
-                Продолжить
-              </button>
-              <button
-                type="button"
-                onClick={onReset}
-                className="border-2 border-border bg-surface-alt px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#000000] dark:hover:shadow-[3px_3px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none hover:bg-text hover:text-canvas"
-              >
-                Начать новое
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="mb-4 border-b-[3px] border-border pb-4">
-        <h2 className="font-mono text-lg font-extrabold uppercase tracking-tight text-text">
-          Готовые сеты
-        </h2>
-      </div>
-
-      <div
-        className={`grid gap-5 sm:grid-cols-2 lg:grid-cols-3 ${presetsDisabled ? 'pointer-events-none opacity-40' : ''}`}
-      >
-        {presets.map((p) => {
-          const active = presetId === p.id;
-          const PresetIcon = PRESET_ICONS[p.id] ?? SquaresFour;
-          const color = PRESET_COLORS[p.id] ?? 'blue';
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => onSelectPreset(p.id)}
-              className={`flex h-full flex-col text-left border-2 p-6 transition-all ${active
-                ? 'border-accent bg-pale-green-bg'
-                : 'border-border bg-surface card-hover'
-                }`}
-            >
-              <div className="flex items-start justify-between gap-3">
-                <span className="font-mono text-base font-extrabold uppercase tracking-tight text-text">
-                  {p.title}
-                </span>
-                <span
-                  className={`shrink-0 border-2 border-border p-1 ${PRESET_BADGE_CLASSES[color]}`}
-                >
-                  <PresetIcon size={20} weight="bold" />
-                </span>
-              </div>
-              <span className="mt-1 w-fit border border-border px-1.5 py-0.5 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
-                {p.count} {questionWord(p.count)}
-              </span>
-              <p className="mt-5 font-mono text-xs font-bold tracking-wide text-text-secondary">
-                {p.description}
-              </p>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mt-10 border-b-[3px] border-border pb-4">
-        <button
-          type="button"
-          onClick={() => setCustomOpen((v) => !v)}
-          aria-expanded={customOpen}
-          className="flex w-full items-center justify-between gap-2 text-left"
-        >
-          <span className="font-mono text-lg font-extrabold uppercase tracking-tight text-text">
-            Свой конфиг
-          </span>
-          <CaretDown
-            size={18}
-            weight="bold"
-            className={`shrink-0 text-text-secondary transition-transform ${customOpen ? 'rotate-180' : ''}`}
-          />
-        </button>
-      </div>
-
-      {customOpen && (
-        <div className={`mt-4 ${customDisabled ? 'opacity-60' : ''}`}>
-          {presetId && (
-            <p className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">
-              Выбран готовый сет — измените параметр, чтобы настроить вручную
-            </p>
-          )}
-          <div className="border-2 border-border bg-surface p-4 sm:p-6">
-            <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-              Разделы
-            </div>
-            {loading && (
-              <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
-                Загрузка вопросов…
-              </p>
-            )}
-            {error && (
-              <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">
-                Не удалось загрузить вопросы — обновите страницу
-              </p>
-            )}
-            {index && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {ALL_SECTION_IDS.map((id) => {
-                  const checked = sections.includes(id);
-                  return (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => onToggleSection(id)}
-                      aria-pressed={checked}
-                      className={`flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide transition-all ${checked
-                        ? 'border-accent bg-pale-green-bg text-text'
-                        : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
-                        }`}
-                    >
-                      <span>{sectionLabels.get(id) ?? id}</span>
-                      <span
-                        className={`shrink-0 text-[11px] ${checked ? 'text-accent' : 'text-text-tertiary'}`}
-                      >
-                        {sectionPool.get(id) ?? 0}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          <div className="mt-4 border-2 border-border bg-surface p-4 sm:p-6">
-            <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-              Стек
-            </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => onSelectStack('')}
-                className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${stack === ''
-                  ? 'border-accent bg-accent text-white'
-                  : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
-                  }`}
-              >
-                Любой
-              </button>
-              {STACK_OPTIONS.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => onSelectStack(s.id)}
-                  className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${stack === s.id
-                    ? 'border-accent bg-accent text-white'
-                    : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
-                    }`}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-4 border-2 border-border bg-surface p-4 sm:p-6">
-            <div className="font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-              Длина интервью
-            </div>
-            <div className="mt-3 flex gap-2">
-              {LENGTH_OPTIONS.map((l) => (
-                <button
-                  key={l}
-                  type="button"
-                  onClick={() => onSelectLength(l)}
-                  className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-all ${length === l
-                    ? 'border-accent bg-accent text-white'
-                    : 'border-border bg-surface-alt text-text-secondary hover:bg-surface'
-                    }`}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {poolCapped && (
-        <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-pale-yellow-text">
-          В выбранных разделах {poolSize} вопросов — выдано {poolSize}
+        <p className="font-mono text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
+          Подбираем вопросы под выбранный сет
         </p>
-      )}
-      {poolEmpty && (
-        <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">
-          В выбранных разделах нет вопросов с ответами — выберите другие разделы
-        </p>
-      )}
-
-      <div className="mt-6 flex items-stretch gap-3">
-        <button
-          type="button"
-          onClick={onStart}
-          disabled={!canStart}
-          className="flex flex-1 items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-40"
-        >
-          <Microphone size={20} weight="bold" />
-          Начать интервью
-        </button>
-        {hasSelection && (
-          <button
-            type="button"
-            onClick={onClearSelection}
-            className="shrink-0 border-[3px] border-border bg-surface px-4 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none hover:bg-text hover:text-canvas"
-          >
-            Сбросить
-          </button>
-        )}
-      </div>
-    </>
-  );
-}
-
-interface ActiveViewProps {
-  question: MockInterviewQuestion;
-  currentIndex: number;
-  total: number;
-  elapsedSec: number;
-  flipped: boolean;
-  busy: boolean;
-  onFlip: () => void;
-  onAnswer: (status: AnswerStatus) => void;
-  onSkip: () => void;
-}
-
-function ActiveView({
-  question,
-  currentIndex,
-  total,
-  elapsedSec,
-  flipped,
-  busy,
-  onFlip,
-  onAnswer,
-  onSkip,
-}: ActiveViewProps) {
-  const progress = (currentIndex / total) * 100;
-
-  return (
-    <div className="flex w-full flex-col">
-      <div className="mb-4 flex items-center justify-between gap-3 font-mono text-sm font-bold uppercase tracking-wider text-text">
-        <span>
-          Вопрос {currentIndex + 1} / {total}
-        </span>
-        <span className="flex items-center gap-1.5 text-text-secondary">
-          <Clock size={14} weight="bold" />
-          {formatDuration(elapsedSec)}
-        </span>
-      </div>
-
-      <div className="mb-6 h-1.5 w-full border border-border bg-surface-alt sm:mb-8">
-        <div
-          className="h-full bg-accent transition-all duration-300"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-
-      <div
-        className="quiz-card relative min-h-[300px] w-full cursor-pointer sm:min-h-[400px]"
-        onClick={() => {
-          if (!flipped) onFlip();
-        }}
-      >
-        <div
-          className={`quiz-card-inner relative h-full min-h-[300px] w-full sm:min-h-[400px] ${flipped ? 'flipped' : ''}`}
-        >
-          <div className="quiz-card-face flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-12">
-            <div className="flex items-start justify-between gap-2">
-              <span className="border-2 border-border bg-canvas px-2 py-1 font-mono text-xs font-extrabold uppercase tracking-wider text-accent">
-                {question.sectionLabel}
-              </span>
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
-                Вопрос
-              </span>
-            </div>
-            <div className="my-auto">
-              <p className="break-words text-left text-lg font-bold leading-relaxed text-text md:text-xl">
-                {renderInlineCode(question.question)}?
-              </p>
-              {!flipped && (
-                <div className="mt-6 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary md:mt-10">
-                  <Eye size={14} />
-                  Нажмите, чтобы увидеть ответ
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="quiz-card-face quiz-card-back flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-12">
-            <div className="my-auto">
-              <div className="mb-3 font-mono text-xs font-bold uppercase tracking-wider text-accent md:mb-4">
-                Ответ
-              </div>
-              <p className="quiz-answer break-words text-left text-base leading-relaxed text-text-secondary md:text-lg">
-                {renderInlineCode(question.answer ?? '')}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-6 flex flex-col gap-3 sm:mt-8">
-        {flipped && (
-          <div className="flex w-full gap-3">
-            {RATE_STATUSES.map((status) => {
-              const meta = STATUS_META[status];
-              return (
-                <button
-                  key={status}
-                  type="button"
-                  onClick={() => onAnswer(status)}
-                  disabled={busy}
-                  aria-label={meta.label}
-                  className={`flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6 ${meta.bg} ${meta.hoverBg}`}
-                >
-                  {meta.icon}
-                  <span className={`font-mono text-xs font-bold uppercase tracking-wider ${meta.color}`}>
-                    {meta.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-        {!flipped && (
-          <button
-            type="button"
-            onClick={onSkip}
-            disabled={busy}
-            className="flex items-center justify-center gap-2 border-2 border-border bg-surface-alt px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none hover:bg-text hover:text-canvas"
-          >
-            <SkipForward size={18} weight="fill" />
-            Пропустить
-          </button>
-        )}
       </div>
     </div>
-  );
-}
-
-interface ResultsViewProps {
-  entry: InterviewHistoryEntry;
-  questions: MockInterviewQuestion[];
-  onRetake: () => void;
-}
-
-function ResultsView({ entry, questions, onRetake }: ResultsViewProps) {
-  const counts = entry.counts;
-
-  const rows = useMemo(() => {
-    const bySection = new Map<
-      string,
-      { section: string; label: string; url: string }
-    >();
-    for (const q of questions) {
-      if (!bySection.has(q.section)) {
-        bySection.set(q.section, {
-          section: q.section,
-          label: q.sectionLabel,
-          url: withBase(`/${q.section}`),
-        });
-      }
-    }
-    const ratio = (c: Record<AnswerStatus, number>) => {
-      const answered = c.good + c.unsure + c.failed;
-      return answered === 0 ? Infinity : c.good / answered;
-    };
-    const total = (c: Record<AnswerStatus, number>) =>
-      c.good + c.unsure + c.failed + c.skipped;
-    return [...bySection.values()]
-      .map((row) => ({
-        ...row,
-        counts: entry.perSection[row.section] ?? {
-          good: 0,
-          unsure: 0,
-          failed: 0,
-          skipped: 0,
-        },
-      }))
-      .sort((a, b) => ratio(a.counts) - ratio(b.counts) || total(b.counts) - total(a.counts));
-  }, [entry, questions]);
-
-  const weakest = useMemo(() => {
-    let best: (typeof rows)[number] | null = null;
-    for (const row of rows) {
-      const answered = row.counts.good + row.counts.unsure + row.counts.failed;
-      if (answered === 0) continue;
-      if (!best) {
-        best = row;
-        continue;
-      }
-      const prevAnswered =
-        best.counts.good + best.counts.unsure + best.counts.failed;
-      if (row.counts.good / answered < best.counts.good / prevAnswered) {
-        best = row;
-      }
-    }
-    return best;
-  }, [rows]);
-
-  return (
-    <>
-      <div className="mb-8">
-        <h1 className="flex items-center gap-3 font-mono text-3xl font-extrabold uppercase tracking-tight text-text">
-          <Microphone size={28} weight="bold" className="text-accent" />
-          Результат интервью
-        </h1>
-        <p className="mt-2 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary">
-          {formatDate(entry.startedAt)} · {formatDuration(entry.durationSec)}
-        </p>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        {STATUSES.map((status) => {
-          const meta = STATUS_META[status];
-          return (
-            <div
-              key={status}
-              className={`flex flex-col items-center gap-1 border-2 border-border p-3 ${meta.bg}`}
-            >
-              {meta.icon}
-              <span className={`font-mono text-2xl font-extrabold ${meta.color}`}>
-                {counts[status]}
-              </span>
-              <span className={`font-mono text-xs font-bold uppercase tracking-wider ${meta.color}`}>
-                {meta.label}
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="mt-8 border-[3px] border-border bg-surface">
-        <div className="border-b-[3px] border-border p-4 sm:p-6">
-          <h2 className="font-mono text-sm font-extrabold uppercase tracking-tight text-text">
-            Результаты по разделам
-          </h2>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="border-b-2 border-border font-mono text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
-                <th className="px-4 py-2 sm:px-6">Раздел</th>
-                {STATUSES.map((s) => (
-                  <th key={s} className="px-3 py-2 text-center">
-                    {STATUS_META[s].label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr
-                  key={row.section}
-                  className="border-b-2 border-border last:border-b-0"
-                >
-                  <td className="px-4 py-2 sm:px-6">
-                    <a
-                      href={row.url}
-                      className="font-mono text-xs font-extrabold uppercase tracking-wide text-accent hover:text-accent-hover"
-                    >
-                      {row.label}
-                    </a>
-                  </td>
-                  {STATUSES.map((s) => (
-                    <td
-                      key={s}
-                      className={`px-3 py-2 text-center font-mono text-sm font-bold ${row.counts[s] > 0 ? 'text-text' : 'text-text-tertiary'
-                        }`}
-                    >
-                      {row.counts[s]}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {weakest && (
-        <div className="mt-8 border-2 border-border bg-pale-red-bg p-4 sm:p-6">
-          <div className="font-mono text-xs font-bold uppercase tracking-wider text-pale-red-text">
-            Самая слабая тема
-          </div>
-          <div className="mt-2 flex items-center gap-2">
-            <a
-              href={weakest.url}
-              className="font-mono text-lg font-extrabold uppercase tracking-tight text-text hover:text-accent"
-            >
-              {weakest.label}
-            </a>
-            <ArrowRight size={18} weight="bold" className="text-pale-red-text" />
-          </div>
-        </div>
-      )}
-
-      <div className="mt-8 border-2 border-border bg-surface p-4 sm:p-6">
-        <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-text-secondary">
-          <Clock size={14} weight="bold" />
-          Время интервью
-        </div>
-        <div className="mt-2 font-mono text-xl font-extrabold text-text">
-          {formatDuration(entry.durationSec)}
-        </div>
-        <div className="mt-1 font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary">
-          Старт: {formatDate(entry.startedAt)}
-        </div>
-      </div>
-
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <button
-          type="button"
-          onClick={onRetake}
-          className="flex flex-1 items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
-        >
-          <ArrowCounterClockwise size={20} weight="bold" />
-          Перепройти
-        </button>
-        <a
-          href={withBase('/')}
-          className="flex flex-1 items-center justify-center gap-2 border-[3px] border-border bg-surface px-6 py-3 font-mono font-bold uppercase tracking-wider text-text transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
-        >
-          <House size={20} weight="bold" />
-          На главную
-        </a>
-      </div>
-    </>
   );
 }

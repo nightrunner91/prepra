@@ -29,12 +29,13 @@ const colorClasses: Record<SectionStat["color"], string> = {
       <h2
         class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl lg:text-5xl"
       >
-        Что охватывает PrePra
+        Разделы подготовки
       </h2>
       <p
-        class="mt-3 text-base font-medium leading-relaxed text-text-secondary sm:text-lg lg:whitespace-nowrap"
+        class="mt-3 text-base font-medium leading-relaxed text-text-secondary sm:text-lg"
       >
-        Материал подаётся каскадом по мере углубления во фронтенд.
+        Начни с основ и двигайся по порядку: каждый следующий раздел опирается
+        на предыдущий.
       </p>
     </div>
     <a
@@ -74,6 +75,7 @@ const colorClasses: Record<SectionStat["color"], string> = {
                 <span class="min-w-0 flex-1">
                   <span class="flex items-baseline justify-between gap-3">
                     <span class="font-mono text-sm font-extrabold uppercase tracking-tight text-text transition-colors group-hover:text-accent sm:text-base">
+                      <span class="text-xs">{number} / </span>
                       {section.label}
                     </span>
                   </span>

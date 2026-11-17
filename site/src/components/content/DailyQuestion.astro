@@ -34,9 +34,9 @@ const { question, questionCount } = Astro.props;
           Вопрос дня
         </h2>
         <p class="mt-2 text-base font-medium leading-relaxed text-text-secondary">
-          В базе{" "}
-          {`${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}.`}{" "}
-          Освежи память перед следующим интервью.
+          {`${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}`}{" "}
+          из всех разделов. Один в день — чтобы тема не выветривалась перед
+          интервью.
         </p>
         <a
           href={withBase(`/${question.sectionId}`)}

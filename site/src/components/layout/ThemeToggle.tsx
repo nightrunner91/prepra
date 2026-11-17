@@ -21,9 +21,11 @@ export function ThemeToggle() {
 
   return (
     <button
+      type="button"
       onClick={toggle}
-      className="flex items-center justify-center h-9 w-9 border-2 border-border text-text-secondary hover:bg-text hover:text-canvas transition-colors"
-      aria-label="Toggle theme"
+      className="icon-btn"
+      aria-label={dark ? 'Включить светлую тему' : 'Включить тёмную тему'}
+      title={dark ? 'Светлая тема' : 'Тёмная тема'}
     >
       {dark ? (
         <Sun size={18} weight="bold" />

@@ -1,0 +1,110 @@
+---
+import {
+  ArrowRight,
+  BookOpen,
+  CheckCircle,
+  ListNumbers,
+} from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+import { plural } from "../../lib/plural";
+
+interface Props {
+  sectionCount: number;
+  articleCount: number;
+  questionCount: number;
+}
+
+const { sectionCount, articleCount, questionCount } = Astro.props;
+
+const features = [
+  {
+    icon: ListNumbers,
+    title: `${sectionCount} ${plural(sectionCount, "раздел", "раздела", "разделов")}`,
+    text: "От JavaScript и браузера до React, Next.js, System Design и Node.js.",
+  },
+  {
+    icon: BookOpen,
+    title: `${articleCount} ${plural(articleCount, "статья", "статьи", "статей")}`,
+    text: "Последовательный материал с примерами кода, схемами и разбором внутренних механизмов.",
+  },
+  {
+    icon: CheckCircle,
+    title: `${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}`,
+    text: "Самопроверка в конце каждой статьи: отвечай вслух, без подглядывания.",
+  },
+];
+---
+
+<div class="mt-16 lg:mt-20">
+  <div
+    class="animate-fade-in border-[3px] border-border bg-pale-green-bg p-6 lg:p-8"
+  >
+    <div class="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <div>
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-border bg-pale-green-text text-canvas"
+          >
+            <BookOpen size={22} weight="bold" />
+          </div>
+          <div>
+            <h2
+              class="font-mono text-2xl font-extrabold uppercase tracking-tight text-text sm:text-3xl"
+            >
+              Теория
+            </h2>
+            <p
+              class="font-mono text-xs font-bold uppercase tracking-wider text-text-tertiary"
+            >
+              Структурированная база вместо случайных статей
+            </p>
+          </div>
+        </div>
+
+        <p
+          class="mt-5 max-w-2xl text-sm font-medium leading-relaxed text-text-secondary"
+        >
+          Материалы собраны в последовательный трек подготовки: от основ языка и
+          браузера к архитектуре, инфраструктуре и AI. В конце каждой статьи —
+          вопросы для самопроверки и шпаргалка для повторения.
+        </p>
+
+        <a
+          href={withBase("/theory")}
+          class="group mt-6 inline-flex items-center gap-2 border-[3px] border-border bg-accent px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider !text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+        >
+          <BookOpen size={18} weight="bold" />
+          Перейти к теории
+          <span
+            class="inline-block transition-transform group-hover:translate-x-1"
+          >
+            <ArrowRight size={16} weight="bold" />
+          </span>
+        </a>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        {
+          features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <div class="flex items-start gap-3 border-2 border-border bg-surface p-4">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-border bg-pale-green-text text-canvas">
+                  <Icon size={20} weight="bold" />
+                </div>
+                <div>
+                  <div class="font-mono text-sm font-extrabold uppercase tracking-tight text-text">
+                    {feature.title}
+                  </div>
+                  <p class="mt-0.5 text-sm font-medium leading-relaxed text-text-secondary">
+                    {feature.text}
+                  </p>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -240,16 +240,16 @@ export function TaskDetail({
         <button
           type="button"
           onClick={onPrev}
-          className="inline-flex items-center gap-1.5 border-2 border-border bg-surface px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
+          className="btn btn-secondary btn-sm"
         >
           <ArrowLeft size={14} weight="bold" />
-          Назад
+          Предыдущая
         </button>
 
         <button
           type="button"
           onClick={onRandom}
-          className="inline-flex items-center gap-1.5 border-2 border-border bg-surface px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-wider text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
+          className="btn btn-secondary btn-sm"
         >
           <Shuffle size={14} weight="bold" />
           Случайная
@@ -264,7 +264,7 @@ export function TaskDetail({
           <button
             type="button"
             onClick={onNext}
-            className="inline-flex items-center gap-1.5 border-2 border-border bg-accent px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none"
+            className="btn btn-primary btn-sm"
           >
             {training ? (answered ? "Следующая" : "Пропустить") : "Следующая"}
             <ArrowRight size={14} weight="bold" />

@@ -2,25 +2,21 @@
 import { MagnifyingGlass } from "@phosphor-icons/react";
 ---
 
-<div class="relative hidden sm:flex items-center">
-  <MagnifyingGlass
-    size={18}
-    weight="bold"
-    className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text/60 pointer-events-none"
-  />
+<div class="relative hidden sm:block">
   <button
     type="button"
     data-open-search
     aria-label="Поиск по сайту"
     aria-haspopup="dialog"
-    class="h-9 w-36 md:w-44 lg:w-52 border-2 border-border bg-canvas pl-9 pr-14 text-sm text-text/50 text-left focus:border-accent focus:outline-none"
+    class="flex h-10 w-40 items-center gap-2 border-2 border-border bg-surface pl-2.5 pr-2 text-left font-mono text-[11px] font-bold uppercase tracking-wider text-text-tertiary transition-colors hover:border-accent hover:text-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:w-44 xl:w-56"
   >
-    Поиск...
+    <MagnifyingGlass size={16} weight="bold" className="shrink-0" />
+    <span class="flex-1 truncate">Поиск</span>
+    <kbd
+      class="hidden shrink-0 items-center gap-1 border border-border bg-canvas px-1.5 py-0.5 text-[10px] leading-none text-text-tertiary xl:inline-flex"
+      aria-hidden="true"
+    >
+      <span>Ctrl</span><span>K</span>
+    </kbd>
   </button>
-  <kbd
-    class="absolute right-2.5 top-1/2 hidden md:flex -translate-y-1/2 items-center gap-1 border border-border px-1.5 py-0.5 text-xs font-mono text-text/50 pointer-events-none"
-    aria-hidden="true"
-  >
-    <span>Ctrl</span><span>K</span>
-  </kbd>
 </div>
