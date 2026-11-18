@@ -2,6 +2,7 @@
 import { List, MagnifyingGlass } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
 import HeaderNav from "./HeaderNav.astro";
+import Logo from "./Logo.astro";
 import SearchInput from "./SearchInput.astro";
 import { SearchModal } from "./SearchModal.tsx";
 import { ThemeToggle } from "./ThemeToggle.tsx";
@@ -11,13 +12,8 @@ import { ThemeToggle } from "./ThemeToggle.tsx";
   <div
     class="mx-auto flex h-[var(--header-h)] items-center justify-between gap-4 px-4 lg:grid lg:grid-cols-[1fr_auto_1fr]"
   >
-    <a
-      href={withBase("/")}
-      class="justify-self-start font-mono text-2xl font-extrabold uppercase tracking-tight text-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-strong"
-    >
-      <span class="text-text">PRE</span><span
-        class="-mr-1 bg-accent px-1 text-accent-ink">PRA</span
-      >
+    <a href={withBase("/")} class="logo-link justify-self-start">
+      <Logo class="h-9" />
     </a>
 
     <HeaderNav />

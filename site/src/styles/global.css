@@ -536,6 +536,12 @@
     @apply bg-surface-alt text-text-secondary hover:bg-text hover:text-canvas;
   }
 
+  /* Логотип-ссылка: бруталистский подъём при наведении. На фокусе
+     и нажатии возвращается на исходную позицию. */
+  .logo-link {
+    @apply inline-block transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-border)] focus-visible:translate-x-0 focus-visible:translate-y-0 focus-visible:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-strong active:translate-x-0 active:translate-y-0 active:shadow-none;
+  }
+
   /* Квадратная иконочная кнопка. Общая для шапки, темы и закрытия шторки. */
   .icon-btn {
     @apply inline-flex h-10 w-10 shrink-0 items-center justify-center border-2 border-border bg-surface text-text-secondary transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong active:translate-y-px;

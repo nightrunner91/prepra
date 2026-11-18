@@ -1,5 +1,5 @@
 ---
-import { sections } from "../../lib/sections";
+import { getActivePage } from "../../lib/nav";
 import { withBase } from "../../lib/urls";
 
 const tabs = [
@@ -8,24 +8,7 @@ const tabs = [
   { id: "interview", label: "Интервью", href: withBase("/interview") },
 ];
 
-const pathname = Astro.url.pathname.replace(/\/+$/, "");
-
-const isTheoryPage =
-  pathname === withBase("/theory") ||
-  sections.some(
-    (section) =>
-      pathname === withBase(`/${section.id}`) ||
-      pathname.startsWith(withBase(`/${section.id}/`)),
-  );
-
-const activePage =
-  pathname === withBase("/practice")
-    ? "practice"
-    : pathname === withBase("/interview")
-      ? "interview"
-      : isTheoryPage
-        ? "theory"
-        : undefined;
+const activePage = getActivePage(Astro.url.pathname);
 ---
 
 <nav
