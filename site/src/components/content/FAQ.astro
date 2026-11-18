@@ -37,7 +37,7 @@ const { items } = Astro.props;
             <button
               type="button"
               class="faq-trigger flex w-full cursor-pointer items-start justify-between gap-4 py-5 text-left font-mono text-base font-bold leading-relaxed text-text transition-colors hover:text-accent-strong sm:text-lg"
-              aria-expanded="false"
+              aria-expanded={i === 0 ? "true" : "false"}
               aria-controls={`faq-panel-${i}`}
               id={`faq-btn-${i}`}
             >
@@ -50,7 +50,9 @@ const { items } = Astro.props;
             </button>
             <div
               class="faq-panel grid transition-[grid-template-rows] duration-200 ease-out"
-              style="grid-template-rows: 0fr"
+              style={
+                i === 0 ? "grid-template-rows: 1fr" : "grid-template-rows: 0fr"
+              }
               id={`faq-panel-${i}`}
               role="region"
               aria-labelledby={`faq-btn-${i}`}
