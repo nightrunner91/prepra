@@ -42,7 +42,7 @@ export function TopicsProgress({
               key={topic.id}
               type="button"
               onClick={() => onSelectTopic(topic.id)}
-              className="border-2 border-border bg-canvas p-3 text-left transition-colors hover:bg-surface-alt"
+              className="border-2 border-border bg-canvas p-3 text-left transition-colors hover:bg-surface-alt active:translate-y-px"
             >
               <span className="flex items-center justify-between gap-2">
                 <span className="eyebrow tracking-wide text-text">

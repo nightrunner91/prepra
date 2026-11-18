@@ -21,19 +21,19 @@ export function TaskTile({ task, number, status, onOpen }: TaskTileProps) {
         <span className="font-mono text-xs font-bold text-text-tertiary">
           #{String(number).padStart(3, "0")}
         </span>
-        <StatusMark status={status} size={16} />
+        <StatusMark status={status} size={20} />
       </span>
 
-      <span className="mt-2 font-mono text-sm font-extrabold uppercase leading-snug tracking-tight text-text transition-colors group-hover:text-accent-strong">
+      <span className="mt-2 font-mono text-base font-extrabold uppercase leading-snug tracking-tight text-text transition-colors group-hover:text-accent-strong">
         {task.title}
       </span>
 
       <span className="mt-auto flex flex-wrap items-center gap-1.5 pt-3">
-        <TopicBadge topic={task.topic} short />
-        <DifficultyBadge difficulty={task.difficulty} />
+        <TopicBadge topic={task.topic} short muted />
+        <DifficultyBadge difficulty={task.difficulty} muted />
         {task.kind === "code" && (
-          <span className="inline-flex items-center gap-1 border-2 border-border bg-surface-alt px-2 py-0.5 eyebrow text-text-secondary">
-            <Code size={11} weight="bold" />
+          <span className="inline-flex items-center gap-1 border border-border bg-surface px-1.5 py-0.5 eyebrow text-text-tertiary">
+            <Code size={12} weight="bold" />
             Код
           </span>
         )}

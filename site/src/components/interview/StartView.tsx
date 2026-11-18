@@ -223,7 +223,7 @@ export function StartView({
                       type="button"
                       onClick={() => onToggleSection(id)}
                       aria-pressed={checked}
-                      className={`flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide transition-colors ${checked
+                      className={`flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide transition-colors active:translate-y-px ${checked
                           ? "border-border bg-accent text-accent-ink"
                           : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
                         }`}
@@ -249,7 +249,7 @@ export function StartView({
                 <button
                   type="button"
                   onClick={() => onSelectStack("")}
-                  className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${stack === ""
+                  className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors active:translate-y-px ${stack === ""
                       ? "border-border bg-accent text-accent-ink"
                       : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
                     }`}
@@ -261,7 +261,7 @@ export function StartView({
                     key={option.id}
                     type="button"
                     onClick={() => onSelectStack(option.id)}
-                    className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${stack === option.id
+                    className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors active:translate-y-px ${stack === option.id
                         ? "border-border bg-accent text-accent-ink"
                         : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
                       }`}
@@ -282,7 +282,7 @@ export function StartView({
                     key={option}
                     type="button"
                     onClick={() => onSelectLength(option)}
-                    className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${length === option
+                    className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors active:translate-y-px ${length === option
                         ? "border-border bg-accent text-accent-ink"
                         : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
                       }`}
@@ -329,7 +329,7 @@ export function StartView({
             ))}
 
           {ready &&
-            presets.map((preset) => {
+            presets.map((preset, index) => {
               const PresetIcon = PRESET_ICONS[preset.id] ?? SquaresFour;
               const color = PRESET_COLORS[preset.id] ?? "blue";
 
@@ -340,7 +340,8 @@ export function StartView({
                   disabled={!ready}
                   onClick={() => onStartPreset(preset)}
                   aria-label={`Начать интервью: ${preset.title}, ${preset.count} ${questionWord(preset.count)}`}
-                  className="tile card-hover group p-5 disabled:pointer-events-none disabled:opacity-40"
+                  style={{ animationDelay: `${Math.min(index, 8) * 40}ms` }}
+                  className="tile card-hover group reveal p-5 disabled:pointer-events-none disabled:opacity-40"
                 >
                   <span className="flex items-start justify-between gap-3">
                     <span className="font-mono text-base font-extrabold uppercase leading-tight tracking-tight text-text transition-colors group-hover:text-accent-strong">

@@ -1,4 +1,5 @@
-import { Funnel, MagnifyingGlass } from "@phosphor-icons/react";
+import { CaretDown, Funnel, MagnifyingGlass } from "@phosphor-icons/react";
+import type { ReactNode } from "react";
 import { TOPICS } from "../../lib/practice";
 import type { Difficulty, TopicId } from "../../lib/practice/types";
 
@@ -27,6 +28,38 @@ interface ToolbarProps {
   onStatus: (value: StatusFilter) => void;
   onReset: () => void;
   found: number;
+}
+
+/** Селект со своей стрелкой: нативная прилипает к правому краю и мелкая. */
+function FilterSelect({
+  value,
+  onChange,
+  label,
+  children,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <span className="relative block">
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="field field-select"
+        aria-label={label}
+      >
+        {children}
+      </select>
+      <CaretDown
+        size={16}
+        weight="bold"
+        aria-hidden="true"
+        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary"
+      />
+    </span>
+  );
 }
 
 export function Toolbar({
@@ -67,11 +100,10 @@ export function Toolbar({
           />
         </label>
 
-        <select
+        <FilterSelect
           value={topic}
-          onChange={(event) => onTopic(event.target.value as TopicFilter)}
-          className="field"
-          aria-label="Тема"
+          onChange={(value) => onTopic(value as TopicFilter)}
+          label="Тема"
         >
           <option value="all">Все темы</option>
           {TOPICS.map((item) => (
@@ -79,32 +111,28 @@ export function Toolbar({
               {item.label}
             </option>
           ))}
-        </select>
+        </FilterSelect>
 
-        <select
+        <FilterSelect
           value={difficulty}
-          onChange={(event) =>
-            onDifficulty(event.target.value as DifficultyFilter)
-          }
-          className="field"
-          aria-label="Сложность"
+          onChange={(value) => onDifficulty(value as DifficultyFilter)}
+          label="Сложность"
         >
           <option value="all">Любая сложность</option>
           <option value="junior">Junior</option>
           <option value="middle">Middle</option>
           <option value="senior">Senior</option>
-        </select>
+        </FilterSelect>
 
-        <select
+        <FilterSelect
           value={kind}
-          onChange={(event) => onKind(event.target.value as KindFilter)}
-          className="field"
-          aria-label="Тип задачи"
+          onChange={(value) => onKind(value as KindFilter)}
+          label="Тип задачи"
         >
           <option value="all">Все типы</option>
           <option value="choice">Выбор ответа</option>
           <option value="code">Код</option>
-        </select>
+        </FilterSelect>
       </div>
 
       <div className="mt-2 flex flex-wrap items-center gap-1.5">
@@ -115,7 +143,7 @@ export function Toolbar({
             type="button"
             onClick={() => onStatus(option.value)}
             aria-pressed={status === option.value}
-            className={`border-2 border-border px-2 py-0.5 eyebrow transition-colors ${
+            className={`border-2 border-border px-2 py-0.5 eyebrow transition-colors active:translate-y-px ${
               status === option.value
                 ? "bg-accent text-accent-ink"
                 : "bg-canvas text-text-secondary hover:bg-surface-alt hover:text-text"

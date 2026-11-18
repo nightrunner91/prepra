@@ -317,6 +317,13 @@
     font-size: 0.8em;
     font-family: var(--font-mono);
   }
+
+  /* Единое фокус-кольцо для всего интерактивного. :where() даёт нулевую
+     специфичность — компонентные и утилитарные стили могут переопределить. */
+  :where(a, button, select, input, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-accent-strong);
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
@@ -348,6 +355,20 @@
 
   .dark .card-hover:hover {
     box-shadow: 4px 4px 0px var(--color-border);
+  }
+
+  /* Нажатие возвращает плитку на место: ховер не «залипает» под пальцем. */
+  .card-hover:active {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Появление элемента: тот же сдвиг, что у .animate-fade-in,
+     но без JS-обвязки — React-острова не зависят от гидрации.
+     backwards, а не both: после анимации transform не должен
+     перебивать hover-подъём у .card-hover. */
+  .reveal {
+    animation: reveal-in 300ms var(--ease-out) backwards;
   }
 
   /* ── Общий шелл раздела ───────────────────────────────────────
@@ -382,7 +403,7 @@
 
   /* Плитка: секции теории, пресеты интервью, карточки задач. */
   .tile {
-    @apply flex h-full w-full flex-col border-[3px] border-border bg-surface p-6 text-left transition-all;
+    @apply flex h-full w-full flex-col border-[3px] border-border bg-surface p-6 text-left transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong;
   }
 
   /* Рамка-контейнер для произвольного блока. */
@@ -527,7 +548,12 @@
 
   /* Поле ввода и селект. */
   .field {
-    @apply h-10 w-full min-w-0 border-2 border-border bg-canvas px-3 font-mono text-xs font-medium text-text outline-none placeholder:text-text-tertiary focus:border-accent-strong;
+    @apply h-10 w-full min-w-0 border-2 border-border bg-canvas px-3 font-mono text-xs font-medium text-text outline-none transition-colors placeholder:text-text-tertiary focus:border-accent-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong;
+  }
+
+  /* Селект со своей стрелкой: нативная прилипает к краю и мелкая. */
+  .field-select {
+    @apply appearance-none pr-10;
   }
 
   .badge-hover-red:hover {
@@ -597,6 +623,17 @@
   }
 }
 
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translate(4px, 4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Маркер раздела: цвет приходит из утилит bg-pale-*, при наведении —
    общий лайм. Реагируем на ховер всей плитки (.group), а не только
    иконки. Только для мыши: на тапе заливка иначе «залипает» после
@@ -617,10 +654,12 @@
 @media (prefers-reduced-motion: reduce) {
 
   .animate-fade-in,
-  .js .animate-fade-in:not(.is-visible) {
+  .js .animate-fade-in:not(.is-visible),
+  .reveal {
     opacity: 1;
     transform: none;
     transition: none;
+    animation: none;
   }
 }
 

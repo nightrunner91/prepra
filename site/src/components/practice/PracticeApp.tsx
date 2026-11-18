@@ -567,14 +567,19 @@ export function PracticeApp() {
           ) : (
             <>
               <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {visibleTasks.map((task) => (
-                  <TaskTile
+                {visibleTasks.map((task, index) => (
+                  <div
                     key={task.id}
-                    task={task}
-                    number={taskNumbers.get(task.id) ?? 0}
-                    status={progress.tasks[task.id]?.status}
-                    onOpen={() => openTask(task.id)}
-                  />
+                    className="reveal h-full"
+                    style={{ animationDelay: `${Math.min(index, 8) * 40}ms` }}
+                  >
+                    <TaskTile
+                      task={task}
+                      number={taskNumbers.get(task.id) ?? 0}
+                      status={progress.tasks[task.id]?.status}
+                      onOpen={() => openTask(task.id)}
+                    />
+                  </div>
                 ))}
               </div>
 

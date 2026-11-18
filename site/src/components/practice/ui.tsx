@@ -1,4 +1,5 @@
 import { CheckCircle, Circle, XCircle } from "@phosphor-icons/react";
+import type { ReactNode } from "react";
 import type { Difficulty, TopicId } from "../../lib/practice/types";
 import { DIFFICULTY_COLOR, DIFFICULTIES, TOPIC_MAP } from "../../lib/practice/topics";
 
@@ -29,10 +30,20 @@ export function InlineText({ text }: { text: string }) {
   );
 }
 
-export function DifficultyBadge({ difficulty }: { difficulty: Difficulty }) {
+export function DifficultyBadge({
+  difficulty,
+  muted = false,
+}: {
+  difficulty: Difficulty;
+  muted?: boolean;
+}) {
   const label =
     DIFFICULTIES.find((item) => item.id === difficulty)?.label ?? difficulty;
   const color = DIFFICULTY_COLOR[difficulty];
+
+  if (muted) {
+    return <MutedBadge>{label}</MutedBadge>;
+  }
 
   return (
     <span
@@ -46,17 +57,32 @@ export function DifficultyBadge({ difficulty }: { difficulty: Difficulty }) {
 export function TopicBadge({
   topic,
   short = false,
+  muted = false,
 }: {
   topic: TopicId;
   short?: boolean;
+  muted?: boolean;
 }) {
   const meta = TOPIC_MAP[topic];
+
+  if (muted) {
+    return <MutedBadge>{short ? meta.short : meta.label}</MutedBadge>;
+  }
 
   return (
     <span
       className={`inline-flex items-center border-2 border-border px-2 py-0.5 eyebrow ${colorClasses[meta.color]}`}
     >
       {short ? meta.short : meta.label}
+    </span>
+  );
+}
+
+/** Спокойный бейдж для плиток: 1px рамка, цвет только у текста. */
+export function MutedBadge({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center border border-border bg-surface px-1.5 py-0.5 eyebrow text-text-tertiary">
+      {children}
     </span>
   );
 }
