@@ -9,7 +9,7 @@ const { totalArticles, totalQuestions, sectionsCount } = Astro.props;
 ---
 
 <div class="mt-6">
-  <div class="animate-fade-in border-[3px] border-border bg-pale-green-bg p-6">
+  <div class="animate-fade-in border-[3px] border-border bg-surface p-6">
     <div
       class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
     >
@@ -27,17 +27,17 @@ const { totalArticles, totalQuestions, sectionsCount } = Astro.props;
         class="flex items-center gap-6 font-mono text-sm font-bold uppercase tracking-wider"
       >
         <div class="text-center">
-          <div class="text-2xl text-accent">{totalArticles}</div>
+          <div class="text-2xl text-accent-strong">{totalArticles}</div>
           <div class="text-xs text-text-tertiary">Статей</div>
         </div>
         <div class="h-8 w-[2px] bg-border"></div>
         <div class="text-center">
-          <div class="text-2xl text-accent">{totalQuestions}</div>
+          <div class="text-2xl text-accent-strong">{totalQuestions}</div>
           <div class="text-xs text-text-tertiary">Вопросов</div>
         </div>
         <div class="h-8 w-[2px] bg-border"></div>
         <div class="text-center">
-          <div class="text-2xl text-accent">{sectionsCount}</div>
+          <div class="text-2xl text-accent-strong">{sectionsCount}</div>
           <div class="text-xs text-text-tertiary">Разделов</div>
         </div>
       </div>

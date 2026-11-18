@@ -17,12 +17,15 @@ const { articleCount, taskCount } = Astro.props;
   >
     <div>
       <h1
-        class="-ms-1 font-mono text-6xl font-extrabold uppercase tracking-tight text-text sm:text-7xl lg:text-8xl xl:text-9xl"
+        class="font-mono text-4xl font-extrabold uppercase leading-[1.02] tracking-tight text-text sm:text-5xl xl:text-6xl 2xl:text-7xl"
       >
-        <span
-          class="block text-xl font-bold tracking-normal sm:text-3xl lg:mt-6 lg:text-6xl leading-relaxed"
-          ><span class="sr-only">— </span>Подготовка к фронтенд собеседованию
-        </span>
+        <span class="block">Подготовка</span>
+        <span class="block"
+          >к <span class="-mx-2 inline-block bg-accent px-2 text-accent-ink"
+            >фронтенд</span
+          ></span
+        >
+        <span class="block">собеседованию</span>
       </h1>
       <p
         class="mt-5 text-base font-medium leading-relaxed text-text-secondary sm:text-lg"
@@ -32,7 +35,7 @@ const { articleCount, taskCount } = Astro.props;
       <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
         <a
           href={withBase("/javascript")}
-          class="group inline-flex items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3.5 font-mono text-base font-bold uppercase tracking-wider !text-white transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:!text-white hover:shadow-[4px_4px_0px_var(--color-border)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0 active:translate-y-0 active:shadow-none"
+          class="group inline-flex items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3.5 font-mono text-base font-bold uppercase tracking-wider text-accent-ink transition-all hover:text-accent-ink hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-border)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0 active:translate-y-0 active:shadow-none"
         >
           Начать подготовку
           <ArrowRight size={16} weight="bold" className="" />
@@ -80,7 +83,7 @@ const { articleCount, taskCount } = Astro.props;
               main*
             </span>
             <span class="flex items-center gap-1">
-              <CheckCircle size={12} weight="bold" className="text-accent" />
+              <CheckCircle size={12} weight="bold" className="text-accent-strong" />
               0
             </span>
           </div>
@@ -97,7 +100,7 @@ const { articleCount, taskCount } = Astro.props;
 
 <style>
   :global(.g-kw) {
-    color: var(--color-accent);
+    color: var(--color-accent-strong);
     font-weight: 700;
   }
   :global(.g-str) {
@@ -133,7 +136,7 @@ const { articleCount, taskCount } = Astro.props;
   }
   :global(.g-cursor) {
     display: inline-block;
-    background: var(--color-accent);
+    background: var(--color-accent-strong);
     width: 0.6ch;
     height: 1.1em;
     vertical-align: text-bottom;

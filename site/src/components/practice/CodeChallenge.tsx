@@ -323,7 +323,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
           onKeyDown={handleEditorKeyDown}
           spellCheck={false}
           rows={Math.min(20, Math.max(10, code.split("\n").length + 1))}
-          className="block w-full resize-y border-0 bg-canvas p-3 font-mono text-xs leading-relaxed text-text outline-none focus:ring-2 focus:ring-inset focus:ring-accent"
+          className="block w-full resize-y border-0 bg-canvas p-3 font-mono text-xs leading-relaxed text-text outline-none focus:ring-2 focus:ring-inset focus:ring-accent-strong"
           aria-label={`Редактор решения задачи ${task.title}`}
         />
 
@@ -332,7 +332,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
             type="button"
             onClick={handleRun}
             disabled={running}
-            className="inline-flex items-center gap-2 border-2 border-border bg-accent px-4 py-2 eyebrow text-white transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex items-center gap-2 border-2 border-border bg-accent px-4 py-2 eyebrow text-accent-ink transition-all hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:cursor-wait disabled:opacity-70"
           >
             {running ? (
               <Spinner size={15} weight="bold" className="animate-spin" />
@@ -439,7 +439,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
           <div
             className={`border-2 border-border p-3 font-mono text-sm font-bold ${
               allPassed
-                ? "bg-pale-green-bg text-pale-green-text"
+                ? "bg-positive-bg text-positive-text"
                 : "bg-pale-red-bg text-pale-red-text"
             }`}
           >
@@ -452,13 +452,13 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
             <div
               key={index}
               className={`border-2 border-border p-3 ${
-                result.ok ? "bg-pale-green-bg" : "bg-pale-red-bg"
+                result.ok ? "bg-positive-bg" : "bg-pale-red-bg"
               }`}
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span
                   className={`eyebrow ${
-                    result.ok ? "text-pale-green-text" : "text-pale-red-text"
+                    result.ok ? "text-positive-text" : "text-pale-red-text"
                   }`}
                 >
                   {result.ok ? "✓" : "✕"} {result.label}
@@ -509,7 +509,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
       {revealed && (
         <div
           className={`border-2 border-border p-4 ${
-            allPassed ? "bg-pale-green-bg" : "bg-surface-alt"
+            allPassed ? "bg-positive-bg" : "bg-surface-alt"
           }`}
         >
           <div className="eyebrow text-text">
@@ -522,7 +522,7 @@ export function CodeChallenge({ task, onResult }: CodeChallengeProps) {
           {task.article && (
             <a
               href={withBase(task.article.href)}
-              className="mt-3 inline-flex items-center gap-1 eyebrow text-accent hover:underline"
+              className="mt-3 inline-flex items-center gap-1 eyebrow text-accent-strong hover:underline"
             >
               {task.article.label}
               <ArrowRight size={13} weight="bold" />

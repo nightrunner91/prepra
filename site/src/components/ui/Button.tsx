@@ -10,7 +10,7 @@ export function Button({ variant = 'primary', size = 'md', children, className =
   const base = 'inline-flex items-center justify-center font-mono font-bold uppercase tracking-wider border-2 border-border transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none';
 
   const variants = {
-    primary: 'bg-accent text-white hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff]',
+    primary: 'bg-accent text-accent-ink hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff]',
     ghost: 'bg-transparent text-text-secondary hover:text-text hover:bg-surface-alt',
   };
 

@@ -8,7 +8,6 @@ interface SectionItem {
   label: string;
   icon?: Icon;
   description: string;
-  color: "red" | "blue" | "green" | "yellow" | "neutral";
   articleCount: number;
   questionCount: number;
 }
@@ -31,7 +30,6 @@ const { sections } = Astro.props;
             href={withBase(`/${s.id}`)}
             articleCount={s.articleCount}
             questionCount={s.questionCount}
-            color={s.color}
             icon={s.icon}
           />
         </div>

@@ -24,6 +24,14 @@ export default {
         accent: {
           DEFAULT: 'var(--color-accent)',
           hover: 'var(--color-accent-hover)',
+          ink: 'var(--color-accent-ink)',
+          strong: 'var(--color-accent-strong)',
+        },
+        invert: {
+          bg: 'var(--color-invert-bg)',
+          text: 'var(--color-invert-text)',
+          muted: 'var(--color-invert-muted)',
+          accent: 'var(--color-invert-accent)',
         },
         'pale-red': {
           bg: 'var(--color-pale-red-bg)',
@@ -37,11 +45,11 @@ export default {
           'bg-hover': 'var(--color-pale-blue-bg-hover)',
           'text-hover': 'var(--color-pale-blue-text-hover)',
         },
-        'pale-green': {
-          bg: 'var(--color-pale-green-bg)',
-          text: 'var(--color-pale-green-text)',
-          'bg-hover': 'var(--color-pale-green-bg-hover)',
-          'text-hover': 'var(--color-pale-green-text-hover)',
+        positive: {
+          bg: 'var(--color-positive-bg)',
+          text: 'var(--color-positive-text)',
+          'bg-hover': 'var(--color-positive-bg-hover)',
+          'text-hover': 'var(--color-positive-text-hover)',
         },
         'pale-yellow': {
           bg: 'var(--color-pale-yellow-bg)',

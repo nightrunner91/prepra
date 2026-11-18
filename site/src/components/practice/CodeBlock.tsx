@@ -63,7 +63,7 @@ function tokenClass(token: string, rest: string): string {
     return "text-pale-red-text";
   }
   if (/^\d/.test(token)) return "text-pale-blue-text";
-  if (KEYWORDS.has(token)) return "text-accent font-semibold";
+  if (KEYWORDS.has(token)) return "text-accent-strong font-semibold";
   if (/^\s*\(/.test(rest)) return "text-pale-blue-text";
   return "";
 }
@@ -132,7 +132,7 @@ export function CodeBlock({ code, label = "JavaScript", className = "" }: CodeBl
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1 eyebrow text-text-secondary transition-colors hover:text-accent"
+          className="inline-flex items-center gap-1 eyebrow text-text-secondary transition-colors hover:text-accent-strong"
           aria-label="Скопировать код"
         >
           {copied ? <Check size={13} weight="bold" /> : <Copy size={13} />}

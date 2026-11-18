@@ -176,7 +176,7 @@ export function ResultsView({
                   <td className="px-4 py-2 sm:px-5">
                     <a
                       href={row.url}
-                      className="font-mono text-xs font-extrabold uppercase tracking-wide text-accent hover:text-accent-hover"
+                      className="font-mono text-xs font-extrabold uppercase tracking-wide text-accent-strong hover:text-text"
                     >
                       {row.label}
                     </a>
@@ -208,7 +208,7 @@ export function ResultsView({
           <div className="mt-2 flex items-center gap-2">
             <a
               href={weakest.url}
-              className="font-mono text-lg font-extrabold uppercase tracking-tight text-text hover:text-accent"
+              className="font-mono text-lg font-extrabold uppercase tracking-tight text-text hover:text-accent-strong"
             >
               {weakest.label}
             </a>

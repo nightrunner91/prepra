@@ -20,7 +20,9 @@ const { articleCount, taskCount, presetCount } = Astro.props;
 const cardClass =
   "card-hover group flex flex-col border-[3px] border-border p-6 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0 active:translate-y-0 active:shadow-none lg:p-8";
 const linkClass =
-  "mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-border pt-6 eyebrow text-text transition-colors group-hover:border-accent group-hover:text-accent";
+  "mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-border pt-6 eyebrow transition-colors group-hover:border-accent-strong group-hover:text-accent-strong";
+const linkOnAccentClass =
+  "mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-border pt-6 eyebrow text-accent-ink transition-colors group-hover:border-accent-ink";
 const badgeClass =
   "inline-flex w-fit items-center gap-2 border-2 border-border bg-surface px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-[0.16em] text-text";
 ---
@@ -41,7 +43,7 @@ const badgeClass =
   <div class="mt-8 grid gap-5 lg:grid-cols-12">
     <a
       href={withBase("/theory")}
-      class={`${cardClass} bg-pale-green-bg lg:col-span-6`}
+      class={`${cardClass} bg-accent text-accent-ink lg:col-span-6`}
     >
       <span class={badgeClass}>
         <BookOpen size={16} weight="bold" />
@@ -50,33 +52,33 @@ const badgeClass =
 
       <div class="mt-8 flex items-baseline gap-2">
         <span
-          class="font-mono text-5xl font-extrabold leading-none tabular-nums text-text xl:text-6xl"
+          class="font-mono text-5xl font-extrabold leading-none tabular-nums text-accent-ink xl:text-6xl"
           >{articleCount}</span
         >
         <span
-          class="font-mono text-xs font-bold uppercase tracking-widest text-text-secondary"
+          class="font-mono text-xs font-bold uppercase tracking-widest text-accent-ink"
           >{plural(articleCount, "статья", "статьи", "статей")}</span
         >
       </div>
 
       <h3
-        class="mt-4 font-mono text-2xl font-extrabold uppercase tracking-tight text-text"
+        class="mt-4 font-mono text-2xl font-extrabold uppercase tracking-tight text-accent-ink"
       >
         Теория
       </h3>
       <p
-        class="mt-2 font-mono text-xs font-bold uppercase tracking-[0.12em] text-text-tertiary"
+        class="mt-2 font-mono text-xs font-bold uppercase tracking-[0.12em] text-accent-ink"
       >
         Что внутри
       </p>
       <ul
-        class="mt-3 grid max-w-[52ch] gap-2 text-sm font-medium text-text-secondary sm:text-base"
+        class="mt-3 grid max-w-[52ch] gap-2 text-sm font-medium text-accent-ink sm:text-base"
       >
         <li class="flex gap-2">
           <Check
             size={16}
             weight="bold"
-            className="mt-1 shrink-0 text-pale-green-text"
+            className="mt-1 shrink-0 text-accent-ink"
             aria-hidden="true"
           />
           Разбор с примерами кода и схемами
@@ -85,7 +87,7 @@ const badgeClass =
           <Check
             size={16}
             weight="bold"
-            className="mt-1 shrink-0 text-pale-green-text"
+            className="mt-1 shrink-0 text-accent-ink"
             aria-hidden="true"
           />
           Вопросы для самопроверки в конце статьи
@@ -94,14 +96,14 @@ const badgeClass =
           <Check
             size={16}
             weight="bold"
-            className="mt-1 shrink-0 text-pale-green-text"
+            className="mt-1 shrink-0 text-accent-ink"
             aria-hidden="true"
           />
           Шпаргалка раздела для повторения
         </li>
       </ul>
 
-      <span class={linkClass}>
+      <span class={linkOnAccentClass}>
         Открыть теорию
         <ArrowRight
           size={14}
@@ -114,9 +116,9 @@ const badgeClass =
     <div
       class="grid gap-5 sm:grid-cols-2 lg:col-span-6 lg:grid-cols-1 lg:grid-rows-2"
     >
-      <a href={withBase("/practice")} class={`${cardClass} bg-pale-yellow-bg`}>
+      <a href={withBase("/practice")} class={`${cardClass} bg-surface`}>
         <span class={badgeClass}>
-          <Barbell size={16} weight="bold" />
+          <Barbell size={16} weight="bold" className="text-pale-yellow-text" />
           Решай
         </span>
 
@@ -143,7 +145,7 @@ const badgeClass =
           задачи с автотестами.
         </p>
 
-        <span class={linkClass}>
+        <span class={`${linkClass} text-text`}>
           Открыть практикум
           <ArrowRight
             size={14}
@@ -153,9 +155,9 @@ const badgeClass =
         </span>
       </a>
 
-      <a href={withBase("/interview")} class={`${cardClass} bg-pale-blue-bg`}>
+      <a href={withBase("/interview")} class={`${cardClass} bg-surface`}>
         <span class={badgeClass}>
-          <Microphone size={16} weight="bold" />
+          <Microphone size={16} weight="bold" className="text-pale-blue-text" />
           Отвечай
         </span>
 
@@ -182,7 +184,7 @@ const badgeClass =
           тем с переходом к статье.
         </p>
 
-        <span class={linkClass}>
+        <span class={`${linkClass} text-text`}>
           Пройти мок-интервью
           <ArrowRight
             size={14}

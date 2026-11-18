@@ -18,7 +18,7 @@ const { title, description, href, tags = [], questionCount = 0 } = Astro.props;
   <div class="flex items-start justify-between gap-6">
     <a href={href} class="min-w-0 flex-1">
       <h3
-        class="font-mono text-base font-extrabold uppercase tracking-tight text-text leading-tight group-hover:text-accent transition-colors"
+        class="font-mono text-base font-extrabold uppercase tracking-tight text-text leading-tight group-hover:text-accent-strong transition-colors"
       >
         {title}
       </h3>
@@ -100,9 +100,9 @@ const { title, description, href, tags = [], questionCount = 0 } = Astro.props;
         "text-text-secondary",
       );
       button.classList.add(
-        "border-pale-green-text",
-        "bg-pale-green-bg-hover",
-        "text-pale-green-text-hover",
+        "border-border",
+        "bg-accent",
+        "text-accent-ink",
       );
       check?.classList.remove("hidden");
       button.setAttribute("aria-label", "Отметить непрочитанной");
@@ -114,9 +114,8 @@ const { title, description, href, tags = [], questionCount = 0 } = Astro.props;
         "text-text-secondary",
       );
       button.classList.remove(
-        "border-pale-green-text",
-        "bg-pale-green-bg-hover",
-        "text-pale-green-text-hover",
+        "bg-accent",
+        "text-accent-ink",
       );
       check?.classList.add("hidden");
       button.setAttribute("aria-label", "Отметить прочитанной");

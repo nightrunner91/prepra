@@ -33,9 +33,24 @@
   --color-text: #000000;
   --color-text-secondary: #333333;
   --color-text-tertiary: #666666;
-  --color-accent: #34946B;
-  --color-accent-hover: #2A7A58;
+
+  /* Акцент работает как ПОЛЕ: заливка кнопок, маркер, инверсия, селекшн.
+     Текст на нём всегда accent-ink. Как текст акцент не используется:
+     лайм почти равен канве по светлоте, поэтому для текста есть
+     отдельный тёмный вариант accent-strong. */
+  --color-accent: #C8F135;
+  --color-accent-hover: #B0DC1E;
+  --color-accent-ink: #000000;
+  --color-accent-strong: #527000;
   --color-syntax-string: #B45309;
+
+  /* Инвертированная полоса: чернильное поле с канвой внутри.
+     Отдельные токены, чтобы в тёмной теме полоса не превращалась
+     в светлую и не переворачивала тему страницы. */
+  --color-invert-bg: #000000;
+  --color-invert-text: #F2F2EC;
+  --color-invert-muted: #3D3D35;
+  --color-invert-accent: #C8F135;
 
   --color-pale-red-bg: #FFE0E0;
   --color-pale-red-text: #B91C1C;
@@ -45,10 +60,12 @@
   --color-pale-blue-text: #1E40AF;
   --color-pale-blue-bg-hover: #B3DAFE;
   --color-pale-blue-text-hover: #1E3A8A;
-  --color-pale-green-bg: #D4F5D4;
-  --color-pale-green-text: #166534;
-  --color-pale-green-bg-hover: #B5EBB5;
-  --color-pale-green-text-hover: #14532D;
+  /* Позитивное состояние живёт в семье акцента, а не отдельным мятным
+     зелёным: два зелёных рядом читались как ошибка. */
+  --color-positive-bg: #EDFBC0;
+  --color-positive-text: #3F5A00;
+  --color-positive-bg-hover: #DFF79E;
+  --color-positive-text-hover: #2F4300;
   --color-pale-yellow-bg: #FFF3BF;
   --color-pale-yellow-text: #854D0E;
   --color-pale-yellow-bg-hover: #FDE68A;
@@ -63,24 +80,31 @@
   --color-border-strong: #FFFFFF;
   --color-text: #F0F0F0;
   --color-text-secondary: #B0B0B0;
-  --color-text-tertiary: #707070;
-  --color-accent: #4ADE80;
-  --color-accent-hover: #86EFAC;
+  --color-text-tertiary: #909090;
+  --color-accent: #D6F94A;
+  --color-accent-hover: #E4FF7A;
+  --color-accent-ink: #0A0A0A;
+  --color-accent-strong: #D6F94A;
   --color-syntax-string: #FBBF24;
 
-  --color-pale-red-bg: #2D1111;
+  --color-invert-bg: #1C1C1C;
+  --color-invert-text: #F0F0F0;
+  --color-invert-muted: #3A3A3A;
+  --color-invert-accent: #D6F94A;
+
+  --color-pale-red-bg: #2E1313;
   --color-pale-red-text: #F87171;
   --color-pale-red-bg-hover: #3D1818;
   --color-pale-red-text-hover: #FCA5A5;
-  --color-pale-blue-bg: #0C1929;
+  --color-pale-blue-bg: #0F2033;
   --color-pale-blue-text: #60A5FA;
-  --color-pale-blue-bg-hover: #132B42;
+  --color-pale-blue-bg-hover: #152F49;
   --color-pale-blue-text-hover: #93C5FD;
-  --color-pale-green-bg: #0A1F0A;
-  --color-pale-green-text: #4ADE80;
-  --color-pale-green-bg-hover: #143314;
-  --color-pale-green-text-hover: #86EFAC;
-  --color-pale-yellow-bg: #1F1A05;
+  --color-positive-bg: #141B05;
+  --color-positive-text: #D6F94A;
+  --color-positive-bg-hover: #1E2A08;
+  --color-positive-text-hover: #E4FF7A;
+  --color-pale-yellow-bg: #231D06;
   --color-pale-yellow-text: #FACC15;
   --color-pale-yellow-bg-hover: #2D2608;
   --color-pale-yellow-text-hover: #FDE047;
@@ -116,14 +140,14 @@
 
   ::selection {
     background-color: var(--color-accent);
-    color: #FFFFFF;
+    color: var(--color-accent-ink);
   }
 
   a {
-    color: var(--color-accent);
+    color: var(--color-accent-strong);
 
     &:hover {
-      color: var(--color-accent-hover);
+      color: var(--color-text);
     }
   }
 
@@ -225,11 +249,11 @@
 
   /* ── Кнопки ─────────────────────────────────────────────────── */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 border-2 border-border font-mono font-bold uppercase tracking-wider transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-40;
+    @apply inline-flex items-center justify-center gap-2 border-2 border-border font-mono font-bold uppercase tracking-wider transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-40;
   }
 
   .btn-primary {
-    @apply bg-accent text-white dark:text-canvas hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-border)];
+    @apply bg-accent text-accent-ink hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-accent-hover hover:text-accent-ink hover:shadow-[4px_4px_0px_var(--color-border)];
   }
 
   .btn-secondary {
@@ -242,7 +266,7 @@
 
   /* Квадратная иконочная кнопка. Общая для шапки, темы и закрытия шторки. */
   .icon-btn {
-    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center border-2 border-border bg-surface text-text-secondary transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:translate-y-px;
+    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center border-2 border-border bg-surface text-text-secondary transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong active:translate-y-px;
   }
 
   .btn-sm {
@@ -259,7 +283,7 @@
 
   /* Поле ввода и селект. */
   .field {
-    @apply h-10 w-full min-w-0 border-2 border-border bg-canvas px-3 font-mono text-xs font-medium text-text outline-none placeholder:text-text-tertiary focus:border-accent;
+    @apply h-10 w-full min-w-0 border-2 border-border bg-canvas px-3 font-mono text-xs font-medium text-text outline-none placeholder:text-text-tertiary focus:border-accent-strong;
   }
 
   .badge-hover-red:hover {
@@ -272,9 +296,9 @@
     color: var(--color-pale-blue-text-hover);
   }
 
-  .badge-hover-green:hover {
-    background-color: var(--color-pale-green-bg-hover);
-    color: var(--color-pale-green-text-hover);
+  .badge-hover-positive:hover {
+    background-color: var(--color-positive-bg-hover);
+    color: var(--color-positive-text-hover);
   }
 
   .badge-hover-yellow:hover {
@@ -342,7 +366,7 @@
 .prose {
   --tw-prose-body: var(--color-text-secondary);
   --tw-prose-headings: var(--color-text);
-  --tw-prose-links: var(--color-accent);
+  --tw-prose-links: var(--color-accent-strong);
   --tw-prose-bold: var(--color-text);
   --tw-prose-code: var(--color-text);
   --tw-prose-pre-bg: var(--color-surface-alt);

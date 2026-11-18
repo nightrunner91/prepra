@@ -126,9 +126,9 @@ const STATUS_META: Record<AnswerStatus, { label: string; icon: React.ReactNode; 
   good: {
     label: 'Ответил хорошо',
     icon: <ThumbsUp size={24} weight="bold" />,
-    bg: 'bg-pale-green-bg',
-    border: 'border-pale-green-text',
-    color: 'text-pale-green-text',
+    bg: 'bg-positive-bg',
+    border: 'border-positive-text',
+    color: 'text-positive-text',
   },
   unsure: {
     label: 'Ответил неуверенно',
@@ -352,10 +352,10 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
 
       <div>
         <div className="grid grid-cols-2 gap-3 p-6 md:grid-cols-4 md:p-8">
-          <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-green-bg p-3">
-            <ThumbsUp size={22} weight="bold" className="text-pale-green-text" />
-            <span className="font-mono text-2xl font-extrabold text-pale-green-text">{counts.good}</span>
-            <span className="eyebrow text-pale-green-text">Отлично</span>
+          <div className="flex flex-col items-center gap-1 border-2 border-border bg-positive-bg p-3">
+            <ThumbsUp size={22} weight="bold" className="text-positive-text" />
+            <span className="font-mono text-2xl font-extrabold text-positive-text">{counts.good}</span>
+            <span className="eyebrow text-positive-text">Отлично</span>
           </div>
           <div className="flex flex-col items-center gap-1 border-2 border-border bg-pale-yellow-bg p-3">
             <SmileyMeh size={22} weight="bold" className="text-pale-yellow-text" />
@@ -412,11 +412,11 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
           <button
             type="button"
             onClick={handleFinish}
-            className="flex w-full items-center justify-between gap-4 border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-white transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
+            className="flex w-full items-center justify-between gap-4 border-[3px] border-border bg-accent px-6 py-3 font-mono font-bold uppercase tracking-wider text-accent-ink transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none"
           >
             <span className="flex min-w-0 flex-col items-start text-left">
               <span>{isRead ? 'Следующая статья' : 'Отметить изученным'}</span>
-              <span className="w-full truncate text-xs font-normal normal-case tracking-normal text-white/80">
+              <span className="w-full truncate text-xs font-normal normal-case tracking-normal text-accent-ink opacity-70">
                 {isRead ? nextArticle.title : `и перейти: «${nextArticle.title}»`}
               </span>
             </span>
@@ -428,8 +428,8 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
             onClick={handleFinish}
             disabled={isRead}
             className={`flex w-full items-center justify-center gap-2 border-[3px] border-border px-6 py-3 font-mono font-bold uppercase tracking-wider transition-all ${isRead
-              ? 'cursor-default border-pale-green-text bg-pale-green-bg-hover text-pale-green-text-hover'
-              : 'bg-accent text-white hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none'
+              ? 'cursor-default border-positive-text bg-positive-bg-hover text-positive-text-hover'
+              : 'bg-accent text-accent-ink hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none'
               }`}
           >
             <CheckSquare size={20} weight="bold" />
@@ -449,7 +449,7 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
         {!nextArticle && sectionHref && sectionLabel && (
           <a
             href={sectionHref}
-            className="text-center eyebrow text-text-secondary underline-offset-4 transition-colors hover:text-accent hover:underline"
+            className="text-center eyebrow text-text-secondary underline-offset-4 transition-colors hover:text-accent-strong hover:underline"
           >
             Перейти к разделу «{sectionLabel}»
           </a>
@@ -533,7 +533,7 @@ function QuizView({
 
           <div className="quiz-card-face quiz-card-back flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-12">
             <div className="my-auto">
-              <div className="mb-3 eyebrow text-accent md:mb-4">
+              <div className="mb-3 eyebrow text-accent-strong md:mb-4">
                 Ответ
               </div>
               <p className="quiz-answer break-words text-left text-base leading-relaxed text-text-secondary md:text-lg">
@@ -555,11 +555,11 @@ function QuizView({
                 type="button"
                 onClick={() => onAnswer('good')}
                 disabled={savingStatus === currentIndex}
-                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-green-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-green-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-positive-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-positive-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
                 aria-label="Ответил уверенно"
               >
-                <ThumbsUp size={24} weight="bold" className="text-pale-green-text" />
-                <span className="eyebrow text-pale-green-text">Отлично</span>
+                <ThumbsUp size={24} weight="bold" className="text-positive-text" />
+                <span className="eyebrow text-positive-text">Отлично</span>
               </button>
               <button
                 type="button"

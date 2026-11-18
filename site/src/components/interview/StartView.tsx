@@ -58,7 +58,7 @@ const PRESET_COLORS: Record<string, "red" | "blue" | "green" | "yellow"> = {
 const PRESET_BADGE_CLASSES: Record<string, string> = {
   red: "bg-pale-red-bg text-pale-red-text",
   blue: "bg-pale-blue-bg text-pale-blue-text",
-  green: "bg-pale-green-bg text-pale-green-text",
+  green: "bg-positive-bg text-positive-text",
   yellow: "bg-pale-yellow-bg text-pale-yellow-text",
 };
 
@@ -224,13 +224,13 @@ export function StartView({
                       onClick={() => onToggleSection(id)}
                       aria-pressed={checked}
                       className={`flex items-center gap-2 border-2 px-3 py-2 font-mono text-xs font-bold uppercase tracking-wide transition-colors ${checked
-                          ? "border-accent bg-pale-green-bg text-text"
+                          ? "border-border bg-accent text-accent-ink"
                           : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
                         }`}
                     >
                       <span>{sectionLabels.get(id) ?? id}</span>
                       <span
-                        className={`shrink-0 text-xs ${checked ? "text-accent" : "text-text-tertiary"
+                        className={`shrink-0 text-xs ${checked ? "text-accent-ink" : "text-text-tertiary"
                           }`}
                       >
                         {sectionPool.get(id) ?? 0}
@@ -250,7 +250,7 @@ export function StartView({
                   type="button"
                   onClick={() => onSelectStack("")}
                   className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${stack === ""
-                      ? "border-accent bg-accent text-white dark:text-canvas"
+                      ? "border-border bg-accent text-accent-ink"
                       : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
                     }`}
                 >
@@ -262,7 +262,7 @@ export function StartView({
                     type="button"
                     onClick={() => onSelectStack(option.id)}
                     className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${stack === option.id
-                        ? "border-accent bg-accent text-white dark:text-canvas"
+                        ? "border-border bg-accent text-accent-ink"
                         : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
                       }`}
                   >
@@ -283,7 +283,7 @@ export function StartView({
                     type="button"
                     onClick={() => onSelectLength(option)}
                     className={`border-2 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider transition-colors ${length === option
-                        ? "border-accent bg-accent text-white dark:text-canvas"
+                        ? "border-border bg-accent text-accent-ink"
                         : "border-border bg-surface-alt text-text-secondary hover:bg-surface"
                       }`}
                   >
@@ -343,7 +343,7 @@ export function StartView({
                   className="tile card-hover group p-5 disabled:pointer-events-none disabled:opacity-40"
                 >
                   <span className="flex items-start justify-between gap-3">
-                    <span className="font-mono text-base font-extrabold uppercase leading-tight tracking-tight text-text transition-colors group-hover:text-accent">
+                    <span className="font-mono text-base font-extrabold uppercase leading-tight tracking-tight text-text transition-colors group-hover:text-accent-strong">
                       {preset.title}
                     </span>
                     <span
@@ -361,7 +361,7 @@ export function StartView({
                     {preset.description}
                   </span>
 
-                  <span className="mt-auto flex items-center gap-1.5 pt-4 eyebrow text-accent">
+                  <span className="mt-auto flex items-center gap-1.5 pt-4 eyebrow text-accent-strong">
                     Начать
                     <ArrowRight size={14} weight="bold" />
                   </span>

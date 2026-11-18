@@ -117,7 +117,7 @@ export function Toolbar({
             aria-pressed={status === option.value}
             className={`border-2 border-border px-2 py-0.5 eyebrow transition-colors ${
               status === option.value
-                ? "bg-text text-canvas"
+                ? "bg-accent text-accent-ink"
                 : "bg-canvas text-text-secondary hover:bg-surface-alt hover:text-text"
             }`}
           >
@@ -136,7 +136,7 @@ export function Toolbar({
           <button
             type="button"
             onClick={onReset}
-            className="eyebrow text-text-secondary underline decoration-2 underline-offset-2 transition-colors hover:text-accent"
+            className="eyebrow text-text-secondary underline decoration-2 underline-offset-2 transition-colors hover:text-accent-strong"
           >
             Сбросить
           </button>

@@ -5,7 +5,7 @@ import { DIFFICULTY_COLOR, DIFFICULTIES, TOPIC_MAP } from "../../lib/practice/to
 const colorClasses = {
   red: "bg-pale-red-bg text-pale-red-text",
   blue: "bg-pale-blue-bg text-pale-blue-text",
-  green: "bg-pale-green-bg text-pale-green-text",
+  green: "bg-positive-bg text-positive-text",
   yellow: "bg-pale-yellow-bg text-pale-yellow-text",
   neutral: "bg-surface-alt text-text-secondary",
 };
@@ -77,7 +77,7 @@ export function StatusMark({
   size?: number;
 }) {
   if (status === "solved") {
-    return <CheckCircle size={size} weight="fill" className="text-pale-green-text" />;
+    return <CheckCircle size={size} weight="fill" className="text-positive-text" />;
   }
   if (status === "failed") {
     return <XCircle size={size} weight="fill" className="text-pale-red-text" />;

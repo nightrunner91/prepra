@@ -299,14 +299,14 @@ export function SearchModal() {
                       selectResult(result);
                     }}
                     onMouseEnter={() => setActiveIndex(index)}
-                    className={`card-hover block border-2 px-4 py-3 transition-all sm:px-5 ${index === activeIndex ? "border-accent bg-surface" : "border-border bg-surface"
+                    className={`card-hover block border-2 border-border px-4 py-3 transition-all sm:px-5 ${index === activeIndex ? "bg-accent" : "bg-surface"
                       }`}
                   >
                     <div className="flex items-center justify-between gap-5">
-                      <h3 className="min-w-0 font-mono text-sm font-extrabold uppercase tracking-tight text-text">
+                      <h3 className={`min-w-0 font-mono text-sm font-extrabold uppercase tracking-tight ${index === activeIndex ? "text-accent-ink" : "text-text"}`}>
                         {result.title}
                       </h3>
-                      <span className="shrink-0 border border-border px-2 py-0.5 eyebrow text-text-tertiary">
+                      <span className={`shrink-0 border border-border px-2 py-0.5 eyebrow ${index === activeIndex ? "text-accent-ink" : "text-text-tertiary"}`}>
                         {result.sectionLabel}
                       </span>
                     </div>

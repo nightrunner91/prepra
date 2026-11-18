@@ -36,7 +36,7 @@ const { items } = Astro.props;
           <div class="border-b-[3px] border-border" data-faq-item>
             <button
               type="button"
-              class="faq-trigger flex w-full cursor-pointer items-start justify-between gap-4 py-5 text-left font-mono text-base font-bold leading-relaxed text-text transition-colors hover:text-accent sm:text-lg"
+              class="faq-trigger flex w-full cursor-pointer items-start justify-between gap-4 py-5 text-left font-mono text-base font-bold leading-relaxed text-text transition-colors hover:text-accent-strong sm:text-lg"
               aria-expanded="false"
               aria-controls={`faq-panel-${i}`}
               id={`faq-btn-${i}`}
@@ -76,12 +76,12 @@ const { items } = Astro.props;
   .faq-panel :global(a) {
     color: var(--color-text);
     text-decoration: underline;
-    text-decoration-color: var(--color-accent);
+    text-decoration-color: var(--color-accent-strong);
     text-underline-offset: 3px;
   }
 
   .faq-panel :global(a:hover) {
-    color: var(--color-accent-hover);
+    color: var(--color-text-secondary);
   }
 
   .faq-panel-inner {

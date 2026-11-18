@@ -151,7 +151,7 @@ export function TaskDetail({
                     disabled={revealed}
                     className={`flex h-full w-full items-start gap-3 border-2 border-border p-3 text-left transition-all ${
                       correct
-                        ? "bg-pale-green-bg"
+                        ? "bg-positive-bg"
                         : wrong
                           ? "bg-pale-red-bg"
                           : revealed
@@ -162,7 +162,7 @@ export function TaskDetail({
                     <span
                       className={`flex h-6 w-6 shrink-0 items-center justify-center border-2 border-border font-mono text-xs font-bold ${
                         correct
-                          ? "bg-pale-green-text text-canvas"
+                          ? "bg-positive-text text-canvas"
                           : wrong
                             ? "bg-pale-red-text text-canvas"
                             : "bg-surface-alt text-text-secondary"
@@ -191,12 +191,12 @@ export function TaskDetail({
             {revealed && (
               <div
                 className={`border-2 border-border p-4 ${
-                  isCorrect ? "bg-pale-green-bg" : "bg-pale-red-bg"
+                  isCorrect ? "bg-positive-bg" : "bg-pale-red-bg"
                 }`}
               >
                 <div
                   className={`eyebrow ${
-                    isCorrect ? "text-pale-green-text" : "text-pale-red-text"
+                    isCorrect ? "text-positive-text" : "text-pale-red-text"
                   }`}
                 >
                   {isCorrect ? "Верно" : "Неверно"}
@@ -208,7 +208,7 @@ export function TaskDetail({
                 {task.article && (
                   <a
                     href={withBase(task.article.href)}
-                    className="mt-3 inline-flex items-center gap-1 eyebrow text-accent hover:underline"
+                    className="mt-3 inline-flex items-center gap-1 eyebrow text-accent-strong hover:underline"
                   >
                     {task.article.label}
                     <ArrowRight size={13} weight="bold" />

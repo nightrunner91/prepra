@@ -24,7 +24,7 @@ export function TaskTile({ task, number, status, onOpen }: TaskTileProps) {
         <StatusMark status={status} size={16} />
       </span>
 
-      <span className="mt-2 font-mono text-sm font-extrabold uppercase leading-snug tracking-tight text-text transition-colors group-hover:text-accent">
+      <span className="mt-2 font-mono text-sm font-extrabold uppercase leading-snug tracking-tight text-text transition-colors group-hover:text-accent-strong">
         {task.title}
       </span>
 

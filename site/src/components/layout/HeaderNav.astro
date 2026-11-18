@@ -37,7 +37,7 @@ const activePage =
       <a
         href={tab.href}
         aria-current={activePage === tab.id ? "page" : undefined}
-        class="inline-flex items-center px-4 py-2 font-mono text-base font-extrabold uppercase tracking-wide text-text transition-opacity duration-100 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-[current=page]:bg-text aria-[current=page]:text-canvas aria-[current=page]:hover:opacity-100"
+        class="inline-flex items-center px-4 py-2 font-mono text-base font-extrabold uppercase tracking-wide text-text transition-opacity duration-100 hover:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong aria-[current=page]:bg-accent aria-[current=page]:text-accent-ink aria-[current=page]:hover:opacity-100"
       >
         {tab.label}
       </a>

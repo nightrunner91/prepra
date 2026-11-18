@@ -13,9 +13,11 @@ import { ThemeToggle } from "./ThemeToggle.tsx";
   >
     <a
       href={withBase("/")}
-      class="justify-self-start font-mono text-2xl font-extrabold uppercase tracking-tight text-text hover:text-accent transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+      class="justify-self-start font-mono text-2xl font-extrabold uppercase tracking-tight text-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-strong"
     >
-      <span class="text-text">PRE</span><span class="text-accent">PRA</span>
+      <span class="text-text">PRE</span><span
+        class="-mr-1 bg-accent px-1 text-accent-ink">PRA</span
+      >
     </a>
 
     <HeaderNav />

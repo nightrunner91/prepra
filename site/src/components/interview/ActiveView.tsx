@@ -109,7 +109,7 @@ export function ActiveView({
         >
           <div className="quiz-card-face flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-10">
             <div className="flex items-start justify-between gap-2">
-              <span className="border-2 border-border bg-canvas px-2 py-1 eyebrow font-extrabold text-accent">
+              <span className="border-2 border-border bg-canvas px-2 py-1 eyebrow font-extrabold text-accent-strong">
                 {question.sectionLabel}
               </span>
               <span className="eyebrow text-text-tertiary">
@@ -132,7 +132,7 @@ export function ActiveView({
 
           <div className="quiz-card-face quiz-card-back flex flex-col overflow-y-auto border-[3px] border-border bg-surface p-6 md:p-10">
             <div className="my-auto py-6">
-              <div className="mb-3 eyebrow text-accent">
+              <div className="mb-3 eyebrow text-accent-strong">
                 Ответ
               </div>
               <p className="quiz-answer break-words text-left text-base leading-relaxed text-text-secondary md:text-lg">

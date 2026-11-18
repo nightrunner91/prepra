@@ -29,9 +29,9 @@ export const STATUS_META: Record<
   good: {
     label: "Отлично",
     icon: <ThumbsUp size={22} weight="bold" />,
-    bg: "bg-pale-green-bg",
-    hoverBg: "hover:bg-pale-green-bg-hover",
-    color: "text-pale-green-text",
+    bg: "bg-positive-bg",
+    hoverBg: "hover:bg-positive-bg-hover",
+    color: "text-positive-text",
   },
   unsure: {
     label: "Так себе",

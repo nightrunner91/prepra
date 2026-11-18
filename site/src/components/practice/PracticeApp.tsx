@@ -397,7 +397,7 @@ export function PracticeApp() {
 
       {training?.finished ? (
         <div className="mx-auto max-w-3xl">
-          <div className="panel bg-pale-yellow-bg p-5 sm:p-6">
+          <div className="panel bg-surface p-5 sm:p-6">
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center border-2 border-border bg-pale-yellow-text text-canvas">
                 <Trophy size={22} weight="bold" />
