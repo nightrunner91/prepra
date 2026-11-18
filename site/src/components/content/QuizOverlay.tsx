@@ -555,31 +555,31 @@ function QuizView({
                 type="button"
                 onClick={() => onAnswer('good')}
                 disabled={savingStatus === currentIndex}
-                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-positive-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-positive-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-rate-good px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] hover:bg-rate-good-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
                 aria-label="Ответил уверенно"
               >
-                <ThumbsUp size={24} weight="bold" className="text-positive-text" />
-                <span className="eyebrow text-positive-text">Отлично</span>
+                <ThumbsUp size={24} weight="bold" className="text-rate-ink" />
+                <span className="eyebrow text-rate-ink">Отлично</span>
               </button>
               <button
                 type="button"
                 onClick={() => onAnswer('unsure')}
                 disabled={savingStatus === currentIndex}
-                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-yellow-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-yellow-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-rate-unsure px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] hover:bg-rate-unsure-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
                 aria-label="Ответил неуверенно"
               >
-                <SmileyMeh size={24} weight="bold" className="text-pale-yellow-text" />
-                <span className="eyebrow text-pale-yellow-text">Так себе</span>
+                <SmileyMeh size={24} weight="bold" className="text-rate-ink" />
+                <span className="eyebrow text-rate-ink">Так себе</span>
               </button>
               <button
                 type="button"
                 onClick={() => onAnswer('failed')}
                 disabled={savingStatus === currentIndex}
-                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-pale-red-bg px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] hover:bg-pale-red-bg-hover dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-rate-failed px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] hover:bg-rate-failed-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
                 aria-label="Не смог ответить"
               >
-                <ThumbsDown size={24} weight="bold" className="text-pale-red-text" />
-                <span className="eyebrow text-pale-red-text">Плохо</span>
+                <ThumbsDown size={24} weight="bold" className="text-rate-ink" />
+                <span className="eyebrow text-rate-ink">Плохо</span>
               </button>
             </div>
           </div>

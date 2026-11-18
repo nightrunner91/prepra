@@ -53,10 +53,16 @@
   --color-interview-ink: #000000;
   --color-interview-strong: #1D4ED8;
 
-  /* Фиксированный лайм: им светятся маркеры разделов при наведении
-     в любой теме, чтобы «оживление» иконки читалось одинаково. */
-  --color-lime: #C8F135;
-  --color-lime-ink: #000000;
+  /* Оценка ответа — это действие, а не бейдж: заливка сплошная, без
+     примеси бумаги, поэтому кнопки одинаково читаются в обеих темах.
+     Текст на ней всегда тёмный. */
+  --color-rate-good-bg: #A6F57A;
+  --color-rate-good-bg-hover: #B8FF90;
+  --color-rate-unsure-bg: #FFD34D;
+  --color-rate-unsure-bg-hover: #FFE07A;
+  --color-rate-failed-bg: #FF9E9E;
+  --color-rate-failed-bg-hover: #FFB5B5;
+  --color-rate-ink: #000000;
 
   /* Акцент работает как ПОЛЕ: заливка кнопок, маркер, инверсия, селекшн.
      Текст на нём всегда accent-ink. Как текст акцент не используется:
@@ -143,8 +149,6 @@
   --color-interview: #9CC2FF;
   --color-interview-hover: #B4D2FF;
   --color-interview-strong: #9CC2FF;
-
-  --color-lime: #D6F94A;
 
   --color-wash: #101508;
 
@@ -286,12 +290,15 @@
     color: var(--color-accent-ink);
   }
 
-  a {
+  /* Ссылки: цвет и ховер задаём с нулевой специфичностью (:where), чтобы
+     любой класс компонента — заливка карточки, активный пункт меню — мог
+     перебить их и текст не становился белым на цветном фоне в тёмной теме. */
+  :where(a) {
     color: var(--color-accent-strong);
+  }
 
-    &:hover {
-      color: var(--color-text);
-    }
+  :where(a:hover) {
+    color: var(--color-text);
   }
 
   h1,
@@ -635,9 +642,11 @@
 }
 
 /* Маркер раздела: цвет приходит из утилит bg-pale-*, при наведении —
-   общий лайм. Реагируем на ховер всей плитки (.group), а не только
-   иконки. Только для мыши: на тапе заливка иначе «залипает» после
-   перехода. Вне @layer components, чтобы перебить утилиты. */
+   акцент текущего раздела (в Теории это зелёный), а не общий лайм:
+   иконка подсвечивается цветом своего раздела. Реагируем на ховер всей
+   плитки (.group), а не только иконки. Только для мыши: на тапе заливка
+   иначе «залипает» после перехода. Вне @layer components, чтобы
+   перебить утилиты. */
 .mark-hover {
   transition:
     background-color 120ms var(--ease-out),
@@ -646,8 +655,8 @@
 
 @media (hover: hover) and (pointer: fine) {
   .group:hover .mark-hover {
-    background-color: var(--color-lime);
-    color: var(--color-lime-ink);
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
   }
 }
 

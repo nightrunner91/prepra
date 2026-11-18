@@ -22,37 +22,42 @@ export const STATUS_META: Record<
     label: string;
     icon: ReactNode;
     bg: string;
-    hoverBg: string;
     color: string;
+    solidBg: string;
+    solidHoverBg: string;
   }
 > = {
   good: {
     label: "Отлично",
     icon: <ThumbsUp size={22} weight="bold" />,
     bg: "bg-positive-bg",
-    hoverBg: "hover:bg-positive-bg-hover",
     color: "text-positive-text",
+    solidBg: "bg-rate-good",
+    solidHoverBg: "hover:bg-rate-good-hover",
   },
   unsure: {
     label: "Так себе",
     icon: <SmileyMeh size={22} weight="bold" />,
     bg: "bg-pale-yellow-bg",
-    hoverBg: "hover:bg-pale-yellow-bg-hover",
     color: "text-pale-yellow-text",
+    solidBg: "bg-rate-unsure",
+    solidHoverBg: "hover:bg-rate-unsure-hover",
   },
   failed: {
     label: "Плохо",
     icon: <ThumbsDown size={22} weight="bold" />,
     bg: "bg-pale-red-bg",
-    hoverBg: "hover:bg-pale-red-bg-hover",
     color: "text-pale-red-text",
+    solidBg: "bg-rate-failed",
+    solidHoverBg: "hover:bg-rate-failed-hover",
   },
   skipped: {
     label: "Пропущено",
     icon: <PauseCircle size={22} weight="fill" />,
     bg: "bg-surface-alt",
-    hoverBg: "hover:bg-surface-alt",
     color: "text-text-secondary",
+    solidBg: "bg-surface-alt",
+    solidHoverBg: "hover:bg-surface-alt",
   },
 };
 

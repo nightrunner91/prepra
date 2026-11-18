@@ -56,6 +56,15 @@ export default {
           'bg-hover': 'var(--color-pale-yellow-bg-hover)',
           'text-hover': 'var(--color-pale-yellow-text-hover)',
         },
+        rate: {
+          good: 'var(--color-rate-good-bg)',
+          'good-hover': 'var(--color-rate-good-bg-hover)',
+          unsure: 'var(--color-rate-unsure-bg)',
+          'unsure-hover': 'var(--color-rate-unsure-bg-hover)',
+          failed: 'var(--color-rate-failed-bg)',
+          'failed-hover': 'var(--color-rate-failed-bg-hover)',
+          ink: 'var(--color-rate-ink)',
+        },
       },
       fontFamily: {
         sans: ['var(--font-sans)'],

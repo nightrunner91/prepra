@@ -117,7 +117,7 @@ const jsonLd = [
     taskCount={taskCount}
   />
 
-  <div class="mx-auto max-w-[1600px] px-6 pb-16 lg:px-12 lg:pb-20">
+  <div class="mx-auto max-w-[1600px] px-6 lg:px-12">
     <SectionIndex sections={sectionStats} />
 
     <PreparationModes
@@ -125,9 +125,11 @@ const jsonLd = [
       taskCount={taskCount}
       presetCount={presetCount}
     />
+  </div>
 
-    <HowItWorks />
+  <HowItWorks />
 
+  <div class="mx-auto max-w-[1600px] px-6 pb-16 lg:px-12 lg:pb-20">
     {
       dailyQuestion && (
         <DailyQuestion question={dailyQuestion} questionCount={questionCount} />

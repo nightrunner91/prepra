@@ -83,7 +83,7 @@ const activeTab = pathname === withBase("/practice")
             <a
               href={tab.href}
               aria-current={activeTab === tab.id ? "page" : undefined}
-              class="flex items-center gap-2 border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide text-text-secondary transition-colors hover:bg-surface-alt hover:text-text aria-[current=page]:bg-accent aria-[current=page]:text-accent-ink"
+              class="flex items-center gap-2 border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide text-text-secondary transition-colors hover:bg-surface-alt hover:text-text aria-[current=page]:bg-accent aria-[current=page]:text-accent-ink aria-[current=page]:hover:bg-accent-hover aria-[current=page]:hover:text-accent-ink"
             >
               <Icon size={16} weight="bold" class="shrink-0" />
               <span>{tab.label}</span>
@@ -107,7 +107,7 @@ const activeTab = pathname === withBase("/practice")
               href={withBase(`/${s.id}`)}
               class={`flex items-center gap-2 border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide transition-colors ${
                 currentSection === s.id
-                  ? "bg-accent text-accent-ink"
+                  ? "bg-accent text-accent-ink hover:bg-accent-hover hover:text-accent-ink"
                   : "text-text-secondary hover:bg-surface-alt hover:text-text"
               }`}
             >
