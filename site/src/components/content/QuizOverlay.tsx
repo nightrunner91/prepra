@@ -555,31 +555,31 @@ function QuizView({
                 type="button"
                 onClick={() => onAnswer('good')}
                 disabled={savingStatus === currentIndex}
-                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-rate-good px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] hover:bg-rate-good-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                className="quiz-rate-btn rate-btn-good flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
                 aria-label="Ответил уверенно"
               >
-                <ThumbsUp size={24} weight="bold" className="text-rate-ink" />
-                <span className="eyebrow text-rate-ink">Отлично</span>
+                <ThumbsUp size={24} weight="bold" />
+                <span className="eyebrow">Отлично</span>
               </button>
               <button
                 type="button"
                 onClick={() => onAnswer('unsure')}
                 disabled={savingStatus === currentIndex}
-                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-rate-unsure px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] hover:bg-rate-unsure-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                className="quiz-rate-btn rate-btn-unsure flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
                 aria-label="Ответил неуверенно"
               >
-                <SmileyMeh size={24} weight="bold" className="text-rate-ink" />
-                <span className="eyebrow text-rate-ink">Так себе</span>
+                <SmileyMeh size={24} weight="bold" />
+                <span className="eyebrow">Так себе</span>
               </button>
               <button
                 type="button"
                 onClick={() => onAnswer('failed')}
                 disabled={savingStatus === currentIndex}
-                className="quiz-rate-btn flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border bg-rate-failed px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] hover:bg-rate-failed-hover active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
+                className="quiz-rate-btn rate-btn-failed flex flex-1 flex-col items-center gap-1.5 border-[3px] border-border px-4 py-4 transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6"
                 aria-label="Не смог ответить"
               >
-                <ThumbsDown size={24} weight="bold" className="text-rate-ink" />
-                <span className="eyebrow text-rate-ink">Плохо</span>
+                <ThumbsDown size={24} weight="bold" />
+                <span className="eyebrow">Плохо</span>
               </button>
             </div>
           </div>

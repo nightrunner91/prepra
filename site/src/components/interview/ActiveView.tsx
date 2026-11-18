@@ -156,14 +156,10 @@ export function ActiveView({
                   onClick={() => onAnswer(status)}
                   disabled={busy}
                   aria-label={meta.label}
-                  className={`flex flex-1 flex-col items-center gap-1.5 border-2 border-border px-3 py-4 text-rate-ink transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6 ${meta.solidBg} ${meta.solidHoverBg}`}
+                  className={`flex flex-1 flex-col items-center gap-1.5 border-2 border-border px-3 py-4 transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-border)] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none sm:px-6 ${meta.rateClass}`}
                 >
                   {meta.icon}
-                  <span
-                    className="eyebrow text-rate-ink"
-                  >
-                    {meta.label}
-                  </span>
+                  <span className="eyebrow">{meta.label}</span>
                 </button>
               );
             })}

@@ -628,6 +628,39 @@
     transform: scale(0.92);
   }
 
+  /* Заливка кнопок самооценки: сплошной цвет, одинаковый в обеих темах.
+     Набор одинаковый в квизе и мок-интервью, поэтому цвет задан здесь,
+     а не утилитами на каждой кнопке. Текст на заливке всегда тёмный. */
+  .rate-btn-good,
+  .rate-btn-unsure,
+  .rate-btn-failed {
+    color: var(--color-rate-ink);
+  }
+
+  .rate-btn-good {
+    background-color: var(--color-rate-good-bg);
+  }
+
+  .rate-btn-good:hover {
+    background-color: var(--color-rate-good-bg-hover);
+  }
+
+  .rate-btn-unsure {
+    background-color: var(--color-rate-unsure-bg);
+  }
+
+  .rate-btn-unsure:hover {
+    background-color: var(--color-rate-unsure-bg-hover);
+  }
+
+  .rate-btn-failed {
+    background-color: var(--color-rate-failed-bg);
+  }
+
+  .rate-btn-failed:hover {
+    background-color: var(--color-rate-failed-bg-hover);
+  }
+
   .quiz-answer code,
   .quiz-question code,
   .quiz-results code {
