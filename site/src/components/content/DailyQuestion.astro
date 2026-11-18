@@ -1,6 +1,5 @@
 ---
 import { ArrowRight, QuestionMark } from "@phosphor-icons/react";
-import { plural } from "../../lib/plural";
 import { withBase } from "../../lib/urls";
 
 interface Props {
@@ -36,10 +35,7 @@ const { question, questionCount } = Astro.props;
         <p
           class="mt-2 text-base font-medium leading-relaxed text-text-secondary"
         >
-          {
-            `${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}`
-          }{" "}
-          из всех разделов. Один в день — чтобы тема не выветривалась перед интервью.
+          Один в день — чтобы тема не выветривалась перед интервью.
         </p>
         <a
           href={withBase(`/${question.sectionId}`)}

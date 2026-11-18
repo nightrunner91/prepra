@@ -19,13 +19,15 @@ const steps = [
 ];
 ---
 
-<section class="mt-16 bg-surface lg:mt-20">
-  <div class="mx-auto max-w-[1600px] px-6 py-12 lg:px-12 lg:py-16">
+<section
+  class="mt-16 bg-surface lg:mt-24 border-t-[3px] border-b-[3px] border-border"
+>
+  <div class="mx-auto max-w-[1600px] px-6 py-12 lg:px-12 lg:py-24">
     <div class="border-b-[3px] border-border pb-5">
       <h2
         class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl lg:text-5xl"
       >
-        Методика: от статьи до уверенного ответа
+        Метод подготовки
       </h2>
       <p
         class="mt-3 text-base font-medium leading-relaxed text-text-secondary sm:text-lg"
@@ -35,7 +37,7 @@ const steps = [
       </p>
     </div>
 
-    <div class="grid gap-8 pt-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+    <div class="grid gap-8 pt-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
       {
         steps.map((step, index) => (
           <div>
@@ -45,7 +47,7 @@ const steps = [
             <h3 class="mt-3 font-mono text-lg font-extrabold uppercase tracking-tight text-text">
               {step.title}
             </h3>
-            <p class="mt-2 text-sm leading-relaxed text-text-secondary sm:text-base">
+            <p class="mt-2 text-sm leading-relaxed text-text-secondary sm:text-base pe-8">
               {step.text}
             </p>
           </div>

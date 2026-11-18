@@ -29,7 +29,7 @@ const badgeClass =
   <h2
     class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl lg:text-5xl"
   >
-    Теория, практикум и мок-интервью
+    Форматы подготовки
   </h2>
   <p
     class="mt-3 text-base font-medium leading-relaxed text-text-secondary sm:text-lg"
@@ -109,10 +109,7 @@ const badgeClass =
     <div
       class="grid gap-10 sm:grid-cols-2 lg:col-span-6 lg:grid-cols-1 lg:grid-rows-2"
     >
-      <a
-        href={withBase("/practice")}
-        class={`${cardClass} fill-practice`}
-      >
+      <a href={withBase("/practice")} class={`${cardClass} fill-practice`}>
         <span class={badgeClass}>
           <Barbell size={16} weight="bold" />
           Решай
@@ -148,10 +145,7 @@ const badgeClass =
         </span>
       </a>
 
-      <a
-        href={withBase("/interview")}
-        class={`${cardClass} fill-interview`}
-      >
+      <a href={withBase("/interview")} class={`${cardClass} fill-interview`}>
         <span class={badgeClass}>
           <Microphone size={16} weight="bold" />
           Отвечай
