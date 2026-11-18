@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import PageLayout from "../../layouts/PageLayout.astro";
-import Breadcrumbs from "../../components/layout/Breadcrumbs.astro";
 import Sidebar from "../../components/layout/Sidebar.astro";
 import ArticleGroup from "../../components/content/ArticleGroup.astro";
 import Cheatsheet from "../../components/content/Cheatsheet.astro";
@@ -130,37 +129,28 @@ if (otherArticles.length > 0) {
   <Sidebar currentSection={section.id} slot="left-sidebar" />
 
   <div class="mx-auto max-w-5xl px-4 py-10 lg:px-8 lg:py-14">
-    <div class="">
-      <Breadcrumbs
-        items={[
-          { label: "Главная", href: withBase("/") },
-          { label: section.label },
-        ]}
-      />
-
-      <header class="mt-6 mb-10 border-b-[3px] border-border pb-6">
-        <h1
-          class="font-mono text-3xl text-text sm:text-5xl leading-tight tracking-tight font-extrabold uppercase"
+    <header class="mb-10 border-b-[3px] border-border pb-6">
+      <h1
+        class="font-mono text-3xl text-text sm:text-5xl leading-tight tracking-tight font-extrabold uppercase"
+      >
+        {section.label}
+      </h1>
+      <p
+        class="mt-3 text-sm font-bold uppercase tracking-wide text-text-secondary"
+      >
+        {description}
+      </p>
+      <div
+        class="mt-4 flex items-center gap-3 eyebrow text-text-tertiary"
+      >
+        <span class="border-2 border-border px-2 py-1 bg-surface"
+          >{articles.length} статей</span
         >
-          {section.label}
-        </h1>
-        <p
-          class="mt-3 text-sm font-bold uppercase tracking-wide text-text-secondary"
+        <span class="border-2 border-border px-2 py-1 bg-surface"
+          >{totalQuestions} вопросов</span
         >
-          {description}
-        </p>
-        <div
-          class="mt-4 flex items-center gap-3 eyebrow text-text-tertiary"
-        >
-          <span class="border-2 border-border px-2 py-1 bg-surface"
-            >{articles.length} статей</span
-          >
-          <span class="border-2 border-border px-2 py-1 bg-surface"
-            >{totalQuestions} вопросов</span
-          >
-        </div>
-      </header>
-    </div>
+      </div>
+    </header>
 
     <div class="space-y-10">
       {

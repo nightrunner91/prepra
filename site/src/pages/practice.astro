@@ -1,18 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Breadcrumbs from "../components/layout/Breadcrumbs.astro";
-import { withBase } from "../lib/urls";
 import { PracticeApp } from "../components/practice/PracticeApp";
 ---
 
 <BaseLayout
   title="Практикум"
   description="Бесплатный банк задач по JavaScript для подготовки к собеседованию: hoisting, замыкания, this, event loop, Map/Set, Big O, промисы. С разбором ответов и тестами в браузере."
+  theme="practice"
 >
   <div class="page-shell">
-    <Breadcrumbs
-      items={[{ label: "Главная", href: withBase("/") }, { label: "Практикум" }]}
-    />
     <PracticeApp client:load />
   </div>
 </BaseLayout>

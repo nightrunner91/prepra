@@ -3,7 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionShell from "../components/layout/SectionShell.astro";
 import SectionsGrid from "../components/content/SectionsGrid.astro";
 import ProgressBlock from "../components/content/ProgressBlock.astro";
-import { withBase } from "../lib/urls";
 import { plural } from "../lib/plural";
 import { getSectionStats, getTotals } from "../lib/section-overview";
 
@@ -25,10 +24,6 @@ const chips = [
     title="Теория"
     lede="Теоретическая база разработки: от основ Javascript до системного дизайна."
     chips={chips}
-    breadcrumbs={[
-      { label: "Главная", href: withBase("/") },
-      { label: "Теория" },
-    ]}
   >
     <SectionsGrid sections={sectionStats} />
 

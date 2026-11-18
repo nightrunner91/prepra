@@ -1,7 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import PageLayout from "../../layouts/PageLayout.astro";
-import Breadcrumbs from "../../components/layout/Breadcrumbs.astro";
 import Sidebar from "../../components/layout/Sidebar.astro";
 import TableOfContents from "../../components/content/TableOfContents.astro";
 import PrevNextNav from "../../components/content/PrevNextNav.astro";
@@ -79,16 +78,6 @@ const { headings } = await render(entry);
   <TableOfContents headings={headings} slot="right-sidebar" />
 
   <article class="mx-auto max-w-5xl px-4 py-10 lg:px-8 lg:py-14 w-full">
-    <div class="mb-8">
-      <Breadcrumbs
-        items={[
-          { label: "Главная", href: withBase("/") },
-          { label: sectionLabel, href: withBase(`/${data.section}`) },
-          { label: data.title },
-        ]}
-      />
-    </div>
-
     {
       data.tags && data.tags.length > 0 && (
         <div class="mb-6 flex flex-wrap gap-2">

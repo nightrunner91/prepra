@@ -1,21 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Breadcrumbs from "../components/layout/Breadcrumbs.astro";
-import { withBase } from "../lib/urls";
 import { MockInterview } from "../components/interview/MockInterview";
 ---
 
 <BaseLayout
   title="Мок-интервью"
   description="Прогон в формате собеседования по фронтенду: вопросы из разных разделов, ответы вслух, самопроверка и разбор слабых тем в конце. Бесплатно и без регистрации."
+  theme="interview"
 >
   <div class="page-shell">
-    <Breadcrumbs
-      items={[
-        { label: "Главная", href: withBase("/") },
-        { label: "Мок-интервью" },
-      ]}
-    />
     <MockInterview client:only="react" />
   </div>
 </BaseLayout>
