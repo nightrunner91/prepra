@@ -17,6 +17,9 @@ export function ThemeToggle() {
     setDark(next);
     document.documentElement.classList.toggle('dark', next);
     localStorage.setItem('theme', next ? 'dark' : 'light');
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', next ? '#0A0A0A' : '#F2F2EC');
   };
 
   return (

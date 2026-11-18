@@ -260,6 +260,7 @@ prepra/
 | `npm start` | Псевдоним для `npm run dev` |
 | `npm run build` | Собрать статический сайт в `site/dist` |
 | `npm run preview` | Локальный предпросмотр продакшен-сборки |
+| `npm run icons` | Пересобрать favicon, PNG-иконки платформ и `manifest.json` из одного источника |
 | `npm run astro` | Запустить Astro CLI напрямую |
 
 ---

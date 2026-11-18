@@ -45,7 +45,24 @@ const jsonLdBlocks = jsonLd
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+
+    <!-- Иконки: SVG — основной источник, ICO и PNG — запасные пути.
+         Мастер-файлы и размеры собирает scripts/generate-favicons.mjs. -->
+    <link rel="icon" href={withBase("/favicon.ico")} sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="48x48"
+      href={withBase("/favicon-48x48.png")}
+    />
+    <link rel="apple-touch-icon" sizes="180x180" href={withBase("/apple-touch-icon.png")} />
+    <link rel="mask-icon" href={withBase("/safari-pinned-tab.svg")} color="#85E65B" />
+    <link rel="manifest" href={withBase("/manifest.json")} />
+
+    <meta name="theme-color" content="#F2F2EC" />
+    <meta name="application-name" content="Prepra" />
+    <meta name="apple-mobile-web-app-title" content="Prepra" />
     <title>{fullTitle}</title>
 
     <meta property="og:type" content="website" />
@@ -77,6 +94,13 @@ const jsonLdBlocks = jsonLd
         ).matches;
         if (theme === "dark" || (!theme && prefersDark)) {
           document.documentElement.classList.add("dark");
+        }
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+          meta.setAttribute(
+            "content",
+            document.documentElement.classList.contains("dark") ? "#0A0A0A" : "#F2F2EC",
+          );
         }
       })();
     </script>

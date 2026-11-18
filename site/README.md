@@ -11,4 +11,5 @@ cd site
 npm install
 npm run dev
 npm run check:styles   # запрет произвольных размеров шрифта и цветов
+npm run icons          # пересобрать favicon, PNG-иконки и manifest.json
 ```

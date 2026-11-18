@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check:styles": "node scripts/check-styles.mjs",
+    "icons": "node scripts/generate-favicons.mjs",
     "postinstall": "node scripts/patch-shiki-singleton.mjs"
   },
   "keywords": [],
