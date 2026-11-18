@@ -30,13 +30,13 @@ const stats = [
 ];
 ---
 
-<div class="border-y-[3px] border-border bg-invert-bg">
+<div class="bg-invert-bg">
   <div class="mx-auto max-w-[1600px] px-6 lg:px-12">
     <div class="grid grid-cols-2 lg:grid-cols-4">
       {
         stats.map((stat, index) => (
           <div
-            class={`px-5 py-6 lg:px-7 lg:py-7 ${index === 0 ? "pl-0" : ""} ${index === 1 || index === 3 ? "border-l-[3px] border-invert-muted" : ""} ${index >= 2 ? "border-t-[3px] border-invert-muted lg:border-t-0" : ""} ${index === 2 ? "lg:border-l-[3px] lg:border-invert-muted" : ""}`}
+            class={`stat-cell px-5 py-6 lg:px-7 lg:py-7 ${index === 0 ? "pl-0" : ""} ${index === 1 || index === 3 ? "border-l-[3px]" : ""} ${index >= 2 ? "border-t-[3px] lg:border-t-0" : ""} ${index === 2 ? "lg:border-l-[3px]" : ""}`}
           >
             <div class="font-mono text-3xl font-extrabold leading-none tabular-nums text-invert-accent lg:text-4xl">
               <span

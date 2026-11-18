@@ -34,23 +34,52 @@
   --color-text-secondary: #333333;
   --color-text-tertiary: #666666;
 
+  /* Палитры продуктовых разделов. Четвёрка цвет / hover / ink / strong
+     задаёт заливку, наведение, текст на заливке и текст на бумаге.
+     Одна и та же палитра работает и в карточках-переходах на главной,
+     и как акцент всего раздела. */
+  --color-theory: #85E65B;
+  --color-theory-hover: #6FDB43;
+  --color-theory-ink: #000000;
+  --color-theory-strong: #2E6B18;
+
+  --color-practice: #C8F135;
+  --color-practice-hover: #B0DC1E;
+  --color-practice-ink: #000000;
+  --color-practice-strong: #527000;
+
+  --color-interview: #9CC2FF;
+  --color-interview-hover: #7FAEFF;
+  --color-interview-ink: #000000;
+  --color-interview-strong: #1D4ED8;
+
+  /* Фиксированный лайм: им светятся маркеры разделов при наведении
+     в любой теме, чтобы «оживление» иконки читалось одинаково. */
+  --color-lime: #C8F135;
+  --color-lime-ink: #000000;
+
   /* Акцент работает как ПОЛЕ: заливка кнопок, маркер, инверсия, селекшн.
      Текст на нём всегда accent-ink. Как текст акцент не используется:
-     лайм почти равен канве по светлоте, поэтому для текста есть
-     отдельный тёмный вариант accent-strong. */
-  --color-accent: #C8F135;
-  --color-accent-hover: #B0DC1E;
-  --color-accent-ink: #000000;
-  --color-accent-strong: #527000;
+     accent почти равен канве по светлоте, поэтому для текста есть
+     отдельный тёмный вариант accent-strong.
+     Значение по умолчанию — тема теории; дальше его переопределяет
+     класс .theme-* на <html>. */
+  --color-accent: var(--color-theory);
+  --color-accent-hover: var(--color-theory-hover);
+  --color-accent-ink: var(--color-theory-ink);
+  --color-accent-strong: var(--color-theory-strong);
   --color-syntax-string: #B45309;
 
-  /* Инвертированная полоса: чернильное поле с канвой внутри.
-     Отдельные токены, чтобы в тёмной теме полоса не превращалась
-     в светлую и не переворачивала тему страницы. */
+  /* Полупрозрачная на вид заливка блоков-подсказок («Вопрос дня»). */
+  --color-wash: #E9F6DE;
+
+  /* Полоса статистики инвертирует страницу: на светлой теме это
+     чёрное поле с белыми разделителями, на тёмной — светлое поле
+     с тёмным текстом и разделителями. */
   --color-invert-bg: #000000;
   --color-invert-text: #F2F2EC;
-  --color-invert-muted: #3D3D35;
-  --color-invert-accent: #C8F135;
+  --color-invert-line: #FFFFFF;
+  --color-invert-accent: var(--color-theory);
 
   --color-pale-red-bg: #FFE0E0;
   --color-pale-red-text: #B91C1C;
@@ -70,27 +99,61 @@
   --color-pale-yellow-text: #854D0E;
   --color-pale-yellow-bg-hover: #FDE68A;
   --color-pale-yellow-text-hover: #713F12;
+
+  /* Дополнительные маркеры разделов: у каждого свой характер,
+     поэтому палитра шире, чем семантика success/danger. */
+  --color-pale-cyan-bg: #CFFAFE;
+  --color-pale-cyan-text: #0E7490;
+  --color-pale-teal-bg: #CCFBF1;
+  --color-pale-teal-text: #115E59;
+  --color-pale-indigo-bg: #E0E7FF;
+  --color-pale-indigo-text: #3730A3;
+  --color-pale-violet-bg: #EDE9FE;
+  --color-pale-violet-text: #6D28D9;
+  --color-pale-slate-bg: #E2E8F0;
+  --color-pale-slate-text: #334155;
+  --color-pale-lime-bg: #ECFCCB;
+  --color-pale-lime-text: #3F6212;
+  --color-pale-orange-bg: #FFEDD5;
+  --color-pale-orange-text: #9A3412;
+  --color-pale-rose-bg: #FFE4E6;
+  --color-pale-rose-text: #9F1239;
+  --color-pale-fuchsia-bg: #FAE8FF;
+  --color-pale-fuchsia-text: #86198F;
 }
 
 .dark {
   --color-canvas: #0A0A0A;
-  --color-surface: #24292e;
-  --color-surface-alt: #1C1C1C;
+  --color-surface: #232323;
+  --color-surface-alt: #1A1A1A;
   --color-border: #FFFFFF;
   --color-border-strong: #FFFFFF;
   --color-text: #F0F0F0;
   --color-text-secondary: #B0B0B0;
   --color-text-tertiary: #909090;
-  --color-accent: #D6F94A;
-  --color-accent-hover: #E4FF7A;
-  --color-accent-ink: #0A0A0A;
-  --color-accent-strong: #D6F94A;
+
+  --color-theory: #A6F57A;
+  --color-theory-hover: #B8FF90;
+  --color-theory-strong: #A6F57A;
+
+  --color-practice: #D6F94A;
+  --color-practice-hover: #E4FF7A;
+  --color-practice-strong: #D6F94A;
+
+  --color-interview: #9CC2FF;
+  --color-interview-hover: #B4D2FF;
+  --color-interview-strong: #9CC2FF;
+
+  --color-lime: #D6F94A;
+
+  --color-wash: #101508;
+
   --color-syntax-string: #FBBF24;
 
-  --color-invert-bg: #1C1C1C;
-  --color-invert-text: #F0F0F0;
-  --color-invert-muted: #3A3A3A;
-  --color-invert-accent: #D6F94A;
+  --color-invert-bg: #EDEDE6;
+  --color-invert-text: #0A0A0A;
+  --color-invert-line: #0A0A0A;
+  --color-invert-accent: #2E6B18;
 
   --color-pale-red-bg: #2E1313;
   --color-pale-red-text: #F87171;
@@ -108,6 +171,86 @@
   --color-pale-yellow-text: #FACC15;
   --color-pale-yellow-bg-hover: #2D2608;
   --color-pale-yellow-text-hover: #FDE047;
+
+  --color-pale-cyan-bg: #062A30;
+  --color-pale-cyan-text: #67E8F9;
+  --color-pale-teal-bg: #042F2A;
+  --color-pale-teal-text: #5EEAD4;
+  --color-pale-indigo-bg: #141A3D;
+  --color-pale-indigo-text: #A5B4FC;
+  --color-pale-violet-bg: #1E1638;
+  --color-pale-violet-text: #C4B5FD;
+  --color-pale-slate-bg: #1B2028;
+  --color-pale-slate-text: #CBD5E1;
+  --color-pale-lime-bg: #1A2605;
+  --color-pale-lime-text: #BEF264;
+  --color-pale-orange-bg: #2B1608;
+  --color-pale-orange-text: #FDBA74;
+  --color-pale-rose-bg: #2B0D13;
+  --color-pale-rose-text: #FDA4AF;
+  --color-pale-fuchsia-bg: #2A0E2E;
+  --color-pale-fuchsia-text: #F0ABFC;
+}
+
+/* ── Темы разделов ────────────────────────────────────────────
+   Класс живёт на <html>, поэтому тонированная бумага достаётся
+   и html-фону, и overscroll. Палитры определены выше; здесь только
+   алиасы акцента и лёгкий тон поверхностей. Блоки .dark.theme-*
+   идут последними: оба класса на одном элементе, и тёмные
+   значения должны перебить светлые из .theme-*. */
+.theme-theory {
+  --color-accent: var(--color-theory);
+  --color-accent-hover: var(--color-theory-hover);
+  --color-accent-ink: var(--color-theory-ink);
+  --color-accent-strong: var(--color-theory-strong);
+  --color-canvas: #F1F3EA;
+  --color-surface-alt: #E7EADF;
+  --color-wash: #E9F6DE;
+  --color-invert-accent: var(--color-theory);
+}
+
+.theme-practice {
+  --color-accent: var(--color-practice);
+  --color-accent-hover: var(--color-practice-hover);
+  --color-accent-ink: var(--color-practice-ink);
+  --color-accent-strong: var(--color-practice-strong);
+  --color-canvas: #F3F4E6;
+  --color-surface-alt: #E9EBD8;
+  --color-wash: #F1F6DC;
+  --color-invert-accent: var(--color-practice);
+}
+
+.theme-interview {
+  --color-accent: var(--color-interview);
+  --color-accent-hover: var(--color-interview-hover);
+  --color-accent-ink: var(--color-interview-ink);
+  --color-accent-strong: var(--color-interview-strong);
+  --color-canvas: #EFF2F7;
+  --color-surface-alt: #E4E8EF;
+  --color-wash: #E7EEFB;
+  --color-invert-accent: var(--color-interview);
+}
+
+.dark.theme-theory {
+  --color-canvas: #0A0B09;
+  --color-surface-alt: #1A1D17;
+  --color-wash: #101508;
+  /* Полоса на тёмной теме светлая, поэтому цифры — тёмный вариант акцента. */
+  --color-invert-accent: #2E6B18;
+}
+
+.dark.theme-practice {
+  --color-canvas: #0B0B08;
+  --color-surface-alt: #1D1C14;
+  --color-wash: #121408;
+  --color-invert-accent: #527000;
+}
+
+.dark.theme-interview {
+  --color-canvas: #090B10;
+  --color-surface-alt: #171A20;
+  --color-wash: #0C1220;
+  --color-invert-accent: #1D4ED8;
 }
 
 @layer base {
@@ -247,6 +390,107 @@
     @apply border-[3px] border-border bg-surface;
   }
 
+  /* Полупрозрачная на вид заливка смыслового блока («Вопрос дня»). */
+  .panel-wash {
+    background-color: var(--color-wash);
+  }
+
+  /* Заливка карточки-перехода + нейтральные чернила. Фон и цвет текста
+     неразделимы, поэтому это компонентный класс, а не набор утилит:
+     заливки светлые в обеих темах, текст всегда чёрный. */
+  .fill-theory {
+    background-color: var(--color-theory);
+    color: var(--color-theory-ink);
+  }
+
+  .fill-practice {
+    background-color: var(--color-practice);
+    color: var(--color-practice-ink);
+  }
+
+  .fill-interview {
+    background-color: var(--color-interview);
+    color: var(--color-interview-ink);
+  }
+
+  /* Чернильная полоса статистики: разделители ячеек. */
+  .stat-cell {
+    border-color: var(--color-invert-line);
+  }
+
+  /* ── Маркеры разделов ─────────────────────────────────────────
+     Бледная плашка + насыщенная иконка. У каждого раздела свой
+     характер, поэтому палитра шире семантической. */
+  .mark-red {
+    background-color: var(--color-pale-red-bg);
+    color: var(--color-pale-red-text);
+  }
+
+  .mark-blue {
+    background-color: var(--color-pale-blue-bg);
+    color: var(--color-pale-blue-text);
+  }
+
+  .mark-green {
+    background-color: var(--color-positive-bg);
+    color: var(--color-positive-text);
+  }
+
+  .mark-yellow {
+    background-color: var(--color-pale-yellow-bg);
+    color: var(--color-pale-yellow-text);
+  }
+
+  .mark-cyan {
+    background-color: var(--color-pale-cyan-bg);
+    color: var(--color-pale-cyan-text);
+  }
+
+  .mark-teal {
+    background-color: var(--color-pale-teal-bg);
+    color: var(--color-pale-teal-text);
+  }
+
+  .mark-indigo {
+    background-color: var(--color-pale-indigo-bg);
+    color: var(--color-pale-indigo-text);
+  }
+
+  .mark-violet {
+    background-color: var(--color-pale-violet-bg);
+    color: var(--color-pale-violet-text);
+  }
+
+  .mark-slate {
+    background-color: var(--color-pale-slate-bg);
+    color: var(--color-pale-slate-text);
+  }
+
+  .mark-lime {
+    background-color: var(--color-pale-lime-bg);
+    color: var(--color-pale-lime-text);
+  }
+
+  .mark-orange {
+    background-color: var(--color-pale-orange-bg);
+    color: var(--color-pale-orange-text);
+  }
+
+  .mark-rose {
+    background-color: var(--color-pale-rose-bg);
+    color: var(--color-pale-rose-text);
+  }
+
+  .mark-fuchsia {
+    background-color: var(--color-pale-fuchsia-bg);
+    color: var(--color-pale-fuchsia-text);
+  }
+
+  .mark-neutral {
+    background-color: var(--color-surface-alt);
+    color: var(--color-text-secondary);
+  }
+
   /* ── Кнопки ─────────────────────────────────────────────────── */
   .btn {
     @apply inline-flex items-center justify-center gap-2 border-2 border-border font-mono font-bold uppercase tracking-wider transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-40;
@@ -350,6 +594,23 @@
   .quiz-results code {
     white-space: normal;
     overflow-wrap: anywhere;
+  }
+}
+
+/* Маркер раздела: цвет приходит из утилит bg-pale-*, при наведении —
+   общий лайм. Реагируем на ховер всей плитки (.group), а не только
+   иконки. Только для мыши: на тапе заливка иначе «залипает» после
+   перехода. Вне @layer components, чтобы перебить утилиты. */
+.mark-hover {
+  transition:
+    background-color 120ms var(--ease-out),
+    color 120ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .mark-hover {
+    background-color: var(--color-lime);
+    color: var(--color-lime-ink);
   }
 }
 

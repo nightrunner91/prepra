@@ -30,7 +30,6 @@ export default {
         invert: {
           bg: 'var(--color-invert-bg)',
           text: 'var(--color-invert-text)',
-          muted: 'var(--color-invert-muted)',
           accent: 'var(--color-invert-accent)',
         },
         'pale-red': {

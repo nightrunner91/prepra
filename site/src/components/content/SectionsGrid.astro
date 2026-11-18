@@ -1,5 +1,6 @@
 ---
 import type { Icon } from "@dev.icons/react";
+import type { SectionMark } from "../../lib/section-marks";
 import { withBase } from "../../lib/urls";
 import SectionCard from "./SectionCard.astro";
 
@@ -8,6 +9,7 @@ interface SectionItem {
   label: string;
   icon?: Icon;
   description: string;
+  color?: SectionMark;
   articleCount: number;
   questionCount: number;
 }
@@ -30,6 +32,7 @@ const { sections } = Astro.props;
             href={withBase(`/${s.id}`)}
             articleCount={s.articleCount}
             questionCount={s.questionCount}
+            color={s.color}
             icon={s.icon}
           />
         </div>

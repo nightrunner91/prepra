@@ -18,11 +18,9 @@ interface Props {
 const { articleCount, taskCount, presetCount } = Astro.props;
 
 const cardClass =
-  "card-hover group flex flex-col border-[3px] border-border p-6 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0 active:translate-y-0 active:shadow-none lg:p-8";
+  "card-hover group flex flex-col border-[3px] border-border p-6 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text lg:p-8";
 const linkClass =
-  "mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-border pt-6 eyebrow transition-colors group-hover:border-accent-strong group-hover:text-accent-strong";
-const linkOnAccentClass =
-  "mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-border pt-6 eyebrow text-accent-ink transition-colors group-hover:border-accent-ink";
+  "mt-auto inline-flex w-fit items-center gap-2 border-b-2 border-current pt-6 eyebrow transition-colors";
 const badgeClass =
   "inline-flex w-fit items-center gap-2 border-2 border-border bg-surface px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-[0.16em] text-text";
 ---
@@ -43,7 +41,7 @@ const badgeClass =
   <div class="mt-8 grid gap-5 lg:grid-cols-12">
     <a
       href={withBase("/theory")}
-      class={`${cardClass} bg-accent text-accent-ink lg:col-span-6`}
+      class={`${cardClass} fill-theory lg:col-span-6`}
     >
       <span class={badgeClass}>
         <BookOpen size={16} weight="bold" />
@@ -52,33 +50,28 @@ const badgeClass =
 
       <div class="mt-8 flex items-baseline gap-2">
         <span
-          class="font-mono text-5xl font-extrabold leading-none tabular-nums text-accent-ink xl:text-6xl"
+          class="font-mono text-5xl font-extrabold leading-none tabular-nums xl:text-6xl"
           >{articleCount}</span
         >
-        <span
-          class="font-mono text-xs font-bold uppercase tracking-widest text-accent-ink"
+        <span class="font-mono text-xs font-bold uppercase tracking-widest"
           >{plural(articleCount, "статья", "статьи", "статей")}</span
         >
       </div>
 
       <h3
-        class="mt-4 font-mono text-2xl font-extrabold uppercase tracking-tight text-accent-ink"
+        class="mt-4 font-mono text-2xl font-extrabold uppercase tracking-tight"
       >
         Теория
       </h3>
-      <p
-        class="mt-2 font-mono text-xs font-bold uppercase tracking-[0.12em] text-accent-ink"
-      >
+      <p class="mt-2 font-mono text-xs font-bold uppercase tracking-[0.12em]">
         Что внутри
       </p>
-      <ul
-        class="mt-3 grid max-w-[52ch] gap-2 text-sm font-medium text-accent-ink sm:text-base"
-      >
+      <ul class="mt-3 grid max-w-[52ch] gap-2 text-sm font-medium sm:text-base">
         <li class="flex gap-2">
           <Check
             size={16}
             weight="bold"
-            className="mt-1 shrink-0 text-accent-ink"
+            className="mt-1 shrink-0"
             aria-hidden="true"
           />
           Разбор с примерами кода и схемами
@@ -87,7 +80,7 @@ const badgeClass =
           <Check
             size={16}
             weight="bold"
-            className="mt-1 shrink-0 text-accent-ink"
+            className="mt-1 shrink-0"
             aria-hidden="true"
           />
           Вопросы для самопроверки в конце статьи
@@ -96,14 +89,14 @@ const badgeClass =
           <Check
             size={16}
             weight="bold"
-            className="mt-1 shrink-0 text-accent-ink"
+            className="mt-1 shrink-0"
             aria-hidden="true"
           />
           Шпаргалка раздела для повторения
         </li>
       </ul>
 
-      <span class={linkOnAccentClass}>
+      <span class={linkClass}>
         Открыть теорию
         <ArrowRight
           size={14}
@@ -116,36 +109,36 @@ const badgeClass =
     <div
       class="grid gap-5 sm:grid-cols-2 lg:col-span-6 lg:grid-cols-1 lg:grid-rows-2"
     >
-      <a href={withBase("/practice")} class={`${cardClass} bg-surface`}>
+      <a
+        href={withBase("/practice")}
+        class={`${cardClass} fill-practice`}
+      >
         <span class={badgeClass}>
-          <Barbell size={16} weight="bold" className="text-pale-yellow-text" />
+          <Barbell size={16} weight="bold" />
           Решай
         </span>
 
         <div class="mt-6 flex items-baseline gap-2">
           <span
-            class="font-mono text-4xl font-extrabold leading-none tabular-nums text-text"
+            class="font-mono text-4xl font-extrabold leading-none tabular-nums"
             >{taskCount}</span
           >
-          <span
-            class="font-mono text-xs font-bold uppercase tracking-widest text-text-secondary"
+          <span class="font-mono text-xs font-bold uppercase tracking-widest"
             >{plural(taskCount, "задача", "задачи", "задач")}</span
           >
         </div>
 
         <h3
-          class="mt-3 font-mono text-xl font-extrabold uppercase tracking-tight text-text"
+          class="mt-3 font-mono text-xl font-extrabold uppercase tracking-tight"
         >
           Практикум
         </h3>
-        <p
-          class="mt-2 text-sm font-medium leading-relaxed text-text-secondary sm:text-base"
-        >
+        <p class="mt-2 text-sm font-medium leading-relaxed sm:text-base">
           Задачи по базовому JavaScript: выбор ответа, «что выведет код» и
           задачи с автотестами.
         </p>
 
-        <span class={`${linkClass} text-text`}>
+        <span class={linkClass}>
           Открыть практикум
           <ArrowRight
             size={14}
@@ -155,36 +148,36 @@ const badgeClass =
         </span>
       </a>
 
-      <a href={withBase("/interview")} class={`${cardClass} bg-surface`}>
+      <a
+        href={withBase("/interview")}
+        class={`${cardClass} fill-interview`}
+      >
         <span class={badgeClass}>
-          <Microphone size={16} weight="bold" className="text-pale-blue-text" />
+          <Microphone size={16} weight="bold" />
           Отвечай
         </span>
 
         <div class="mt-6 flex items-baseline gap-2">
           <span
-            class="font-mono text-4xl font-extrabold leading-none tabular-nums text-text"
+            class="font-mono text-4xl font-extrabold leading-none tabular-nums"
             >{presetCount}</span
           >
-          <span
-            class="font-mono text-xs font-bold uppercase tracking-widest text-text-secondary"
+          <span class="font-mono text-xs font-bold uppercase tracking-widest"
             >{plural(presetCount, "сет", "сета", "сетов")}</span
           >
         </div>
 
         <h3
-          class="mt-3 font-mono text-xl font-extrabold uppercase tracking-tight text-text"
+          class="mt-3 font-mono text-xl font-extrabold uppercase tracking-tight"
         >
           Мок-интервью
         </h3>
-        <p
-          class="mt-2 text-sm font-medium leading-relaxed text-text-secondary sm:text-base"
-        >
+        <p class="mt-2 text-sm font-medium leading-relaxed sm:text-base">
           Вопросы из разных разделов, ответы вслух, самопроверка и карта слабых
           тем с переходом к статье.
         </p>
 
-        <span class={`${linkClass} text-text`}>
+        <span class={linkClass}>
           Пройти мок-интервью
           <ArrowRight
             size={14}

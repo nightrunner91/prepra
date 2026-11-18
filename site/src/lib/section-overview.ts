@@ -1,5 +1,6 @@
 import { getCollection } from "astro:content";
 import { sections } from "./sections";
+import type { SectionMark } from "./section-marks";
 
 const sectionDescriptions: Record<string, string> = {
   javascript: "Основы JavaScript, ES6+, замыкания, прототипы, асинхронность",
@@ -24,24 +25,21 @@ const sectionDescriptions: Record<string, string> = {
   nodejs: "Рантайм, асинхронность, HTTP-API, сервисы",
 };
 
-const sectionColors: Record<
-  string,
-  "red" | "blue" | "green" | "yellow" | "neutral"
-> = {
+const sectionColors: Record<string, SectionMark> = {
   javascript: "yellow",
   typescript: "blue",
   "html-css": "red",
-  react: "blue",
+  react: "cyan",
   nextjs: "neutral",
-  architecture: "neutral",
-  "api-communication": "green",
-  "build-and-deployment": "neutral",
-  testing: "green",
-  performance: "green",
-  security: "red",
-  ai: "green",
+  architecture: "indigo",
+  "api-communication": "violet",
+  "build-and-deployment": "slate",
+  testing: "lime",
+  performance: "orange",
+  security: "rose",
+  ai: "fuchsia",
   vue: "green",
-  nodejs: "green",
+  nodejs: "teal",
 };
 
 export interface SectionStat {
@@ -49,7 +47,7 @@ export interface SectionStat {
   label: string;
   icon?: (typeof sections)[number]["icon"];
   description: string;
-  color: "red" | "blue" | "green" | "yellow" | "neutral";
+  color: SectionMark;
   articleCount: number;
   questionCount: number;
 }

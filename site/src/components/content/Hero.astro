@@ -11,7 +11,7 @@ interface Props {
 const { articleCount, taskCount } = Astro.props;
 ---
 
-<section class="border-b-[3px] border-border bg-surface">
+<section class="bg-surface">
   <div
     class="mx-auto grid max-w-[1600px] items-center gap-10 px-6 py-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16 lg:px-12 lg:py-16"
   >
@@ -58,16 +58,8 @@ const { articleCount, taskCount } = Astro.props;
         <div
           class="flex items-center justify-between border-b-[3px] border-border bg-surface px-4 py-2"
         >
-          <span
-            class="eyebrow text-text"
-          >
-            track.ts
-          </span>
-          <span
-            class="eyebrow text-text-tertiary"
-          >
-            typescript
-          </span>
+          <span class="eyebrow text-text"> track.ts </span>
+          <span class="eyebrow text-text-tertiary"> typescript </span>
         </div>
         <div
           id="glitch-lines"
@@ -83,7 +75,11 @@ const { articleCount, taskCount } = Astro.props;
               main*
             </span>
             <span class="flex items-center gap-1">
-              <CheckCircle size={12} weight="bold" className="text-accent-strong" />
+              <CheckCircle
+                size={12}
+                weight="bold"
+                className="text-accent-strong"
+              />
               0
             </span>
           </div>

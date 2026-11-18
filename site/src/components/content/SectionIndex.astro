@@ -1,6 +1,7 @@
 ---
 import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react";
 import type { SectionStat } from "../../lib/section-overview";
+import { SECTION_MARK_CLASSES } from "../../lib/section-marks";
 import { withBase } from "../../lib/urls";
 
 interface Props {
@@ -58,7 +59,9 @@ const columns = [sections.slice(0, half), sections.slice(half)];
                 class="section-row group flex items-center gap-3 border-b-2 border-border py-4 sm:gap-4"
               >
                 {Icon && (
-                  <span class="section-icon flex h-14 w-14 shrink-0 items-center justify-center border-2 border-border bg-surface text-text">
+                  <span
+                    class={`section-icon mark-hover flex h-14 w-14 shrink-0 items-center justify-center border-2 border-border ${SECTION_MARK_CLASSES[section.color]}`}
+                  >
                     <Icon size={24} weight="bold" />
                   </span>
                 )}
@@ -93,14 +96,6 @@ const columns = [sections.slice(0, half), sections.slice(half)];
       background-color 120ms var(--ease-out),
       color 120ms var(--ease-out),
       transform 90ms var(--ease-out);
-  }
-
-  /* Только для мыши: на тапе заливка иначе «залипает» после перехода. */
-  @media (hover: hover) and (pointer: fine) {
-    .section-row:hover .section-icon {
-      background-color: var(--color-accent);
-      color: var(--color-accent-ink);
-    }
   }
 
   .section-row:active .section-icon {

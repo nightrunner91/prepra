@@ -1,5 +1,7 @@
 ---
 import type { Icon } from "@dev.icons/react";
+import type { SectionMark } from "../../lib/section-marks";
+import { SECTION_MARK_CLASSES } from "../../lib/section-marks";
 
 interface Props {
   title: string;
@@ -7,6 +9,7 @@ interface Props {
   href: string;
   articleCount: number;
   questionCount: number;
+  color?: SectionMark;
   icon?: Icon;
 }
 
@@ -16,6 +19,7 @@ const {
   href,
   articleCount,
   questionCount,
+  color = "neutral",
   icon: Icon,
 } = Astro.props;
 ---
@@ -33,7 +37,7 @@ const {
     {
       Icon && (
         <span
-          class="shrink-0 border-2 border-border bg-surface-alt p-1 text-text transition-colors group-hover:bg-accent group-hover:text-accent-ink"
+          class={`mark-hover shrink-0 border-2 border-border p-1 ${SECTION_MARK_CLASSES[color]}`}
         >
           <Icon size={20} weight="bold" />
         </span>

@@ -1,7 +1,7 @@
 ---
 import { ArrowRight, QuestionMark } from "@phosphor-icons/react";
-import { withBase } from "../../lib/urls";
 import { plural } from "../../lib/plural";
+import { withBase } from "../../lib/urls";
 
 interface Props {
   question: {
@@ -17,7 +17,7 @@ const { question, questionCount } = Astro.props;
 ---
 
 <section class="mt-16 lg:mt-20">
-  <div class="border-[3px] border-border bg-surface">
+  <div class="panel-wash border-[3px] border-border">
     <div class="grid lg:grid-cols-[300px_minmax(0,1fr)]">
       <div
         class="border-b-[3px] border-border bg-canvas p-6 lg:border-b-0 lg:border-r-[3px]"
@@ -25,7 +25,7 @@ const { question, questionCount } = Astro.props;
         <QuestionMark
           size={28}
           weight="bold"
-          className="text-pale-yellow-text"
+          className="text-accent-strong"
           aria-hidden="true"
         />
         <h2
@@ -33,10 +33,13 @@ const { question, questionCount } = Astro.props;
         >
           Вопрос дня
         </h2>
-        <p class="mt-2 text-base font-medium leading-relaxed text-text-secondary">
-          {`${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}`}{" "}
-          из всех разделов. Один в день — чтобы тема не выветривалась перед
-          интервью.
+        <p
+          class="mt-2 text-base font-medium leading-relaxed text-text-secondary"
+        >
+          {
+            `${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}`
+          }{" "}
+          из всех разделов. Один в день — чтобы тема не выветривалась перед интервью.
         </p>
         <a
           href={withBase(`/${question.sectionId}`)}
