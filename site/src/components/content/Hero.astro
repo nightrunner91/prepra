@@ -21,7 +21,7 @@ const { articleCount, taskCount } = Astro.props;
       >
         <span class="block">Подготовка</span>
         <span class="block"
-          >к <span class="-mx-2 inline-block bg-accent px-2 text-accent-ink"
+          >к <span class="hero-mark -mx-2 inline-block px-2 text-accent-ink"
             >фронтенд</span
           ></span
         >
@@ -95,6 +95,28 @@ const { articleCount, taskCount } = Astro.props;
 </section>
 
 <style>
+  /* Подложка под «фронтенд»: заливка на псевдоэлементе растёт слева направо.
+     scaleX вместо width — анимируется на композиторе, без пересчёта layout
+     и без сдвига текста в строке. */
+  .hero-mark {
+    position: relative;
+    isolation: isolate;
+  }
+  .hero-mark::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: hero-mark-grow 600ms var(--ease-out) 150ms forwards;
+  }
+  @keyframes hero-mark-grow {
+    to {
+      transform: scaleX(1);
+    }
+  }
   :global(.g-kw) {
     color: var(--color-accent-strong);
     font-weight: 700;
@@ -193,6 +215,10 @@ const { articleCount, taskCount } = Astro.props;
     :global(.g-cursor) {
       animation: none;
       opacity: 1;
+    }
+    .hero-mark::before {
+      animation: none;
+      transform: scaleX(1);
     }
   }
 </style>
