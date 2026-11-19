@@ -1,67 +1,85 @@
 ---
 name: generate-cheatsheet
-description: Генерация сверхкраткой шпаргалки-«якоря» для собеседования по разделу docs/. Читает README и все статьи раздела, пишет docs/<section>/CHEATSHEET.md — только термины и понятия, без предложений. Шпаргалка выводится на странице раздела и печатается на один лист A4. Используй когда нужно создать или обновить шпаргалку раздела.
+description: Generates a one-page anchor cheat sheet for a docs/ section interview prep. Reads the README and every article of the section, then writes docs/<section>/CHEATSHEET.md with terms and anchors only, no sentences. It renders on the section page and prints on one A4 sheet. Use to create or refresh a section cheat sheet.
 ---
 
 # Protocol: Generate Section Cheatsheet
 
-## 1. Назначение
+## 1. Purpose
 
-Шпаргалка — маяк для собеседуемого. Бросив на неё взгляд, человек вспоминает структуру темы и цепляется за термин как за «якорь», а дальше рассказывает своими словами. Это **не конспект**: никаких предложений, тезисов, объяснений — только сжатые термины и понятия, сгруппированные так, чтобы по ним можно было выстроить связный рассказ.
+A cheat sheet is a beacon for the interviewee. One glance and the structure of
+the topic comes back; the term acts as an anchor to talk from. It is **not a
+summary**: no sentences, no theses, no explanations, only compressed terms and
+concepts, grouped so they can carry a coherent story.
 
-Файл `docs/<section>/CHEATSHEET.md` автоматически рендерится блоком под списком статей на странице раздела (`site/src/components/content/Cheatsheet.astro`) и печатается по клику.
+`docs/<section>/CHEATSHEET.md` is rendered as a block under the article list on
+the section page (`site/src/components/content/Cheatsheet.astro`) and printed on
+click. Content language: Russian, matching the articles.
 
-Эталон формата и стиля: `docs/javascript/CHEATSHEET.md`. Прочитай его перед генерацией. По объёму эталон на пределе — ориентироваться на лимиты раздела 6, они строже.
+Reference file for format and style: `docs/javascript/CHEATSHEET.md`. Read it
+before generating. It sits at the size limit; the limits in §6 are stricter.
 
-## 2. Вызов
+## 2. Invocation
 
 ```
 /generate-cheatsheet <section>
-/generate-cheatsheet <section> --force   # перезаписать существующую шпаргалку
+/generate-cheatsheet <section> --force   # overwrite an existing cheat sheet
 ```
 
-Допустимые разделы: `javascript`, `typescript`, `html-css`, `react`, `vue`, `nuxt`, `nextjs`, `testing`, `performance`, `architecture`, `state-management`, `api-communication`, `build-and-deployment`, `security`, `ai`
+Valid sections: `javascript`, `typescript`, `html-css`, `react`, `vue`, `nuxt`,
+`nextjs`, `testing`, `performance`, `architecture`, `state-management`,
+`api-communication`, `build-and-deployment`, `security`, `ai`
 
-Если `docs/<section>/CHEATSHEET.md` уже существует и `--force` не передан — вывести `skip (cheatsheet exists): <section>` и остановиться.
+If `docs/<section>/CHEATSHEET.md` exists and `--force` is not passed, print
+`skip (cheatsheet exists): <section>` and stop.
 
-## 3. Алгоритм
+## 3. Algorithm
 
-### Шаг 1. Собрать материал
+### Step 1. Gather material
 
-1. Прочитать эталон `docs/javascript/CHEATSHEET.md`.
-2. Прочитать `docs/<section>/README.md` — порядок статей и их группировка задают каркас шпаргалки.
-3. Для **каждой** статьи раздела (все `.md`, кроме `README.md`, `GUIDE.md`, `CHEATSHEET.md`):
-   - frontmatter: `title`, `tags`, `questions` — что реально спрашивают;
-   - заголовки `##` / `###` — структура темы;
-   - секцию «Ключевые тезисы для интервью» — главные якоря;
-   - тело статьи — читать там, где нужно уточнить термин или найти точную микросноску.
+1. Read the reference `docs/javascript/CHEATSHEET.md`.
+2. Read `docs/<section>/README.md`: its article order and grouping set the
+   skeleton.
+3. For **every** article in the section (all `.md` except `README.md`, `GUIDE.md`,
+   `CHEATSHEET.md`):
+   - frontmatter: `title`, `tags`, `questions` — what is actually asked;
+   - `##` / `###` headings — the structure of the topic;
+   - the "Ключевые тезисы для интервью" section — the main anchors;
+   - the body, only where a term needs pinning down.
 
-Основа — только содержимое статей раздела. Не добавлять темы, которых в разделе нет.
+Base everything on the section's own articles. Do not add topics the section does
+not cover.
 
-### Шаг 2. Выделить якоря
+### Step 2. Extract anchors
 
-Для каждой статьи выписать 2–5 якорей: термины, механизмы, сравнения, классические ловушки — то, с чего начинается ответ на вопрос из `questions`. Отбросить вводные, исторические и «зачем это нужно» части.
+Write 2–5 anchors per article: terms, mechanisms, comparisons, classic traps —
+whatever an answer to a `questions` entry starts from. Drop intros, history and
+"why you need this" parts.
 
-**Шпаргалка — не индекс статей.** Цель не покрыть всё, а оставить самое важное. Из кандидатов брать только то, без чего не ответить на главный вопрос темы:
-- ✅ механизмы и сравнения (`useState vs ref`, `ISR vs SWR`), порядок выполнения, классические ловушки;
-- ❌ каталоги API (все хелперы, все хуки, все опции конфига) — 2–4 самых частых, остальное выкинуть;
-- ❌ имена пакетов и модулей экосистемы, CLI-команды, пути генерируемых файлов, редкие опции;
-- ❌ то, что повторяется в другой группе, — оставить в одном месте.
+**A cheat sheet is not an index of articles.** The goal is not coverage but what
+matters most. Keep a candidate only if the main question of the topic cannot be
+answered without it:
+- ✅ mechanisms and comparisons (`useState vs ref`, `ISR vs SWR`), execution
+  order, classic traps;
+- ❌ API catalogs (every helper, hook or config option): 2–4 most common, drop
+  the rest;
+- ❌ package and module names, CLI commands, generated file paths, rare options;
+- ❌ anything repeated in another group — keep it in one place.
 
-Если сомневаешься, нужен ли якорь, — он не нужен.
+If you hesitate whether an anchor is needed, it is not.
 
-### Шаг 3. Сгруппировать
+### Step 3. Group
 
-- 5–7 групп `##`. Названия — 1–4 слова, по смыслу, а не по названиям статей.
-- Порядок групп следует логике README (от базы к продвинутому).
-- Близкие статьи можно объединять в одну группу; большую статью — разносить на несколько строк.
-- В группе 2–8 строк.
+- 5–7 `##` groups. Names are 1–4 words, by meaning, not by article titles.
+- Group order follows the README logic, basics to advanced.
+- Related articles may share one group; a large article may span several lines.
+- 2–8 lines per group.
 
-### Шаг 4. Написать строки
+### Step 4. Write the lines
 
-Каждая строка — один пункт `- **Термин:** якорь, якорь, якорь`.
+Each line is one item: `- **Term:** anchor, anchor, anchor`.
 
-## 4. Формат файла
+## 4. File format
 
 ```markdown
 # Шпаргалка: <Название раздела>
@@ -76,67 +94,83 @@ description: Генерация сверхкраткой шпаргалки-«я
 - ...
 ```
 
-Парсер (`site/src/lib/section-cheatsheet.ts`) понимает только:
-- `# ...` — заголовок файла (на сайте не выводится);
-- `## ...` — группа;
-- `- **Термин:** текст` — пункт;
-- внутри текста: `` `code` `` и `**bold**`.
+The parser (`site/src/lib/section-cheatsheet.ts`) understands only:
+- `# ...` — file title (not rendered on the site);
+- `## ...` — group;
+- `- **Term:** text` — item;
+- inside text: `` `code` `` and `**bold**`.
 
-Ничего другого (вложенные списки, таблицы, ссылки, абзацы, `###`) не использовать — это не отрендерится.
+Anything else (nested lists, tables, links, paragraphs, `###`) will not render.
 
-## 5. Правила содержания
+## 5. Content rules
 
-### Жёсткие запреты
+### Hard bans
 
-- Никаких предложений и глаголов-сказуемых. Не «Promise имеет три состояния», а `pending → fulfilled / rejected`.
-- Никаких оценок и воды: «важно», «ключевой», «основной», «позволяет», «используется для».
-- Никаких определений-объяснений после двоеточия. После `**Термин:**` идут якоря, а не пояснение термина.
-- Никаких примеров кода длиннее одного выражения.
+- No sentences and no finite verbs. Not «Promise имеет три состояния» but
+  `pending → fulfilled / rejected`.
+- No evaluation or filler: «важно», «ключевой», «основной», «позволяет»,
+  «используется для».
+- No explanatory definitions after the colon. After `**Term:**` come anchors, not
+  a gloss of the term.
+- No code examples longer than a single expression.
 
-### Нотация
+### Notation
 
-| Символ | Смысл | Пример |
+| Symbol | Meaning | Example |
 |---|---|---|
-| `,` | перечисление якорей | `map, filter, reduce` |
-| `/` | альтернативы, пары | `call / apply / bind` |
-| `→` | порядок, переход, результат | `sync → микрозадачи → render` |
-| `vs` | противопоставление | `ESM vs CJS` |
-| `·` | смена подтемы внутри строки | `7 примитивов · всё остальное — object` |
-| `( )` | микросноска | `var (func, ⬆ undefined)` |
-| `⬆` | всплытие (hoisting) | `let и const ({}, ⬆ TDZ)` |
+| `,` | list of anchors | `map, filter, reduce` |
+| `/` | alternatives, pairs | `call / apply / bind` |
+| `→` | order, transition, result | `sync → микрозадачи → render` |
+| `vs` | contrast | `ESM vs CJS` |
+| `·` | subtopic shift within a line | `7 примитивов · всё остальное — object` |
+| `( )` | micro-note | `var (func, ⬆ undefined)` |
+| `⬆` | hoisting | `let и const ({}, ⬆ TDZ)` |
 
-### Микросноски
+### Micro-notes
 
-Сноска в скобках — 1–4 слова, которые раскрывают суть, если без них якорь не однозначен:
+A bracket note is 1–4 words that disambiguate the anchor; omit it when the term is
+clear on its own:
 - ✅ `all (fail-fast), any (первый успешный, AggregateError)`
 - ✅ `debounce (после паузы), throttle (раз в N мс)`
-- ❌ `all (возвращает промис, который резолвится когда все промисы выполнены)` — это предложение.
+- ❌ `all (возвращает промис, который резолвится когда все промисы выполнены)` —
+  that is a sentence.
 
-Не ставить сноски ко всему подряд. Если термин и так понятен (`map, filter, reduce`) — без сноски. Ориентир: сноски у трети строк или меньше. Читаемость важнее деталей.
+Do not annotate everything. Target: notes on a third of the lines or fewer.
 
-### Код
+### Code
 
-В обратные кавычки — только буквальный синтаксис: `` `Symbol.iterator` ``, `` `#private` ``, `` `0.1 + 0.2` ``, `` `useEffect` ``. Названия концепций (Event Loop, tree shaking, hydration) — обычным текстом.
+Backticks hold literal syntax only: `` `Symbol.iterator` ``, `` `#private` ``,
+`` `0.1 + 0.2` ``, `` `useEffect` ``. Concept names (Event Loop, tree shaking,
+hydration) stay plain text.
 
-### Язык
+### Language
 
-Термины — как их говорят на собеседовании: английские названия API и устоявшихся понятий (stale closure, tree shaking, hydration), русские — для общих слов (утечки, приватные данные, порядок). Не переводить устоявшиеся англицизмы.
+Terms as they are spoken in an interview: English for APIs and established
+concepts (stale closure, tree shaking, hydration), Russian for general words
+(утечки, приватные данные, порядок). Do not translate settled anglicisms.
 
-## 6. Объём
+## 6. Size
 
-Шпаргалка **обязана** печататься на **один лист A4**. Печатная вёрстка (`Cheatsheet.astro`): поля 10 мм, 9pt, две колонки по ~91 мм → в строке колонки ~50 символов, на страницу ~110 печатных строк вместе с заголовками групп. Пункт до 100 символов занимает 2 печатные строки, 100–150 — уже 3, поэтому длинные пункты съедают место быстрее всего.
+The cheat sheet **must** print on **one A4 sheet**. Print layout
+(`Cheatsheet.astro`): 10 mm margins, 9 pt, two columns of ~91 mm → ~50 characters
+per column line, ~110 printed lines per page including group headings. An item up
+to 100 characters takes 2 printed lines, 100–150 already 3, so long items cost
+the most.
 
-Жёсткие лимиты (считаются по строкам `- **…`, вместе с разметкой):
-- **суммарно ≤ 3800 символов** — главный лимит;
-- 30–40 пунктов;
-- пункт **≤ 100 символов**, в среднем ~90;
-- 5–7 групп.
+Hard limits (counted over `- **…` lines, markup included):
+- **≤ 3800 characters total** — the main limit;
+- 30–40 items;
+- each item **≤ 100 characters**, ~90 on average;
+- 5–7 groups.
 
-Если не помещается — сначала выкидывать второстепенные якоря и целые пункты (см. «Шпаргалка — не индекс статей»), потом сливать группы. Не сжимать текст до нечитаемости.
+If it does not fit, drop secondary anchors and whole items first (see "not an
+index of articles"), then merge groups. Never compress the text into
+unreadability.
 
-## 7. Примеры
+## 7. Examples
 
-**Хорошо** ✅
+**Good** ✅
+
 ```markdown
 - **Переменные:** var (func, ⬆ undefined), let и const ({}, ⬆ TDZ)
 - **Event Loop:** call stack, Web API, macrotask (setTimeout, I/O), microtask (then, queueMicrotask), rAF
@@ -144,31 +178,35 @@ description: Генерация сверхкраткой шпаргалки-«я
 - **SOLID:** Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion
 ```
 
-**Плохо** ❌
+**Bad** ❌
+
 ```markdown
 - **Переменные:** var имеет функциональную область видимости и всплывает со значением undefined
 - **Event Loop** — механизм, который позволяет JS выполнять асинхронный код в одном потоке
 - **Важно:** не блокировать Event Loop тяжёлыми вычислениями
 - **Promise:** pending (ожидание), fulfilled (выполнен), rejected (отклонён), then (обработка), catch (ошибка)
 ```
-Проблемы: предложения, определения вместо якорей, «Важно», сноски-переводы ко всему подряд.
 
-## 8. Контроль качества
+Problems: sentences, definitions instead of anchors, an "Important" line, notes
+that gloss every anchor.
 
-После записи файла проверить:
-1. Каждая статья раздела покрыта хотя бы одной строкой (сверить со списком файлов).
-2. Каждая строка начинается с `- **` и содержит `:**`.
-3. Нет предложений: строки не заканчиваются точкой, нет глаголов-сказуемых.
-4. Объём в лимитах раздела 6 — проверять скриптом, не на глаз:
+## 8. Quality control
+
+After writing the file, verify:
+1. Every article of the section is covered by at least one line (compare with the
+   file list).
+2. Every line starts with `- **` and contains `:**`.
+3. No sentences: lines do not end with a period, no finite verbs.
+4. Size within the §6 limits, checked by script, not by eye:
    ```bash
    f=docs/<section>/CHEATSHEET.md
    echo "groups=$(grep -c '^## ' $f) lines=$(grep -c '^- ' $f) chars=$(grep '^- ' $f | tr -d '\n' | wc -m)"
-   awk '/^- / && length>100 {print length": "$0}' $f   # пункты длиннее лимита
+   awk '/^- / && length>100 {print length": "$0}' $f   # items over the limit
    ```
-   Любое превышение — сокращать и проверять снова.
-5. `cd site && npm run build` проходит без ошибок.
+   Any overrun means trim and check again.
+5. `cd site && npm run build` passes.
 
-## 9. Итоговый отчёт
+## 9. Report
 
 ```
 === generate-cheatsheet: <section> ===
@@ -177,11 +215,11 @@ groups:   N
 lines:    N
 chars:    N / 3800
 articles: N/N covered
-build:    ok | failed (<причина>)
+build:    ok | failed (<reason>)
 ```
 
-## 10. Ограничения
+## 10. Constraints
 
-- Создавать / изменять только `docs/<section>/CHEATSHEET.md`.
-- Не трогать статьи, README и код сайта.
-- Не добавлять темы, которых нет в статьях раздела.
+- Create or modify only `docs/<section>/CHEATSHEET.md`.
+- Do not touch articles, READMEs or site code.
+- Do not add topics the section's articles do not cover.

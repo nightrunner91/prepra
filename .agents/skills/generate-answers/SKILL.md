@@ -1,108 +1,113 @@
 ---
 name: generate-answers
-description: Генерация ответов на вопросы для статей раздела docs/. Берёт раздел как аргумент и последовательно генерирует ответы для каждой статьи, у которой есть questions, но нет answers. Записывает ответы в поле answers во frontmatter. Используй когда нужно заполнить answers для раздела или отдельной статьи.
+description: Generates quiz answers for articles of a docs/ section. Takes a section and fills the answers frontmatter field for every article that has questions but no answers. Use to fill answers for a whole section or a single article.
 ---
 
 # Protocol: Generate Quiz Answers
 
-## 1. Назначение
+## 1. Purpose
 
-Генерирует ответы на вопросы интервью (`questions` во frontmatter) для каждой статьи указанного раздела. Ответы сохраняются в поле `answers` во frontmatter и отображаются в квиз-оверлее при переворачивании карточки.
+Generate interview answers for the `questions` in each article's frontmatter and
+store them in `answers`. The site renders them in the quiz overlay when a card is
+flipped. Answer language matches the article (Russian).
 
-## 2. Вызов
+## 2. Invocation
 
 ```
 /generate-answers <section>
-/generate-answers <section> --force   # перегенерировать даже если answers уже есть
-/generate-answers <section>/<slug>    # одна конкретная статья
+/generate-answers <section> --force   # regenerate even if answers exist
+/generate-answers <section>/<slug>    # a single article
 ```
 
-Допустимые разделы: `javascript`, `typescript`, `html-css`, `react`, `vue`, `nuxt`, `nextjs`, `testing`, `performance`, `architecture`, `state-management`, `api-communication`, `build-and-deployment`, `security`, `ai`
+Valid sections: `javascript`, `typescript`, `html-css`, `react`, `vue`, `nuxt`,
+`nextjs`, `testing`, `performance`, `architecture`, `state-management`,
+`api-communication`, `build-and-deployment`, `security`, `ai`
 
-## 3. Алгоритм
+## 3. Algorithm
 
-### Шаг 1. Найти статьи
+### Step 1. Find the articles
 
-Использовать Glob для поиска всех `.md` файлов в `docs/<section>/`, исключая `README.md` и `GUIDE.md`.
+Glob all `.md` files in `docs/<section>/`, excluding `README.md` and `GUIDE.md`.
+For a `<section>/<slug>` argument, process only `docs/<section>/<slug>.md`.
 
-Если передан путь вида `<section>/<slug>`, обработать только один файл: `docs/<section>/<slug>.md`.
+### Step 2. Per article, one at a time
 
-### Шаг 2. Для каждой статьи — последовательно
+1. Read the file in full.
+2. Check the frontmatter:
+   - no `questions` or an empty array → print `skip (no questions): <filename>`
+     and continue;
+   - `answers` already filled and no `--force` → print
+     `skip (answers exist): <filename>` and continue.
+3. Read the body (everything after the second `---`).
+4. Write one answer per question.
+5. Save `answers` into the frontmatter with Edit.
+6. Print `done: <filename> (N answers)`.
 
-1. Прочитать файл целиком через Read.
-2. Проверить frontmatter:
-   - Если `questions` отсутствует или массив пуст → вывести `skip (no questions): <filename>` и перейти к следующей.
-   - Если `answers` уже заполнен И флаг `--force` не передан → вывести `skip (answers exist): <filename>` и перейти к следующей.
-3. Прочитать тело статьи (всё после второго `---`).
-4. Сгенерировать ответ для каждого вопроса из `questions`.
-5. Записать `answers` во frontmatter через Edit.
-6. Вывести `done: <filename> (N answers)`.
+### Step 3. Answer rules
 
-### Шаг 3. Правила генерации ответов
+**Format**
+- Language: the article's language (Russian).
+- Length: 1–2 sentences.
+- Tone: concrete, no filler, as a senior developer explains it in an interview.
+- Source: only what the article says, no outside knowledge.
+- Shape: the mechanism, plus a practical consequence or nuance.
 
-**Формат каждого ответа:**
-- Язык: русский
-- Длина: 1–2 предложения
-- Тон: конкретный, без воды, как объясняет senior-разработчик на интервью
-- Основа: только то, что есть в статье — не общие знания
-- Структура: объяснение механизма + практический контекст или нюанс
+**Include**
+- A precise, compact definition or description of how it works.
+- Where relevant, the key distinction or pitfall that separates a good answer
+  from a mediocre one.
 
-**Что включать:**
-- Точное и ёмкое определение или описание механизма работы
-- Если актуально — ключевое отличие или подводный камень (то, что разделяет хороший ответ и посредственный)
+**Avoid**
+- Restating the question in other words.
+- Stock phrases: «важный концепт», «ключевой принцип», «на практике это помогает».
+- Naming the effect instead of explaining the mechanism.
+- Abstraction with no specifics.
+- More than two sentences.
 
+**Examples** (answers below are Russian, matching the articles)
 
-**Чего избегать:**
-- Пересказывает вопрос другими словами
-- Содержит шаблонные фразы: «важный концепт», «ключевой принцип», «на практике это помогает»
-- Не объясняет механизм, а говорит «это работает так»
-- Слишком абстрактный, без конкретики или без примера
-- Более двух предложений
+Question: `Что такое замыкание и как оно работает под капотом`
 
-**Примеры:**
+Good: Замыкание — функция, сохраняющая ссылку на Lexical Environment внешней
+функции: движок не удаляет этот объект, пока на него ссылается замыкание,
+поэтому внутренняя функция читает и изменяет переменные внешней даже после её
+завершения.
 
-Вопрос: `Что такое замыкание и как оно работает под капотом`
+Bad: Замыкание — важный концепт JavaScript, который помогает писать лучший код.
 
-**Хорошо** ✅: Замыкание — функция, сохраняющая ссылку на Lexical Environment внешней функции: движок не удаляет этот объект, пока на него ссылается замыкание, поэтому внутренняя функция читает и изменяет переменные внешней даже после её завершения.
-**Плохо** ❌: Замыкание — важный концепт JavaScript, который помогает писать лучший код.
+Question: `Как runtime CSS-in-JS генерирует стили и почему это создаёт проблемы с RSC, performance и CSP`
 
----
+Good: Styled-components при рендере вставляет CSS-правило через DOM-манипуляцию
+в `<style>` в `<head>` — RSC без клиентского JS не могут этого делать, каждый
+уникальный набор props раздувает `<style>`, а CSP без `'unsafe-inline'`
+блокирует вставку.
 
-Вопрос: `Как устроена многопроцессная архитектура браузера и почему Site Isolation увеличивает потребление памяти`
+Bad: Runtime CSS-in-JS динамически создаёт стили в браузере, что влияет на
+производительность и создаёт проблемы с безопасностью.
 
-**Хорошо** ✅: Браузер делит работу между процессами: Browser Process — UI и хранилища, Renderer Process — рендеринг вкладки, GPU Process — графика. Site Isolation даёт каждому origin отдельный renderer, и накладные расходы (V8 heap, стеки потоков) умножаются на число изолированных сайтов.
-**Плохо** ❌: Браузер использует многопроцессную архитектуру для безопасности. Site Isolation добавляет процессы, что увеличивает память.
+### Step 4. Write the answers
 
----
+Use Edit for a targeted change.
 
-Вопрос: `Как runtime CSS-in-JS генерирует стили и почему это создаёт проблемы с RSC, performance и CSP`
+**Placement:** insert the `answers:` block right after `questions:`. If `answers:`
+already exists, replace it.
 
-**Хорошо** ✅: Styled-components при рендере вставляет CSS-правило через DOM-манипуляцию в `<style>` в `<head>` — RSC без клиентского JS не могут этого делать, каждый уникальный набор props раздувает `<style>`, а CSP без `'unsafe-inline'` блокирует вставку.
-**Плохо** ❌: Runtime CSS-in-JS динамически создаёт стили в браузере, что влияет на производительность и создаёт проблемы с безопасностью.
+**YAML format**
 
-### Шаг 4. Запись ответов во frontmatter
-
-Использовать Edit для точечного изменения файла.
-
-**Правило позиционирования:** вставить блок `answers:` сразу после блока `questions:`. Если `answers:` уже существует — заменить его.
-
-**Формат YAML:**
 ```yaml
 answers:
   - "Ответ на первый вопрос..."
   - "Ответ на второй вопрос..."
 ```
 
-**Экранирование:** внутри двойных кавычек экранировать `"` как `\"` и `\` как `\\`.
+**Escaping:** inside double quotes escape `"` as `\"` and `\` as `\\`.
 
-**Важно:**
-- Не изменять никакие другие поля frontmatter
-- Не изменять тело статьи
-- Количество ответов должно строго совпадать с количеством вопросов
+**Do not** touch other frontmatter fields, change the article body, or write a
+number of answers that differs from the number of questions.
 
-### Шаг 5. Итоговый отчёт
+### Step 5. Report
 
-После обработки всех статей раздела вывести:
+After the whole section:
 
 ```
 === generate-answers: <section> ===
@@ -111,20 +116,22 @@ skipped: N articles (answers exist / no questions)
 errors:  N articles
 
 Files with errors:
-  - <filename>: <причина>
+  - <filename>: <reason>
 ```
 
-## 4. Контроль качества
+## 4. Quality control
 
-После записи ответов для каждой статьи — проверить:
-1. Количество ответов равно количеству вопросов (если нет — ошибка, не записывать).
-2. Ни один ответ не является пустой строкой.
-3. Ни один ответ не содержит шаблонных фраз из `ANSWER_TEMPLATES` в `QuizOverlay.tsx` (признак того, что сгенерировался generic текст).
+After writing each article, verify:
+1. The number of answers equals the number of questions. If not, it is an error:
+   do not write.
+2. No answer is an empty string.
+3. No answer contains the stock phrases from `ANSWER_TEMPLATES` in
+   `QuizOverlay.tsx` — they mark generic text.
 
-## 5. Ограничения
+## 5. Constraints
 
-- Работать только с файлами в `docs/<section>/`
-- Не изменять ничего кроме поля `answers` во frontmatter
-- Не обрабатывать `README.md` и `GUIDE.md`
-- Не добавлять информацию, которой нет в статье
-- При ошибке в одной статье — продолжить обработку следующих
+- Work only with files in `docs/<section>/`.
+- Change nothing except the `answers` frontmatter field.
+- Skip `README.md` and `GUIDE.md`.
+- Do not add information the article does not contain.
+- If one article fails, continue with the rest.

@@ -1,42 +1,55 @@
 ---
 name: arrange
-description: Анализ и упорядочивание статей раздела в docs/. Используй когда нужно проверить или предложить логичный порядок статей в разделе — от простого к сложному. Принимает название раздела (папку в docs/).
+description: Reviews and proposes a logical order for the articles of a docs/ section, simple to advanced. Use when checking or fixing the order of articles in a section. Takes the section folder name in docs/.
 ---
 
 # Protocol: Article Order Arranger
 
-## 1. Обзор
+## 1. Purpose
 
-Проверяет и предлагает логичный порядок статей в разделе `docs/<section>/`. Источник истины — параметр `order` во frontmatter каждой статьи: именно по нему рендерится сайт. `README.md` раздела — производный человекочитаемый роадмап, он должен совпадать с `order`.
+Check and propose a logical order of articles in `docs/<section>/`. The source of
+truth is the `order` field in each article's frontmatter: the site renders by it.
+The section `README.md` is a derived, human-readable roadmap and must match
+`order`.
 
-## 2. Вход
+## 2. Input
 
-`/arrange <section>` — название папки в `docs/` (`javascript`, `react`, `vue`, ...). Если папки нет — сообщить об ошибке и вывести список доступных разделов.
+`/arrange <section>` — a folder name in `docs/` (`javascript`, `react`, `vue`, ...).
+If the folder does not exist, report the error and list the available sections.
 
-## 3. Шаги
+## 3. Steps
 
-1. **Собрать данные.** Для каждой статьи `docs/<section>/*.md` (кроме `README.md`) вытащить из frontmatter `order`, `title`, `section`. Поверхностно изучить заголовки (`##`), чтобы понять тему и зависимости.
-2. **Прочитать `README.md`** раздела, если есть — в нём зафиксирован текущий роадмап и группировки.
-3. **Найти проблемы текущего порядка:**
-   - дубликаты `order` (две статьи с одинаковым значением);
-   - расхождение между порядком в README и `order`;
-   - «перескоки»: статья с высокой сложностью стоит раньше базовой, от которой зависит;
-   - непоследовательная нумерация.
-4. **Выстроить цепочку зависимостей.** От простого к сложному, где каждая статья опирается на предыдущие:
-   - база (синтаксис, типы) → механизмы (скоуп, замыкания, `this`) → абстракции (прототипы, async) → продвинутое (метапрограммирование, производительность);
-   - статья, которая вводит концепцию, идёт раньше той, что её использует (например, замыкания → модули/функциональное программирование; Promise → Event Loop).
-5. **Предложить новый порядок.** Нумерованный список 1..N: `order` — файл — заголовок. Показать изменения относительно текущего (дифф: что переехало куда).
-6. **Не применять сразу.** Спросить пользователя, применить ли изменения: переписать `order` во frontmatter всех статей и обновить `README.md`.
+1. **Collect data.** For every article in `docs/<section>/*.md` (except
+   `README.md`) read `order`, `title`, `section` from the frontmatter. Skim the
+   `##` headings to grasp the topic and its dependencies.
+2. **Read the section `README.md`** if present: it records the current roadmap
+   and groupings.
+3. **Find problems in the current order:**
+   - duplicate `order` values;
+   - mismatch between the README order and `order`;
+   - jumps: an advanced article placed before the basic one it depends on;
+   - inconsistent numbering.
+4. **Build the dependency chain**, simple to advanced, so each article rests on
+   the previous ones:
+   - basics (syntax, types) → mechanisms (scope, closures, `this`) → abstractions
+     (prototypes, async) → advanced (metaprogramming, performance);
+   - an article that introduces a concept comes before the one that uses it
+     (closures before modules / FP; Promise before Event Loop).
+5. **Propose the new order** as a numbered list 1..N: `order` — file — title.
+   Show the diff against the current order.
+6. **Do not apply immediately.** Ask whether to write `order` into every
+   frontmatter and update `README.md`.
 
-## 4. Правила
+## 4. Rules
 
-- Не менять ничего, кроме `order` во frontmatter и порядка пунктов в README.
-- `order` — целые числа 1..N без пропусков и дубликатов.
-- Файлы не переименовывать, контент не трогать.
-- Группировки в README («Начни с базы», «Углубись в детали») сохранять, обновляя только порядок пунктов.
+- Change nothing except the frontmatter `order` and the item order in `README.md`.
+- `order` values are integers 1..N, with no gaps and no duplicates.
+- Do not rename files or touch article content.
+- Keep README group headings («Начни с базы», «Углубись в детали»), updating
+  only the order of their items.
 
-## 5. Ограничения
+## 5. Constraints
 
-- Не читать статьи целиком для экономии токенов — только frontmatter и заголовки.
-- Не оценивать качество контента, только логику порядка.
-- Без подтверждения пользователя — только предложение, без правок.
+- Do not read articles in full — frontmatter and headings only.
+- Judge ordering logic only, never content quality.
+- Without user confirmation: propose only, make no edits.

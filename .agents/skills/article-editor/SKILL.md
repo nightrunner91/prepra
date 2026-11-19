@@ -1,44 +1,47 @@
 ---
 name: article-editor
-description: Приведение статьи docs/ к единому формату и фокусу. Объединяет структурную нормализацию (frontmatter, содержание, вступление, заключение, ссылки) и работу с ключевыми тезисами, вопросами и ответами для самопроверки. Работает по одной статье за раз; в режиме focus читает только нужные блоки.
+description: Brings one docs/ article to the PrePra standard in a single pass, covering both structural normalization (frontmatter, TOC, intro, conclusion, links) and the focus work (key theses, self-check questions and answers). Works on one article at a time; in focus mode it reads only the needed blocks.
 ---
 
 # Protocol: Article Editor
 
-## 1. Назначение
+## 1. Purpose
 
-Один проход по одной статье из `docs/`: привести её к стандарту PrePra и
-сфокусировать на главном. Скилл заменяет два прежних протокола
-(`article-format` и `article-focus`) и работает в трёх режимах.
+One pass over one article in `docs/`: bring it to the PrePra standard and focus it
+on what matters. This skill replaces the former `article-format` and
+`article-focus` protocols and runs in three modes.
 
-**Цель:** читатель быстро находит нужное, а после статьи помнит 5–7 ключевых
-мыслей и отвечает на 5–8 концептуальных вопросов.
+**Goal:** the reader finds what they need fast, then leaves remembering 5–7 key
+ideas and able to answer 5–8 conceptual questions.
 
-## 2. Режимы
+Article prose stays in its original language (Russian articles remain Russian).
+Only this protocol is English; heading names in §4 and the examples are literal.
 
-| Режим | Когда | Что меняется | Что читать |
+## 2. Modes
+
+| Mode | When | What changes | What to read |
 |---|---|---|---|
-| `structure` | статья новая или развалилась структура | всё: frontmatter, вступление, TOC, секции, тезисы, заключение, ссылки | статью целиком |
-| `focus` | структура ок, но тезисы/вопросы слабые | только `## Ключевые тезисы для интервью`, `questions`, `answers` | 4 блока (см. §3) |
-| `check` | перед сдачей, без правок | ничего, только отчёт по чеклисту §10 | по необходимости |
+| `structure` | new article, or the structure fell apart | everything: frontmatter, intro, TOC, sections, theses, conclusion, links | the whole article |
+| `focus` | structure is fine, theses/questions are weak | only `## Ключевые тезисы для интервью`, `questions`, `answers` | 4 blocks (§3) |
+| `check` | before delivery, no edits | nothing, report against the §10 checklist | as needed |
 
-Если режим не указан — сначала проверь структуру (`structure`), затем фокус
-(`focus`). Не смешивай: в `focus` не трогай `title`, `section`, `order`,
-`tags`, `description` и тело статьи.
+With no mode given, check structure first (`structure`), then focus (`focus`).
+Never mix: in `focus` do not touch `title`, `section`, `order`, `tags`,
+`description` or the body.
 
-## 3. Экономия контекста (режим `focus`)
+## 3. Context economy (`focus` mode)
 
-**Не загружай статью целиком.** Достаточно:
+**Do not load the whole article.** Four blocks are enough:
 
-1. **Frontmatter** — первые ~20 строк: `title`, `section`, `questions`.
-2. **`## Содержание`** — список секций, чтобы понимать структуру.
-3. **`## Ключевые тезисы для интервью`** — grep по заголовку, читать до следующего `##`.
-4. **`## Заключение`** — что автор считает главным.
+1. **Frontmatter** — the first ~20 lines: `title`, `section`, `questions`.
+2. **`## Содержание`** — the section list, to see the shape.
+3. **`## Ключевые тезисы для интервью`** — grep the heading, read to the next `##`.
+4. **`## Заключение`** — what the author considers essential.
 
-Только если после этих четырёх блоков непонятно, какие концепции ключевые —
-читай отдельные секции выборочно.
+Only if these four blocks leave the key concepts unclear, read individual
+sections selectively.
 
-## 4. Каноническая структура статьи
+## 4. Canonical article structure
 
 ```markdown
 ---
@@ -85,77 +88,70 @@ answers:
 - [Название](https://...)
 ```
 
-Блок `## Практика` — единственное разрешённое расширение канона. Он нужен
-в новых разделах (`backend`, `databases`, `practices`, кейсы System Design) и
-должен попасть в TOC. В старых статьях его нет — не добавляй искусственно.
+`## Практика` is the only allowed extension of the canon. It belongs to the newer
+sections (`backend`, `databases`, `practices`, System Design cases) and must
+appear in the TOC. Older articles do not have it; do not add it artificially.
 
 ## 5. Frontmatter
 
-**`title`** — обязательный, ≤ 6 слов, отражает суть.
-Запрещено: «Глубокое погружение», «Глубокое понимание», «Руководство для…»,
-заголовки из 1–2 слов, длиннее 8 слов.
+**`title`** — required, ≤ 6 words, states the essence. Banned: «Глубокое
+погружение», «Глубокое понимание», «Руководство для…», one- or two-word titles,
+anything over 8 words.
 
-Хорошо: «XSS: анатомия атаки и методы защиты», «useTransition и useDeferredValue».
-Плохо: «Fiber», «Гидратация — Глубокое погружение», «Next.js как монолит: прямое
-обращение к базе данных без отдельного API».
+Good: «XSS: анатомия атаки и методы защиты», «useTransition and
+useDeferredValue». Bad: «Fiber», «Гидратация — Глубокое погружение», «Next.js как
+монолит: прямое обращение к базе данных без отдельного API».
 
-**`description`** — 1–3 предложения, ≤ 160 символов, для meta и карточек.
-Не TOC, не список ссылок, не пусто. Если мусор — переписать по содержанию.
+**`description`** — 1–3 sentences, ≤ 160 characters, for meta tags and cards. Not
+a TOC, not a link list, never empty. If it is junk, rewrite it from the content.
 
-**`tags`** — 3–6 терминов. Первый — главная тема. Только существительные и
-устойчивые термины, дефисы допустимы.
-Запрещено: разбивать заголовок на слова (`"передача", "данных", "через"`),
-шаблонные фразы (`"глубокое"`, `"погружение"`, `"основы"`), предлоги и глаголы,
-дублировать `section` в каждой статье.
+**`tags`** — 3–6 terms, the first one the main topic. Nouns and established terms
+only; hyphens allowed. Banned: splitting a headline into words (`"передача"`,
+`"данных"`, `"через"`), stock words (`"глубокое"`, `"погружение"`, `"основы"`),
+prepositions and verbs, repeating `section` in every article.
 
-Хорошо: `["usecontext", "createcontext", "context", "prop-drilling", "provider"]`.
-Плохо: `["usecontext", "передача", "данных", "через", "дерево"]`.
+Good: `["usecontext", "createcontext", "context", "prop-drilling", "provider"]`.
+Bad: `["usecontext", "передача", "данных", "через", "дерево"]`.
 
-**Поля плана** — `level`, `requires`, `project`, `market` — если они есть,
-сохраняй и проверяй: `level` 1–5, `requires` не ссылается на статью того же
-или большего уровня. Не добавляй их в старые статьи без отдельной задачи.
+**Plan fields** — `level`, `requires`, `project`, `market`: keep and validate if
+present. `level` is 1–5; `requires` must not point to an article of the same or a
+higher level. Do not add them to older articles without a separate task.
 
-**`questions`** — 5–8, **`answers`** — ровно столько же. Оба непустые.
+**`questions`** — 5–8; **`answers`** — exactly as many. Neither may be empty.
 
-## 6. Тело статьи
+## 6. Article body
 
-**H1** — один, совпадает с `title`.
+**H1** — one, identical to `title`.
 
-**Вводная** — 2–4 предложения: что за тема, зачем нужна, что читатель узнает.
-Не начинать с «X — это…»; лучше с контекста или проблемы.
+**Intro** — 2–4 sentences: what the topic is, why it matters, what the reader will
+learn. Do not open with «X — это…»; start from context or a problem.
 
-**Содержание** — `## Содержание`, нумерованный список якорей на все `##`.
-Подсекции `###` не включать. После списка — `---`.
+**TOC** — `## Содержание`, a numbered list of anchors for every `##`. Exclude
+`###`. Follow the list with `---`.
 
-**Секции** — `##` основные, `###` внутри. Каждая самодостаточна. `---` между
-крупными секциями опционально.
+**Sections** — `##` for the main ones, `###` inside. Each stands on its own. `---`
+between major sections is optional.
 
-**Тезисы** — см. §7. **Заключение** — 3–7 предложений, без новой информации.
-**Полезные ссылки** — внешние MDN/спеки; если ссылок нет, секцию не добавляй.
+**Theses** — see §7. **Conclusion** — 3–7 sentences, no new information.
+**Useful links** — external MDN pages and specs; if there are none, omit the
+section.
 
-## 7. Ключевые тезисы для интервью
+## 7. Key theses for the interview
 
-### Количество
+**Count: 5–7, never more.** Eight or more means duplication or items too granular.
 
-**5–7. Не больше.** 8+ означает дублирование или слишком мелкие пункты.
+Each thesis answers: "If I am asked about X in an interview, what do I say in one
+sentence?" A thesis is a complete thought, a core concept, a merge of 2–3 related
+facts. It is **not** a retelling of a section, not a description of one method, and
+not a fact anyone can google in ten seconds.
 
-### Содержание
+Format: a `-` list, 1–2 lines per item, inline `code` allowed. Never open with
+«Эта статья…» or «В статье рассматривается…».
 
-Каждый тезис отвечает на вопрос: «Если на интервью попросят рассказать про X,
-что я скажу одним предложением?»
+**Example: 12 items → 6**
 
-Тезис — это законченная мысль, ключевая концепция, объединение 2–3 связанных
-фактов. Тезис — это **не** пересказ секции, не описание одного метода и не факт,
-который гуглится за 10 секунд.
+Bad (excerpt):
 
-### Формат
-
-Маркированный список `-`, 1–2 строки на пункт, допустимы `code`-вставки.
-Не начинать с «Эта статья…», «В статье рассматривается…».
-
-### Пример: было 12 → стало 6
-
-Плохо (фрагменты):
 ```markdown
 - `useEffect` выполняется после commit phase.
 - Массив зависимостей определяет, когда эффект перезапускается.
@@ -164,113 +160,104 @@ answers:
 - Cleanup-функция чистит таймеры.
 ```
 
-Хорошо:
+Good:
+
 ```markdown
 - `useEffect` выполняется после commit phase; массив зависимостей через `Object.is` определяет перезапуск. Честные зависимости обязательны — иначе stale closure.
 - Cleanup-функция освобождает подписки, таймеры и AbortController перед повторным запуском и при размонтировании.
 - Один эффект — одна ответственность; производные данные вычисляйте в рендере, а не в `useEffect`.
 ```
 
-## 8. Вопросы и ответы
+## 8. Questions and answers
 
-### Количество
+**Count: 5–8 questions, never more.** They test understanding, not recall:
 
-**5–8 вопросов.** Не больше.
-
-### Тип
-
-Проверяют понимание, а не запоминание:
-
-| Плохо (факт) | Хорошо (понимание) |
+| Bad (fact) | Good (understanding) |
 |---|---|
 | «Что такое useEffect» | «Как useEffect связан с жизненным циклом и commit phase» |
 | «Сколько осей у Flexbox» | «Как алгоритм распределения пространства объясняет поведение flex-grow и flex-shrink» |
 | «Что делает Partial<T>» | «Как mapped types позволяют строить utility-типы вроде Partial и Required» |
 
-Формулы: «Как X связан с Y и почему это важно», «Почему X работает именно так»,
+Patterns: «Как X связан с Y и почему это важно», «Почему X работает именно так»,
 «Чем X отличается от Y в контексте Z», «Что произойдёт, если сделать X».
 
-### Покрытие и отсутствие повторов
+**Coverage, no repetition**
+- Questions span **all major sections**, not just one.
+- If two questions share one paragraph of answer, merge them.
+- Questions **complement** the theses instead of duplicating them: a thesis gives
+  the answer, a question checks whether the reader got it.
 
-- вопросы покрывают **все основные секции**, а не одну;
-- если два вопроса отвечаются одним абзацем — они дублируются, объедини;
-- вопросы **дополняют** тезисы, а не дублируют: тезис даёт ответ, вопрос
-  проверяет, понял ли читатель.
+Bad: thesis «Cleanup чистит подписки и таймеры» plus the question «Зачем нужна
+cleanup-функция». Good: «Что произойдёт, если не вызвать cleanup при
+размонтировании компонента с подпиской».
 
-Плохо: тезис «Cleanup чистит подписки и таймеры» + вопрос «Зачем нужна
-cleanup-функция».
-Хорошо: вопрос «Что произойдёт, если не вызвать cleanup при размонтировании
-компонента с подпиской».
+**Answers**
+- Exactly as many as `questions`; no empty strings.
+- 1–2 sentences: the mechanism plus a practical nuance.
+- Only from the article, without restating the question or stock phrases.
+- Same language as the article; full rules live in the `generate-answers` skill.
 
-### Ответы
+The block renders from frontmatter. Never add `## Вопросы для самопроверки` or
+`## Ответы` headings to the body.
 
-- количество строго совпадает с `questions`, пустых строк нет;
-- 1–2 предложения, конкретно: механизм + практический нюанс;
-- только по содержанию статьи, без пересказа вопроса и шаблонных фраз;
-- язык — язык статьи; правила детально — в skill `generate-answers`.
+## 9. Algorithm
 
-Блок рендерится из frontmatter. Заголовки `## Вопросы для самопроверки` и
-`## Ответы` в тело статьи **не добавлять**.
+### Pass 1 — structure (`structure`)
 
-## 9. Алгоритм
+1. Read the whole article.
+2. Check what is missing: intro, TOC, theses, questions with answers, conclusion,
+   links, a valid `description`, correct `tags`.
+3. Reorder sections correctly, **keeping all content**.
+4. Add what is missing, derived from the existing text.
+5. Verify TOC anchors against the actual headings.
 
-### Проход 1 — структура (`structure`)
+### Pass 2 — focus (`focus`)
 
-1. Прочитать статью целиком.
-2. Чеклист отсутствующего: вступление, TOC, тезисы, вопросы+ответы,
-   заключение, ссылки, валидный `description`, корректные `tags`.
-3. Переставить секции в правильном порядке, **сохранив весь контент**.
-4. Добавить отсутствующее на основе существующего текста.
-5. Проверить якоря TOC по фактическим заголовкам.
+1. Pull the 4 blocks (§3).
+2. Theses: count them (>7 means cut), find duplicates, micro-items and section
+   retellings; group by topic; reduce to 5–7.
+3. Questions: count them (>8 means cut), find repeats, rephrase factual ones,
+   check coverage and overlap with the theses; reduce to 5–8.
+4. Rewrite `questions` and sync `answers`.
 
-### Проход 2 — фокус (`focus`)
+### Pass 3 — check (`check`)
 
-1. Извлечь 4 блока (§3).
-2. Тезисы: посчитать (>7 — сокращать), найти дубликаты и микро-пункты,
-   пересказы секций; сгруппировать по темам; свести к 5–7.
-3. Вопросы: посчитать (>8 — сокращать), найти повторы, фактологические
-   вопросы переформулировать, проверить покрытие и дублирование с тезисами;
-   свести к 5–8.
-4. Переписать `questions` и синхронизировать `answers`.
+Walk the §10 checklist and report: what was fixed, what remains debatable. If
+nothing needs fixing, say so.
 
-### Проход 3 — проверка (`check`)
+## 10. Checklist
 
-Пройти чеклист §10 и вернуть отчёт: что исправлено, что осталось спорным.
-Если править нечего — так и сказать.
+- [ ] one H1, identical to `title`
+- [ ] `title` ≤ 6 words, no stock phrases
+- [ ] `description` meaningful, ≤ 160 characters, not a TOC
+- [ ] `tags` 3–6 terms, the first one the main topic
+- [ ] intro 2–4 sentences, does not open with «X — это…»
+- [ ] `## Содержание` covers every `##`, anchors resolve
+- [ ] no duplicate sections, code and examples preserved
+- [ ] `## Ключевые тезисы для интервью` holds 5–7 complete thoughts
+- [ ] `questions` 5–8, conceptual, covering the whole article
+- [ ] `answers` exactly as many, 1–2 sentences, none empty
+- [ ] `## Заключение` 3–7 sentences, no new information
+- [ ] no "Вопросы для самопроверки" / "Ответы" headings in the body
+- [ ] if `## Практика` exists, it is in the TOC
+- [ ] `level` / `requires` (if present) are valid
+- [ ] relative links point to existing files
 
-## 10. Чеклист
+## 11. Constraints
 
-- [ ] один H1, совпадает с `title`
-- [ ] `title` ≤ 6 слов, без шаблонных фраз
-- [ ] `description` осмысленный, ≤ 160 символов, не TOC
-- [ ] `tags` 3–6 терминов, первый — главная тема
-- [ ] вступление 2–4 предложения, не начинается с «X — это…»
-- [ ] `## Содержание` покрывает все `##`, якоря рабочие
-- [ ] нет дублирующихся секций, код и примеры сохранены
-- [ ] `## Ключевые тезисы для интервью` — 5–7 законченных мыслей
-- [ ] `questions` 5–8, концептуальные, покрывают всю статью
-- [ ] `answers` ровно столько же, 1–2 предложения, без пустых
-- [ ] `## Заключение` 3–7 предложений, без новой информации
-- [ ] нет заголовков «Вопросы для самопроверки» / «Ответы» в теле
-- [ ] если есть `## Практика` — она в TOC
-- [ ] `level`/`requires` (если есть) валидны
-- [ ] relative-ссылки ведут на существующие файлы
+- **One article per run.**
+- **Never delete content** — only move, merge and extend it.
+- **Never change the meaning** when rewriting the intro, conclusion or theses.
+- **Never add information** the article did not have, except the intro, conclusion
+  and questions/answers derived from the existing text.
+- **Keep code, examples, tables and diagrams** untouched.
+- **In `focus` mode** leave `title`, `section`, `order`, `tags`, `description` and
+  the body alone.
+- **Never change the article's language.**
 
-## 11. Ограничения
+## 12. Example full pass
 
-- **Одна статья за раз.**
-- **Не удалять контент** — только перемещать, объединять и дополнять.
-- **Не менять смысл** при переписывании вступления, заключения, тезисов.
-- **Не добавлять информацию**, которой не было в статье (кроме вступления,
-  заключения и вопросов с ответами на основе существующего текста).
-- **Сохранять код, примеры, таблицы, диаграммы** как есть.
-- **В режиме `focus`** не трогать `title`, `section`, `order`, `tags`,
-  `description` и тело статьи.
-- **Не менять язык статьи.** Русская статья остаётся русской.
-
-## 12. Пример полного прохода
-
-Было: нет TOC, нет тезисов, нет вопросов, нет заключения, `description` — мусор.
+Before: no TOC, no theses, no questions, no conclusion, junk `description`.
 
 ```markdown
 ---
@@ -286,7 +273,7 @@ CSS Flexbox — это модуль CSS для одномерной раскла
 ...
 ```
 
-Стало:
+After:
 
 ```markdown
 ---
