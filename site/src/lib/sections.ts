@@ -5,12 +5,14 @@ import {
   Brain,
   Check,
   Code,
+  Cube,
+  Database,
   Layout,
-  Leaf,
   Lightning,
   Package,
   PlugsConnected,
   Shield,
+  Stack,
   Terminal,
   TreeStructure,
   Triangle,
@@ -56,7 +58,17 @@ export const sections: Section[] = [
   {
     id: "vue",
     label: "Vue",
-    icon: Leaf,
+    icon: Cube,
+  },
+  {
+    id: "nuxt",
+    label: "Nuxt",
+    icon: Stack,
+  },
+  {
+    id: "api-communication",
+    label: "API",
+    icon: PlugsConnected,
   },
   {
     id: "nodejs",
@@ -64,14 +76,14 @@ export const sections: Section[] = [
     icon: Terminal,
   },
   {
+    id: "postgres",
+    label: "Postgres",
+    icon: Database,
+  },
+  {
     id: "architecture",
     label: "System Design",
     icon: TreeStructure,
-  },
-  {
-    id: "api-communication",
-    label: "API",
-    icon: PlugsConnected,
   },
   {
     id: "build-and-deployment",

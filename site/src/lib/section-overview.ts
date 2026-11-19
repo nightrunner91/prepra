@@ -21,8 +21,10 @@ const sectionDescriptions: Record<string, string> = {
   performance: "Метрики, виртуализация, hydration, web workers",
   security: "XSS, CSRF, CSP, аутентификация, HTTP-заголовки",
   ai: "Ментальная модель, паттерны промптинга, агенты, RAG",
-  vue: "Vue 3, Composition API, реактивность, Pinia и Nuxt",
+  vue: "Vue 3, Composition API, реактивность, Pinia и Vue Router",
+  nuxt: "Файловая маршрутизация, SSR, data fetching, Nitro и модули",
   nodejs: "Рантайм, асинхронность, HTTP-API, сервисы",
+  postgres: "SQL, моделирование данных, индексы, транзакции и PostgreSQL",
 };
 
 const sectionColors: Record<string, SectionMark> = {
@@ -36,10 +38,12 @@ const sectionColors: Record<string, SectionMark> = {
   "build-and-deployment": "slate",
   testing: "lime",
   performance: "orange",
-  security: "rose",
+  security: "red",
   ai: "fuchsia",
   vue: "green",
+  nuxt: "neutral",
   nodejs: "teal",
+  postgres: "orange",
 };
 
 export interface SectionStat {

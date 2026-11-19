@@ -1,6 +1,6 @@
 # Vue
 
-Раздел охватывает Vue 3 с упором на Composition API и `<script setup>`: SFC, реактивность, жизненный цикл компонентов, Vue Router, обработку ошибок, оптимизацию производительности и экосистему. Вторая половина раздела — Nuxt 3 как full-stack надстройка над Vue.
+Раздел охватывает Vue 3 с упором на Composition API и `<script setup>`: SFC, реактивность, жизненный цикл компонентов, Vue Router, обработку ошибок, оптимизацию производительности и экосистему. Nuxt 3 вынесен в отдельный соседний раздел.
 
 ## Начни с базы
 
@@ -29,21 +29,6 @@
 
 - **[Pinia](./pinia.md)** — официальный стейт-менеджер Vue 3: `defineStore`, геттеры, actions, плагины, `storeToRefs` и миграция с Vuex.
 - **[Vuex](./vuex.md)** — классический стейт-менеджер Vue: state, mutations, getters, actions, модули с namespaced и пошаговая миграция на Pinia.
-
-### Nuxt
-
-1. **[Основы Nuxt 3](./nuxt-fundamentals.md)** — создание проекта, структура папок, конфигурация `nuxt.config.ts`, dev/prod, отличия от Vue SPA.
-2. **[Файловая маршрутизация](./nuxt-file-based-routing.md)** — `pages/`, динамические и вложенные роуты, `routeParam`, 404, `useRoute`/`useRouter`.
-3. **[Режимы рендеринга](./nuxt-rendering-modes.md)** — SSR, SSG, CSR, ISR (`routeRules`, `prerender`, `ssr`), гидратация Vue-приложения.
-4. **[Data fetching](./nuxt-data-fetching.md)** — `useFetch`, `useAsyncData`, `$fetch`, обработка ошибок, отмена запросов, SSR-safe fetching.
-5. **[Состояние и SEO](./nuxt-state-and-seo.md)** — `useState`, Pinia в Nuxt, `useHead`, `useSeoMeta`, meta-теги и Open Graph.
-6. **[Composables и auto-imports](./nuxt-composables-and-auto-imports.md)** — встроенные composables (`useFetch`, `useAsyncData`, `useState`, `useHead`), создание своих, отличие от Vue composables.
-7. **[Серверная часть Nitro](./nuxt-nitro-server.md)** — `server/api/`, `server/routes/`, `server/middleware/`, обработчики, пресеты деплоя, кэширование.
-8. **[Жизненный цикл приложения](./nuxt-app-lifecycle.md)** — плагины, middleware, hooks (`app:created`, `page:start`, `page:finish`), порядок выполнения.
-9. **[Модули и экосистема](./nuxt-modules-ecosystem.md)** — официальные модули (`@nuxt/image`, `@nuxt/content`, `@nuxtjs/tailwindcss`), поиск и выбор сторонних, создание собственных через `defineNuxtModule`.
-10. **[Nuxt Layers](./nuxt-layers.md)** — переиспользование конфигурации, компонентов, composables и middleware между проектами.
-11. **[Обработка ошибок](./nuxt-error-handling.md)** — `error.vue`, `throwError`, `showError`, `vue:error` hook, логирование.
-12. **[Деплой Nuxt 3](../build-and-deployment/nuxt-deployment.md)** — стратегии сборки и развёртывания через Nitro.
 
 ## Не будет лишним
 

@@ -1,6 +1,6 @@
 ---
 title: "Модули и экосистема Nuxt 3"
-section: vue
+section: nuxt
 description: "Официальные и сторонние модули Nuxt 3, их подключение, создание собственных через defineNuxtModule, инъекция зависимостей и сравнение с Layers."
 order: 30
 tags: ["nuxt", "nuxt3", "modules", "ecosystem", "nuxt-kit", "defineNuxtModule", "plugins"]

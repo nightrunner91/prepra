@@ -1,6 +1,6 @@
 ---
 title: "Состояние и SEO в Nuxt 3: useState, Pinia, useHead и Open Graph"
-section: vue
+section: nuxt
 description: "Управление состоянием и SEO в Nuxt 3: useState, Pinia, useHead, useSeoMeta, meta-теги, Open Graph, SSR-сериализация и лучшие практики."
 order: 26
 tags: ["nuxt", "nuxt3", "vue", "useState", "pinia", "useHead", "useSeoMeta", "seo", "open-graph"]
@@ -201,7 +201,7 @@ const { items, totalPrice } = storeToRefs(cart);
 | SSR | Сериализуется автоматически | Сериализуется через `@pinia/nuxt` |
 | Когда использовать | Sidebar, тема, простые флаги | Корзина, аутентификация, сложный UI |
 
-Для глубокого изучения Pinia смотрите [отдельную статью](./pinia.md).
+Для глубокого изучения Pinia смотрите [отдельную статью](../vue/pinia.md).
 
 ---
 

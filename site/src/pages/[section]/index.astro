@@ -36,9 +36,12 @@ export async function getStaticPaths() {
       "Метрики, виртуализация, hydration, web workers, архитектура браузера",
     security: "XSS, CSRF, CSP, аутентификация, HTTP-заголовки, supply chain",
     ai: "Ментальная модель LLM, паттерны промптинга, агенты, RAG, streaming UI и безопасность",
-    vue: "Vue 3, Composition API, реактивность, Pinia, Vue Router, Nuxt 3 и серверный рендеринг",
+    vue: "Vue 3, Composition API, реактивность, Pinia, Vue Router и компоненты",
+    nuxt: "Файловая маршрутизация, SSR, data fetching, Nitro и модули",
     nodejs:
       "Рантайм, асинхронность, HTTP-API, данные, надёжность и архитектура Node.js-сервиса",
+    postgres:
+      "SQL, моделирование данных, индексы, транзакции и эксплуатация PostgreSQL",
   };
 
   const sections = sectionRegistry.map((s) => ({

@@ -1,6 +1,6 @@
 ---
 title: "Режимы рендеринга в Nuxt 3"
-section: vue
+section: nuxt
 description: "Разбираем режимы рендеринга в Nuxt 3: SSR, SSG, CSR, ISR, SWR, гибридный рендеринг через routeRules, prerender, ssr, гидратацию Vue-приложения и когда какой режим выбирать."
 order: 24
 tags: ["nuxt", "nuxt3", "vue", "ssr", "ssg", "csr", "isr", "swr", "routeRules", "prerender", "hydration"]

@@ -1,6 +1,6 @@
 ---
 title: "Жизненный цикл приложения в Nuxt 3"
-section: vue
+section: nuxt
 description: "Как устроен жизненный цикл Nuxt 3-приложения: плагины, route middleware, runtime hooks, порядок выполнения при старте, SSR и клиентской навигации, типичные ошибки и лучшие практики."
 order: 29
 tags: ["nuxt", "nuxt3", "vue", "lifecycle", "plugins", "middleware", "hooks", "ssr", "hydration"]

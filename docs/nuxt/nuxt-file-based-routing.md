@@ -1,6 +1,6 @@
 ---
 title: "Файловая маршрутизация в Nuxt 3"
-section: vue
+section: nuxt
 description: "Как устроен роутинг в Nuxt 3: файловая маршрутизация в pages/, динамические и вложенные роуты, catch-all и optional catch-all, Route Groups, приоритет маршрутов, 404, useRoute, useRouter, definePageMeta и программная навигация navigateTo."
 order: 23
 tags: ["nuxt", "nuxt3", "vue", "routing", "vue-router", "useRoute", "useRouter", "pages", "dynamic-routes", "route-groups", "optional-catch-all"]

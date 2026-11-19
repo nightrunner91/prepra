@@ -1,6 +1,6 @@
 ---
 title: "Data fetching в Nuxt: useFetch, useAsyncData и $fetch"
-section: vue
+section: nuxt
 description: "Пошаговый разбор data fetching в Nuxt: от проблемы двойного запроса до useFetch, useAsyncData, $fetch, ключей, ошибок, отмены запросов, cookies и кэширования."
 order: 25
 tags: ["data-fetching", "useFetch", "useAsyncData", "$fetch", "ssr", "caching"]
