@@ -1,7 +1,6 @@
 import {
   ArrowLeft,
   Books,
-  Shuffle,
   Target,
   Trophy,
 } from "@phosphor-icons/react";
@@ -12,7 +11,6 @@ import {
   TOPICS,
   computeStats,
   computeTopicStats,
-  getCodeTaskCount,
   getWeakTopics,
   pickTrainingTasks,
 } from "../../lib/practice";
@@ -28,6 +26,7 @@ import {
 import { TOPIC_MAP } from "../../lib/practice/topics";
 import type { Task, TopicId } from "../../lib/practice/types";
 import { TaskDetail } from "./TaskDetail";
+import { PracticeMasthead } from "./PracticeMasthead";
 import { TaskTile } from "./TaskTile";
 import type {
   DifficultyFilter,
@@ -51,6 +50,7 @@ const PAGE_SIZE = 30;
 export function PracticeApp() {
   const [progress, setProgress] = useState<PracticeProgress>(emptyProgress);
   const progressRef = useRef<PracticeProgress>(emptyProgress());
+  const [progressReady, setProgressReady] = useState(false);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [topic, setTopic] = useState<TopicFilter>("all");
@@ -91,6 +91,7 @@ export function PracticeApp() {
     const loaded = loadProgress();
     progressRef.current = loaded;
     setProgress(loaded);
+    setProgressReady(true);
 
     const params = new URLSearchParams(window.location.search);
 
@@ -149,7 +150,6 @@ export function PracticeApp() {
   const stats = useMemo(() => computeStats(progress), [progress]);
   const topicStats = useMemo(() => computeTopicStats(progress), [progress]);
   const weakTopics = useMemo(() => getWeakTopics(progress, 3), [progress]);
-  const codeTaskCount = useMemo(() => getCodeTaskCount(), []);
 
   const filteredTasks = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -357,42 +357,12 @@ export function PracticeApp() {
   return (
     <div>
       {(!detailTask || training?.finished) && (
-        <header className="page-head">
-          <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
-            <div className="min-w-0">
-              <h1 className="page-title">Практикум</h1>
-              <p className="page-lede">
-                Задачи на базовый JavaScript в формате «что выведет код» для всех грейдов.
-              </p>
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <span className="chip">
-                  Решено {stats.solved} / {stats.total}
-                </span>
-                <span className="chip">Точность {stats.accuracy}%</span>
-                <span className="chip">{codeTaskCount} задач с кодом</span>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={startTraining}
-                className="btn btn-primary btn-md"
-              >
-                <Target size={16} weight="bold" />
-                Тренировка на 10
-              </button>
-              <button
-                type="button"
-                onClick={openRandomTask}
-                className="btn btn-secondary btn-md"
-              >
-                <Shuffle size={16} weight="bold" />
-                Случайная
-              </button>
-            </div>
-          </div>
-        </header>
+        <PracticeMasthead
+          stats={stats}
+          ready={progressReady}
+          onStartTraining={startTraining}
+          onRandomTask={openRandomTask}
+        />
       )}
 
       {training?.finished ? (
