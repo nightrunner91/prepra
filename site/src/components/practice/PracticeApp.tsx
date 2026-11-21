@@ -10,21 +10,18 @@ import {
   TASK_MAP,
   TOPICS,
   computeStats,
-  computeTopicStats,
-  getWeakTopics,
   pickTrainingTasks,
 } from "../../lib/practice";
 import {
   emptyProgress,
   loadProgress,
   recordAttempt,
-  resetAllProgress,
   resetTaskProgress,
   saveProgress,
   type PracticeProgress,
 } from "../../lib/practice/storage";
 import { TOPIC_MAP } from "../../lib/practice/topics";
-import type { Task, TopicId } from "../../lib/practice/types";
+import type { Task } from "../../lib/practice/types";
 import { TaskDetail } from "./TaskDetail";
 import { PracticeMasthead } from "./PracticeMasthead";
 import { TaskTile } from "./TaskTile";
@@ -35,7 +32,6 @@ import type {
   TopicFilter,
 } from "./Toolbar";
 import { Toolbar } from "./Toolbar";
-import { TopicsProgress } from "./TopicsProgress";
 import { ProgressBar, StatusMark } from "./ui";
 
 interface TrainingState {
@@ -148,8 +144,6 @@ export function PracticeApp() {
   }, []);
 
   const stats = useMemo(() => computeStats(progress), [progress]);
-  const topicStats = useMemo(() => computeTopicStats(progress), [progress]);
-  const weakTopics = useMemo(() => getWeakTopics(progress, 3), [progress]);
 
   const filteredTasks = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -302,22 +296,6 @@ export function PracticeApp() {
     setKind("all");
     setStatusFilter("all");
     setSearch("");
-  }
-
-  function applyTopicFilter(next: TopicId) {
-    setTopic(next);
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }
-
-  function handleResetAll() {
-    if (
-      !window.confirm("Сбросить весь прогресс в практике? Это нельзя отменить.")
-    ) {
-      return;
-    }
-
-    commitProgress(resetAllProgress());
-    setTraining(null);
   }
 
   useEffect(() => {
@@ -567,15 +545,6 @@ export function PracticeApp() {
               )}
             </>
           )}
-
-          <TopicsProgress
-            topicStats={topicStats}
-            solved={stats.solved}
-            total={stats.total}
-            weakTopics={stats.attempted > 0 ? weakTopics : []}
-            onSelectTopic={applyTopicFilter}
-            onResetAll={handleResetAll}
-          />
         </>
       )}
     </div>
