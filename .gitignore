@@ -3,3 +3,6 @@
 
 # Agent temporary artifacts
 .tmp/
+
+# Iteration backlog generated from UX/UI audit
+UX_UI_AUDIT_TASKS.md
