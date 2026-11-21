@@ -7,6 +7,7 @@ import {
   clearActiveSession,
   countAnswers,
   loadActiveSession,
+  loadHistory,
   saveActiveSession,
 } from "../../lib/mock-interview/storage";
 import type {
@@ -36,52 +37,50 @@ function configFromPreset(preset: InterviewPreset): InterviewConfig {
   };
 }
 
-export function MockInterview() {
+interface MockInterviewProps {
+  questionCount: number;
+  sectionCount: number;
+}
+
+export function MockInterview({
+  questionCount,
+  sectionCount,
+}: MockInterviewProps) {
   const [phase, setPhase] = useState<Phase>("start");
   const [index, setIndex] = useState<MockInterviewQuestion[] | null>(null);
   const [indexLoading, setIndexLoading] = useState(false);
   const [indexError, setIndexError] = useState(false);
-  const [session, setSession] = useState<InterviewSession | null>(() => {
-    const stored = loadActiveSession();
-    if (stored && stored.currentIndex >= stored.questions.length) {
-      clearActiveSession();
-      return null;
-    }
-    return stored;
-  });
+  const [ready, setReady] = useState(false);
+  const [session, setSession] = useState<InterviewSession | null>(null);
+  const [history, setHistory] = useState<InterviewHistoryEntry[]>([]);
   const [lastResult, setLastResult] = useState<{
     entry: InterviewHistoryEntry;
     questions: MockInterviewQuestion[];
   } | null>(null);
   /** Прямой переход с главной (?preset=…): запускаем без экрана выбора. */
-  const [autoStartPending, setAutoStartPending] = useState(() => {
-    if (typeof window === "undefined" || session) return false;
-    const id = new URLSearchParams(window.location.search).get("preset");
-    return Boolean(id && PRESETS.some((preset) => preset.id === id));
-  });
+  const [autoStartPending, setAutoStartPending] = useState(false);
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [selectedStack, setSelectedStack] = useState<string>("");
   const [length, setLength] = useState(30);
   const [flipped, setFlipped] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState(0);
 
   const lockRef = useRef(false);
   const pendingRetakeRef = useRef<InterviewConfig | null>(null);
   const autoStartRef = useRef<InterviewConfig | null>(null);
-  const deepLinkRef = useRef(false);
 
   useEffect(() => {
-    if (deepLinkRef.current) return;
-    deepLinkRef.current = true;
+    const stored = loadActiveSession();
+    const active =
+      stored && stored.currentIndex < stored.questions.length ? stored : null;
+
+    if (stored && !active) clearActiveSession();
+    setSession(active);
+    setHistory(loadHistory());
 
     const params = new URLSearchParams(window.location.search);
-    const resumeRequested = params.get("resume") === "1";
-    if (
-      resumeRequested &&
-      session &&
-      session.currentIndex < session.questions.length
-    ) {
+    if (params.get("resume") === "1" && active) {
       setPhase("active");
     }
 
@@ -90,18 +89,19 @@ export function MockInterview() {
     const preset = presetId
       ? PRESETS.find((item) => item.id === presetId)
       : undefined;
-    if (preset && !session) {
+    if (preset && !active) {
       autoStartRef.current = configFromPreset(preset);
+      setAutoStartPending(true);
     }
 
-    if (params.has("preset") || params.has("custom") || params.has("resume")) {
+    if (params.has("preset") || params.has("resume")) {
       const url = new URL(window.location.href);
-      ["preset", "custom", "resume"].forEach((key) =>
-        url.searchParams.delete(key),
-      );
+      ["preset", "resume"].forEach((key) => url.searchParams.delete(key));
       window.history.replaceState({}, "", url);
     }
-  }, [session]);
+
+    setReady(true);
+  }, []);
 
   const startWithIndex = useCallback(
     (data: MockInterviewQuestion[], config: InterviewConfig) => {
@@ -132,7 +132,7 @@ export function MockInterview() {
   );
 
   useEffect(() => {
-    if (phase !== "start" || index || indexLoading) return;
+    if (!ready || phase !== "start" || index || indexLoading) return;
     setIndexLoading(true);
     setIndexError(false);
     fetch(INDEX_URL)
@@ -162,7 +162,7 @@ export function MockInterview() {
       })
       .finally(() => setIndexLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, index, indexLoading]);
+  }, [ready, phase, index, indexLoading]);
 
   useEffect(() => {
     if (phase !== "active") return;
@@ -198,6 +198,7 @@ export function MockInterview() {
       ),
     };
     appendHistory(entry);
+    setHistory(loadHistory());
     clearActiveSession();
     setSession(null);
     setLastResult({ entry, questions: final.questions });
@@ -295,6 +296,18 @@ export function MockInterview() {
     },
     [index, session, startWithIndex],
   );
+
+  const repeatLast = useCallback(() => {
+    const last = history[0];
+    if (!index || !last) return;
+    if (
+      session &&
+      !window.confirm("Начать новое интервью? Текущая сессия будет сброшена.")
+    ) {
+      return;
+    }
+    startWithIndex(index, last.config);
+  }, [history, index, session, startWithIndex]);
 
   const startCustom = useCallback(() => {
     if (!index || selectedSections.length === 0) return;
@@ -396,6 +409,10 @@ export function MockInterview() {
           loading={indexLoading}
           error={indexError}
           session={session}
+          history={history}
+          progressReady={ready}
+          questionCount={questionCount}
+          sectionCount={sectionCount}
           presets={PRESETS}
           sections={selectedSections}
           stack={selectedStack}
@@ -412,6 +429,7 @@ export function MockInterview() {
           onClearSelection={clearSelection}
           onStartCustom={startCustom}
           onStartPreset={startPreset}
+          onRepeatLast={repeatLast}
           onResume={resume}
           onReset={resetActive}
         />
@@ -437,6 +455,7 @@ export function MockInterview() {
           entry={lastResult.entry}
           questions={lastResult.questions}
           onRetake={retake}
+          onBack={() => setPhase("start")}
         />
       )}
     </div>

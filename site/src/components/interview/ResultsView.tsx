@@ -1,5 +1,6 @@
 import {
   ArrowCounterClockwise,
+  ArrowLeft,
   ArrowRight,
   House,
 } from "@phosphor-icons/react";
@@ -17,12 +18,14 @@ interface ResultsViewProps {
   entry: InterviewHistoryEntry;
   questions: MockInterviewQuestion[];
   onRetake: () => void;
+  onBack: () => void;
 }
 
 export function ResultsView({
   entry,
   questions,
   onRetake,
+  onBack,
 }: ResultsViewProps) {
   const counts = entry.counts;
   const answered = counts.good + counts.unsure + counts.failed;
@@ -225,6 +228,14 @@ export function ResultsView({
         >
           <ArrowCounterClockwise size={18} weight="bold" />
           Перепройти
+        </button>
+        <button
+          type="button"
+          onClick={onBack}
+          className="btn btn-secondary btn-lg flex-1"
+        >
+          <ArrowLeft size={18} weight="bold" />
+          К сетам
         </button>
         <a
           href={withBase("/")}

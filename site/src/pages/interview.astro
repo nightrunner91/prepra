@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { MockInterview } from "../components/interview/MockInterview";
+import { getMockInterviewSummary } from "../lib/mock-interview/build";
+
+const { questionCount, sectionCount } = await getMockInterviewSummary();
 ---
 
 <BaseLayout
@@ -9,6 +12,10 @@ import { MockInterview } from "../components/interview/MockInterview";
   theme="interview"
 >
   <div class="page-shell">
-    <MockInterview client:only="react" />
+    <MockInterview
+      client:load
+      questionCount={questionCount}
+      sectionCount={sectionCount}
+    />
   </div>
 </BaseLayout>

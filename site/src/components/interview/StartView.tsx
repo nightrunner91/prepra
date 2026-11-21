@@ -13,13 +13,15 @@ import {
   SquaresFour,
   TreeStructure,
 } from "@phosphor-icons/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ALL_SECTION_IDS } from "../../lib/mock-interview/presets";
 import type {
+  InterviewHistoryEntry,
   InterviewPreset,
   InterviewSession,
   MockInterviewQuestion,
 } from "../../lib/mock-interview/types";
+import { InterviewMasthead } from "./InterviewMasthead";
 import { questionWord, sectionWord } from "./shared";
 
 const LENGTH_OPTIONS = [20, 30, 50];
@@ -67,6 +69,10 @@ interface StartViewProps {
   loading: boolean;
   error: boolean;
   session: InterviewSession | null;
+  history: InterviewHistoryEntry[];
+  progressReady: boolean;
+  questionCount: number;
+  sectionCount: number;
   presets: InterviewPreset[];
   sections: string[];
   stack: string;
@@ -83,6 +89,7 @@ interface StartViewProps {
   onClearSelection: () => void;
   onStartCustom: () => void;
   onStartPreset: (preset: InterviewPreset) => void;
+  onRepeatLast: () => void;
   onResume: () => void;
   onReset: () => void;
 }
@@ -92,6 +99,10 @@ export function StartView({
   loading,
   error,
   session,
+  history,
+  progressReady,
+  questionCount,
+  sectionCount,
   presets,
   sections,
   stack,
@@ -108,66 +119,46 @@ export function StartView({
   onClearSelection,
   onStartCustom,
   onStartPreset,
+  onRepeatLast,
   onResume,
   onReset,
 }: StartViewProps) {
-  const [customOpen, setCustomOpen] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return new URLSearchParams(window.location.search).get("custom") === "1";
-  });
+  const [customOpen, setCustomOpen] = useState(false);
 
-  const ready = index !== null;
-  const questionPool = index
-    ? index.filter((question) => question.answer !== null).length
-    : 0;
-  const answered = session ? Object.keys(session.answers).length : 0;
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("custom") !== "1") return;
+
+    setCustomOpen(true);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("custom");
+    window.history.replaceState({}, "", url);
+  }, []);
+
+  const indexReady = index !== null;
   const stackLabel = stack
     ? (STACK_OPTIONS.find((item) => item.id === stack)?.label ?? stack)
     : "любой стек";
+  const defaultPreset =
+    presets.find((item) => item.id === "web-basics") ?? presets[0];
 
   return (
     <div className={customOpen ? "pb-28" : undefined}>
-      <header className="page-head">
-        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
-          <div className="min-w-0">
-            <h1 className="page-title">Мок-интервью</h1>
-            <p className="page-lede">
-              Прогон в формате технического собеседования с самопроверкой.
-            </p>
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <span className="chip">{presets.length} сетов</span>
-              <span className="chip">20–50 вопросов</span>
-              <span className="chip">
-                {ready
-                  ? `${questionPool} ${questionWord(questionPool)} в базе`
-                  : error
-                    ? "База недоступна"
-                    : "Загрузка базы…"}
-              </span>
-            </div>
-          </div>
-
-          {session && (
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={onResume}
-                className="btn btn-primary btn-md"
-              >
-                <Microphone size={16} weight="bold" />
-                Продолжить {answered}/{session.questions.length}
-              </button>
-              <button
-                type="button"
-                onClick={onReset}
-                className="btn btn-secondary btn-md"
-              >
-                Начать новое
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
+      <InterviewMasthead
+        presetCount={presets.length}
+        questionCount={index?.length ?? questionCount}
+        sectionCount={sectionCount}
+        ready={progressReady}
+        indexReady={indexReady}
+        session={session}
+        history={history}
+        onResume={onResume}
+        onReset={onReset}
+        onStartDefault={() => {
+          if (defaultPreset) onStartPreset(defaultPreset);
+        }}
+        onRepeatLast={onRepeatLast}
+      />
 
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
         <div>
@@ -319,7 +310,7 @@ export function StartView({
           className={`grid gap-5 md:grid-cols-2 xl:grid-cols-3 ${customOpen ? "mt-5" : ""}`}
           aria-busy={loading}
         >
-          {!ready &&
+          {!indexReady &&
             !error &&
             Array.from({ length: 6 }).map((_, index) => (
               <div
@@ -328,7 +319,7 @@ export function StartView({
               />
             ))}
 
-          {ready &&
+          {indexReady &&
             presets.map((preset, index) => {
               const PresetIcon = PRESET_ICONS[preset.id] ?? SquaresFour;
               const color = PRESET_COLORS[preset.id] ?? "blue";
@@ -337,7 +328,7 @@ export function StartView({
                 <button
                   key={preset.id}
                   type="button"
-                  disabled={!ready}
+                  disabled={!indexReady}
                   onClick={() => onStartPreset(preset)}
                   aria-label={`Начать интервью: ${preset.title}, ${preset.count} ${questionWord(preset.count)}`}
                   style={{ animationDelay: `${Math.min(index, 8) * 40}ms` }}

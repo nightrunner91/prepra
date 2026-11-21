@@ -74,7 +74,7 @@ export function PracticeMasthead({
 
   return (
     <header className="masthead">
-      <div className="masthead-grid">
+      <div className="masthead-grid lg:gap-4">
         <div className="masthead-main">
           <div className="min-w-0">
             <h1 className="page-title">Практикум</h1>
