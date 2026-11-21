@@ -1,4 +1,4 @@
-import { Shuffle, Target } from "@phosphor-icons/react";
+import { Barbell, Shuffle, Target } from "@phosphor-icons/react";
 import {
   TOPICS,
   getCodeTaskCount,
@@ -77,7 +77,12 @@ export function PracticeMasthead({
       <div className="masthead-grid lg:gap-4">
         <div className="masthead-main">
           <div className="min-w-0">
-            <h1 className="page-title">Практика</h1>
+            <div className="page-head-row">
+              <span className="page-title-mark" aria-hidden="true">
+                <Barbell size={22} weight="bold" className="size-5 lg:size-6" />
+              </span>
+              <h1 className="page-title">Практика</h1>
+            </div>
             <p className="page-lede">
               Задачи на базовый JavaScript в формате «что выведет код» для всех
               грейдов.

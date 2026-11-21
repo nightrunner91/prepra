@@ -1,6 +1,10 @@
 ---
+import type { Icon } from "@phosphor-icons/react";
+
 interface Props {
   title: string;
+  /** Знак раздела: иконка в штампе перед заголовком. */
+  icon?: Icon;
   lede?: string;
   /** Метрики каталога под заголовком раздела. */
   stats?: Array<{ value: number; label: string }>;
@@ -9,6 +13,7 @@ interface Props {
 
 const {
   title,
+  icon: Icon,
   lede,
   stats = [],
   class: className = "",
@@ -25,7 +30,20 @@ const hasStats = stats.length > 0;
       <div class:list={[hasAside ? "masthead-main" : "min-w-0"]}>
         <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div class="min-w-0">
-            <h1 class="page-title">{title}</h1>
+            <div class="page-head-row">
+              {
+                Icon && (
+                  <span class="page-title-mark" aria-hidden="true">
+                    <Icon
+                      size={22}
+                      weight="bold"
+                      className="size-5 lg:size-6"
+                    />
+                  </span>
+                )
+              }
+              <h1 class="page-title">{title}</h1>
+            </div>
             {lede && <p class="page-lede">{lede}</p>}
           </div>
 

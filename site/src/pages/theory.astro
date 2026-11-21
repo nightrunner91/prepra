@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { BookOpen } from "@phosphor-icons/react";
 import SectionShell from "../components/layout/SectionShell.astro";
 import SectionsGrid from "../components/content/SectionsGrid.astro";
 import SectionProgress from "../components/content/SectionProgress.astro";
@@ -35,6 +36,7 @@ const stats = [
 >
   <SectionShell
     title="Теория"
+    icon={BookOpen}
     lede="Теоретическая база разработки: от основ Javascript до системного дизайна."
     stats={stats}
   >

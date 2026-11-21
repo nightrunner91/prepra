@@ -433,6 +433,16 @@
     @apply font-mono text-3xl font-extrabold uppercase leading-tight tracking-tight text-text sm:text-4xl lg:text-6xl;
   }
 
+  /* Заголовок раздела вместе со своим знаком: иконка-штамп стоит
+     перед текстом, в одну строку с ним. */
+  .page-head-row {
+    @apply flex items-center gap-3 lg:gap-4;
+  }
+
+  .page-title-mark {
+    @apply inline-flex size-10 shrink-0 items-center justify-center border-[3px] border-border bg-accent text-accent-ink lg:size-12;
+  }
+
   .page-lede {
     @apply mt-3 max-w-3xl text-sm font-bold uppercase tracking-wide text-text-secondary;
   }

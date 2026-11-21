@@ -172,7 +172,12 @@ export function InterviewMasthead({
       <div className="masthead-grid lg:gap-5">
         <div className="masthead-main">
           <div className="min-w-0">
-            <h1 className="page-title">Интервью</h1>
+            <div className="page-head-row">
+              <span className="page-title-mark" aria-hidden="true">
+                <Microphone size={22} weight="bold" className="size-5 lg:size-6" />
+              </span>
+              <h1 className="page-title">Интервью</h1>
+            </div>
             <p className="page-lede">
               Прогон в формате технического собеседования с самопроверкой.
             </p>
