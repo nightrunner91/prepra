@@ -378,7 +378,7 @@ export function StartView({
           aria-label="Запуск своего сета"
           className="fixed inset-x-0 bottom-0 z-40 border-t-[3px] border-border bg-canvas"
         >
-          <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-10" style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
+          <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-3 px-6 py-3 lg:px-12" style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
             <div className="min-w-0 eyebrow text-text-secondary">
               {sections.length > 0
                 ? `${sections.length} ${sectionWord(sections.length)}`
