@@ -20,6 +20,9 @@ import {
   TopicBadge,
 } from "./ui";
 
+/** Окно, в котором повторный клик по навигации считается двойным. */
+const NAV_LOCK_MS = 300;
+
 interface TaskDetailProps {
   task: Task;
   status?: TaskProgress;
@@ -45,6 +48,16 @@ export function TaskDetail({
   const [revealed, setRevealed] = useState(false);
   const [answered, setAnswered] = useState(false);
   const [attempt, setAttempt] = useState(0);
+  /**
+   * Кнопки навигации блокируются на короткое время после показа задачи, чтобы
+   * двойной клик по «Следующая» не перескочил через вопрос.
+   */
+  const [navReady, setNavReady] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setNavReady(true), NAV_LOCK_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const isChoice = task.kind === "choice";
   const isCorrect = task.kind === "choice" && picked === task.answer;
@@ -62,11 +75,21 @@ export function TaskDetail({
     onResult(solved);
   }
 
-  function handleReset() {
+  function resetAnswerState() {
     setPicked(null);
     setRevealed(false);
     setAnswered(false);
     setAttempt((value) => value + 1);
+  }
+
+  /** Повторная попытка: сбрасываем только локальный ответ, прогресс сохраняем. */
+  function handleRetry() {
+    resetAnswerState();
+  }
+
+  /** Полный сброс задачи: локальный ответ + сохранённый прогресс. */
+  function handleResetProgress() {
+    resetAnswerState();
     onResetTask();
   }
 
@@ -118,7 +141,7 @@ export function TaskDetail({
           </h2>
           <button
             type="button"
-            onClick={handleReset}
+            onClick={handleResetProgress}
             className="inline-flex shrink-0 items-center gap-1 border-2 border-border bg-canvas px-2 py-1 eyebrow text-text-secondary transition-colors hover:bg-surface-alt hover:text-text"
             title="Сбросить прогресс по этой задаче"
           >
@@ -218,7 +241,7 @@ export function TaskDetail({
                 {!isCorrect && (
                   <button
                     type="button"
-                    onClick={handleReset}
+                    onClick={handleRetry}
                     className="mt-3 block border-2 border-border bg-surface px-3 py-1.5 eyebrow text-text transition-colors hover:bg-surface-alt"
                   >
                     Попробовать ещё раз
@@ -240,7 +263,8 @@ export function TaskDetail({
         <button
           type="button"
           onClick={onPrev}
-          className="btn btn-secondary btn-sm"
+          disabled={!navReady}
+          className="btn btn-secondary btn-sm disabled:cursor-default disabled:opacity-60"
         >
           <ArrowLeft size={14} weight="bold" />
           Предыдущая
@@ -249,7 +273,8 @@ export function TaskDetail({
         <button
           type="button"
           onClick={onRandom}
-          className="btn btn-secondary btn-sm"
+          disabled={!navReady}
+          className="btn btn-secondary btn-sm disabled:cursor-default disabled:opacity-60"
         >
           <Shuffle size={14} weight="bold" />
           Случайная
@@ -264,7 +289,8 @@ export function TaskDetail({
           <button
             type="button"
             onClick={onNext}
-            className="btn btn-primary btn-sm"
+            disabled={!navReady}
+            className="btn btn-primary btn-sm disabled:cursor-default disabled:opacity-60"
           >
             {training ? (answered ? "Следующая" : "Пропустить") : "Следующая"}
             <ArrowRight size={14} weight="bold" />

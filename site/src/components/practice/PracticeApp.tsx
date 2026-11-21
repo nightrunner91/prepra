@@ -56,6 +56,12 @@ export function PracticeApp() {
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [training, setTraining] = useState<TrainingState | null>(null);
+  const trainingRef = useRef<TrainingState | null>(null);
+
+  const commitTraining = useCallback((next: TrainingState | null) => {
+    trainingRef.current = next;
+    setTraining(next);
+  }, []);
 
   /** Позиция списка, к которой возвращаемся после закрытия задачи. */
   const listScrollRef = useRef(0);
@@ -191,17 +197,16 @@ export function PracticeApp() {
     (taskId: string, solved: boolean) => {
       commitProgress(recordAttempt(progressRef.current, taskId, solved));
 
-      setTraining((current) => {
-        if (!current || current.finished) return current;
+      const current = trainingRef.current;
+      if (!current || current.finished) return;
 
-        const previous = current.results[taskId] === true;
-        return {
-          ...current,
-          results: { ...current.results, [taskId]: previous || solved },
-        };
+      const previous = current.results[taskId] === true;
+      commitTraining({
+        ...current,
+        results: { ...current.results, [taskId]: previous || solved },
       });
     },
-    [commitProgress],
+    [commitProgress, commitTraining],
   );
 
   const handleResetTask = useCallback(
@@ -217,12 +222,16 @@ export function PracticeApp() {
 
   function openTask(id: string) {
     rememberListScroll();
-    if (training && !training.finished) setTraining(null);
+    if (trainingRef.current && !trainingRef.current.finished) {
+      commitTraining(null);
+    }
     selectTask(id, "push");
   }
 
   function closeTask() {
-    if (training && !training.finished) setTraining(null);
+    if (trainingRef.current && !trainingRef.current.finished) {
+      commitTraining(null);
+    }
     selectTask(null, "replace");
   }
 
@@ -232,7 +241,7 @@ export function PracticeApp() {
 
     rememberListScroll();
 
-    setTraining({
+    commitTraining({
       ids: tasks.map((task) => task.id),
       index: 0,
       results: {},
@@ -248,16 +257,17 @@ export function PracticeApp() {
   }
 
   function handleTrainingNext() {
-    if (!training) return;
+    const current = trainingRef.current;
+    if (!current || current.finished) return;
 
-    const nextIndex = training.index + 1;
-    if (nextIndex >= training.ids.length) {
-      setTraining({ ...training, finished: true });
+    const nextIndex = current.index + 1;
+    if (nextIndex >= current.ids.length) {
+      commitTraining({ ...current, finished: true });
       return;
     }
 
-    setTraining({ ...training, index: nextIndex });
-    selectTask(training.ids[nextIndex], "replace");
+    commitTraining({ ...current, index: nextIndex });
+    selectTask(current.ids[nextIndex], "replace");
   }
 
   function openRandomTask() {
@@ -267,27 +277,32 @@ export function PracticeApp() {
     const task = source[Math.floor(Math.random() * source.length)];
     if (!task) return;
     rememberListScroll();
-    if (training && !training.finished) setTraining(null);
+    if (trainingRef.current && !trainingRef.current.finished) {
+      commitTraining(null);
+    }
     selectTask(task.id, "replace");
   }
 
   function moveInList(direction: number) {
-    if (filteredTasks.length === 0) return;
-
+    // Если фильтр больше не показывает текущую задачу (например, её только что
+    // решили), переходим по полному списку, а не остаёмся на месте.
+    const pool = filteredTasks.length > 0 ? filteredTasks : TASKS;
     const currentId =
-      training && !training.finished
-        ? training.ids[training.index]
+      trainingRef.current && !trainingRef.current.finished
+        ? trainingRef.current.ids[trainingRef.current.index]
         : selectedId;
-    const index = filteredTasks.findIndex((task) => task.id === currentId);
+    const index = pool.findIndex((task) => task.id === currentId);
 
     if (index === -1) {
-      selectTask(filteredTasks[0].id, "replace");
+      selectTask(
+        direction > 0 ? pool[0].id : pool[pool.length - 1].id,
+        "replace",
+      );
       return;
     }
 
-    const nextIndex =
-      (index + direction + filteredTasks.length) % filteredTasks.length;
-    selectTask(filteredTasks[nextIndex].id, "replace");
+    const nextIndex = (index + direction + pool.length) % pool.length;
+    selectTask(pool[nextIndex].id, "replace");
   }
 
   function resetFilters() {
@@ -385,7 +400,7 @@ export function PracticeApp() {
                           key={id}
                           type="button"
                           onClick={() => {
-                            setTraining(null);
+                            commitTraining(null);
                             selectTask(id, "replace");
                           }}
                           className="flex items-center gap-2 border-2 border-border bg-surface px-3 py-2 text-left eyebrow tracking-wide text-text transition-colors hover:bg-surface-alt"
@@ -444,7 +459,7 @@ export function PracticeApp() {
               </span>
               <button
                 type="button"
-                onClick={() => setTraining(null)}
+                onClick={() => commitTraining(null)}
                 className="ml-auto eyebrow text-text-secondary underline decoration-2 underline-offset-2 transition-colors hover:text-text"
               >
                 Выйти
@@ -469,7 +484,9 @@ export function PracticeApp() {
                 : () => moveInList(1)
             }
             onPrev={() => {
-              if (training && !training.finished) setTraining(null);
+              if (training && !training.finished) {
+                commitTraining(null);
+              }
               moveInList(-1);
             }}
             onRandom={openRandomTask}
