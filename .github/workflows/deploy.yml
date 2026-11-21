@@ -41,6 +41,9 @@ jobs:
       - name: Check styles
         run: npm run check:styles
 
+      - name: Run tests
+        run: npm run test
+
       - name: Build with Astro
         run: |
           rm -rf .astro node_modules/.astro
