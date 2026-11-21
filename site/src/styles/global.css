@@ -21,6 +21,13 @@
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
+  /* Переход между страницами: вход дольше выхода, чтобы новый контент
+     успевал «осесть», а старая страница не задерживала навигацию. */
+  --duration-page-in: 260ms;
+  --duration-page-out: 160ms;
+  --distance-page: 14px;
+  --distance-page-out: -7px;
+
   /* Единая высота шапки. От неё считают отступы сайдбары и прогресс чтения. */
   --header-h: 3.75rem;
   --header-offset: calc(var(--header-h) + 3px);
@@ -708,6 +715,76 @@
     transform: none;
     transition: none;
     animation: none;
+  }
+}
+
+/* ── Переходы между страницами ───────────────────────────────
+   Навигация остаётся документной: браузер загружает новую страницу,
+   а View Transitions API только сшивает кадры. Поэтому фокус и
+   объявление заголовка работают как при обычном переходе, скрипты
+   не нужно переинициализировать, а без поддержки API ссылки
+   открываются мгновенно.
+
+   Характер — «новый лист бумаги»: контент поднимается снизу, шапка
+   стоит на месте. Направление всегда вертикальное: в документации
+   глубина чтения важнее направления «вперёд/назад», а смещение
+   вверх-вниз одинаково читается при любом переходе. */
+@view-transition {
+  navigation: auto;
+}
+
+/* Шапка — общий каркас страниц: снапшоты совпадают, морфинг не нужен. */
+#site-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(site-header),
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: page-out var(--duration-page-out) var(--ease-in-out) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: page-in var(--duration-page-in) var(--ease-out) both;
+  }
+}
+
+/* При reduced motion оставляем переход, но без движения и затухания:
+   страница меняется сразу, без промежуточных кадров. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(root),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+@keyframes page-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(var(--distance-page-out));
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--distance-page));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 

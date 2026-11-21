@@ -4,6 +4,10 @@ This directory contains the Astro application that powers the Prepra learning pl
 
 For full project documentation, setup instructions, and contribution guidelines, see the [README](../README.md).
 
+## Motion
+
+Правила анимации и перехода между страницами — в [MOTION.md](./MOTION.md).
+
 ## Quick commands
 
 ```bash
