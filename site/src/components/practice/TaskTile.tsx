@@ -10,11 +10,18 @@ interface TaskTileProps {
 }
 
 export function TaskTile({ task, number, status, onOpen }: TaskTileProps) {
+  const statusLabel =
+    status === "solved"
+      ? "решена"
+      : status === "failed"
+        ? "с ошибками"
+        : "не решена";
+
   return (
     <button
       type="button"
       onClick={onOpen}
-      aria-label={`Открыть задачу ${number}: ${task.title}`}
+      aria-label={`Открыть задачу ${number}: ${task.title}. ${statusLabel}`}
       className="tile card-hover group p-4"
     >
       <span className="flex items-start justify-between gap-2">

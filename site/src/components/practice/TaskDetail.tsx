@@ -106,7 +106,7 @@ export function TaskDetail({
           {status && (
             <span className="inline-flex items-center gap-1 border-2 border-border bg-canvas px-2 py-0.5 eyebrow text-text-secondary">
               <StatusMark status={status.status} size={13} />
-              {status.status === "solved" ? "Решено" : "Была ошибка"}
+              {status.status === "solved" ? "Решено" : "Были ошибки"}
               {status.attempts > 1 ? ` · ${status.attempts}` : ""}
             </span>
           )}
@@ -149,13 +149,13 @@ export function TaskDetail({
                     type="button"
                     onClick={() => handlePick(index)}
                     disabled={revealed}
-                    className={`flex h-full w-full items-start gap-3 border-2 border-border p-3 text-left transition-all ${
+                    className={`flex h-full w-full items-start gap-3 border-2 border-border p-3 text-left transition-all disabled:cursor-default disabled:opacity-100 ${
                       correct
                         ? "bg-positive-bg"
                         : wrong
                           ? "bg-pale-red-bg"
                           : revealed
-                            ? "bg-surface opacity-55"
+                            ? "bg-surface-alt"
                             : "bg-surface hover:translate-x-[-1px] hover:translate-y-[-1px] hover:bg-surface-alt hover:shadow-[3px_3px_0px_var(--color-border)]"
                     }`}
                   >

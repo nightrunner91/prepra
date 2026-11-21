@@ -582,9 +582,32 @@
     @apply inline-block transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-border)] focus-visible:translate-x-0 focus-visible:translate-y-0 focus-visible:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-strong active:translate-x-0 active:translate-y-0 active:shadow-none;
   }
 
-  /* Квадратная иконочная кнопка. Общая для шапки, темы и закрытия шторки. */
+  /* Квадратная иконочная кнопка. Общая для шапки, темы и фильтров. */
   .icon-btn {
-    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center border-2 border-border bg-surface text-text-secondary transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong active:translate-y-px;
+    @apply inline-flex h-10 w-10 shrink-0 items-center justify-center border-2 border-border bg-surface text-text-secondary transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong active:bg-text-secondary disabled:pointer-events-none disabled:opacity-40;
+  }
+
+  /* Контрастный вариант кнопки фильтров: заливка — инверсия темы,
+     поэтому светлая иконка читается в обеих темах. Открытое
+     состояние переключается на акцент, чтобы включённый фильтр
+     был очевиден. */
+  .icon-btn-solid {
+    @apply bg-text text-canvas hover:bg-text-secondary;
+  }
+
+  .icon-btn-solid[aria-expanded="true"] {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+
+  .icon-btn-solid[aria-expanded="true"]:hover,
+  .icon-btn-solid[aria-expanded="true"]:active {
+    background-color: var(--color-accent-hover);
+  }
+
+  /* Счётчик активных фильтров на углу кнопки. */
+  .filter-count {
+    @apply absolute -left-1.5 -top-1.5 inline-flex h-4 min-w-4 items-center justify-center border-2 border-border bg-accent px-0.5 font-mono text-xs font-bold leading-none text-accent-ink;
   }
 
   .btn-sm {
@@ -604,9 +627,17 @@
     @apply h-10 w-full min-w-0 border-2 border-border bg-canvas px-3 font-mono text-xs font-medium text-text outline-none transition-colors placeholder:text-text-tertiary focus:border-accent-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong;
   }
 
-  /* Селект со своей стрелкой: нативная прилипает к краю и мелкая. */
-  .field-select {
-    @apply appearance-none pr-10;
+  /* Меню кастомного селекта: та же бумага и рамка, что у полей,
+     плюс офсетная тень — системное меню так не оформить. */
+  .dropdown-menu {
+    box-shadow: 4px 4px 0 var(--color-border);
+    animation: dropdown-in 140ms var(--ease-out);
+    transform-origin: top center;
+  }
+
+  .dropdown-menu[data-placement="top"] {
+    transform-origin: bottom center;
+    animation-name: dropdown-in-up;
   }
 
   .badge-hover-red:hover {
@@ -720,6 +751,30 @@
   }
 }
 
+/* Меню раскрывается коротким сдвигом от триггера: заметно, но не
+   задерживает выбор. При reduced motion остаётся мгновенное появление. */
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dropdown-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Маркер раздела: цвет приходит из утилит bg-pale-*, при наведении —
    акцент текущего раздела (в Теории это зелёный), а не общий лайм:
    иконка подсвечивается цветом своего раздела. Реагируем на ховер всей
@@ -747,6 +802,10 @@
     opacity: 1;
     transform: none;
     transition: none;
+    animation: none;
+  }
+
+  .dropdown-menu {
     animation: none;
   }
 }
