@@ -3,23 +3,36 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /**
- * Старые URL разделов, которых больше нет: nuxt слит в vue,
- * state-management распущен по react / vue / html-css.
+ * Старые URL разделов, которых больше нет: nuxt был слит в vue,
+ * а затем снова выделен в отдельный раздел, state-management
+ * распущен по react / vue / html-css.
  * GitHub Pages умеет только статику, поэтому на каждый старый адрес
  * генерируется meta-refresh заглушка с canonical.
  */
 const REDIRECTS = {
-  'nuxt/app-lifecycle': 'vue/nuxt-app-lifecycle',
-  'nuxt/composables-and-auto-imports': 'vue/nuxt-composables-and-auto-imports',
-  'nuxt/data-fetching': 'vue/nuxt-data-fetching',
-  'nuxt/error-handling': 'vue/nuxt-error-handling',
-  'nuxt/file-based-routing': 'vue/nuxt-file-based-routing',
-  'nuxt/fundamentals': 'vue/nuxt-fundamentals',
-  'nuxt/layers': 'vue/nuxt-layers',
-  'nuxt/modules-ecosystem': 'vue/nuxt-modules-ecosystem',
-  'nuxt/nitro-server': 'vue/nuxt-nitro-server',
-  'nuxt/rendering-modes': 'vue/nuxt-rendering-modes',
-  'nuxt/state-and-seo': 'vue/nuxt-state-and-seo',
+  'nuxt/app-lifecycle': 'nuxt/nuxt-app-lifecycle',
+  'nuxt/composables-and-auto-imports': 'nuxt/nuxt-composables-and-auto-imports',
+  'nuxt/data-fetching': 'nuxt/nuxt-data-fetching',
+  'nuxt/error-handling': 'nuxt/nuxt-error-handling',
+  'nuxt/file-based-routing': 'nuxt/nuxt-file-based-routing',
+  'nuxt/fundamentals': 'nuxt/nuxt-fundamentals',
+  'nuxt/layers': 'nuxt/nuxt-layers',
+  'nuxt/modules-ecosystem': 'nuxt/nuxt-modules-ecosystem',
+  'nuxt/nitro-server': 'nuxt/nuxt-nitro-server',
+  'nuxt/rendering-modes': 'nuxt/nuxt-rendering-modes',
+  'nuxt/state-and-seo': 'nuxt/nuxt-state-and-seo',
+  'vue/nuxt-app-lifecycle': 'nuxt/nuxt-app-lifecycle',
+  'vue/nuxt-composables-and-auto-imports':
+    'nuxt/nuxt-composables-and-auto-imports',
+  'vue/nuxt-data-fetching': 'nuxt/nuxt-data-fetching',
+  'vue/nuxt-error-handling': 'nuxt/nuxt-error-handling',
+  'vue/nuxt-file-based-routing': 'nuxt/nuxt-file-based-routing',
+  'vue/nuxt-fundamentals': 'nuxt/nuxt-fundamentals',
+  'vue/nuxt-layers': 'nuxt/nuxt-layers',
+  'vue/nuxt-modules-ecosystem': 'nuxt/nuxt-modules-ecosystem',
+  'vue/nuxt-nitro-server': 'nuxt/nuxt-nitro-server',
+  'vue/nuxt-rendering-modes': 'nuxt/nuxt-rendering-modes',
+  'vue/nuxt-state-and-seo': 'nuxt/nuxt-state-and-seo',
   'state-management/client-storage': 'html-css/client-storage',
   'state-management/pinia': 'vue/pinia',
   'state-management/redux': 'react/redux',
