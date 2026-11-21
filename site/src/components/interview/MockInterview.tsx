@@ -19,11 +19,19 @@ import type {
   MockInterviewQuestion,
 } from "../../lib/mock-interview/types";
 import { withBase } from "../../lib/urls";
+import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { ActiveView } from "./ActiveView";
 import { ResultsView } from "./ResultsView";
 import { StartView } from "./StartView";
 
 type Phase = "start" | "active" | "results";
+
+interface ConfirmRequest {
+  title: string;
+  description: string;
+  confirmLabel: string;
+  action: () => void;
+}
 
 const INDEX_URL = withBase("/mock-interview-index.json");
 
@@ -65,6 +73,9 @@ export function MockInterview({
   const [flipped, setFlipped] = useState(false);
   const [busy, setBusy] = useState(false);
   const [now, setNow] = useState(0);
+  const [confirmRequest, setConfirmRequest] = useState<ConfirmRequest | null>(
+    null,
+  );
 
   const lockRef = useRef(false);
   const pendingRetakeRef = useRef<InterviewConfig | null>(null);
@@ -255,19 +266,37 @@ export function MockInterview({
     setPhase("start");
   }, []);
 
+  const confirmNewInterview = useCallback((action: () => void) => {
+    setConfirmRequest({
+      title: "Начать новое интервью?",
+      description:
+        "Текущее интервью и все его ответы будут удалены. Новое интервью начнётся сразу.",
+      confirmLabel: "Начать новое",
+      action,
+    });
+  }, []);
+
   const resetActive = useCallback(() => {
-    if (
-      session &&
-      !window.confirm(
-        "Начать новое интервью? Текущая сессия будет сброшена.",
-      )
-    ) {
+    if (!session) {
+      clearActiveSession();
+      setSession(null);
+      setPhase("start");
+      setFlipped(false);
       return;
     }
-    clearActiveSession();
-    setSession(null);
-    setPhase("start");
-    setFlipped(false);
+
+    setConfirmRequest({
+      title: "Сбросить интервью?",
+      description:
+        "Текущее интервью и все его ответы будут удалены. Это действие нельзя отменить.",
+      confirmLabel: "Сбросить",
+      action: () => {
+        clearActiveSession();
+        setSession(null);
+        setPhase("start");
+        setFlipped(false);
+      },
+    });
   }, [session]);
 
   const retake = useCallback(() => {
@@ -284,47 +313,54 @@ export function MockInterview({
   const startPreset = useCallback(
     (preset: InterviewPreset) => {
       if (!index) return;
-      if (
-        session &&
-        !window.confirm(
-          "Начать новое интервью? Текущая сессия будет сброшена.",
-        )
-      ) {
+      const begin = () => startWithIndex(index, configFromPreset(preset));
+
+      if (session) {
+        confirmNewInterview(begin);
         return;
       }
-      startWithIndex(index, configFromPreset(preset));
+      begin();
     },
-    [index, session, startWithIndex],
+    [index, session, startWithIndex, confirmNewInterview],
   );
 
   const repeatLast = useCallback(() => {
     const last = history[0];
     if (!index || !last) return;
-    if (
-      session &&
-      !window.confirm("Начать новое интервью? Текущая сессия будет сброшена.")
-    ) {
+    const begin = () => startWithIndex(index, last.config);
+
+    if (session) {
+      confirmNewInterview(begin);
       return;
     }
-    startWithIndex(index, last.config);
-  }, [history, index, session, startWithIndex]);
+    begin();
+  }, [history, index, session, startWithIndex, confirmNewInterview]);
 
   const startCustom = useCallback(() => {
     if (!index || selectedSections.length === 0) return;
-    if (
-      session &&
-      !window.confirm("Начать новое интервью? Текущая сессия будет сброшена.")
-    ) {
+    const begin = () =>
+      startWithIndex(index, {
+        presetId: null,
+        sections: selectedSections,
+        stacks: selectedStack ? [selectedStack] : undefined,
+        count: length,
+        mainSection: null,
+      });
+
+    if (session) {
+      confirmNewInterview(begin);
       return;
     }
-    startWithIndex(index, {
-      presetId: null,
-      sections: selectedSections,
-      stacks: selectedStack ? [selectedStack] : undefined,
-      count: length,
-      mainSection: null,
-    });
-  }, [index, selectedSections, selectedStack, length, session, startWithIndex]);
+    begin();
+  }, [
+    index,
+    selectedSections,
+    selectedStack,
+    length,
+    session,
+    startWithIndex,
+    confirmNewInterview,
+  ]);
 
   const toggleSection = useCallback((id: string) => {
     setSelectedSections((previous) =>
@@ -458,6 +494,19 @@ export function MockInterview({
           onBack={() => setPhase("start")}
         />
       )}
+
+      <ConfirmDialog
+        open={confirmRequest !== null}
+        title={confirmRequest?.title ?? ""}
+        description={confirmRequest?.description ?? ""}
+        confirmLabel={confirmRequest?.confirmLabel ?? "Сбросить"}
+        onCancel={() => setConfirmRequest(null)}
+        onConfirm={() => {
+          const action = confirmRequest?.action;
+          setConfirmRequest(null);
+          action?.();
+        }}
+      />
     </div>
   );
 }

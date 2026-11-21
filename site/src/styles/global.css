@@ -576,6 +576,11 @@
     @apply bg-surface-alt text-text-secondary hover:bg-text hover:text-canvas;
   }
 
+  /* Деструктивное действие: красная плашка отделяет его от отмены. */
+  .btn-danger {
+    @apply bg-pale-red-bg text-pale-red-text hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-pale-red-bg-hover hover:text-pale-red-text-hover hover:shadow-[4px_4px_0px_var(--color-border)];
+  }
+
   /* Логотип-ссылка: бруталистский подъём при наведении. На фокусе
      и нажатии возвращается на исходную позицию. */
   .logo-link {
