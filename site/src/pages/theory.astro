@@ -2,17 +2,30 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionShell from "../components/layout/SectionShell.astro";
 import SectionsGrid from "../components/content/SectionsGrid.astro";
-import ProgressBlock from "../components/content/ProgressBlock.astro";
+import SectionProgress from "../components/content/SectionProgress.astro";
 import { plural } from "../lib/plural";
 import { getSectionStats, getTotals } from "../lib/section-overview";
+import { getTheoryIndex } from "../lib/theory-index";
+import { withBase } from "../lib/urls";
 
 const sectionStats = await getSectionStats();
 const { articleCount, questionCount, sectionCount } = getTotals(sectionStats);
+const theoryIndex = await getTheoryIndex();
+const firstArticleHref = theoryIndex[0]?.href ?? withBase("/javascript");
 
-const chips = [
-  `${sectionCount} ${plural(sectionCount, "раздел", "раздела", "разделов")}`,
-  `${articleCount} ${plural(articleCount, "статья", "статьи", "статей")}`,
-  `${questionCount} ${plural(questionCount, "вопрос", "вопроса", "вопросов")}`,
+const stats = [
+  {
+    value: sectionCount,
+    label: plural(sectionCount, "раздел", "раздела", "разделов"),
+  },
+  {
+    value: articleCount,
+    label: plural(articleCount, "статья", "статьи", "статей"),
+  },
+  {
+    value: questionCount,
+    label: plural(questionCount, "вопрос", "вопроса", "вопросов"),
+  },
 ];
 ---
 
@@ -23,15 +36,18 @@ const chips = [
   <SectionShell
     title="Теория"
     lede="Теоретическая база разработки: от основ Javascript до системного дизайна."
-    chips={chips}
+    stats={stats}
   >
-    <SectionsGrid sections={sectionStats} />
-
-    <ProgressBlock
+    <SectionProgress
+      slot="aside"
       totalArticles={articleCount}
       totalQuestions={questionCount}
-      sectionsCount={sectionCount}
+      firstArticleHref={firstArticleHref}
+      indexUrl={withBase("/theory-index.json")}
+      practiceHref={withBase("/practice")}
     />
+
+    <SectionsGrid sections={sectionStats} />
   </SectionShell>
 </BaseLayout>
 

@@ -1,0 +1,219 @@
+---
+import { ArrowRight } from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+
+interface Props {
+  totalArticles: number;
+  totalQuestions: number;
+  firstArticleHref: string;
+  indexUrl?: string;
+  practiceHref?: string;
+}
+
+const {
+  totalArticles,
+  totalQuestions,
+  firstArticleHref,
+  indexUrl = withBase("/theory-index.json"),
+  practiceHref = withBase("/practice"),
+} = Astro.props;
+---
+
+<div
+  class="min-w-0 w-full"
+  data-theory-progress
+  data-total-articles={totalArticles}
+  data-total-questions={totalQuestions}
+  data-index-url={indexUrl}
+  data-practice-url={practiceHref}
+>
+  <div class="flex items-start justify-between gap-4">
+    <div class="min-w-0">
+      <h2 id="theory-progress-title" class="eyebrow text-text-tertiary">
+        Твой прогресс
+      </h2>
+      <p
+        data-progress-status
+        class="mt-1 text-sm font-medium leading-snug text-text-secondary"
+      >
+        Прогресс в браузере
+      </p>
+    </div>
+    {/* 4ch резервирует место под «100%»: процент не должен дёргать шапку
+        при загрузке и обновлении прогресса. */}
+    <p
+      data-progress-percent
+      class="min-w-[4ch] shrink-0 text-right font-mono text-3xl font-extrabold leading-none tabular-nums text-accent-strong"
+    >
+      —
+    </p>
+  </div>
+
+  <div
+    data-progress-bar
+    class="mt-4 h-2.5 w-full border-2 border-border bg-surface-alt"
+    role="progressbar"
+    aria-labelledby="theory-progress-title"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="0"
+    aria-valuetext="Прогресс загружается"
+  >
+    <div
+      data-progress-fill
+      class="h-full origin-left bg-accent transition-transform duration-300 motion-reduce:transition-none"
+      style="transform: scaleX(0)"
+    >
+    </div>
+  </div>
+
+  <dl class="mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
+    <div class="min-w-0">
+      <dt class="eyebrow text-text-tertiary">Прочитано</dt>
+      <dd class="mt-1 font-mono text-sm font-bold tabular-nums text-text">
+        <span data-progress-read>—</span>
+        <span class="text-text-tertiary">/ {totalArticles}</span>
+      </dd>
+    </div>
+    <div class="min-w-0">
+      <dt class="eyebrow text-text-tertiary">Отвечено</dt>
+      <dd class="mt-1 font-mono text-sm font-bold tabular-nums text-text">
+        <span data-progress-answered>—</span>
+        <span class="text-text-tertiary">/ {totalQuestions}</span>
+      </dd>
+    </div>
+  </dl>
+
+  <a
+    data-progress-cta
+    href={firstArticleHref}
+    class="btn btn-secondary btn-sm mt-5 w-full justify-between"
+  >
+    <span data-progress-cta-label class="min-w-0 truncate"
+      >Начать с JavaScript</span
+    >
+    <ArrowRight size={14} weight="bold" className="shrink-0" />
+  </a>
+</div>
+
+<script>
+  import { plural } from "../../lib/plural";
+  import {
+    fetchTheoryIndex,
+    getTheoryProgress,
+    subscribeTheoryProgress,
+    type TheoryProgressArticle,
+  } from "../../lib/theory-progress";
+
+  const root = document.querySelector<HTMLElement>("[data-theory-progress]");
+
+  if (root) {
+    const totalArticles = Number(root.dataset.totalArticles) || 0;
+    const totalQuestions = Number(root.dataset.totalQuestions) || 0;
+    const indexUrl = root.dataset.indexUrl ?? "";
+    const practiceUrl = root.dataset.practiceUrl ?? "";
+
+    const percentEl =
+      root.querySelector<HTMLElement>("[data-progress-percent]");
+    const statusEl = root.querySelector<HTMLElement>("[data-progress-status]");
+    const barEl = root.querySelector<HTMLElement>("[data-progress-bar]");
+    const fillEl = root.querySelector<HTMLElement>("[data-progress-fill]");
+    const readEl = root.querySelector<HTMLElement>("[data-progress-read]");
+    const answeredEl = root.querySelector<HTMLElement>(
+      "[data-progress-answered]",
+    );
+    const ctaEl = root.querySelector<HTMLAnchorElement>("[data-progress-cta]");
+    const ctaLabelEl = root.querySelector<HTMLElement>(
+      "[data-progress-cta-label]",
+    );
+
+    const fallbackHref = ctaEl?.href ?? "";
+    let articles: TheoryProgressArticle[] = [];
+
+    const render = () => {
+      const snapshot = getTheoryProgress(
+        articles,
+        totalArticles,
+        totalQuestions,
+      );
+
+      if (percentEl) percentEl.textContent = `${snapshot.percent}%`;
+      if (readEl) readEl.textContent = String(snapshot.read);
+      if (answeredEl) answeredEl.textContent = String(snapshot.answered);
+
+      if (fillEl) {
+        fillEl.style.transform = `scaleX(${snapshot.percent / 100})`;
+      }
+
+      if (barEl) {
+        barEl.setAttribute("aria-valuenow", String(snapshot.percent));
+        barEl.setAttribute(
+          "aria-valuetext",
+          `Прочитано ${snapshot.read} из ${snapshot.total} ${plural(
+            snapshot.total,
+            "статьи",
+            "статей",
+            "статей",
+          )}`,
+        );
+      }
+
+      if (statusEl) {
+        if (snapshot.total === 0) {
+          statusEl.textContent = "Статьи скоро появятся";
+        } else if (snapshot.read === 0) {
+          statusEl.textContent = "Начни с основ";
+        } else if (snapshot.remaining === 0) {
+          statusEl.textContent = "Теория пройдена";
+        } else {
+          statusEl.textContent = `Ещё ${snapshot.remaining} ${plural(
+            snapshot.remaining,
+            "статья",
+            "статьи",
+            "статей",
+          )}`;
+        }
+      }
+
+      let label = "Продолжить обучение";
+      let href = fallbackHref;
+
+      const complete = snapshot.total > 0 && snapshot.read >= snapshot.total;
+
+      if (complete) {
+        label = "Дальше: Практикум";
+        href = practiceUrl || href;
+      } else if (articles.length === 0) {
+        label =
+          snapshot.read > 0 ? "Продолжить обучение" : "Начать с JavaScript";
+      } else if (snapshot.next) {
+        label =
+          snapshot.read === 0
+            ? "Начать с JavaScript"
+            : `Продолжить: ${snapshot.next.title}`;
+        href = snapshot.next.href;
+      }
+
+      if (ctaEl) {
+        if (href) ctaEl.href = href;
+        ctaEl.setAttribute("aria-label", label);
+        ctaEl.title = label;
+      }
+
+      if (ctaLabelEl) ctaLabelEl.textContent = label;
+    };
+
+    render();
+
+    fetchTheoryIndex(indexUrl)
+      .then((items) => {
+        articles = items;
+        render();
+      })
+      .catch(() => {
+        // Индекс не загрузился: остаётся SSR-ссылка на первую статью.
+      });
+
+    subscribeTheoryProgress(render);
+  }
+</script>

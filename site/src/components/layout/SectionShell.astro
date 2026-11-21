@@ -2,36 +2,78 @@
 interface Props {
   title: string;
   lede?: string;
-  chips?: string[];
+  /** Метрики каталога под заголовком раздела. */
+  stats?: Array<{ value: number; label: string }>;
   class?: string;
 }
 
-const { title, lede, chips = [], class: className = "" } = Astro.props;
+const {
+  title,
+  lede,
+  stats = [],
+  class: className = "",
+} = Astro.props;
 
 const hasActions = Astro.slots.has("actions");
+const hasAside = Astro.slots.has("aside");
+const hasStats = stats.length > 0;
 ---
 
 <div class:list={["page-shell", className]}>
-  <header class="page-head">
-    <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
-      <div class="min-w-0">
-        <h1 class="page-title">{title}</h1>
-        {lede && <p class="page-lede">{lede}</p>}
+  <header
+    class:list={[
+      hasAside
+        ? "mb-10 border-[3px] border-border bg-surface"
+        : "page-head",
+    ]}
+  >
+    <div
+      class:list={[
+        hasAside &&
+          "grid lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]",
+      ]}
+    >
+      <div class:list={["min-w-0", hasAside && "flex flex-col p-6 lg:p-8"]}>
+        <div class="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+          <div class="min-w-0">
+            <h1 class="page-title">{title}</h1>
+            {lede && <p class="page-lede">{lede}</p>}
+          </div>
+
+          {
+            hasActions && (
+              <div class="flex flex-wrap items-center gap-2">
+                <slot name="actions" />
+              </div>
+            )
+          }
+        </div>
+
         {
-          chips.length > 0 && (
-            <div class="mt-4 flex flex-wrap items-center gap-2">
-              {chips.map((chip) => (
-                <span class="chip">{chip}</span>
+          hasStats && (
+            <ul
+              class:list={[
+                "flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-bold uppercase tracking-wider text-text-tertiary",
+                hasAside ? "mt-auto pt-4 lg:pt-6" : "mt-4",
+              ]}
+            >
+              {stats.map((stat) => (
+                <li class="inline-flex items-baseline gap-1.5">
+                  <span class="font-mono text-base font-bold tabular-nums text-text-secondary">
+                    {stat.value}
+                  </span>
+                  <span>{stat.label}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           )
         }
       </div>
 
       {
-        hasActions && (
-          <div class="flex flex-wrap items-center gap-2">
-            <slot name="actions" />
+        hasAside && (
+          <div class="min-w-0 border-t-[3px] border-border p-6 lg:border-l-[3px] lg:border-t-0 lg:p-8">
+            <slot name="aside" />
           </div>
         )
       }
