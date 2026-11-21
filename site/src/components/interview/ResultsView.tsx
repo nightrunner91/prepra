@@ -53,10 +53,7 @@ export function ResultsView({
         : sectionCounts.good / sectionAnswered;
     };
     const total = (sectionCounts: Record<AnswerStatus, number>) =>
-      sectionCounts.good +
-      sectionCounts.unsure +
-      sectionCounts.failed +
-      sectionCounts.skipped;
+      sectionCounts.good + sectionCounts.unsure + sectionCounts.failed;
 
     return [...bySection.values()]
       .map((row) => ({
@@ -65,7 +62,6 @@ export function ResultsView({
           good: 0,
           unsure: 0,
           failed: 0,
-          skipped: 0,
         },
       }))
       .sort(
@@ -106,7 +102,6 @@ export function ResultsView({
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <span className="chip">{answered} отвечено</span>
               <span className="chip">{accuracy}% отлично</span>
-              <span className="chip">{counts.skipped} пропущено</span>
             </div>
           </div>
 
@@ -127,7 +122,7 @@ export function ResultsView({
         </div>
       </header>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
         {STATUSES.map((status) => {
           const meta = STATUS_META[status];
 

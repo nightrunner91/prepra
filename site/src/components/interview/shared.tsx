@@ -1,5 +1,4 @@
 import {
-  PauseCircle,
   SmileyMeh,
   ThumbsDown,
   ThumbsUp,
@@ -7,14 +6,7 @@ import {
 import type { ReactNode } from "react";
 import type { AnswerStatus } from "../../lib/mock-interview/types";
 
-export const STATUSES: AnswerStatus[] = [
-  "good",
-  "unsure",
-  "failed",
-  "skipped",
-];
-
-export const RATE_STATUSES: AnswerStatus[] = ["good", "unsure", "failed"];
+export const STATUSES: AnswerStatus[] = ["good", "unsure", "failed"];
 
 export const STATUS_META: Record<
   AnswerStatus,
@@ -46,13 +38,6 @@ export const STATUS_META: Record<
     bg: "bg-pale-red-bg",
     color: "text-pale-red-text",
     rateClass: "rate-btn-failed",
-  },
-  skipped: {
-    label: "Пропущено",
-    icon: <PauseCircle size={22} weight="fill" />,
-    bg: "bg-surface-alt",
-    color: "text-text-secondary",
-    rateClass: "bg-surface-alt",
   },
 };
 

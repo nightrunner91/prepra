@@ -1,4 +1,4 @@
-export type AnswerStatus = 'good' | 'unsure' | 'failed' | 'skipped';
+export type AnswerStatus = 'good' | 'unsure' | 'failed';
 
 export type MockInterviewQuestion = {
   id: string;

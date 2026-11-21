@@ -186,12 +186,12 @@ export function MockInterview({
     const counts = countAnswers(final.answers);
     const perSection: Record<string, Record<AnswerStatus, number>> = {};
     final.questions.forEach((question, index) => {
-      const status = final.answers[index] ?? "skipped";
+      const status = final.answers[index];
+      if (!status) return;
       const row = perSection[question.section] ?? {
         good: 0,
         unsure: 0,
         failed: 0,
-        skipped: 0,
       };
       row[status]++;
       perSection[question.section] = row;
@@ -250,10 +250,6 @@ export function MockInterview({
     },
     [session, advanceTo],
   );
-
-  const handleSkip = useCallback(() => {
-    if (session) advanceTo(session, "skipped");
-  }, [session, advanceTo]);
 
   const resume = useCallback(() => {
     if (!session || session.currentIndex >= session.questions.length) return;
@@ -481,7 +477,6 @@ export function MockInterview({
           busy={busy}
           onFlip={() => setFlipped(true)}
           onAnswer={handleAnswer}
-          onSkip={handleSkip}
           onExit={exitInterview}
         />
       )}

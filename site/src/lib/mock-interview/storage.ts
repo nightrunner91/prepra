@@ -12,15 +12,21 @@ export const EMPTY_COUNTS: Record<AnswerStatus, number> = {
   good: 0,
   unsure: 0,
   failed: 0,
-  skipped: 0,
 };
+
+const ANSWER_STATUSES = new Set<AnswerStatus>(Object.keys(EMPTY_COUNTS) as AnswerStatus[]);
+
+function isAnswerStatus(value: unknown): value is AnswerStatus {
+  return typeof value === 'string' && ANSWER_STATUSES.has(value as AnswerStatus);
+}
 
 export function countAnswers(
   answers: Record<number, AnswerStatus>,
 ): Record<AnswerStatus, number> {
   const counts = { ...EMPTY_COUNTS };
   for (const status of Object.values(answers)) {
-    counts[status]++;
+    // Старые сохранения могут содержать пропущенные вопросы — в статистику они не входят.
+    if (isAnswerStatus(status)) counts[status]++;
   }
   return counts;
 }
@@ -31,7 +37,12 @@ export function loadActiveSession(): InterviewSession | null {
     if (!raw) return null;
     const data = JSON.parse(raw) as InterviewSession;
     if (data.version !== 1) return null;
-    return data;
+    const answers: Record<number, AnswerStatus> = {};
+    for (const [index, status] of Object.entries(data.answers ?? {})) {
+      // Ответы старого формата «пропущено» больше не считаются ответом.
+      if (isAnswerStatus(status)) answers[Number(index)] = status;
+    }
+    return { ...data, answers };
   } catch {
     return null;
   }
@@ -45,12 +56,37 @@ export function clearActiveSession(): void {
   localStorage.removeItem(ACTIVE_KEY);
 }
 
+function normalizeCounts(raw: unknown): Record<AnswerStatus, number> {
+  const counts = { ...EMPTY_COUNTS };
+  if (!raw || typeof raw !== 'object') return counts;
+  const source = raw as Record<string, unknown>;
+  for (const status of ANSWER_STATUSES) {
+    const value = source[status];
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      counts[status] = value;
+    }
+  }
+  return counts;
+}
+
 export function loadHistory(): InterviewHistoryEntry[] {
   try {
     const raw = localStorage.getItem(HISTORY_KEY);
     if (!raw) return [];
     const data = JSON.parse(raw) as InterviewHistoryEntry[];
-    return Array.isArray(data) ? data.filter((e) => e.version === 1) : [];
+    if (!Array.isArray(data)) return [];
+    return data
+      .filter((entry) => entry && entry.version === 1)
+      .map((entry) => ({
+        ...entry,
+        counts: normalizeCounts(entry.counts),
+        perSection: Object.fromEntries(
+          Object.entries(entry.perSection ?? {}).map(([section, counts]) => [
+            section,
+            normalizeCounts(counts),
+          ]),
+        ),
+      }));
   } catch {
     return [];
   }

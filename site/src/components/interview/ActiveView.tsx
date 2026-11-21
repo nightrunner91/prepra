@@ -1,8 +1,8 @@
-import { Clock, Eye, SkipForward } from "@phosphor-icons/react";
+import { Clock, Eye } from "@phosphor-icons/react";
 import { useEffect } from "react";
 import { formatDuration } from "../../lib/mock-interview/storage";
 import type { AnswerStatus, MockInterviewQuestion } from "../../lib/mock-interview/types";
-import { RATE_STATUSES, STATUS_META, renderInlineCode } from "./shared";
+import { STATUSES, STATUS_META, renderInlineCode } from "./shared";
 
 interface ActiveViewProps {
   question: MockInterviewQuestion;
@@ -13,7 +13,6 @@ interface ActiveViewProps {
   busy: boolean;
   onFlip: () => void;
   onAnswer: (status: AnswerStatus) => void;
-  onSkip: () => void;
   onExit: () => void;
 }
 
@@ -26,7 +25,6 @@ export function ActiveView({
   busy,
   onFlip,
   onAnswer,
-  onSkip,
   onExit,
 }: ActiveViewProps) {
   const progress = (currentIndex / total) * 100;
@@ -44,7 +42,7 @@ export function ActiveView({
       }
 
       const index = Number(event.key) - 1;
-      const status = RATE_STATUSES[index];
+      const status = STATUSES[index];
       if (!status) return;
 
       event.preventDefault();
@@ -146,7 +144,7 @@ export function ActiveView({
       <div className="mt-6 min-h-[104px]">
         {flipped ? (
           <div className="flex w-full gap-2 sm:gap-3">
-            {RATE_STATUSES.map((status) => {
+            {STATUSES.map((status) => {
               const meta = STATUS_META[status];
 
               return (
@@ -165,15 +163,10 @@ export function ActiveView({
             })}
           </div>
         ) : (
-          <button
-            type="button"
-            onClick={onSkip}
-            disabled={busy}
-            className="btn btn-ghost btn-lg w-full"
-          >
-            <SkipForward size={18} weight="fill" />
-            Пропустить
-          </button>
+          <div className="flex min-h-[104px] items-center justify-center gap-2 eyebrow text-text-secondary">
+            <Eye size={14} />
+            Нажми на карточку чтобы увидеть ответ
+          </div>
         )}
       </div>
 

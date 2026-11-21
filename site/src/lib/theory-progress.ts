@@ -50,7 +50,8 @@ export function getAnsweredCount(): number {
 
       if (answers && typeof answers === "object") {
         count += Object.values(answers).filter(
-          (status) => status !== "skipped",
+          (status) =>
+            status === "good" || status === "unsure" || status === "failed",
         ).length;
       }
     }

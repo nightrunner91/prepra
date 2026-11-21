@@ -5,8 +5,6 @@ import {
   CheckSquare,
   ClipboardText,
   Eye,
-  PauseCircle,
-  SkipForward,
   SmileyMeh,
   ThumbsDown,
   ThumbsUp,
@@ -15,7 +13,7 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { isArticleRead, markArticleRead } from '../../lib/readState';
 
-type AnswerStatus = 'good' | 'unsure' | 'failed' | 'skipped';
+type AnswerStatus = 'good' | 'unsure' | 'failed';
 
 interface QuizAttempt {
   timestamp: number;
@@ -144,13 +142,6 @@ const STATUS_META: Record<AnswerStatus, { label: string; icon: React.ReactNode; 
     border: 'border-pale-red-text',
     color: 'text-pale-red-text',
   },
-  skipped: {
-    label: 'Пропущено',
-    icon: <PauseCircle size={24} weight="fill" />,
-    bg: 'bg-surface-alt',
-    border: 'border-border',
-    color: 'text-text-secondary',
-  },
 };
 
 export function QuizOverlay({ questions, customAnswers, articleId, nextArticle, sectionHref, sectionLabel }: QuizOverlayProps) {
@@ -203,21 +194,6 @@ export function QuizOverlay({ questions, customAnswers, articleId, nextArticle, 
       }
     }, 400);
   }, [answers, currentIndex, questions.length, articleId]);
-
-  const handleClose = useCallback(() => {
-    if (phase === 'quiz') {
-      const finalAnswers = { ...answers };
-      for (let i = 0; i < questions.length; i++) {
-        if (!(i in finalAnswers)) {
-          finalAnswers[i] = 'skipped';
-        }
-      }
-      const attempt: QuizAttempt = { timestamp: Date.now(), answers: finalAnswers };
-      saveQuizData(articleId, { version: 1, lastAttempt: attempt });
-      setLastAttempt(attempt);
-    }
-    closeOverlay();
-  }, [phase, answers, questions.length, articleId, closeOverlay]);
 
   useEffect(() => {
     if (phase !== 'idle') {
@@ -281,8 +257,7 @@ export function QuizOverlay({ questions, customAnswers, articleId, nextArticle, 
                   savingStatus={savingStatus}
                   onFlip={() => setFlipped(true)}
                   onAnswer={handleAnswer}
-                  onSkip={() => handleAnswer('skipped')}
-                  onClose={handleClose}
+                  onClose={closeOverlay}
                   total={questions.length}
                 />
               )}
@@ -306,10 +281,13 @@ interface ResultsViewProps {
 }
 
 function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, sectionLabel, onRetake, onClose }: ResultsViewProps) {
-  const counts = { good: 0, unsure: 0, failed: 0, skipped: 0 };
-  Object.values(attempt.answers).forEach(s => { counts[s]++; });
+  const counts = { good: 0, unsure: 0, failed: 0 };
+  Object.values(attempt.answers).forEach(status => {
+    // В старых сохранениях мог остаться статус «пропущено» — в статистику он не входит.
+    if (status in counts) counts[status]++;
+  });
 
-  const total = questions.length;
+  const answered = counts.good + counts.unsure + counts.failed;
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [isRead, setIsRead] = useState(false);
 
@@ -351,7 +329,7 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
       </div>
 
       <div>
-        <div className="grid grid-cols-2 gap-3 p-6 md:grid-cols-4 md:p-8">
+        <div className="grid grid-cols-2 gap-3 p-6 md:grid-cols-3 md:p-8">
           <div className="flex flex-col items-center gap-1 border-2 border-border bg-positive-bg p-3">
             <ThumbsUp size={22} weight="bold" className="text-positive-text" />
             <span className="font-mono text-2xl font-extrabold text-positive-text">{counts.good}</span>
@@ -367,11 +345,6 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
             <span className="font-mono text-2xl font-extrabold text-pale-red-text">{counts.failed}</span>
             <span className="eyebrow text-pale-red-text">Плохо</span>
           </div>
-          <div className="flex flex-col items-center gap-1 border-2 border-border bg-surface-alt p-3">
-            <PauseCircle size={22} weight="fill" className="text-text-secondary" />
-            <span className="font-mono text-2xl font-extrabold text-text-secondary">{counts.skipped}</span>
-            <span className="eyebrow text-text-secondary">Пропущено</span>
-          </div>
         </div>
 
         <div className="px-6 pb-6 md:px-8 md:pb-8">
@@ -381,15 +354,16 @@ function ResultsView({ questions, attempt, articleId, nextArticle, sectionHref, 
             className="flex w-full items-center justify-between border-2 border-border bg-surface-alt px-4 py-3 eyebrow text-text-secondary transition-all hover:bg-text hover:text-canvas"
             aria-expanded={detailsOpen}
           >
-            <span>Ответы по вопросам ({total})</span>
+            <span>Ответы по вопросам ({answered})</span>
             <CaretDown size={16} weight="bold" className={`transition-transform ${detailsOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {detailsOpen && (
             <ul className="quiz-results mt-3 space-y-2">
               {questions.map((q, i) => {
-                const status = attempt.answers[i] || 'skipped';
-                const meta = STATUS_META[status];
+                const status = attempt.answers[i];
+                const meta = status ? STATUS_META[status] : undefined;
+                if (!meta) return null;
                 return (
                   <li
                     key={i}
@@ -467,7 +441,6 @@ interface QuizViewProps {
   savingStatus: number | null;
   onFlip: () => void;
   onAnswer: (status: AnswerStatus) => void;
-  onSkip: () => void;
   onClose: () => void;
   total: number;
 }
@@ -480,7 +453,6 @@ function QuizView({
   savingStatus,
   onFlip,
   onAnswer,
-  onSkip,
   onClose,
   total,
 }: QuizViewProps) {
@@ -585,15 +557,10 @@ function QuizView({
           </div>
         )}
         {!flipped && (
-          <button
-            type="button"
-            onClick={onSkip}
-            disabled={savingStatus === currentIndex}
-            className="flex items-center justify-center gap-2 border-2 border-border bg-surface-alt px-6 py-3 font-mono text-sm font-bold uppercase tracking-wider text-text-secondary transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[4px_4px_0px_#000000] dark:hover:shadow-[4px_4px_0px_#ffffff] active:translate-x-0 active:translate-y-0 active:shadow-none disabled:pointer-events-none hover:bg-text hover:text-canvas"
-          >
-            <SkipForward size={18} weight="fill" />
-            Пропустить
-          </button>
+          <div className="flex items-center justify-center gap-2 eyebrow text-text-secondary">
+            <Eye size={14} />
+            Нажми на карточку чтобы увидеть ответ
+          </div>
         )}
       </div>
     </div>

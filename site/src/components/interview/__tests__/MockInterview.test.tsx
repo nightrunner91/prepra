@@ -73,6 +73,22 @@ afterEach(() => {
   window.localStorage.clear();
 });
 
+describe("MockInterview answers", () => {
+  it("does not offer skipping a question", async () => {
+    seedActiveSession();
+    const user = userEvent.setup();
+
+    render(<MockInterview questionCount={2} sectionCount={1} />);
+
+    await user.click(
+      await screen.findByRole("button", { name: "Продолжить" }),
+    );
+
+    expect(screen.getByRole("button", { name: "Выйти" })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Пропустить" })).toBeNull();
+  });
+});
+
 describe("MockInterview reset confirmation", () => {
   it("does not reset the session without explicit confirmation", async () => {
     seedActiveSession();
