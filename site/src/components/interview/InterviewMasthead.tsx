@@ -172,7 +172,7 @@ export function InterviewMasthead({
       <div className="masthead-grid lg:gap-5">
         <div className="masthead-main">
           <div className="min-w-0">
-            <h1 className="page-title">Мок-интервью</h1>
+            <h1 className="page-title">Интервью</h1>
             <p className="page-lede">
               Прогон в формате технического собеседования с самопроверкой.
             </p>

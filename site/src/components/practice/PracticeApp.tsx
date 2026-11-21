@@ -311,7 +311,7 @@ export function PracticeApp() {
 
   function handleResetAll() {
     if (
-      !window.confirm("Сбросить весь прогресс практикума? Это нельзя отменить.")
+      !window.confirm("Сбросить весь прогресс в практике? Это нельзя отменить.")
     ) {
       return;
     }

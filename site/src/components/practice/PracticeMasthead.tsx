@@ -77,7 +77,7 @@ export function PracticeMasthead({
       <div className="masthead-grid lg:gap-4">
         <div className="masthead-main">
           <div className="min-w-0">
-            <h1 className="page-title">Практикум</h1>
+            <h1 className="page-title">Практика</h1>
             <p className="page-lede">
               Задачи на базовый JavaScript в формате «что выведет код» для всех
               грейдов.

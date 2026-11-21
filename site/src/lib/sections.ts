@@ -114,6 +114,6 @@ export const sections: Section[] = [
 
 /**
  * Единственный источник правды для списка разделов.
- * Используется в content collections, мок-интервью и JSON-индексах.
+ * Используется в content collections, интервью и JSON-индексах.
  */
 export const ALL_SECTION_IDS = sections.map((section) => section.id);

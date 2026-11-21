@@ -59,7 +59,7 @@ async function buildQuestions(): Promise<MockInterviewQuestion[]> {
   return questions;
 }
 
-/** Вопросы для мок-интервью в порядке разделов и статей. */
+/** Вопросы для интервью в порядке разделов и статей. */
 export function getMockInterviewQuestions(): Promise<MockInterviewQuestion[]> {
   return buildQuestions();
 }
