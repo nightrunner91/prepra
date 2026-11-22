@@ -12,10 +12,11 @@ import { withBase } from "../../lib/urls";
 interface Props {
   articleCount: number;
   taskCount: number;
+  sectionCount: number;
   presetCount: number;
 }
 
-const { articleCount, taskCount, presetCount } = Astro.props;
+const { articleCount, taskCount, sectionCount, presetCount } = Astro.props;
 
 const cardClass =
   "card-hover group flex flex-col border-[3px] border-border p-6 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text lg:p-8";
@@ -86,7 +87,7 @@ const titleClass =
             className="mt-1 shrink-0"
             aria-hidden="true"
           />
-          Вопросы для самопроверки в конце статьи
+          Вопросы для самопроверки с ответами
         </li>
         <li class="flex gap-2">
           <Check
@@ -96,6 +97,26 @@ const titleClass =
             aria-hidden="true"
           />
           Шпаргалка раздела для повторения
+        </li>
+        <li class="flex gap-2">
+          <Check
+            size={16}
+            weight="bold"
+            className="mt-1 shrink-0"
+            aria-hidden="true"
+          />
+          {sectionCount}
+          {plural(sectionCount, "раздел", "раздела", "разделов")}: от
+          JavaScript до System Design
+        </li>
+        <li class="flex gap-2">
+          <Check
+            size={16}
+            weight="bold"
+            className="mt-1 shrink-0"
+            aria-hidden="true"
+          />
+          Каждая статья проверена вручную, источники — в конце
         </li>
       </ul>
 
@@ -131,8 +152,8 @@ const titleClass =
 
         <h3 class={titleClass}>Практика</h3>
         <p class="mt-2 text-sm font-medium leading-relaxed sm:text-base">
-          Задачи по базовому JavaScript: выбор ответа, «что выведет код» и
-          задачи с автотестами.
+          Три уровня — Junior, Middle и Senior. Выбор ответа, «что выведет код»
+          и автотесты в браузере.
         </p>
 
         <span class={linkClass}>
@@ -153,7 +174,7 @@ const titleClass =
               >{presetCount}</span
             >
             <span class="font-mono text-xs font-bold uppercase tracking-widest"
-              >{plural(presetCount, "сет", "сета", "сетов")}</span
+              >{plural(presetCount, "интервью", "интервью", "интервью")}</span
             >
           </div>
           <span class={badgeClass}>
@@ -164,8 +185,8 @@ const titleClass =
 
         <h3 class={titleClass}>Интервью</h3>
         <p class="mt-2 text-sm font-medium leading-relaxed sm:text-base">
-          Вопросы из разных разделов, ответы вслух, самопроверка и карта слабых
-          тем с переходом к статье.
+          React, Next.js, System Design, AI и другие. Отвечаешь вслух, сам
+          оцениваешь ответ и получаешь карту слабых тем.
         </p>
 
         <span class={linkClass}>

@@ -1,14 +1,6 @@
 ---
 import { ArrowRight, CheckCircle, GitBranch } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
-import { plural } from "../../lib/plural";
-
-interface Props {
-  articleCount: number;
-  taskCount: number;
-}
-
-const { articleCount, taskCount } = Astro.props;
 ---
 
 <section class="bg-surface">
@@ -16,13 +8,16 @@ const { articleCount, taskCount } = Astro.props;
     class="mx-auto grid max-w-[1600px] items-center gap-10 px-6 py-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16 lg:px-12 lg:py-16"
   >
     <div>
+      <p class="eyebrow text-accent-strong">
+        Для Middle / Senior разработчиков
+      </p>
       <h1
-        class="font-mono text-4xl font-extrabold uppercase leading-[1.02] tracking-tight text-text sm:text-5xl xl:text-6xl 2xl:text-7xl"
+        class="mt-4 font-mono text-4xl font-extrabold uppercase leading-[1.02] tracking-tight text-text sm:text-5xl xl:text-6xl 2xl:text-7xl"
       >
         <span class="block">Подготовка</span>
         <span class="block"
           >к <span class="hero-mark -mx-2 inline-block px-2 text-accent-ink"
-            >фронтенд</span
+            >фронтенд-</span
           ></span
         >
         <span class="block">собеседованию</span>
@@ -30,21 +25,21 @@ const { articleCount, taskCount } = Astro.props;
       <p
         class="mt-5 text-base font-medium leading-relaxed text-text-secondary sm:text-lg"
       >
-        От основ JavaScript до системного дизайна: статьи, карточки и задачи
+        От основ JavaScript до системного дизайна
       </p>
       <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
         <a
           href={withBase("/javascript")}
           class="group inline-flex items-center justify-center gap-2 border-[3px] border-border bg-accent px-6 py-3.5 font-mono text-base font-bold uppercase tracking-wider text-accent-ink transition-all hover:text-accent-ink hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_var(--color-border)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0 active:translate-y-0 active:shadow-none"
         >
-          Начать подготовку
+          Начать с JavaScript
           <ArrowRight size={16} weight="bold" className="" />
         </a>
         <a
-          href="#product"
+          href={withBase("/interview")}
           class="inline-flex items-center justify-center border-[3px] border-border bg-canvas px-6 py-3.5 font-mono text-base font-bold uppercase tracking-wider text-text transition-colors hover:bg-text hover:text-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text active:translate-x-0.5 active:translate-y-0.5"
         >
-          О продукте
+          Пройти интервью
         </a>
       </div>
     </div>
@@ -252,7 +247,7 @@ const { articleCount, taskCount } = Astro.props;
     [
       { text: "await", type: "kw" },
       { text: " prepra.", type: "" },
-      { text: "mockInterview", type: "fn" },
+      { text: "interview", type: "fn" },
       { text: "();", type: "" },
     ],
     [],
