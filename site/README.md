@@ -18,3 +18,9 @@ npm run check:styles   # запрет произвольных размеров 
 npm run test           # unit/regression-тесты (vitest + jsdom)
 npm run icons          # пересобрать favicon, PNG-иконки и manifest.json
 ```
+
+## Deploy
+
+The site is deployed to Railway from `main`. The root `Dockerfile` builds the
+static bundle with Node 24 and serves it with nginx; a push to `main` triggers a
+new deployment automatically.
