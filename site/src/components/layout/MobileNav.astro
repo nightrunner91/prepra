@@ -2,12 +2,7 @@
 import { sections } from "../../lib/sections";
 import { withBase } from "../../lib/urls";
 import { topLevelCounts } from "../../lib/top-level-counts";
-import {
-  Barbell,
-  BookOpen,
-  Microphone,
-  X,
-} from "@phosphor-icons/react";
+import { Barbell, BookOpen, Microphone, X } from "@phosphor-icons/react";
 
 interface Props {
   currentSection?: string;
@@ -46,13 +41,14 @@ const isTheoryPage =
       pathname.startsWith(withBase(`/${section.id}/`)),
   );
 
-const activeTab = pathname === withBase("/practice")
-  ? "practice"
-  : pathname === withBase("/interview")
-    ? "interview"
-    : isTheoryPage
-      ? "theory"
-      : undefined;
+const activeTab =
+  pathname === withBase("/practice")
+    ? "practice"
+    : pathname === withBase("/interview")
+      ? "interview"
+      : isTheoryPage
+        ? "theory"
+        : undefined;
 ---
 
 <div
@@ -74,7 +70,9 @@ const activeTab = pathname === withBase("/practice")
       <X size={18} weight="bold" />
     </button>
   </div>
-  <nav class="flex h-[calc(100vh-var(--header-offset))] flex-col overflow-y-auto py-4 px-3">
+  <nav
+    class="flex h-[calc(100vh-var(--header-offset))] flex-col overflow-y-auto py-4 px-3"
+  >
     <div class="space-y-0">
       {
         tabs.map((tab) => {
@@ -85,7 +83,7 @@ const activeTab = pathname === withBase("/practice")
               aria-current={activeTab === tab.id ? "page" : undefined}
               class="flex items-center gap-2 border-b-2 border-border px-3 py-3 text-sm font-bold uppercase tracking-wide text-text-secondary transition-colors hover:bg-surface-alt hover:text-text aria-[current=page]:bg-accent aria-[current=page]:text-accent-ink aria-[current=page]:hover:bg-accent-hover aria-[current=page]:hover:text-accent-ink"
             >
-              <Icon size={16} weight="bold" class="shrink-0" />
+              <Icon size={16} weight="fill" class="shrink-0" />
               <span>{tab.label}</span>
               <span
                 aria-hidden="true"
