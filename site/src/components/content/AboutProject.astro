@@ -1,5 +1,8 @@
 ---
 import { ArrowUpRight } from "@phosphor-icons/react";
+import { withBase } from "../../lib/urls";
+
+const avatarSrc = withBase("/images/avatar-nightrunner91.png");
 ---
 
 <section
@@ -9,88 +12,129 @@ import { ArrowUpRight } from "@phosphor-icons/react";
 >
   <div class="border-[3px] border-border bg-surface">
     <div class="grid lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)]">
-      <div class="p-6 lg:p-8 xl:p-10">
+      <div class="flex flex-col p-6 lg:p-8 xl:p-10">
         <h2
           id="about-title"
           class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl lg:text-5xl"
         >
-          Что такое Prepra
+          Что такое
+          <span class="whitespace-nowrap"
+            ><span class="-ml-2 mr-0.5 inline-block bg-accent px-2 text-accent-ink"
+              >Prepra</span
+            >?</span
+          >
         </h2>
 
         <p
           class="mt-5 max-w-[54ch] text-lg font-bold leading-relaxed text-text sm:text-xl lg:text-2xl lg:leading-snug"
         >
-          Открытая база знаний по фронтенду для самостоятельной подготовки к
-          собеседованиям. Один трек: от основ JavaScript до Product Engineer.
+          Открытая база знаний по фронтенду для тех, кто готовится к
+          собеседованиям самостоятельно.
         </p>
 
-        <p class="mt-5 max-w-[62ch] text-base leading-relaxed text-text-secondary">
-          Проект делает один разработчик: пишет статьи, собирает задачи и
-          поддерживает сайт. Курсов, расписания и дедлайнов здесь нет — темп и
-          порядок тем выбираешь сам.
-        </p>
+        <ul
+          class="mt-5 grid max-w-[62ch] gap-2 text-base leading-relaxed text-text-secondary"
+        >
+          <li class="flex gap-3">
+            <span
+              class="mt-2 size-2 shrink-0 bg-text-tertiary"
+              aria-hidden="true"></span>
+            Курсов, расписания и дедлайнов нет.
+          </li>
+          <li class="flex gap-3">
+            <span
+              class="mt-2 size-2 shrink-0 bg-text-tertiary"
+              aria-hidden="true"></span>
+            Темп и порядок тем выбираешь сам.
+          </li>
+          <li class="flex gap-3">
+            <span
+              class="mt-2 size-2 shrink-0 bg-text-tertiary"
+              aria-hidden="true"></span>
+            Трекинг прогресса прямо в браузере.
+          </li>
+        </ul>
 
-        <p class="mt-4 max-w-[62ch] text-base leading-relaxed text-text-secondary">
-          Статьи сверяются с официальной документацией, источники перечислены в
-          конце. Контент и код сайта открыты на
+        <p
+          class="mt-5 max-w-[62ch] text-base leading-relaxed text-text-secondary"
+        >
+          Контент и код сайта открыты на
           <a
             href="https://github.com/nightrunner91/prepra"
             target="_blank"
             rel="noopener noreferrer"
             class="font-bold text-accent-strong underline decoration-2 underline-offset-4 hover:text-text"
           >
-            GitHub
-          </a>: можно предложить правку, добавить задачу или сообщить об ошибке.
+            GitHub</a
+          >: можно предложить правку, добавить задачу или сообщить об ошибке.
+        </p>
+
+        <p class="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-6">
+          <a
+            href="https://github.com/nightrunner91/prepra/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="eyebrow inline-flex items-center gap-1 text-text underline decoration-2 underline-offset-4 transition-colors hover:text-accent-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text"
+          >
+            AGPL-3.0
+            <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
+          </a>
         </p>
       </div>
 
-      <div class="border-t-[3px] border-border lg:border-l-[3px] lg:border-t-0">
+      <div
+        class="flex flex-col border-t-[3px] border-border lg:border-l-[3px] lg:border-t-0"
+      >
         <a
-          href="https://github.com/nightrunner91/prepra/blob/main/LICENSE"
+          href="https://t.me/nightrunner91"
           target="_blank"
           rel="noopener noreferrer"
-          class="block border-b-[3px] border-border bg-accent p-5 text-accent-ink transition-colors hover:bg-accent-hover hover:text-accent-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text xl:p-6"
+          class="group flex flex-1 flex-col justify-between gap-6 border-b-[3px] border-border bg-surface-alt px-5 py-6 text-text transition-colors hover:bg-canvas focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text xl:px-6 xl:py-7"
         >
-          <span class="eyebrow">Open source</span>
-          <span
-            class="mt-1 flex items-center justify-between gap-3 font-mono text-2xl font-extrabold uppercase tracking-tight"
-          >
-            AGPL-3.0
-            <ArrowUpRight size={20} weight="bold" aria-hidden="true" />
+          <img
+            src={avatarSrc}
+            alt=""
+            width="64"
+            height="64"
+            loading="lazy"
+            decoding="async"
+            class="size-16 shrink-0 border-2 border-border object-cover"
+          />
+
+          <span class="flex items-end justify-between gap-3">
+            <span class="min-w-0">
+              <span class="eyebrow block text-text-secondary">Автор</span>
+              <span
+                class="mt-1 block truncate font-mono text-xl font-extrabold text-text"
+              >
+                Никита Семикин
+              </span>
+            </span>
+            <ArrowUpRight
+              size={18}
+              weight="bold"
+              aria-hidden="true"
+              className="mb-0.5 shrink-0 text-text-secondary transition-all duration-150 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-text motion-reduce:transition-none"
+            />
           </span>
         </a>
 
         <dl class="divide-y-2 divide-border">
-          <div class="p-5 xl:px-6">
-            <dt class="eyebrow text-text-tertiary">Автор</dt>
+          <div class="px-5 py-6 xl:px-6 xl:py-7">
+            <dt class="eyebrow text-text-tertiary">Основной стек</dt>
             <dd class="mt-1.5 text-sm font-bold text-text">
-              <a
-                href="https://t.me/nightrunner91"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-1 transition-colors hover:text-accent-strong"
-              >
-                nightrunner91
-                <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
-              </a>
+              JavaScript / React / Vue
             </dd>
           </div>
 
-          <div class="p-5 xl:px-6">
-            <dt class="eyebrow text-text-tertiary">Контент</dt>
-            <dd class="mt-1.5 text-sm font-bold text-text">
-              Markdown в открытом репозитории
-            </dd>
-          </div>
-
-          <div class="p-5 xl:px-6">
+          <div class="px-5 py-6 xl:px-6 xl:py-7">
             <dt class="eyebrow text-text-tertiary">В работе</dt>
             <dd class="mt-1.5 text-sm font-bold text-text">
               Node.js, PostgreSQL, банк задач
             </dd>
           </div>
 
-          <div class="p-5 xl:px-6">
+          <div class="px-5 py-6 xl:px-6 xl:py-7">
             <dt class="eyebrow text-text-tertiary">Прогресс</dt>
             <dd class="mt-1.5 text-sm font-bold text-text">
               В браузере, без аккаунта
