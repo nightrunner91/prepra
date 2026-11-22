@@ -1,0 +1,103 @@
+---
+import { ArrowUpRight } from "@phosphor-icons/react";
+---
+
+<section
+  id="about"
+  class="mt-16 scroll-mt-24 lg:mt-20"
+  aria-labelledby="about-title"
+>
+  <div class="border-[3px] border-border bg-surface">
+    <div class="grid lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)]">
+      <div class="p-6 lg:p-8 xl:p-10">
+        <h2
+          id="about-title"
+          class="font-mono text-3xl font-extrabold uppercase tracking-tight text-text sm:text-4xl lg:text-5xl"
+        >
+          Что такое Prepra
+        </h2>
+
+        <p
+          class="mt-5 max-w-[54ch] text-lg font-bold leading-relaxed text-text sm:text-xl lg:text-2xl lg:leading-snug"
+        >
+          Открытая база знаний по фронтенду для самостоятельной подготовки к
+          собеседованиям. Один трек: от основ JavaScript до Product Engineer.
+        </p>
+
+        <p class="mt-5 max-w-[62ch] text-base leading-relaxed text-text-secondary">
+          Проект делает один разработчик: пишет статьи, собирает задачи и
+          поддерживает сайт. Курсов, расписания и дедлайнов здесь нет — темп и
+          порядок тем выбираешь сам.
+        </p>
+
+        <p class="mt-4 max-w-[62ch] text-base leading-relaxed text-text-secondary">
+          Статьи сверяются с официальной документацией, источники перечислены в
+          конце. Контент и код сайта открыты на
+          <a
+            href="https://github.com/nightrunner91/prepra"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-bold text-accent-strong underline decoration-2 underline-offset-4 hover:text-text"
+          >
+            GitHub
+          </a>: можно предложить правку, добавить задачу или сообщить об ошибке.
+        </p>
+      </div>
+
+      <div class="border-t-[3px] border-border lg:border-l-[3px] lg:border-t-0">
+        <a
+          href="https://github.com/nightrunner91/prepra/blob/main/LICENSE"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block border-b-[3px] border-border bg-accent p-5 text-accent-ink transition-colors hover:bg-accent-hover hover:text-accent-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text xl:p-6"
+        >
+          <span class="eyebrow">Open source</span>
+          <span
+            class="mt-1 flex items-center justify-between gap-3 font-mono text-2xl font-extrabold uppercase tracking-tight"
+          >
+            AGPL-3.0
+            <ArrowUpRight size={20} weight="bold" aria-hidden="true" />
+          </span>
+        </a>
+
+        <dl class="divide-y-2 divide-border">
+          <div class="p-5 xl:px-6">
+            <dt class="eyebrow text-text-tertiary">Автор</dt>
+            <dd class="mt-1.5 text-sm font-bold text-text">
+              <a
+                href="https://t.me/nightrunner91"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1 transition-colors hover:text-accent-strong"
+              >
+                nightrunner91
+                <ArrowUpRight size={14} weight="bold" aria-hidden="true" />
+              </a>
+            </dd>
+          </div>
+
+          <div class="p-5 xl:px-6">
+            <dt class="eyebrow text-text-tertiary">Контент</dt>
+            <dd class="mt-1.5 text-sm font-bold text-text">
+              Markdown в открытом репозитории
+            </dd>
+          </div>
+
+          <div class="p-5 xl:px-6">
+            <dt class="eyebrow text-text-tertiary">В работе</dt>
+            <dd class="mt-1.5 text-sm font-bold text-text">
+              Node.js, PostgreSQL, банк задач
+            </dd>
+          </div>
+
+          <div class="p-5 xl:px-6">
+            <dt class="eyebrow text-text-tertiary">Прогресс</dt>
+            <dd class="mt-1.5 text-sm font-bold text-text">
+              В браузере, без аккаунта
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
