@@ -1,0 +1,15 @@
+.git
+.github
+.opencode
+.agents
+.tmp
+.playwright-mcp
+
+**/node_modules
+site/dist
+site/.astro
+
+**/*.log
+UX_UI_AUDIT_TASKS.md
+README.md
+LICENSE

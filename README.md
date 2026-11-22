@@ -48,7 +48,7 @@
 Проект построен на связке Astro и React: контент пишется на чистом markdown и рендерится через content collections. Автор занимается текстом, а сайт сам строит роутинг, темы и интерактивные элементы.
 
 > [!NOTE]
-> Опубликованная версия сайта доступна по адресу [https://nightrunner91.github.io/prepra](https://nightrunner91.github.io/prepra).
+> Опубликованная версия сайта доступна по адресу [https://prepra.up.railway.app](https://prepra.up.railway.app).
 
 ---
 
@@ -164,10 +164,10 @@
 npm run dev
 ```
 
-Открой [http://localhost:8305/prepra](http://localhost:8305/prepra) в браузере.
+Открой [http://localhost:8305](http://localhost:8305) в браузере.
 
 > [!NOTE]
-> Сайт развёртывается по базовому пути `/prepra`, чтобы соответствовать настройкам деплоя на GitHub Pages.
+> Сайт разворачивается в корень домена (`base: '/'`) и хостится на Railway. Базовый путь `/prepra` больше не используется.
 
 ---
 
@@ -178,9 +178,11 @@ npm run dev
 ```text
 prepra/
 ├── .github/workflows/       # CI/CD workflow-файлы
-│   ├── deploy.yml           # Продакшен-деплой на GitHub Pages
-│   ├── lighthouse.yml       # Lighthouse CI в pull request
-│   └── pr-preview.yml       # Preview-окружения для PR
+│   ├── ci.yml               # Стили, тесты и сборка на PR и в main
+│   └── lighthouse.yml       # Lighthouse CI в pull request
+├── deploy/
+│   └── nginx.conf           # Раздача статики на Railway
+├── Dockerfile               # Сборка сайта и nginx-образ для Railway
 ├── docs/                    # Исходные markdown-статьи (208)
 │   ├── javascript/
 │   ├── typescript/
@@ -244,7 +246,7 @@ prepra/
    ---
    ```
 
-3. Запусти dev-сервер и открой `/prepra/react/react-server-components/`, чтобы проверить статью.
+3. Запусти dev-сервер и открой `/react/react-server-components/`, чтобы проверить статью.
 
 ### Добавление задачи в банк практики
 
@@ -272,11 +274,13 @@ prepra/
 
 Ключевые конфигурационные файлы:
 
-- **`site/astro.config.mjs`** — настройки Astro: `output: 'static'`, `site`, `base: '/prepra'`, интеграции и темы Shiki.
+- **`site/astro.config.mjs`** — настройки Astro: `output: 'static'`, `site`, `base: '/'`, интеграции (MDX, React, Tailwind, sitemap) и темы Shiki.
 - **`site/tailwind.config.js`** — токены темы Tailwind, кастомные цвета, шрифты и плагин типографики.
 - **`site/tsconfig.json`** — пути TypeScript и настройки JSX.
 - **`site/src/content/config.ts`** — схема Zod и определения content collections для всех 16 разделов.
 - **`site/lighthouserc.js`** — пороговые значения Lighthouse CI и целевые URL.
+- **`Dockerfile`** — сборка сайта на Node 24 и раздача `site/dist` через nginx.
+- **`deploy/nginx.conf`** — gzip, кэш-заголовки, обработка 404 и порт `8080`.
 
 > [!NOTE]
 > Для локальной разработки и продакшен-сборки не требуются переменные окружения. Прогресс сохраняется в `localStorage` браузера и не синхронизируется с бэкендом.
@@ -297,15 +301,23 @@ prepra/
 
 ## Деплой
 
-Проект использует GitHub Actions для непрерывного деплоя:
+Сайт хостится на [Railway](https://railway.com): сервис собран из этого репозитория, собирается Dockerfile'ом (Node 24 → nginx) и деплоится автоматически при push в `main`.
 
-| Workflow | Триггер | Назначение |
-|----------|---------|------------|
-| `deploy.yml` | Push в `main` или ручной запуск | Сборка и деплой сайта на GitHub Pages |
-| `lighthouse.yml` | Pull request в `main` | Запуск Lighthouse CI и проверка порогов качества |
-| `pr-preview.yml` | События pull request | Деплой preview-URL для каждого PR |
+| Что | Где | Назначение |
+|-----|-----|------------|
+| Railway-сервис | `prepra` | Сборка и раздача статики на `prepra.up.railway.app` |
+| `ci.yml` | Pull request и push в `main` | `check:styles`, тесты и сборка Astro |
+| `lighthouse.yml` | Pull request в `main` | Lighthouse CI и пороги качества |
+| PR environments | Railway | Временное окружение на каждый pull request |
 
-Продакшен-сайт размещён по адресу [https://nightrunner91.github.io/prepra](https://nightrunner91.github.io/prepra).
+Локальная проверка продакшен-сборки:
+
+```bash
+docker build -t prepra-site .
+docker run --rm -p 8080:8080 prepra-site
+```
+
+Продакшен-сайт размещён по адресу [https://prepra.up.railway.app](https://prepra.up.railway.app).
 
 ---
 

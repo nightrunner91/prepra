@@ -13,6 +13,7 @@ interface Props {
   showFooter?: boolean;
   image?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  noindex?: boolean;
 }
 
 const {
@@ -23,9 +24,10 @@ const {
   showFooter = true,
   image = "/og-cover.jpg",
   jsonLd,
+  noindex = false,
 } = Astro.props;
 
-const site = Astro.site ?? new URL("https://nightrunner91.github.io");
+const site = Astro.site ?? new URL("https://prepra.up.railway.app");
 const fullTitle = `${title} | Prepra`;
 const canonicalUrl = new URL(Astro.url.pathname, site);
 if (!canonicalUrl.pathname.endsWith("/")) canonicalUrl.pathname += "/";
@@ -45,6 +47,7 @@ const jsonLdBlocks = jsonLd
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
 
     <!-- Иконки: SVG — основной источник, ICO и PNG — запасные пути.
          Мастер-файлы и размеры собирает scripts/generate-favicons.mjs. -->

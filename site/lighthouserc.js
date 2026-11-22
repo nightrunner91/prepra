@@ -4,9 +4,9 @@ module.exports = {
       startServerCommand: 'npm run preview -- --port 4200',
       startServerReadyPattern: 'http://localhost',
       url: [
-        'http://localhost:4200/prepra/',
-        'http://localhost:4200/prepra/javascript/',
-        'http://localhost:4200/prepra/javascript/js-data-types/',
+        'http://localhost:4200/',
+        'http://localhost:4200/javascript/',
+        'http://localhost:4200/javascript/js-data-types/',
       ],
       numberOfRuns: 3,
     },

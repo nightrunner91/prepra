@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/urls";
+---
+
+<BaseLayout
+  title="Страница не найдена"
+  description="Такой страницы нет: возможно, адрес устарел или в ссылке опечатка. Вернись на главную или открой теорию."
+  noindex
+>
+  <section class="mx-auto flex w-full max-w-3xl flex-col items-start gap-5 px-4 py-20 sm:py-28">
+    <p class="eyebrow text-text-tertiary">Ошибка 404</p>
+
+    <h1
+      class="font-mono text-4xl font-black uppercase leading-none tracking-tight text-text sm:text-6xl"
+    >
+      Страница не найдена
+    </h1>
+
+    <p class="max-w-[58ch] text-base font-medium leading-relaxed text-text-secondary">
+      Такой страницы нет: возможно, адрес устарел или в ссылке опечатка.
+      Начни с главной или открой теорию — там весь материал по разделам.
+    </p>
+
+    <div class="mt-2 flex flex-wrap gap-3">
+      <a href={withBase("/")} class="btn btn-primary btn-md">На главную</a>
+      <a href={withBase("/theory")} class="btn btn-secondary btn-md">К теории</a>
+    </div>
+  </section>
+</BaseLayout>

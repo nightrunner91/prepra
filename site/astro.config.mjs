@@ -1,5 +1,6 @@
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import { defineConfig } from 'astro/config';
 import rehypeMarkdownLinks from './src/lib/rehype-markdown-links.mjs';
@@ -8,11 +9,12 @@ import rehypeAsciiDiagrams from './src/lib/rehype-ascii-diagrams.mjs';
 import rewriteRelativeLinks from './src/lib/rewrite-relative-links.mjs';
 import legacyRedirects from './src/lib/legacy-redirects.mjs';
 
-const BASE = '/prepra';
+const BASE = '/';
+const SITE = 'https://prepra.up.railway.app';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://nightrunner91.github.io',
+  site: SITE,
   base: BASE,
   server: {
     port: 8305,
@@ -26,6 +28,7 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
+    sitemap(),
     rewriteRelativeLinks({ base: BASE }),
     legacyRedirects({ base: BASE }),
   ],
