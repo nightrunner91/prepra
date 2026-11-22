@@ -1,4 +1,5 @@
 ---
+import { GithubLogo, TelegramLogo } from "@phosphor-icons/react";
 import { withBase } from "../../lib/urls";
 import Logo from "./Logo.astro";
 ---
@@ -23,15 +24,21 @@ import Logo from "./Logo.astro";
               href="https://github.com/nightrunner91/prepra"
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-accent-strong transition-colors">GitHub</a
+              class="inline-flex items-center gap-1.5 hover:text-accent-strong transition-colors"
             >
+              <GithubLogo size={16} weight="bold" />
+              GitHub
+            </a>
             <span class="text-border">/</span>
             <a
               href="https://t.me/nightrunner91"
               target="_blank"
               rel="noopener noreferrer"
-              class="hover:text-accent-strong transition-colors">Telegram</a
+              class="inline-flex items-center gap-1.5 hover:text-accent-strong transition-colors"
             >
+              <TelegramLogo size={16} weight="bold" />
+              Telegram
+            </a>
           </div>
         </div>
       </div>
