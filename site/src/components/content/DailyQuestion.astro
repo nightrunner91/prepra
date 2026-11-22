@@ -5,6 +5,7 @@ import { withBase } from "../../lib/urls";
 interface Props {
   question: {
     text: string;
+    answer: string | null;
     sectionId: string;
     sectionLabel: string;
     articleSlug: string;
@@ -13,6 +14,19 @@ interface Props {
 }
 
 const { question, questionCount } = Astro.props;
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/** Минимальный inline-набор из статей: `код`. */
+function renderInline(text: string): string {
+  return escapeHtml(text).replace(/`([^`]+)`/g, "<code>$1</code>");
+}
 ---
 
 <section class="mt-16 lg:mt-20">
@@ -49,9 +63,24 @@ const { question, questionCount } = Astro.props;
         <p
           id="daily-question-text"
           class="text-lg font-bold leading-relaxed text-text sm:text-xl"
+          set:html={renderInline(question.text)}
         >
-          {question.text}
         </p>
+        {
+          question.answer && (
+            <details class="group mt-6">
+              <summary class="inline-flex w-fit cursor-pointer list-none items-center gap-2 border-b-2 border-border eyebrow text-text transition-colors hover:border-accent-strong hover:text-accent-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-text">
+                <span class="group-open:hidden">Показать ответ</span>
+                <span class="hidden group-open:inline">Скрыть ответ</span>
+              </summary>
+              <p
+                class="mt-4 text-base leading-relaxed text-text-secondary"
+                set:html={renderInline(question.answer)}
+              >
+              </p>
+            </details>
+          )
+        }
         <a
           id="daily-question-link"
           href={withBase(`/${question.sectionId}/${question.articleSlug}`)}
@@ -68,3 +97,9 @@ const { question, questionCount } = Astro.props;
     </div>
   </div>
 </section>
+
+<style>
+  summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

@@ -58,6 +58,7 @@ export interface SectionStat {
 
 export interface DailyQuestionItem {
   text: string;
+  answer: string | null;
   sectionId: string;
   sectionLabel: string;
   articleSlug: string;
@@ -104,9 +105,10 @@ export async function getDailyQuestion(
   for (const section of stats) {
     const articles = await getCollection(section.id as any);
     for (const article of articles) {
-      for (const question of article.data.questions || []) {
+      for (const [index, question] of (article.data.questions || []).entries()) {
         allQuestions.push({
           text: question,
+          answer: article.data.answers?.[index] ?? null,
           sectionId: section.id,
           sectionLabel: section.label,
           articleSlug: article.id,
