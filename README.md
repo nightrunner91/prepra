@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="site/public/preview.jpg" alt="Prepra - платформа для подготовки к собеседованиям Frontend-разработчика">
+  <img src="site/public/og-cover.jpg" alt="Prepra - платформа для подготовки к собеседованиям Frontend-разработчика">
 </p>
 
 <p align="center">
